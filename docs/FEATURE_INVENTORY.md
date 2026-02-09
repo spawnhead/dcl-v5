@@ -58,14 +58,3 @@ Source references:
 - Import file handling, specification import, order import, condition for contract import.
 - Smart import and custom import helpers.
 
-## Traceability map (feature → Struts Action / JSP / DAO)
-- **Countries (reference data)**: `CountriesAction`, `CountryAction`, `CountriesListAction` → `Countries.jsp`, `Country.jsp` → `CountryDAO`.
-- **Currencies & rates**: `CurrenciesAction`, `CurrencyAction`, `CurrencyRatesAction`, `CurrencyRateAction` → `Currencies.jsp`, `currency.jsp`, `CurrencyRates.jsp`, `CurrencyRate.jsp` → `CurrencyDAO`, `CurrencyRateDAO`.
-- **Units & routes**: `UnitsAction`, `UnitAction`, `RoutesAction`, `RouteAction` → `Units.jsp`, `Unit.jsp`, `Routes.jsp`, `Route.jsp` → `UnitDAO`, `RouteDAO`.
-- **Orders**: `OrdersAction`, `OrderAction`, `OrderProduceAction`, `OrdersStatisticsAction`, `OrdersUnexecutedAction`, `OrdersLogisticsAction` → `Orders.jsp`, `Order.jsp`, `OrderProduce.jsp`, `OrdersStatistics.jsp`, `OrdersUnexecuted.jsp`, `OrdersLogistics.jsp` → `OrderDAO`, `OrderProduceDAO`.
-- **Contracts**: `ContractsAction`, `ContractAction`, `ConditionsForContractAction`, `ConditionForContractAction` → `Contracts.jsp`, `Contract.jsp`, `ConditionsForContract.jsp`, `ConditionForContract.jsp` → `ContractDAO`, `ConditionForContractDAO`.
-- **Contractors & requests**: `ContractorsAction`, `ContractorAction`, `ContractorRequestsAction`, `ContractorRequestAction` → `contractors.jsp`, `contractor.jsp`, `ContractorRequests.jsp`, `ContractorRequest.jsp` → `ContractorDAO`, `ContractorRequestDAO`.
-- **Shipping & delivery**: `ShippingsAction`, `ShippingAction`, `ShippingPositionsAction`, `ShippingReportAction`, `DeliveryRequestsAction`, `DeliveryRequestAction` → `Shippings.jsp`, `Shipping.jsp`, `ShippingPositions.jsp`, `ShippingReport.jsp`, `DeliveryRequests.jsp`, `DeliveryRequest.jsp` → `ShippingDAO`, `ShippingPositionDAO`, `DeliveryRequestDAO`.
-- **Payments**: `PaymentsAction`, `PaymentAction`, `PaySumAction` → `Payments.jsp`, `Payment.jsp`, `PaySum.jsp` → `PaymentDAO`, `PaySumDAO`.
-- **Produce cost**: `ProduceCostAction`, `ProduceCostPositionsAction`, `ProduceCostReportAction` → `ProduceCost.jsp`, `ProduceCostPositions.jsp`, `ProduceCostReport.jsp` → `ProduceCostDAO`, `ProduceCostProduceDAO`.
-- **Users & roles**: `UsersAction`, `UserAction`, `RolesAction`, `RoleAction`, `ActionRolesAction` → `users.jsp`, `user.jsp`, `Roles.jsp`, `Role.jsp`, `ActionRoles.jsp` → `UserDAO`, `RoleDAO`, `ActionDAO`.

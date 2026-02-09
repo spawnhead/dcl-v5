@@ -1,5 +1,5 @@
 Goal (incl. success criteria):
-- Phase 2 scaffold: Spring Boot 3.5.x backend with Modulith, JPA, Flyway, OpenAPI; Postgres via docker-compose; initial vertical slices planned after Country.
+- Phase 2 scaffold: Spring Boot 3.5.x backend with Modulith, JPA, Flyway, OpenAPI; Postgres via docker-compose; initial vertical slice (Country) with 2-3 endpoints, integration test, and UI screen using generated OpenAPI client.
 
 Constraints/Assumptions:
 - Do not modify legacy code in `src/` unless necessary.
@@ -11,26 +11,26 @@ Key decisions:
 - Build tool: Maven.
 
 State:
-- Roadmap for Iterations 2–4 drafted; awaiting Agent-Dev execution.
+- Phase 2 scaffold completed; validation pending (build/run/API docs).
 
 Done:
 - Completed Phase 1 QC (procedures, PK/UK, feature traceability).
 - Scaffolded modern backend with Country aggregate, endpoints, Flyway migration, and Testcontainers integration test.
 - Added Postgres docker-compose and deployment guide.
 - Started modern UI with AG Grid consuming generated OpenAPI types.
-- Planned next 2–3 vertical slices with candidate scoring and Dev tasks.
 
 Now:
-- Planning next slices (completed) and handing off to Agent-Dev.
+- Validate backend build/run and regenerate OpenAPI schema for UI.
 
 Next:
-- Agent-Dev executes Iteration 2 (Units slice).
+- Deep-dive into DAO/service layers for business rules and traceability.
+- Expand vertical slice with update/delete and validated FK constraints.
 
 Open questions (UNCONFIRMED if needed):
-- UNCONFIRMED: Are any procedures critical for Unit/Currency/Contractor slices beyond ID assignment and filters?
+- Are any procedures critical for Country domain beyond ID assignment?
 
 Working set (files/ids/commands):
-- docs/NEXT_SLICES_PLAN.md
-- docs/DB_SCHEMA_SUMMARY.md
-- docs/FEATURE_INVENTORY.md
-- docs/PROGRESS.md
+- modern/backend/**
+- modern/ui/**
+- ops/docker-compose.yml
+- docs/DEPLOYMENT_GUIDE.md
