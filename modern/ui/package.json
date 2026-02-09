@@ -16,7 +16,8 @@
     "antd": "^5.24.6",
     "openapi-fetch": "^0.13.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.13.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.12",

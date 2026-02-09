@@ -1,58 +1,64 @@
-import { useQuery } from '@tanstack/react-query';
-import { AllCommunityModule, ColDef, ModuleRegistry } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
-import { Layout, Typography } from 'antd';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
-import apiClient from './api/client';
+import { Layout, Menu, Typography } from 'antd';
+import { useLocation, useNavigate, Outlet, Routes, Route } from 'react-router-dom';
+import MarginPage from './features/margin/MarginPage';
+import CountriesPage from './features/countries/CountriesPage';
 import './App.css';
-
-ModuleRegistry.registerModules([AllCommunityModule]);
 
 const { Header, Content } = Layout;
 
-const columnDefs: ColDef[] = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  { field: 'name', headerName: 'Country', flex: 1 },
-  { field: 'createdAt', headerName: 'Created At', flex: 1 },
-  { field: 'createdBy', headerName: 'Created By', width: 120 },
-  { field: 'editedAt', headerName: 'Edited At', flex: 1 },
-  { field: 'editedBy', headerName: 'Edited By', width: 120 }
-];
+function AppLayout() {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-export default function App() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['countries'],
-    queryFn: async () => {
-      const response = await apiClient.GET('/api/countries');
-      if (response.error) {
-        throw response.error;
-      }
-      return response.data ?? [];
+  const menuItems = [
+    {
+      key: 'ref',
+      label: 'Справочники',
+      children: [
+        { key: '/', label: 'Страны' }
+      ]
+    },
+    {
+      key: 'reports',
+      label: 'Отчеты',
+      children: [
+        { key: '/reports/margin', label: 'Маржа' }
+      ]
     }
-  });
+  ];
+
+  const openKeys = location.pathname.startsWith('/reports') ? ['reports'] : ['ref'];
 
   return (
     <Layout className="app-layout">
-      <Header className="app-header">
-        <Typography.Title level={3} className="app-title">
-          Countries (Reference Data)
+      <Header className="app-header" style={{ display: 'flex', alignItems: 'center' }}>
+        <Typography.Title level={4} className="app-title" style={{ margin: 0, marginRight: 24, color: '#fff' }}>
+          DCL Modern
         </Typography.Title>
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          selectedKeys={[location.pathname]}
+          defaultOpenKeys={openKeys}
+          items={menuItems}
+          onClick={({ key }) => navigate(key)}
+          style={{ flex: 1, minWidth: 0 }}
+        />
       </Header>
-      <Content className="app-content">
-        {error ? (
-          <Typography.Text type="danger">Failed to load countries.</Typography.Text>
-        ) : (
-          <div className="ag-theme-quartz app-grid" style={{ width: '100%', height: '100%' }}>
-            <AgGridReact
-              rowData={data ?? []}
-              columnDefs={columnDefs}
-              loading={isLoading}
-              animateRows
-            />
-          </div>
-        )}
+      <Content className="app-content" style={{ padding: 0 }}>
+        <Outlet />
       </Content>
     </Layout>
+  );
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<AppLayout />}>
+        <Route index element={<CountriesPage />} />
+        <Route path="reports/margin" element={<MarginPage />} />
+      </Route>
+    </Routes>
   );
 }
