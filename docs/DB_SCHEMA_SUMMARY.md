@@ -391,7 +391,7 @@ Source of truth: `db/Lintera_dcl-5_schema.ddl`.
 ## Firebird-specific elements to preserve in migration
 - Generators + BEFORE INSERT triggers are the primary mechanism for ID assignment. There are 81 triggers that call `GEN_ID`.
 - Trigger naming conventions signal lifecycle timing: `BI0` (before insert), `BU0` (before update), `BD0` (before delete), `AI0` (after insert), `AU0` (after update), `AD0` (after delete).
-- There are no stored procedures defined in the DDL.
+- Stored procedures are heavily used (231 total). They must be reviewed for business logic and migrated to Postgres or application services.
 
 ## Candidate bounded contexts (by table naming)
 - **Security & access**: `DCL_USER`, `DCL_ROLE`, `DCL_USER_ROLE`, `DCL_ACTION`, `DCL_ACTION_ROLE`, `DCL_USER_LINK`, `DCL_USER_SETTING`.

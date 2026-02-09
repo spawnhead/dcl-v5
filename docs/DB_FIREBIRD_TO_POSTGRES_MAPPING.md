@@ -45,7 +45,10 @@ Source of truth: `db/Lintera_dcl-5_schema.ddl`.
 - Validate usage in legacy Java (DAO queries) to decide whether they are still needed or can be replaced with explicit queries in the new domain modules.
 
 ## Stored procedures
-- None are present in the DDL. If legacy Java calls stored procedures via JDBC, revisit this section.
+- 231 stored procedures are defined in the DDL (e.g., filter/load/insert routines). These require triage:
+  - Move pure data-access procedures into repositories or queries.
+  - Preserve business-critical procedures as Postgres functions/procedures with tests.
+  - Document which ones are retired or replaced by domain services.
 
 ## Constraints & indexing
 - The DDL defines primary keys and a small set of unique constraints, but **no foreign keys** are declared.
