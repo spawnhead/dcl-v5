@@ -1,0 +1,57 @@
+[INFO] Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------------< com.dcl:dcl-modern-backend >---------------------
+[INFO] Building dcl-modern-backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ dcl-modern-backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ dcl-modern-backend ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ dcl-modern-backend ---
+[INFO] skip non existing resourceDirectory C:\Users\IVANIN\dcl-v5\modern\backend\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ dcl-modern-backend ---
+[INFO] Recompiling the module because of added or removed source files.
+[INFO] Compiling 2 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] Annotation processing is enabled because one or more processors were found
+  on the class path. A future release of javac may disable annotation processing
+  unless at least one processor is specified by name (-processor), or a search
+  path is specified (--processor-path, --processor-module-path), or annotation
+  processing is enabled explicitly (-proc:only, -proc:full).
+  Use -Xlint:-options to suppress this message.
+  Use -proc:none to disable annotation processing.
+[INFO] 
+[INFO] --- surefire:3.5.3:test (default-test) @ dcl-modern-backend ---
+[INFO] Surefire report directory: C:\Users\IVANIN\dcl-v5\modern\backend\target\surefire-reports
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+16:20:08.903 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 1.20.5
+16:20:09.468 [main] INFO org.testcontainers.dockerclient.DockerMachineClientProviderStrategy -- docker-machine executable was not found on PATH ([C:\Users\IVANIN\bin, C:\Program Files\Git\mingw64\bin, C:\Program Files\Git\usr\local\bin, C:\Program Files\Git\usr\bin, C:\Program Files\Git\usr\bin, C:\Program Files\Git\mingw64\bin, C:\Program Files\Git\usr\bin, C:\Users\IVANIN\bin, C:\Program Files (x86)\Common Files\Oracle\Java\java8path, C:\Program Files (x86)\Common Files\Oracle\Java\javapath, C:\Program Files\Eclipse Adoptium\jdk-21.0.6.7-hotspot\bin, C:\Program Files\Eclipse Adoptium\jdk-11.0.26.4-hotspot\bin, C:\Python313\Scripts, C:\Python313, C:\Windows\system32, C:\Windows, C:\Windows\System32\Wbem, C:\Windows\System32\WindowsPowerShell\v1.0, C:\Windows\System32\OpenSSH, C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common, C:\Users\IVANIN\AppData\Local\Programs\cursor\resources\app\bin, C:\Program Files\Git\cmd, C:\Program Files\nodejs, C:\ProgramData\chocolatey\bin, C:\Program Files (x86)\Subversion\bin, C:\Program Files\cursor\resources\app\bin, C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.11\bin, C:\Program Files (x86)\nodejs, C:\Program Files (x86)\Sontheim\SiEJ2534, C:\Program Files (x86)\Sontheim\MT_Api, C:\Program Files (x86)\Sontheim\MT_Api, C:\Program Files (x86)\Service ADVISOR\Sontheim, C:\tools\php84, C:\ProgramData\ComposerSetup\bin, C:\Program Files\dotnet, C:\Program Files\PuTTY\C, C:\Program Files\Git\Program Files (x86)\Migration Firebird, C:\Program Files\PowerShell\7, C:\Program Files\Docker\Docker\resources\bin, C:\Users\IVANIN\AppData\Local\Microsoft\WindowsApps, C:\Users\IVANIN\AppData\Local\Programs\Microsoft VS Code\bin, C:\Users\IVANIN\AppData\Local\Programs\Kiro\bin, C:\Users\IVANIN\AppData\Roaming\npm, C:\Program Files (x86)\Subversion\bin, C:\Users\IVANIN\AppData\Local\Programs\Qoder\bin, C:\Users\IVANIN\AppData\Local\Programs\Ollama, C:\Users\IVANIN\AppData\Roaming\Programs\Zero Install, C:\Users\IVANIN\AppData\Roaming\Composer\vendor\bin, C:\Users\IVANIN\AppData\Local\Microsoft\WinGet\Links, C:\Users\IVANIN\.dotnet\tools, C:\Users\IVANIN\AppData\Local\Programs\Antigravity\bin, C:\Program Files\Git\usr\bin\vendor_perl, C:\Program Files\Git\usr\bin\core_perl])
+16:20:09.470 [main] ERROR org.testcontainers.dockerclient.DockerClientProviderStrategy -- Could not find a valid Docker environment. Please check configuration. Attempted configurations were:
+	NpipeSocketClientProviderStrategy: failed with exception BadRequestException (Status 400: {"ID":"","Containers":0,"ContainersRunning":0,"ContainersPaused":0,"ContainersStopped":0,"Images":0,"Driver":"","DriverStatus":null,"Plugins":{"Volume":null,"Network":null,"Authorization":null,"Log":null},"MemoryLimit":false,"SwapLimit":false,"CpuCfsPeriod":false,"CpuCfsQuota":false,"CPUShares":false,"CPUSet":false,"PidsLimit":false,"IPv4Forwarding":false,"Debug":false,"NFd":0,"OomKillDisable":false,"NGoroutines":0,"SystemTime":"","LoggingDriver":"","CgroupDriver":"","NEventsListener":0,"KernelVersion":"","OperatingSystem":"","OSVersion":"","OSType":"","Architecture":"","IndexServerAddress":"","RegistryConfig":null,"NCPU":0,"MemTotal":0,"GenericResources":null,"DockerRootDir":"","HttpProxy":"","HttpsProxy":"","NoProxy":"","Name":"","Labels":["com.docker.desktop.address=npipe://\\\\.\\pipe\\docker_cli"],"ExperimentalBuild":false,"ServerVersion":"","Runtimes":null,"DefaultRuntime":"","Swarm":{"NodeID":"","NodeAddr":"","LocalNodeState":"","ControlAvailable":false,"Error":"","RemoteManagers":null},"LiveRestoreEnabled":false,"Isolation":"","InitBinary":"","ContainerdCommit":{"ID":""},"RuncCommit":{"ID":""},"InitCommit":{"ID":""},"SecurityOptions":null,"CDISpecDirs":null,"Warnings":null})As no valid configuration was found, execution cannot continue.
+See https://java.testcontainers.org/on_failure.html for more details.
+[INFO] Running com.dcl.modern.CountryIntegrationTest
+[WARNING] Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.009 s -- in com.dcl.modern.CountryIntegrationTest
+16:20:09.481 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 1.20.5
+[INFO] Running com.dcl.modern.CurrencyIntegrationTest
+[WARNING] Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0 s -- in com.dcl.modern.CurrencyIntegrationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 2
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.461 s
+[INFO] Finished at: 2026-02-09T16:20:10+03:00
+[INFO] ------------------------------------------------------------------------

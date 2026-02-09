@@ -1,0 +1,2 @@
+NAME             IMAGE                COMMAND                  SERVICE    CREATED         STATUS         PORTS
+ops-postgres-1   postgres:16-alpine   "docker-entrypoint.s…"   postgres   8 seconds ago   Up 6 seconds   0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp

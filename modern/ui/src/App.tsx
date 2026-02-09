@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import { ColDef } from 'ag-grid-community';
+import { AllCommunityModule, ColDef, ModuleRegistry } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { Layout, Typography } from 'antd';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import apiClient from './api/client';
 import './App.css';
+
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 const { Header, Content } = Layout;
 
@@ -41,9 +43,9 @@ export default function App() {
         {error ? (
           <Typography.Text type="danger">Failed to load countries.</Typography.Text>
         ) : (
-          <div className="ag-theme-quartz app-grid">
+          <div className="ag-theme-quartz app-grid" style={{ width: '100%', height: '100%' }}>
             <AgGridReact
-              rowData={data}
+              rowData={data ?? []}
               columnDefs={columnDefs}
               loading={isLoading}
               animateRows

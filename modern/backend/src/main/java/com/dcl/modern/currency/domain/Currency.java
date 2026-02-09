@@ -19,15 +19,15 @@ public class Currency {
     private String name;
 
     @Column(name = "cur_no_round")
-    private Integer noRound;
+    private Short noRound;
 
     @Column(name = "cur_sort_order")
-    private Integer sortOrder;
+    private Short sortOrder;
 
     protected Currency() {
     }
 
-    public Currency(String name, Integer noRound, Integer sortOrder) {
+    public Currency(String name, Short noRound, Short sortOrder) {
         this.name = name;
         this.noRound = noRound;
         this.sortOrder = sortOrder;
@@ -41,11 +41,11 @@ public class Currency {
         return name;
     }
 
-    public Integer getNoRound() {
+    public Short getNoRound() {
         return noRound;
     }
 
-    public Integer getSortOrder() {
+    public Short getSortOrder() {
         return sortOrder;
     }
 }

@@ -1,0 +1,6 @@
+---
+E2E dev1 run 2026-02-09T16:29:32+03:00:
+UI dev server: Vite on http://localhost:5173/ or 5174 if port in use (npm run dev).
+Backend: http://localhost:8080. OpenAPI /v3/api-docs OK. GET/POST /api/countries and /api/currencies verified via curl.
+generate:api: OK (openapi-typescript from backend). Manual check: open http://localhost:5173/ and Countries/Currency screens if present.
+Follow-up: Vite proxy added (vite.config.ts) so /api, /v3, /swagger-ui → localhost:8080. Restart "npm run dev" then open UI in browser to see Countries grid with data.

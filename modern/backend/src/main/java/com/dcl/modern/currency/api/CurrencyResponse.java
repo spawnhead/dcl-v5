@@ -12,8 +12,8 @@ public record CurrencyResponse(
         return new CurrencyResponse(
             currency.getId(),
             currency.getName(),
-            currency.getNoRound(),
-            currency.getSortOrder()
+            currency.getNoRound() != null ? currency.getNoRound().intValue() : null,
+            currency.getSortOrder() != null ? currency.getSortOrder().intValue() : null
         );
     }
 }
