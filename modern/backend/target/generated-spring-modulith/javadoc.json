@@ -1,1 +1,1 @@
-[]
+[{"name":"com.dcl.modern.currency.api.CurrencyController","comment":"REST API for currency reference data. Legacy: DCL_CURRENCY table; reference data used across ERM (no dedicated Struts Action in initial inventory)."}]

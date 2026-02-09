@@ -20,7 +20,7 @@ public class CurrencyService {
 
     @Transactional
     public CurrencyResponse create(CurrencyCreateRequest request) {
-        Currency currency = new Currency(request.name(), request.noRound(), request.sortOrder());
+        Currency currency = new Currency(request.name(), toShort(request.noRound()), toShort(request.sortOrder()));
         Currency saved = repository.save(currency);
         return CurrencyResponse.from(saved);
     }
@@ -35,5 +35,9 @@ public class CurrencyService {
         Currency currency = repository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Currency not found"));
         return CurrencyResponse.from(currency);
+    }
+
+    private static Short toShort(Integer value) {
+        return value == null ? null : value.shortValue();
     }
 }
