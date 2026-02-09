@@ -2,6 +2,11 @@
 
 > **Source note:** This snapshot is reconstructed from legacy JSP/Action sources in the repo because the legacy UI was not runnable in this environment (no live HAR/UI capture). `network.har` and payload JSON are placeholders derived from source analysis; screenshots must be captured separately.
 
+Related docs:
+- Contracts: `docs/screens/margin/CONTRACTS.md`
+- Acceptance checklist: `docs/screens/margin/ACCEPTANCE.md`
+- Behavior matrix: `docs/screens/margin/BEHAVIOR_MATRIX.md`
+
 ## 1. Screen identity
 - Legacy menu path: Отчеты -> Маржа
 - Legacy URL/route: `/MarginAction.do?dispatch=input`
@@ -232,10 +237,4 @@ Iframe source: `/test/MarginReportGridStandalone.jsp`
 - `meta`: `{ rowsTotal: number, rowsReturned: number, limited: boolean }`
 
 ## 6. Parity acceptance checklist
-- MUST: date range + selector gating for Generate/Excel enablement matches legacy.
-- MUST: user/department/contractor/stuffCategory/route mutual exclusivity and aspect checkbox logic matches.
-- MUST: options (onlyTotal / itog_by_spec / itog_by_user / itog_by_product / get_not_block) and enable/disable dependencies.
-- MUST: column visibility flags (`view_*`) match legacy toggles and are applied to grid columns.
-- MUST: grid columns, ordering, sort/filter behaviors, row styles, pagination controls.
-- MUST: export behaviors (Excel via server endpoint, CSV via client).
-- MUST: error/empty states in grid (auth redirect, non‑JSON, permission denial) show same text/behavior.
+- See `docs/screens/margin/ACCEPTANCE.md` → Parity “MUST” list.
