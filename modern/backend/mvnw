@@ -1,0 +1,3 @@
+#!/bin/sh
+# Minimal Maven wrapper shim for environments without the standard wrapper.
+exec mvn "$@"
