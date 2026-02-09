@@ -20,6 +20,7 @@ Done:
 - Started modern UI with AG Grid consuming generated OpenAPI types.
 - 2026-02-09: Added Cursor Project Rules (`.cursor/rules/*.mdc`) enforcing CONTINUITY workflow, bash-only, sources of truth, Modulith, Flyway, tests, docs discipline.
 - 2026-02-09 Dev run: logs/ (dev-env-diagnostics, dev-backend-build, dev-backend-test, dev-backend-run, dev-ui-install, dev-ui-run, dev-db-up, dev-db-ps). Backend: build OK with JAVA_HOME=JDK 21; tests OK (CountryIntegrationTest skipped when Docker unavailable); run fails without Postgres. UI: npm install OK; generate:api requires backend on :8080; npm run dev OK (Vite 5173). Docker Desktop was not running; docker-compose fixed (removed version). DEPLOYMENT_GUIDE updated with prerequisites.
+- 2026-02-09: Cursor Rules enforcement check. Verified `.cursor/rules/*.mdc` present; 000-continuity-always requires "read CONTINUITY.md" at start. Practical check: added Currency module (api/application/domain/infrastructure), no cross-module refs, Flyway V2__init_currency.sql from DDL, integration test, traceability comment in controller.
 
 Now:
 - (none)
@@ -37,11 +38,6 @@ Working set (files/ids/commands):
 - modern/ui/**
 - ops/docker-compose.yml
 - docs/DEPLOYMENT_GUIDE.md
-- .cursor/rules/000-continuity-always.mdc
-- .cursor/rules/010-bash-only.mdc
-- .cursor/rules/020-sources-of-truth.mdc
-- .cursor/rules/030-architecture-modulith.mdc
-- .cursor/rules/040-db-migrations-flyway.mdc
-- .cursor/rules/050-tests-and-repro.mdc
-- .cursor/rules/060-docs-discipline.mdc
-- .cursor/rules/999-mdc-format.mdc
+- docs/PROGRESS.md
+- .cursor/rules/*.mdc
+- modern/backend/.../currency/** (new module)
