@@ -13,11 +13,13 @@
 - 2026-02-09: UI: Vite proxy for /api; AG Grid 33 ModuleRegistry; Countries grid shows real DB data. **Stage: development (local E2E). Production: not deployed.**
 - Margin screen (Reports → Margin): route /reports/margin and menu "Отчеты → Маржа" added; placeholder page (spec missing). docs/screens/margin/ created (SNAPSHOT stub, payloads/README, IMPLEMENTATION_NOTES.md). Backend margin module and full parity blocked until SNAPSHOT and payloads from Agent-Plan.
 - 2026-02-09: Merge origin/main (conflicts in CONTINUITY.md, SNAPSHOT.md resolved); margin SNAPSHOT.md full spec + payloads + network.har committed; pushed main → origin/stage.
+- 2026-02-09: Margin specs finalized with CONTRACTS + ACCEPTANCE + BEHAVIOR_MATRIX; SNAPSHOT linked to new artifacts.
 
 ## Now
 - (none)
 
 ## Next
+- Agent-Dev implements margin module + UI 1:1 using these specs.
 - Agent-Dev Iteration 2 Units (docs/NEXT_SLICES_PLAN.md).
 - Deep-dive into DAO/service for business rules and traceability.
 

@@ -1,5 +1,5 @@
 Goal (incl. success criteria):
-- Capture legacy screen snapshot for "Отчеты -> Маржа" with full parity artifacts (SNAPSHOT.md, HAR, payloads, screenshots) to enable 1:1 reproduction.
+- Finalize Margin screen specs (CONTRACTS + ACCEPTANCE [+ MATRIX]) based on existing snapshot artifacts to enable 1:1 implementation without guessing.
 
 Constraints/Assumptions:
 - Do not modify legacy code in `src/` unless necessary.
@@ -27,24 +27,25 @@ Done:
 - 2026-02-09 UI: Vite proxy (/api, /v3, /swagger-ui → :8080); AG Grid 33 ModuleRegistry + AllCommunityModule, rowData fix. Countries grid displays real data from Postgres (CountryRepository.findAll()). Stage recorded: dev only, production not yet.
 - Margin screen (Отчеты → Маржа): route /reports/margin and menu added; SNAPSHOT.md and payloads absent — parity implementation blocked. Created docs/screens/margin/ (SNAPSHOT stub, payloads/README, IMPLEMENTATION_NOTES.md), UI placeholder page with blocker message. Backend margin module and full UI deferred until Agent-Plan provides spec.
 - 2026-02-09: Merged origin/main; resolved CONTINUITY.md and SNAPSHOT.md; committed margin snapshot (full spec, HAR, payloads); pushed main → origin/stage.
+- 2026-02-09: Margin specs finalized (CONTRACTS + ACCEPTANCE + BEHAVIOR_MATRIX) and SNAPSHOT updated with links.
 
 Now:
 - (none)
 
 Next:
-- Agent-Dev 1 implements new Margin screen parity using SNAPSHOT.md.
+- Agent-Dev implements margin module + UI 1:1 using these specs.
 - Agent-Dev executes Iteration 2 Units (см. docs/NEXT_SLICES_PLAN.md).
 - Deep-dive into DAO/service layers for business rules and traceability.
 
 Open questions (UNCONFIRMED if needed):
 - Are any procedures critical for Country domain beyond ID assignment?
-- Margin screen: SNAPSHOT.md and payloads were missing; spec must be added for 1:1 parity implementation.
+- Margin screen: live HAR/screenshots missing; capture to confirm request payloads and HTML lookup responses.
 
 Working set (files/ids/commands):
+- docs/screens/margin/CONTRACTS.md
+- docs/screens/margin/ACCEPTANCE.md
+- docs/screens/margin/BEHAVIOR_MATRIX.md
 - docs/screens/margin/SNAPSHOT.md
-- docs/screens/margin/network.har
-- docs/screens/margin/payloads/**
-- docs/screens/margin/screenshots/README.md
 - docs/PROGRESS.md
 - ops/docker-compose.yml
 - modern/backend (JAVA_HOME=JDK 21; ./mvnw test; ./mvnw spring-boot:run)
