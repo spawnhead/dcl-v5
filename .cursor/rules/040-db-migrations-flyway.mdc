@@ -1,0 +1,18 @@
+---
+description: Flyway and Firebird-to-Postgres migration rules
+globs: "modern/backend/src/main/resources/db/migration/**"
+alwaysApply: true
+---
+# DB migrations - Flyway
+
+- All schema changes must be done via Flyway migrations.
+- Migrations are derived from Firebird DDL `db/Lintera_dcl-5_schema.ddl`.
+- If Firebird uses generators/triggers/procedures for business rules:
+  - Decide explicitly: keep in DB (Postgres function/trigger) or move to application domain logic.
+  - Record the decision in CONTINUITY.md Key decisions.
+  - Add tests to ensure parity.
+
+## Naming
+- V1__init_<domain>.sql for initial domain schema
+- V<next>__<change>.sql for further changes
+- Keep migrations small and modular per domain.

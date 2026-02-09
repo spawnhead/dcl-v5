@@ -1,66 +1,43 @@
-# Continuity Ledger
+Goal (incl. success criteria):
+- Phase 2 scaffold: Spring Boot 3.5.x backend with Modulith, JPA, Flyway, OpenAPI; Postgres via docker-compose; initial vertical slice (Country) with 2-3 endpoints, integration test, and UI screen using generated OpenAPI client.
 
-## 1. Project Overview
-- Legacy Java ERM application in `src/` (Struts/JSP, DAOs, services).
-- Modernization scaffold in `modern/backend` (Spring Boot Modulith) and `modern/ui` (React/Vite).
-- DB source of truth: `db/Lintera_dcl-5_schema.ddl` with Phase 1 documentation in `docs/`.
+Constraints/Assumptions:
+- Do not modify legacy code in `src/` unless necessary.
+- Use Java 21, Spring Boot 3.5.x, Spring Modulith, Flyway, Postgres.
+- Start each step by reading/updating this file.
 
-## 2. Current Stage & Rationale
-- **Stage:** Prototype / early MVP foundation.
-- **Rationale:** modern backend/UI scaffolds exist, initial Country slice implemented, but no CI/CD and no executed tests or deployment evidence.
+Key decisions:
+- First vertical slice domain: Country reference data (`DCL_COUNTRY`).
+- Build tool: Maven.
 
-## 3. Current Focus (This Week)
-- Align planning artifacts with current repo state.
-- Prepare Iteration 2 execution handoff (Units slice).
+State:
+- Phase 2 scaffold validated: backend builds and tests pass (with JDK 21; Docker optional for integration test). UI installs and dev server runs. Postgres/backend run blocked without Docker Desktop.
 
-## 4. Architecture Snapshot (high-level)
-- **Legacy:** Struts + JSP + DAO/Service in `src/main`.
-- **Modern backend:** Spring Boot 3.5.x Modulith + JPA + Flyway + OpenAPI in `modern/backend`.
-- **Modern UI:** React 19 + Vite + Ant Design + AG Grid in `modern/ui`.
-- **Ops:** Postgres docker-compose in `ops/docker-compose.yml`.
+Done:
+- Completed Phase 1 QC (procedures, PK/UK, feature traceability).
+- Scaffolded modern backend with Country aggregate, endpoints, Flyway migration, and Testcontainers integration test.
+- Added Postgres docker-compose and deployment guide.
+- Started modern UI with AG Grid consuming generated OpenAPI types.
+- 2026-02-09: Added Cursor Project Rules (`.cursor/rules/*.mdc`) enforcing CONTINUITY workflow, bash-only, sources of truth, Modulith, Flyway, tests, docs discipline.
+- 2026-02-09 Dev run: logs/ (dev-env-diagnostics, dev-backend-build, dev-backend-test, dev-backend-run, dev-ui-install, dev-ui-run, dev-db-up, dev-db-ps). Backend: build OK with JAVA_HOME=JDK 21; tests OK (CountryIntegrationTest skipped when Docker unavailable); run fails without Postgres. UI: npm install OK; generate:api requires backend on :8080; npm run dev OK (Vite 5173). Docker Desktop was not running; docker-compose fixed (removed version). DEPLOYMENT_GUIDE updated with prerequisites.
+- 2026-02-09: Cursor Rules enforcement check. Verified `.cursor/rules/*.mdc` present; 000-continuity-always requires "read CONTINUITY.md" at start. Practical check: added Currency module (api/application/domain/infrastructure), no cross-module refs, Flyway V2__init_currency.sql from DDL, integration test, traceability comment in controller.
 
-## 5. Key Decisions (ADR links if any)
-- Vertical slice pattern: Country reference data as baseline module.
-- Build tool: Maven for backend.
-- Iteration roadmap: Units → Currencies+Rates → Contractors (see `docs/NEXT_SLICES_PLAN.md`).
+Now:
+- (none)
 
-## 6. Environments (dev/stage/prod) + how to run
-- **Dev:** Local only.
-  - Postgres: `docker compose -f ops/docker-compose.yml up -d`
-  - Backend: `cd modern/backend && ./mvnw spring-boot:run`
-  - OpenAPI: `http://localhost:8080/v3/api-docs`
-  - UI: `cd modern/ui && npm install && npm run dev`
-- **Stage/Prod:** Not defined.
+Next:
+- Start Docker Desktop → docker compose up → backend spring-boot:run → npm run generate:api → npm run dev for full E2E.
+- Deep-dive into DAO/service layers for business rules and traceability.
+- Expand vertical slice with update/delete and validated FK constraints.
 
-## 7. CI/CD Status + Required Checks
-- No CI/CD config found in repository.
-- Required checks (manual for now): `./mvnw test` and UI build (`npm run build`) once network access allows dependency install.
+Open questions (UNCONFIRMED if needed):
+- Are any procedures critical for Country domain beyond ID assignment?
 
-## 8. Open Issues / Known Bugs
-- External dependency downloads blocked in current environment (Maven Central / npm registry 403).
-- OpenAPI types generation in UI is stubbed until backend runs locally.
-
-## 9. Backlog Priorities (Top 10)
-1. Iteration 2: Units slice (Flyway + backend + UI + tests).
-2. Iteration 3: Currencies + Rates slice (master-detail + date query).
-3. Iteration 4: Contractors & contacts slice.
-4. Run backend tests with Testcontainers in a network-enabled environment.
-5. Generate OpenAPI client from live backend and remove placeholder schema.
-6. Add CI/CD pipeline (build + tests).
-7. Extend traceability: DAO/service → tables for selected domains.
-8. Confirm procedure logic for currency rate selection and other reference data.
-9. Add FK constraints only after DAO verification.
-10. Expand UI navigation beyond single screen.
-
-## 10. Risks & Mitigations
-- **Risk:** Business rules embedded in procedures/triggers may be missed.
-  - **Mitigation:** inspect procedure definitions during each slice.
-- **Risk:** No CI/CD; regressions undetected.
-  - **Mitigation:** add workflows after Iteration 2.
-
-## 11. Ownership & Contacts
-- Not specified in repo (UNCONFIRMED).
-
-## 12. Glossary / Domain Notes
-- **Vertical slice:** DB migration + backend API + UI screen for one domain.
-- **Reference data:** lookup tables such as countries, units, currencies.
+Working set (files/ids/commands):
+- modern/backend/**
+- modern/ui/**
+- ops/docker-compose.yml
+- docs/DEPLOYMENT_GUIDE.md
+- docs/PROGRESS.md
+- .cursor/rules/*.mdc
+- modern/backend/.../currency/** (new module)

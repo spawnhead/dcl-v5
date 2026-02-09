@@ -1,0 +1,16 @@
+---
+description: Source of truth - legacy code and Firebird DDL; never invent schema or behavior
+globs: "**/*"
+alwaysApply: true
+---
+# Sources of truth
+
+## Repository truth
+- Legacy code lives in `src/`.
+- Firebird DDL source of truth is `db/Lintera_dcl-5_schema.ddl`.
+- Phase-1 docs are under `docs/` and must be kept consistent with code.
+
+## Strict rules
+- Never invent DB tables/columns/constraints. Always confirm from `db/Lintera_dcl-5_schema.ddl` (or the derived docs).
+- Never invent business rules. Always trace them to legacy entry points (Struts Action/JSP/DAO) and/or DB triggers/procedures.
+- If something is unclear in legacy, record it in CONTINUITY.md as UNCONFIRMED, and propose a verification step.

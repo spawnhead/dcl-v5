@@ -1,0 +1,24 @@
+
+> dcl-modern-ui@0.1.0 dev
+> vite
+
+
+  VITE v6.4.1  ready in 567 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+C:\Users\IVANIN\dcl-v5\modern\ui\node_modules\esbuild\lib\main.js:974
+                  reject(new Error(error2));
+                         ^
+
+Error: The service was stopped
+    at C:\Users\IVANIN\dcl-v5\modern\ui\node_modules\esbuild\lib\main.js:974:26
+    at responseCallbacks.<computed> (C:\Users\IVANIN\dcl-v5\modern\ui\node_modules\esbuild\lib\main.js:603:9)
+    at Socket.afterClose (C:\Users\IVANIN\dcl-v5\modern\ui\node_modules\esbuild\lib\main.js:594:28)
+    at Socket.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+Node.js v22.17.1
+
+# NOTE: "The service was stopped" above is from timeout killing the process; Vite started successfully (http://localhost:5173/).

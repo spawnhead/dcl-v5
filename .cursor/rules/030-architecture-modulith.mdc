@@ -1,0 +1,21 @@
+---
+description: Spring Modulith boundaries and package conventions
+globs: "modern/backend/**"
+alwaysApply: true
+---
+# Backend architecture - Spring Modulith
+
+## Structure per module
+Each domain module must follow:
+- api/ (controllers, DTOs, OpenAPI surface)
+- application/ (use cases, orchestration)
+- domain/ (aggregates, rules, domain events)
+- infrastructure/ (JPA repositories, adapters)
+
+## Boundaries
+- Cross-module calls: only via another module's api/ or via domain events.
+- No direct references to domain/application packages of other modules.
+- Shared kernel must be minimal and placed in a dedicated common area only when proven necessary.
+
+## Traceability
+- For each endpoint or use case, add a short comment or doc reference pointing to legacy source (Action/JSP/DAO) that it replaces.

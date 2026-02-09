@@ -1,0 +1,14 @@
+---
+description: MDC format reminder - how to write project rules files
+globs: "**/*.mdc"
+alwaysApply: false
+---
+# MDC file format reminder
+
+- Each .mdc file starts with YAML frontmatter delimited by '---'.
+- Required fields for our project rules:
+  - description: short purpose
+  - globs: which files it applies to
+  - alwaysApply: true/false
+- After frontmatter, write Markdown instructions.
+- Keep rules unambiguous, testable, and aligned with CONTINUITY.md workflow.

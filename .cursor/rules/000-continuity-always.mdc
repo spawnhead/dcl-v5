@@ -1,0 +1,28 @@
+---
+description: Core workflow - always follow CONTINUITY.md and keep progress consistent
+globs: "**/*"
+alwaysApply: true
+---
+# Core workflow (ALWAYS)
+
+You must follow this workflow at the start and end of every task.
+
+## Start of every task
+1) Open and read `CONTINUITY.md`.
+2) If the user goal, constraints, or state changed since last run - update `CONTINUITY.md` immediately before doing anything else.
+3) Read `docs/PROGRESS.md` to understand the last recorded state.
+4) Work only from repository facts. Do not assume missing details.
+
+## During work
+- If you make any decision that affects architecture, DB mapping, folder structure, build/run steps, or module boundaries - record it in `CONTINUITY.md` under Key decisions the moment you decide.
+- If something is unknown, write it to `Open questions` and mark as `UNCONFIRMED`.
+
+## End of every task
+1) Update `CONTINUITY.md` sections: Done, Now, Next, Working set.
+2) Update `docs/PROGRESS.md` to match the same status (short, factual).
+3) If you changed how to run/build - update `docs/DEPLOYMENT_GUIDE.md`.
+
+## Non-negotiables
+- Commands must be provided for bash (not PowerShell).
+- Do not create random .bat/.cmd scripts. If a script is required, place it under `ops/` or `modern/*/scripts/`.
+- Preserve traceability: every new feature must point to legacy source (Struts/JSP/DAO) and DB objects (tables/procs/triggers) when relevant.

@@ -1,0 +1,18 @@
+---
+description: Testing and reproducibility gates for backend and UI
+globs: "modern/**"
+alwaysApply: true
+---
+# Reproducibility and tests
+
+## Backend
+- Prefer Testcontainers integration tests for persistence and migrations.
+- Minimum: 1 integration test per vertical slice verifying that Flyway ran and the main repository/service works.
+- Unit tests for domain rules when rules exist (statuses, validation, calculations).
+
+## UI
+- UI must consume OpenAPI-generated client/types (no manual duplicate DTOs when generation exists).
+- Keep API base URL configurable and documented.
+
+## Logs
+- If you run commands, save output to files under `logs/` and update docs accordingly.
