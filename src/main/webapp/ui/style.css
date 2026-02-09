@@ -1,0 +1,123 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Tahoma, Arial, sans-serif;
+  background: #f5f5f5;
+  color: #222;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #ffffff;
+  border-bottom: 1px solid #e3e6ea;
+}
+
+.app-title {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.app-nav a {
+  margin-left: 12px;
+  text-decoration: none;
+  color: #1a73e8;
+  font-size: 13px;
+}
+
+.app-nav a.active {
+  font-weight: 700;
+}
+
+.app-view {
+  padding: 12px;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid #e3e6ea;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  align-items: center;
+}
+
+.toolbar label {
+  font-size: 12px;
+  color: #667085;
+}
+
+.toolbar input[type="text"],
+.toolbar select {
+  padding: 5px 8px;
+  border: 1px solid #d0d5dd;
+  border-radius: 6px;
+  font-size: 12px;
+  min-width: 140px;
+  background: #fff;
+}
+
+.btn {
+  padding: 6px 12px;
+  border: 1px solid #b5b5b5;
+  border-radius: 6px;
+  background: #fff;
+  color: #222;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #4a90e2;
+  border-color: #4a90e2;
+  color: #fff;
+}
+
+.status {
+  font-size: 12px;
+  color: #666;
+}
+
+.grid-container {
+  height: calc(100vh - 220px);
+  min-height: 420px;
+}
+
+.ag-theme-alpine {
+  line-height: normal;
+}
+
+.ag-theme-alpine .ag-cell,
+.ag-theme-alpine .ag-cell-value,
+.ag-theme-alpine .ag-header-cell-text {
+  line-height: 18px !important;
+}
+
+.row-itog .ag-cell { font-weight: 700; }
+.row-green .ag-cell { background: #e9f7ef; }
+.row-pink .ag-cell { background: #fdecef; }
+.row-green-pink .ag-cell { background: linear-gradient(90deg, #e9f7ef 0%, #fdecef 100%); }
+.row-orange .ag-cell { background: #fff2e6; font-weight: 700; }
+.row-red .ag-cell { color: #a40000; font-weight: 700; }
+
+/* Margin form parity: два столбца как в старом экране */
+.margin-form-toolbar { flex-direction: column; align-items: stretch; }
+.margin-form-top-row { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin-bottom: 8px; }
+.margin-form-body { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 10px; }
+.margin-form-left { flex: 1; min-width: 320px; }
+.margin-form-right { min-width: 200px; }
+.margin-form-by-title { font-weight: 600; margin-bottom: 6px; }
+.margin-aspect-title { font-weight: 600; margin-bottom: 6px; }
+.margin-form-table { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; }
+.margin-view-title { font-weight: 600; margin-bottom: 8px; }
+.margin-form-right label { display: block; margin-bottom: 4px; }
+.margin-form-buttons { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }

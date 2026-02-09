@@ -1,0 +1,36 @@
+# Backup/template: absolute paths; runtime config for deploy: conf/main.cfg
+dbconnect.driver.class.name=org.firebirdsql.jdbc.FBDriver
+dbconnect.connection.class.name=
+dbconnect.connection.url=jdbc:firebirdsql:localhost:\z\projects\dcl_v3\db\LINTERA.FDB?lc_ctype=UNICODE_FSS
+#dbconnect.connection.url=jdbc:firebirdsql://pc236/D:\\Projects\\dcl\\db\\LINTERA.FDB?lc_ctype=UNICODE_FSS
+dbconnect.user=SYSDBA
+dbconnect.pwd=masterkey
+dbconnect.test.query=select * from test_table
+db.version=WI-V6.3.9.27139 Firebird 2.5
+
+global.sql-resources=resources/sql-resources.xml
+global.permission-resources=resources/xml-permissions.xml
+
+#format.app.date=dd/MM/yy
+#format.app.date-time=dd/MM/yy HH:mm:ss.S
+#for parse
+format.app.date=dd.MM.yy
+#for view
+format.app.date.view=dd.MM.yyyy
+format.app.date_time.view=dd.MM.yyyy HH:mm
+format.app.date-time=dd.MM.yyyy HH:mm:ss.S
+format.app.time=HH:mm:ss.S
+format.db.timestamp=yyyy-MM-dd HH:mm:ss.S
+format.db.date=yyyy-MM-dd
+
+img-head.dir=%HOME%/img-head
+img-logo.dir=%HOME%/img-logo
+global.slogan-file=%HOME%/conf/slogans.txt
+
+global.encoding=UTF8
+
+config.file=report|controls|update|specific
+
+order.director=000
+order.logist=000
+order.directorRB=000

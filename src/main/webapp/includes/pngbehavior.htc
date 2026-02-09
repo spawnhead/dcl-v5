@@ -1,0 +1,74 @@
+<public:component>
+<public:attach event="onpropertychange" onevent="propertyChanged()" />
+<public:attach event="onbeforeprint" for="window" onevent="beforePrint()" />
+<public:attach event="onafterprint" for="window" onevent="afterPrint()" />
+<script>
+
+/*
+ * PNG Behavior
+ *
+ * This script was created by Erik Arvidsson (erik(at)eae.net)
+ * for WebFX (http://webfx.eae.net)
+ * Copyright 2002
+ * 
+ * For usage see license at http://webfx.eae.net/license.html	
+ *
+ * Version: 1.01a
+ * Created: 2001-??-??	First working version
+ * Updated: 2002-03-28	Fixed issue when starting with a non png image and
+ *                      switching between non png images
+ *          2003-01-06	Fixed RegExp to correctly work with IE 5.0x
+ *          2004-04-25  Fixed PNG image printing, eliminated need for external
+ *                      GIF file, fixed intermittent uninitialised variable
+ *                      error [by AG, <http://www.scss.com.au/family/andrew/> ]
+ *
+ */
+ 
+var IS_PNG = /\.png$/i;
+var supported = /MSIE (5\.5)|[6789]/.test(navigator.userAgent) && navigator.platform == 'Win32';
+var realSrc;
+/*var blankSrc = "javascript:'#define x_width 1\x5cn#define x_height 1\x5cnstatic char x_bits[]={0x00}'";*/
+var blankSrc = "images/blank.gif";
+if (supported) fixImage();
+function propertyChanged() {
+  if (supported && event.propertyName == 'src' && src != blankSrc) {
+    fixImage();
+  }
+}
+function fixImage() {
+  // check for real change
+  if (realSrc && (element.src == realSrc) && IS_PNG.test(element.src)) {
+    element.src = blankSrc;
+  } else {
+    if (element.src != blankSrc) {
+      // backup old src
+      realSrc = element.src;
+    }
+    // test for png
+    if ( realSrc && IS_PNG.test( realSrc ) ) {
+      element.src = blankSrc;
+      element.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + realSrc + "',sizingMethod='scale')";
+    } else {
+      element.runtimeStyle.filter = ''; // remove filter
+    }
+  }
+}
+function beforePrint() {
+  if (supported && realSrc) {
+    // printing - ensure there's no filter and the original src is restored
+    supported = false; // support temporarily disabled to prevent 'fixing'
+    element.runtimeStyle.filter = '';
+    element.src = realSrc;
+    supported = true;
+  }
+}
+function afterPrint() {
+  if (supported && realSrc) {
+    // done printing - restore filter
+    var rs = realSrc;
+    realSrc = '';
+    element.src = rs;
+  }
+}
+</script>
+</public:component>

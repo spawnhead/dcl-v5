@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+				"-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+				"http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+
+<!--
+     Definitions for AM
+-->
+<tiles-definitions>
+	<definition name=".main-layout" path="/layout/main.jsp">
+		<put name="menuActive" value="1"/>
+		<put name="menu" value="/layout-items/menu.jsp"/>
+		<put name="header" value="/layout-items/header.jsp"/>
+		<put name="footer" value="/layout-items/footer.jsp"/>
+		<put name="errors" value="/layout-items/errors-in-dialog2.jsp"/>
+	</definition>
+
+	<definition name=".plain-layout" path="/layout/plain.jsp">
+	</definition>
+
+	<definition name=".ajax" path="/layout/ajax.jsp">
+	</definition>
+	<definition name=".ajax-empty" extends=".ajax">
+		<put name="body" value=""/>
+	</definition>
+	<definition name=".NomenclatureTree" extends=".ajax">
+		<put name="body" value="/ajax/NomenclatureTree.jsp"/>
+	</definition>
+	<definition name=".NomenclatureGrid" extends=".ajax">
+		<put name="body" value="/ajax/NomenclatureGrid.jsp"/>
+	</definition>
+	<definition name=".NomenclatureCNGrid" extends=".ajax">
+		<put name="body" value="/ajax/NomenclatureCNGrid.jsp"/>
+	</definition>
+	<definition name=".ShippingManagersGrid" extends=".ajax">
+		<put name="body" value="/ajax/ShippingManagersGrid.jsp"/>
+	</definition>
+	<definition name=".SpecificationImportRecalcPriceByCustomPercent" extends=".ajax">
+		<put name="body" value="/ajax/SpecificationImportRecalcPriceByCustomPercent.jsp"/>
+	</definition>
+	<definition name=".SpecificationImportRecalcCostByPrice" extends=".ajax">
+		<put name="body" value="/ajax/SpecificationImportRecalcCostByPrice.jsp"/>
+	</definition>
+
+	<definition name=".NomenclatureAddCategory" extends=".ajax">
+		<put name="body" value="/ajax/NomenclatureAddCategory.jsp"/>
+	</definition>
+	<definition name=".NomenclatureProduceCNGrid" extends=".ajax">
+		<put name="body" value="/ajax/NomenclatureProduceCNGrid.jsp"/>
+	</definition>
+	<definition name=".NomenclatureProduceLTGrid" extends=".ajax">
+		<put name="body" value="/ajax/NomenclatureProduceLTGrid.jsp"/>
+	</definition>
+
+	<definition name=".main-layout-menu_no_active" path="/layout/main.jsp">
+		<put name="menuActive" value="0"/>
+		<put name="menu" value="/layout-items/menu.jsp"/>
+		<put name="header" value="/layout-items/header.jsp"/>
+		<put name="footer" value="/layout-items/footer.jsp"/>
+		<!--<put name="messages" value="/layout-items/messages2.jsp"/>-->
+		<put name="errors" value="/layout-items/errors-in-dialog2.jsp"/>
+	</definition>
+
+	<definition name=".main-empty" path="/layout/main_empty.jsp">
+		<put name="errors" value="/layout-items/errors-in-dialog2.jsp"/>
+	</definition>
+
+	<definition name=".dialog-layout" path="/layout/dialog.jsp">
+		<put name="errors" value="/layout-items/errors-in-dialog2.jsp"/>
+	</definition>
+
+	<definition name=".list-layout" path="/layout/list-layout.jsp">
+		<put name="css" value="/includes/dcl.css"/>
+		<put name="errors" value="/layout-items/errors-in-dialog2.jsp"/>
+		<put name="body" value=""/>
+	</definition>
+	<definition name=".default-list" extends=".list-layout">
+		<put name="body" value="/layout-items/default-list.jsp"/>
+	</definition>
+	<definition name=".default-map" extends=".list-layout">
+		<put name="body" value="/layout-items/default-map.jsp"/>
+	</definition>
+
+	<definition name=".error" extends=".main-layout">
+		<put name="body" value="/jsp/error.jsp"/>
+	</definition>
+	<definition name=".global-lock-error" extends=".main-layout">
+		<put name="body" value="/jsp/global-lock-error.jsp"/>
+	</definition>
+
+	<!--  <definition name=".yes-no" extends=".dialog-layout">-->
+	<!--    <put name="title" value="Best�tigung"/>-->
+	<!--    <put name="body" value="/dialogs/yes-no.jsp"/>-->
+	<!--  </definition>-->
+	<definition name=".DevZone" extends=".main-layout">
+		<put name="body" value="/jsp/DevZone.jsp"/>
+	</definition>
+	<definition name=".AdmZone" extends=".main-layout">
+		<put name="body" value="/jsp/AdmZone.jsp"/>
+	</definition>
+	<definition name=".Sessions" extends=".main-layout">
+		<put name="body" value="/jsp/Sessions.jsp"/>
+	</definition>
+	<definition name=".LockedRecords" extends=".main-layout">
+		<put name="body" value="/jsp/LockedRecords.jsp"/>
+	</definition>
+	<definition name=".FixAttachments" extends=".main-layout">
+		<put name="body" value="/jsp/FixAttachments.jsp"/>
+	</definition>
+
+
+	<definition name=".Test" extends=".main-layout">
+		<put name="body" value="/test/test.html"/>
+	</definition>
+	<definition name=".TestSelect" extends=".main-layout">
+		<put name="body" value="/test/test-select.jsp"/>
+	</definition>
+	<definition name=".TestEnc" extends=".main-layout">
+		<put name="body" value="/test/test-enc.jsp"/>
+	</definition>
+	<definition name=".Test-tags" extends=".main-layout">
+		<put name="body" value="/test/test-tags.jsp"/>
+	</definition>
+	<definition name=".test-grid" extends=".main-layout">
+		<put name="body" value="/test/grid.jsp"/>
+	</definition>
+
+
+	<definition name=".login" extends=".main-empty">
+		<put name="form-title-id" value="Login.title"/>
+		<put name="body" value="/jsp/login.jsp"/>
+	</definition>
+	<definition name=".login-disabled" extends=".main-empty">
+		<put name="body" value="/jsp/login-disabled.jsp"/>
+	</definition>
+	<definition name=".invitation" extends=".main-layout">
+		<put name="body" value="/jsp/invitation.jsp"/>
+	</definition>
+	<definition name=".no_permission" extends=".main-layout">
+		<put name="body" value="/jsp/no_permission.jsp"/>
+	</definition>
+
+
+	<definition name=".PersonalOffice" extends=".main-layout">
+		<put name="body" value="/jsp/PersonalOffice.jsp"/>
+	</definition>
+	<definition name=".Office" extends=".main-layout">
+		<put name="form-title-id" value="Office.title"/>
+		<put name="body" value="/jsp/Office.jsp"/>
+	</definition>
+	<definition name=".MessagesGrid" extends=".ajax">
+		<put name="body" value="/ajax/MessagesGrid.jsp"/>
+	</definition>
+
+	<definition name=".UserSettings" extends=".main-layout">
+		<put name="form-title-id" value="UserSettings.title"/>
+		<put name="body" value="/jsp/UserSettings.jsp"/>
+	</definition>
+	<definition name=".UserSetting" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/UserSetting.jsp"/>
+	</definition>
+
+
+	<definition name=".Journals" extends=".main-layout">
+		<put name="body" value="/jsp/Journals.jsp"/>
+	</definition>
+
+	<definition name=".References" extends=".main-layout">
+		<put name="body" value="/jsp/References.jsp"/>
+	</definition>
+
+	<definition name=".Reports" extends=".main-layout">
+		<put name="body" value="/jsp/Reports.jsp"/>
+	</definition>
+
+	<definition name=".CommercialProposals" extends=".main-layout">
+		<put name="form-title-id" value="CommercialProposals.title"/>
+		<put name="body" value="/jsp/CommercialProposals.jsp"/>
+	</definition>
+	<definition name=".CommercialProposal" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="CommercialProposal.title"/>
+		<put name="body" value="/jsp/CommercialProposal.jsp"/>
+	</definition>
+	<definition name=".ImportFile" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/ImportFile.jsp"/>
+	</definition>
+	<definition name=".UploadFile" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/UploadFile.jsp"/>
+	</definition>
+	<definition name=".DefferedUploadFile" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/DefferedUploadFile.jsp"/>
+	</definition>
+	<definition name=".MultipleFileUpload" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/MultipleFileUpload.jsp"/>
+	</definition>
+	<definition name=".ProducesForAssembleMinskGrid" extends=".ajax">
+		<put name="body" value="/ajax/ProducesForAssembleMinskGrid.jsp"/>
+	</definition>
+	<definition name=".ProducesCommercialProposalGrid" extends=".ajax">
+		<put name="body" value="/ajax/ProducesCommercialProposalGrid.jsp"/>
+	</definition>
+	<definition name=".ReservedInfoGrid" extends=".ajax">
+		<put name="body" value="/ajax/ReservedInfoGrid.jsp"/>
+	</definition>
+
+	<definition name=".CommercialProposalProduce" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/CommercialProposalProduce.jsp"/>
+	</definition>
+	<definition name=".ProducesForAssembleMinsk" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="ProducesForAssembleMinsk.title"/>
+		<put name="body" value="/jsp/ProducesForAssembleMinsk.jsp"/>
+	</definition>
+
+
+	<definition name=".ConditionsForContract" extends=".main-layout">
+		<put name="form-title-id" value="ConditionsForContract.title"/>
+		<put name="body" value="/jsp/ConditionsForContract.jsp"/>
+	</definition>
+	<definition name=".ConditionForContract" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="ConditionForContract.title"/>
+		<put name="body" value="/jsp/ConditionForContract.jsp"/>
+	</definition>
+
+	<definition name=".ConditionForContractProduce" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/ConditionForContractProduce.jsp"/>
+	</definition>
+
+
+	<definition name=".Contracts" extends=".main-layout">
+		<put name="form-title-id" value="Contracts.title"/>
+		<put name="body" value="/jsp/Contracts.jsp"/>
+	</definition>
+	<definition name=".Contract" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="Contract.title"/>
+		<put name="body" value="/jsp/Contract.jsp"/>
+	</definition>
+
+	<definition name=".Specification" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Specification.jsp"/>
+	</definition>
+	<definition name=".SpecificationPaymentsGrid" extends=".ajax">
+		<put name="body" value="/ajax/SpecificationPaymentsGrid.jsp"/>
+	</definition>
+
+
+	<definition name=".Orders" extends=".main-layout">
+		<put name="form-title-id" value="Orders.title"/>
+		<put name="body" value="/jsp/Orders.jsp"/>
+	</definition>
+	<definition name=".Order" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="Order.title"/>
+		<put name="body" value="/jsp/Order.jsp"/>
+	</definition>
+
+	<definition name=".OrderProduce" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/OrderProduce.jsp"/>
+	</definition>
+	<definition name=".OrderExecutedProduces" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/OrderExecutedProduces.jsp"/>
+	</definition>
+	<definition name=".OrderExecutedProducesGrid" extends=".ajax">
+		<put name="body" value="/ajax/OrderExecutedProducesGrid.jsp"/>
+	</definition>
+	<definition name=".OrderPaymentsGrid" extends=".ajax">
+		<put name="body" value="/ajax/OrderPaymentsGrid.jsp"/>
+	</definition>
+	<definition name=".OrderPaySumsGrid" extends=".ajax">
+		<put name="body" value="/ajax/OrderPaySumsGrid.jsp"/>
+	</definition>
+
+
+	<definition name=".DeliveryRequests" extends=".main-layout">
+		<put name="body" value="/jsp/DeliveryRequests.jsp"/>
+	</definition>
+	<definition name=".DeliveryRequest" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/DeliveryRequest.jsp"/>
+	</definition>
+	<definition name=".DeliveryRequestPositions" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="DeliveryRequestPositions.title"/>
+		<put name="body" value="/jsp/DeliveryRequestPositions.jsp"/>
+	</definition>
+
+	<definition name=".DeliveryRequestProduce" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/DeliveryRequestProduce.jsp"/>
+	</definition>
+
+
+	<definition name=".Assembles" extends=".main-layout">
+		<put name="form-title-id" value="Assembles.title"/>
+		<put name="body" value="/jsp/Assembles.jsp"/>
+	</definition>
+	<definition name=".Assemble" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="Assemble.title"/>
+		<put name="body" value="/jsp/Assemble.jsp"/>
+	</definition>
+	<definition name=".AssemblePositions" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="AssemblePositions.title"/>
+		<put name="body" value="/jsp/AssemblePositions.jsp"/>
+	</definition>
+
+
+	<definition name=".SpecificationImports" extends=".main-layout">
+		<put name="body" value="/jsp/SpecificationImports.jsp"/>
+	</definition>
+	<definition name=".SpecificationImport" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="SpecificationImport.title"/>
+		<put name="body" value="/jsp/SpecificationImport.jsp"/>
+	</definition>
+	<definition name=".SpecificationImportPositions" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="SpecificationImportPositions.title"/>
+		<put name="body" value="/jsp/SpecificationImportPositions.jsp"/>
+	</definition>
+
+
+	<definition name=".ProducesCost" extends=".main-layout">
+		<put name="form-title-id" value="ProducesCost.title"/>
+		<put name="body" value="/jsp/ProducesCost.jsp"/>
+	</definition>
+	<definition name=".ProduceCost" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="ProduceCost.title"/>
+		<put name="body" value="/jsp/ProduceCost.jsp"/>
+	</definition>
+	<definition name=".ProduceCostPositions" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="ProduceCostPositions.title"/>
+		<put name="body" value="/jsp/ProduceCostPositions.jsp"/>
+	</definition>
+
+
+	<definition name=".ProduceCostProduce" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/ProduceCostProduce.jsp"/>
+	</definition>
+	<definition name=".ProduceCostCustom" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/ProduceCostCustom.jsp"/>
+	</definition>
+
+
+	<definition name=".Payments" extends=".main-layout">
+		<put name="form-title-id" value="Payments.title"/>
+		<put name="body" value="/jsp/Payments.jsp"/>
+	</definition>
+	<definition name=".Payment" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="Payment.title"/>
+		<put name="body" value="/jsp/Payment.jsp"/>
+	</definition>
+	<definition name=".PaymentSumsGrid" extends=".ajax">
+		<put name="body" value="/ajax/PaymentSumsGrid.jsp"/>
+	</definition>
+
+	<definition name=".PaySum" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/PaySum.jsp"/>
+	</definition>
+
+	<definition name=".Shippings" extends=".main-layout">
+		<put name="form-title-id" value="Shippings.title"/>
+		<put name="body" value="/jsp/Shippings.jsp"/>
+	</definition>
+	<definition name=".Shipping" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="Shipping.title"/>
+		<put name="body" value="/jsp/Shipping.jsp"/>
+	</definition>
+	<definition name=".ShippingsGrid" extends=".ajax">
+		<put name="body" value="/ajax/ShippingsGrid.jsp"/>
+	</definition>
+	<definition name=".ShippingPositions" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="ShippingPositions.title"/>
+		<put name="body" value="/jsp/ShippingPositions.jsp"/>
+	</definition>
+
+
+	<definition name=".ContractsClosed" extends=".main-layout">
+		<put name="form-title-id" value="ContractsClosed.title"/>
+		<put name="body" value="/jsp/ContractsClosed.jsp"/>
+	</definition>
+	<definition name=".ContractClosed" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="ContractClosed.title"/>
+		<put name="body" value="/jsp/ContractClosed.jsp"/>
+	</definition>
+	<definition name=".ClosedContractRecordsGrid" extends=".ajax">
+		<put name="body" value="/ajax/ClosedContractRecordsGrid.jsp"/>
+	</definition>
+
+	<definition name=".ClosedRecord" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/ClosedRecord.jsp"/>
+	</definition>
+
+
+	<definition name=".ContractorRequests" extends=".main-layout">
+		<put name="form-title-id" value="ContractorRequests.title"/>
+		<put name="body" value="/jsp/ContractorRequests.jsp"/>
+	</definition>
+	<definition name=".ContractorRequest" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="ContractorRequest.title"/>
+		<put name="body" value="/jsp/ContractorRequest.jsp"/>
+	</definition>
+	<definition name=".ContractorRequestPrintGrid" extends=".ajax">
+		<put name="body" value="/ajax/ContractorRequestPrintGrid.jsp"/>
+	</definition>
+	<definition name=".LinkedOrdersGrid" extends=".ajax">
+		<put name="body" value="/ajax/LinkedOrdersGrid.jsp"/>
+	</definition>
+
+
+	<definition name=".Timeboards" extends=".main-layout">
+		<put name="form-title-id" value="Timeboards.title"/>
+		<put name="body" value="/jsp/Timeboards.jsp"/>
+	</definition>
+	<definition name=".Timeboard" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="Timeboard.title"/>
+		<put name="body" value="/jsp/Timeboard.jsp"/>
+	</definition>
+
+	<definition name=".TimeboardWork" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/TimeboardWork.jsp"/>
+	</definition>
+
+
+	<definition name=".CurrentWorks" extends=".main-layout">
+		<put name="form-title-id" value="CurrentWorks.title"/>
+		<put name="body" value="/jsp/CurrentWorks.jsp"/>
+	</definition>
+
+
+	<definition name=".OutgoingLetters" extends=".main-layout">
+		<put name="form-title-id" value="OutgoingLetters.title"/>
+		<put name="body" value="/jsp/OutgoingLetters.jsp"/>
+	</definition>
+	<definition name=".OutgoingLetter" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="OutgoingLetter.title"/>
+		<put name="body" value="/jsp/OutgoingLetter.jsp"/>
+	</definition>
+
+
+	<definition name=".Instructions" extends=".main-layout">
+		<put name="form-title-id" value="Instructions.title"/>
+		<put name="body" value="/jsp/Instructions.jsp"/>
+	</definition>
+	<definition name=".Instruction" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="Instruction.title"/>
+		<put name="body" value="/jsp/Instruction.jsp"/>
+	</definition>
+
+
+	<definition name=".Blanks" extends=".main-layout">
+		<put name="form-title-id" value="Blanks.title"/>
+		<put name="body" value="/jsp/Blanks.jsp"/>
+	</definition>
+	<definition name=".Blank" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Blank.jsp"/>
+	</definition>
+
+	<definition name=".Settings" extends=".main-layout">
+		<put name="form-title-id" value="Settings.title"/>
+		<put name="body" value="/jsp/Settings.jsp"/>
+	</definition>
+	<definition name=".Setting" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Setting.jsp"/>
+	</definition>
+
+	<definition name=".Actions" extends=".main-layout">
+		<put name="form-title-id" value="Actions.title"/>
+		<put name="body" value="/jsp/Actions.jsp"/>
+	</definition>
+	<definition name=".Action" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Action.jsp"/>
+	</definition>
+	<definition name=".ActionRoles" extends=".main-layout">
+		<put name="form-title-id" value="ActionRoles.title"/>
+		<put name="body" value="/jsp/ActionRoles.jsp"/>
+	</definition>
+
+	<definition name=".users" extends=".main-layout">
+		<put name="form-title-id" value="users.title"/>
+		<put name="body" value="/jsp/users.jsp"/>
+	</definition>
+	<definition name=".user" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/user.jsp"/>
+	</definition>
+	<definition name=".contractors" extends=".main-layout">
+		<put name="form-title-id" value="Contractors.title"/>
+		<put name="body" value="/jsp/contractors.jsp"/>
+	</definition>
+	<definition name=".contractor" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/contractor.jsp"/>
+	</definition>
+	<definition name=".MergeContractors" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="MergeContractors.title"/>
+		<put name="body" value="/jsp/MergeContractors.jsp"/>
+	</definition>
+	<definition name=".ContactPerson" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/ContactPerson.jsp"/>
+	</definition>
+
+	<definition name=".departments" extends=".main-layout">
+		<put name="form-title-id" value="departments.title"/>
+		<put name="body" value="/jsp/departments.jsp"/>
+	</definition>
+	<definition name=".department" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/department.jsp"/>
+	</definition>
+
+	<definition name=".Currencies" extends=".main-layout">
+		<put name="form-title-id" value="Currencies.title"/>
+		<put name="body" value="/jsp/Currencies.jsp"/>
+	</definition>
+	<definition name=".currency" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/currency.jsp"/>
+	</definition>
+	<definition name=".CurrencyRates" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/CurrencyRates.jsp"/>
+	</definition>
+	<definition name=".CurrencyRate" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/CurrencyRate.jsp"/>
+	</definition>
+
+	<definition name=".StuffCategories" extends=".main-layout">
+		<put name="form-title-id" value="StuffCategories.title"/>
+		<put name="body" value="/jsp/StuffCategories.jsp"/>
+	</definition>
+	<definition name=".StuffCategory" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/StuffCategory.jsp"/>
+	</definition>
+
+	<definition name=".MontageAdjustments" extends=".main-layout">
+		<put name="form-title-id" value="MontageAdjustments.title"/>
+		<put name="body" value="/jsp/MontageAdjustments.jsp"/>
+	</definition>
+	<definition name=".MontageAdjustment" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/MontageAdjustment.jsp"/>
+	</definition>
+	<definition name=".MontageAdjustmentsHistory" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/MontageAdjustmentsHistory.jsp"/>
+	</definition>
+	<definition name=".MontageAdjustmentHistory" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/MontageAdjustmentHistory.jsp"/>
+	</definition>
+
+	<definition name=".Routes" extends=".main-layout">
+		<put name="form-title-id" value="Routes.title"/>
+		<put name="body" value="/jsp/Routes.jsp"/>
+	</definition>
+	<definition name=".Route" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Route.jsp"/>
+	</definition>
+
+	<definition name=".Sellers" extends=".main-layout">
+		<put name="form-title-id" value="Sellers.title"/>
+		<put name="body" value="/jsp/Sellers.jsp"/>
+	</definition>
+	<definition name=".Seller" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Seller.jsp"/>
+	</definition>
+
+	<definition name=".Units" extends=".main-layout">
+		<put name="form-title-id" value="Units.title"/>
+		<put name="body" value="/jsp/Units.jsp"/>
+	</definition>
+	<definition name=".Unit" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Unit.jsp"/>
+	</definition>
+
+	<definition name=".Purposes" extends=".main-layout">
+		<put name="form-title-id" value="Purposes.title"/>
+		<put name="body" value="/jsp/Purposes.jsp"/>
+	</definition>
+	<definition name=".Purpose" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Purpose.jsp"/>
+	</definition>
+
+	<definition name=".PurchasePurposes" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="PurchasePurposes.title"/>
+		<put name="body" value="/jsp/PurchasePurposes.jsp"/>
+	</definition>
+	<definition name=".PurchasePurpose" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/PurchasePurpose.jsp"/>
+	</definition>
+
+	<definition name=".ShippingDocTypes" extends=".main-layout">
+		<put name="form-title-id" value="ShippingDocTypes.title"/>
+		<put name="body" value="/jsp/ShippingDocTypes.jsp"/>
+	</definition>
+	<definition name=".ShippingDocType" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/ShippingDocType.jsp"/>
+	</definition>
+
+	<definition name=".RatesNDS" extends=".main-layout">
+		<put name="form-title-id" value="RatesNDS.title"/>
+		<put name="body" value="/jsp/RatesNDS.jsp"/>
+	</definition>
+	<definition name=".RateNDS" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/RateNDS.jsp"/>
+	</definition>
+
+	<definition name=".Countries" extends=".main-layout">
+		<put name="form-title-id" value="Countries.title"/>
+		<put name="body" value="/jsp/Countries.jsp"/>
+	</definition>
+	<definition name=".Country" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Country.jsp"/>
+	</definition>
+
+	<definition name=".Reputations" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="Reputations.title"/>
+		<put name="body" value="/jsp/Reputations.jsp"/>
+	</definition>
+	<definition name=".Reputation" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Reputation.jsp"/>
+	</definition>
+
+	<definition name=".InstructionTypes" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="InstructionTypes.title"/>
+		<put name="body" value="/jsp/InstructionTypes.jsp"/>
+	</definition>
+	<definition name=".InstructionType" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/InstructionType.jsp"/>
+	</definition>
+
+	<definition name=".FilesPaths" extends=".main-layout">
+		<put name="form-title-id" value="FilesPaths.title"/>
+		<put name="body" value="/jsp/FilesPaths.jsp"/>
+	</definition>
+	<definition name=".FilesPath" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/FilesPath.jsp"/>
+	</definition>
+
+	<definition name=".Languages" extends=".main-layout">
+		<put name="form-title-id" value="Languages.title"/>
+		<put name="body" value="/jsp/Languages.jsp"/>
+	</definition>
+	<definition name=".Language" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Language.jsp"/>
+	</definition>
+
+	<definition name=".Nomenclature" extends=".main-layout">
+		<put name="form-title-id" value="Nomenclature.title"/>
+		<put name="body" value="/jsp/Nomenclature.jsp"/>
+	</definition>
+	<definition name=".NomenclatureProduce" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="NomenclatureProduce.title"/>
+		<put name="body" value="/jsp/NomenclatureProduce.jsp"/>
+	</definition>
+	<definition name=".NomenclatureProducesMerge" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="NomenclatureProducesMerge.title"/>
+		<put name="body" value="/jsp/NomenclatureProducesMerge.jsp"/>
+	</definition>
+
+	<definition name=".CustomCodes" extends=".main-layout">
+		<put name="form-title-id" value="CustomCodes.title"/>
+		<put name="body" value="/jsp/CustomCodes.jsp"/>
+	</definition>
+	<definition name=".CustomCodeHistory" extends=".main-layout">
+		<put name="body" value="/jsp/CustomCodeHistory.jsp"/>
+	</definition>
+
+	<definition name=".Number1CHistory" extends=".main-layout">
+		<put name="body" value="/jsp/Number1CHistory.jsp"/>
+	</definition>
+
+	<definition name=".Number1C" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/Number1C.jsp"/>
+	</definition>
+
+	<definition name=".NomenclatureProduceCustomCodeHistory" extends=".main-layout">
+		<put name="body" value="/jsp/NomenclatureProduceCustomCodeHistory.jsp"/>
+	</definition>
+
+	<definition name=".NomenclatureProduceCustomCodeFromHistory" extends=".main-layout">
+		<put name="body" value="/jsp/NomenclatureProduceCustomCodeFromHistory.jsp"/>
+	</definition>
+
+	<definition name=".CustomCode" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/CustomCode.jsp"/>
+	</definition>
+
+	<definition name=".Roles" extends=".main-layout">
+		<put name="form-title-id" value="Roles.title"/>
+		<put name="body" value="/jsp/Roles.jsp"/>
+	</definition>
+	<definition name=".Role" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="Role.title"/>
+		<put name="body" value="/jsp/Role.jsp"/>
+	</definition>
+	<definition name=".UserRoles" extends=".main-layout">
+		<put name="form-title-id" value="UserRoles.title"/>
+		<put name="body" value="/jsp/UserRoles.jsp"/>
+	</definition>
+	<definition name=".TestHirGrid" extends=".main-layout">
+		<put name="body" value="/test/TestHirGrid.jsp"/>
+	</definition>
+	<definition name=".TestNewGrid" extends=".main-layout">
+		<put name="body" value="/test/TestNewGrid.jsp"/>
+	</definition>
+
+	<definition name=".custom_code" extends=".main-layout-menu_no_active">
+		<put name="body" value="/jsp/custom_code.jsp"/>
+	</definition>
+
+
+	<definition name=".Margin" extends=".main-layout">
+		<put name="form-title-id" value="Margin.title"/>
+		<put name="body" value="/jsp/Margin.jsp"/>
+	</definition>
+	<definition name=".MarginDev" extends=".main-layout">
+		<put name="form-title-id" value="Margin.title"/>
+		<put name="body" value="/jsp/MarginDev.jsp"/>
+	</definition>
+	<definition name=".CalculationStateDev" extends=".main-layout">
+		<put name="form-title-id" value="CalculationState.title"/>
+		<put name="body" value="/jsp/CalculationStateDev.jsp"/>
+	</definition>
+	<definition name=".GoodsRest" extends=".main-layout">
+		<put name="form-title-id" value="GoodsRest.title"/>
+		<put name="body" value="/jsp/GoodsRest.jsp"/>
+	</definition>
+	<definition name=".CalculationState" extends=".main-layout">
+		<put name="form-title-id" value="CalculationState.title"/>
+		<put name="body" value="/jsp/CalculationState.jsp"/>
+	</definition>
+	<definition name=".CalculationStateGrid" extends=".plain-layout">
+		<put name="body" value="/jsp/CalculationStateJustGrid.jsp"/>
+	</definition>
+	<definition name=".OrdersStatistics" extends=".main-layout">
+		<put name="form-title-id" value="OrdersStatistics.title"/>
+		<put name="body" value="/jsp/OrdersStatistics.jsp"/>
+	</definition>
+	<definition name=".OrdersUnexecuted" extends=".main-layout">
+		<put name="form-title-id" value="OrdersUnexecuted.title"/>
+		<put name="body" value="/jsp/OrdersUnexecuted.jsp"/>
+	</definition>
+	<definition name=".OrdersLogistics" extends=".main-layout">
+		<put name="form-title-id" value="OrdersLogistics.title"/>
+		<put name="body" value="/jsp/OrdersLogistics.jsp"/>
+	</definition>
+	<definition name=".ShippingReport" extends=".main-layout">
+		<put name="form-title-id" value="ShippingReport.title"/>
+		<put name="body" value="/jsp/ShippingReport.jsp"/>
+	</definition>
+	<definition name=".GoodsCirculation" extends=".main-layout">
+		<put name="form-title-id" value="GoodsCirculation.title"/>
+		<put name="body" value="/jsp/GoodsCirculation.jsp"/>
+	</definition>
+	<definition name=".ProduceCostReport" extends=".main-layout">
+		<put name="form-title-id" value="ProduceCostReport.title"/>
+		<put name="body" value="/jsp/ProduceCostReport.jsp"/>
+	</definition>
+	<definition name=".ProduceMovement" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="ProduceMovement.title"/>
+		<put name="body" value="/jsp/ProduceMovement.jsp"/>
+	</definition>
+
+
+	<definition name=".YesNo" extends=".dialog-layout">
+		<put name="body" value="/dialogs/YesNo.jsp"/>
+	</definition>
+	<definition name=".ErrorDialog" extends=".dialog-layout">
+		<put name="body" value="/dialogs/ErrorDialog.jsp"/>
+	</definition>
+	<definition name=".IncoTermsList" extends=".list-layout">
+		<put name="body" value="/jsp/IncoTermsList.jsp"/>
+	</definition>
+	<definition name=".CustomCodesList" extends=".list-layout">
+		<put name="body" value="/jsp/CustomCodesList.jsp"/>
+	</definition>
+	<definition name=".ContractorsList" extends=".list-layout">
+		<put name="body" value="/jsp/ContractorsList.jsp"/>
+	</definition>
+	<definition name=".ContractorsForContractsClosedList" extends=".list-layout">
+		<put name="body" value="/jsp/ContractorsForContractsClosedList.jsp"/>
+	</definition>
+	<definition name=".ContactPersonsList" extends=".list-layout">
+		<put name="body" value="/jsp/ContactPersonsList.jsp"/>
+	</definition>
+	<definition name=".ContractsDepFromContractorList" extends=".list-layout">
+		<put name="body" value="/jsp/ContractsDepFromContractorList.jsp"/>
+	</definition>
+	<definition name=".SpecificationsDepFromContractList" extends=".list-layout">
+		<put name="body" value="/jsp/SpecificationsDepFromContractList.jsp"/>
+	</definition>
+	<definition name=".EquipmentList" extends=".list-layout">
+		<put name="body" value="/jsp/EquipmentList.jsp"/>
+	</definition>
+	<definition name=".SerialNumberList" extends=".list-layout">
+		<put name="body" value="/jsp/SerialNumberList.jsp"/>
+	</definition>
+	<definition name=".SellersList" extends=".list-layout">
+		<put name="body" value="/jsp/SellersList.jsp"/>
+	</definition>
+
+	<definition name=".Attachments" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="Attachments.title"/>
+		<put name="body" value="/jsp/Attachments.jsp"/>
+	</definition>
+	<definition name=".GoodsRestLithuania" extends=".main-layout">
+		<put name="form-title-id" value="GoodsRestLithuania.title"/>
+		<put name="body" value="/jsp/GoodsRestLithuania.jsp"/>
+	</definition>
+	<definition name=".WoodworkWorkFiles" extends=".main-layout">
+		<put name="form-title-id" value="WoodworkWorkFiles.title"/>
+		<put name="body" value="/jsp/WoodworkWorkFiles.jsp"/>
+	</definition>
+	<definition name=".DeferredAttachments" extends=".main-layout-menu_no_active">
+		<put name="form-title-id" value="Attachments.title"/>
+		<put name="body" value="/jsp/DeferredAttachments.jsp"/>
+	</definition>
+	<definition name=".AttachmentsAjax" extends=".ajax">
+		<put name="body" value="/jsp/Attachments.jsp"/>
+	</definition>
+
+	<definition name=".Logs" extends=".main-layout">
+		<put name="form-title-id" value="Logs.title"/>
+		<put name="body" value="/jsp/Logs.jsp"/>
+	</definition>
+
+</tiles-definitions>

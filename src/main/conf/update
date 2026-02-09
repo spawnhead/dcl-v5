@@ -1,0 +1,5 @@
+exchange.rates.script=Tip("<iframe APPLICATION=\\"yes\\" src=\\"http://www.nbrb.by/publications/wmastersd.asp?lnkcolor=Maroon&bgcolor=e6e6dc&brdcolor=dcdccd\\" width=250 height=95 frameborder=0 scrolling=no></iframe>", LEFT,true,WIDTH,250,PADDING,0,STICKY,true,CLICKCLOSE, true,FOLLOWMOUSE,false,FIX,["menus.exchange.rates",-100,10])
+encodingFilter.exclude=(/.*PrintAction.do.*)|(/images/.*)
+
+encodingFilter.setCache=(/images/.*)|(/includes/.*)
+responseCollect.exclude=(/images/.*)|(/includes/.*)|(/GoodsRestAction\.do.*)

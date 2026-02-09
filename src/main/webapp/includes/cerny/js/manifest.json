@@ -1,0 +1,26 @@
+{"name": "Cerny.js",
+ "namespace": "CERNY",
+ "version": {
+    "major": 1,
+    "minor": 4,
+    "bugfix": 0
+ },
+ "files":[
+    "cerny.js",
+    "console/console.js",
+    "console/PopupWindow.js",
+    "console/DomElement.js",
+    "js/Array.js",
+    "js/Date.js",
+    "js/Number.js",
+    "js/String.js",
+    "schema/schema.js",
+    "js/doc/Generator.js",
+    "js/doc/Schema.js",
+    "json/HtmlPrettyPrinter.js",
+    "json/Printer.js",
+    "json/TextPrettyPrinter.js",
+    "text/DateFormat.js",
+    "text/NumberFormat.js",
+    "util/util.js"
+]}

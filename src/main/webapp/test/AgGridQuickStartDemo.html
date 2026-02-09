@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ag-grid/26.0.0/ag-grid.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ag-grid/26.0.0/ag-theme-alpine.min.css"/>
+  <style>
+    body { font-family: Tahoma, Arial, sans-serif; margin: 12px; }
+    .toolbar { margin-bottom: 8px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .toolbar input { padding: 4px 8px; }
+    .toolbar button { padding: 6px 12px; cursor: pointer; }
+    #myGrid { width: 100%; height: 450px; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <input type="text" id="quickFilter" placeholder="Быстрый поиск..." style="width: 200px;"/>
+    <button id="btnExport">Экспорт CSV</button>
+    <button id="btnClearFilter">Сбросить фильтр</button>
+    <button id="btnRefresh">Обновить</button>
+  </div>
+  <div id="myGrid" class="ag-theme-alpine"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ag-grid/26.0.0/ag-grid-community.min.js"></script>
+  <script>
+  (function() {
+    var gridApi = null;
+    function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+    var columnDefs = [
+      { field: 'id', headerName: 'ID', width: 80, pinned: 'left' },
+      { field: 'name', headerName: 'Имя', minWidth: 150, filter: true },
+      { field: 'age', headerName: 'Возраст', minWidth: 90, filter: 'agNumberColumnFilter' },
+      { field: 'country', headerName: 'Страна', minWidth: 120, filter: true },
+      { field: 'date', headerName: 'Дата', minWidth: 120, filter: 'agDateColumnFilter' },
+      { field: 'amount', headerName: 'Сумма', minWidth: 120, filter: 'agNumberColumnFilter', cellClass: 'ag-right-aligned-cell' }
+    ];
+
+    var gridOptions = {
+      columnDefs: columnDefs,
+      rowData: [],
+      defaultColDef: {
+        sortable: true,
+        resizable: true,
+        filter: true,
+        floatingFilter: true
+      },
+      pagination: true,
+      paginationPageSize: 25,
+      paginationPageSizeSelector: [25, 50, 100, 200],
+      rowSelection: 'multiple',
+      suppressRowClickSelection: true,
+      headerHeight: 36,
+      rowHeight: 32,
+      onGridReady: function(params) {
+        gridApi = params.api;
+        gridApi.setRowData(getSampleData());
+      }
+    };
+
+    function getSampleData() {
+      var countries = ['Россия', 'Беларусь', 'Казахстан', 'Украина'];
+      var data = [];
+      for (var i = 1; i <= 100; i++) {
+        var m = Math.floor(i / 30) + 1;
+        var d = (i % 28) + 1;
+        data.push({
+          id: i,
+          name: 'Запись ' + i,
+          age: 20 + (i % 50),
+          country: countries[i % 4],
+          date: '2025-' + pad2(m) + '-' + pad2(d),
+          amount: (i * 100).toFixed(2)
+        });
+      }
+      return data;
+    }
+
+    document.getElementById('quickFilter').addEventListener('input', function() {
+      if (gridApi) gridApi.setQuickFilter(this.value);
+    });
+    document.getElementById('btnExport').addEventListener('click', function() {
+      if (gridApi) gridApi.exportDataAsCsv({ fileName: 'export.csv' });
+    });
+    document.getElementById('btnClearFilter').addEventListener('click', function() {
+      if (gridApi) {
+        gridApi.setFilterModel(null);
+        document.getElementById('quickFilter').value = '';
+        gridApi.setQuickFilter('');
+      }
+    });
+    document.getElementById('btnRefresh').addEventListener('click', function() {
+      if (gridApi) gridApi.setRowData(getSampleData());
+    });
+
+    new agGrid.Grid(document.querySelector('#myGrid'), gridOptions);
+  })();
+  </script>
+</body>
+</html>

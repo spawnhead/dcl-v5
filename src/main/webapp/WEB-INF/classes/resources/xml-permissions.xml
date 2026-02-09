@@ -1,0 +1,943 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  xml-permissions PUBLIC "xml-permissions_1_1.dtd" "dtd/xml-permissions_1_1.dtd">
+<xml-permissions>
+
+ <!--
+  // т.к. проверяется совпадение первых символов (для того, чтобы работали стандартные акшн с разными диспачами),
+  // нужно избегать ситуаций, когда имеем одинаковые начальные названия, но разные права
+  // Пример:
+  // <action name="/Menu.do?current_menu_id=id.contract"> и
+  // <action name="/Menu.do?current_menu_id=id.contractors">
+  // для второй строки действуют права первой.
+ --> 
+
+<!-- begin menu section -->
+  <action name="/Menu.do?current_menu_id=id.personalOffice">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+    <lawyer/>
+    <user_in_lithuania/>
+    <other_user_in_Minsk/>
+    <staff_of_service/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.office">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+    <lawyer/>
+    <user_in_lithuania/>
+    <other_user_in_Minsk/>
+    <staff_of_service/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.personalSettings">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+    <lawyer/>
+    <user_in_lithuania/>
+    <other_user_in_Minsk/>
+    <staff_of_service/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.journals">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+    <lawyer/>
+    <user_in_lithuania/>
+    <other_user_in_Minsk/>
+    <staff_of_service/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.commercial_proposal">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.condition_for_contract">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.contractDoc">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <user_in_lithuania/>
+	  <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.order">
+    <admin/>
+    <economist/>
+    <manager/>
+    <user_in_lithuania/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.in_delivery_request">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.out_delivery_request">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.assemble">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.specification_import">
+    <admin/>
+    <economist/>
+    <declarant/>
+    <manager/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.produce_cost">
+    <admin/>
+    <economist/>
+    <declarant/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.payment">
+    <admin/>
+    <economist/>
+    <manager/>
+	  <lawyer/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.shipping">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.cclosed">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.requestContractor">
+    <admin/>
+    <economist/>
+    <staff_of_service/>
+    <manager/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.timeboard">
+    <admin/>
+    <economist/>
+    <staff_of_service/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.current_works">
+    <admin/>
+    <economist/>
+    <staff_of_service/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.woodwork_work_files">
+    <admin/>
+    <economist/>
+    <staff_of_service/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.outgoingLetter">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+    <lawyer/>
+    <other_user_in_Minsk/>
+    <logistic/>
+  </action>
+
+  <action name="/Menu.do?current_menu_id=id.references">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+    <lawyer/>
+    <other_user_in_Minsk/>
+    <user_in_lithuania/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.contractors">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <declarant/>
+    <other_user_in_Minsk/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.nomenclature">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <declarant/>
+    <user_in_lithuania/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.custom_code">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.currencies">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.stuff_categories">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.montage_adjustment">
+    <admin/>
+    <economist/>
+    <manager/>
+    <user_in_lithuania/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.units">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.purposes">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.doc_types_shipping">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.countries">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+    <lawyer/>
+    <other_user_in_Minsk/>
+  </action>
+
+
+  <action name="/Menu.do?current_menu_id=id.reports">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <declarant/>
+    <user_in_lithuania/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.margin">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.goods_rest,/Menu.do?current_menu_id=id.minsk_goods_rest">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.lithuania_goods_rest">
+    <admin/>
+    <economist/>
+    <manager/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.lithuania_goods_circulation">
+    <admin/>
+    <economist/>
+    <manager/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.calculation_state">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <user_in_lithuania/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.logistics_order">
+    <admin/>
+    <economist/>
+    <user_in_lithuania/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.statistics_orders">
+    <admin/>
+    <economist/>
+    <manager/>
+    <user_in_lithuania/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.unexecuted_orders">
+    <admin/>
+    <economist/>
+    <user_in_lithuania/>
+    <logistic/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.rep_shipping">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.goods_circulation">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.prdCostReport">
+    <admin/>
+    <economist/>
+    <user_in_lithuania/>
+  </action>
+
+
+  <action name="/Menu.do?current_menu_id=id.adm_zone">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.test_new_grid">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.dev_margin">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.users">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.roles">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.departments">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.languages">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.routes">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.sellers">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.blanks">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.settings">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.actions">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.log">
+    <admin/>
+  </action>
+  <action name="/Menu.do?current_menu_id=id.filesPaths">
+    <admin/>
+  </action>
+
+<!-- end menu section -->
+
+<!-- справочник Пользователи редактирование -->
+  <action name="/UsersAction.do,/UserAction.do">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/RolesAction.do,/RoleAction.do,/UserRolesAction.do">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/ContractorAction.do?dispatch=delete">
+    <admin/>
+  </action>
+  <action name="/ContactPersonAction.do?dispatch=deleteRowFromUserGrid">
+    <admin/>
+  </action>
+  <action name="/ContractorsAction.do,/ContractorAction.do,
+                /ContractorEditActionConditionForContract.do,
+                /ContractorEditActionCalculationState.do,
+                /ContractorAddAction.do,
+                /ContractorAddActionConditionForContract.do,
+                /ContractorAddActionContract.do,
+                /ContractorAddActionContractCalculationState.do,
+                /ContractorAddActionOrder.do,
+                /ContractorAddActionShipping.do,
+                /ContractorAddActionPayment.do,
+                /ContractorAddActionContractorRequest.do,
+                /ContractorAddActionOutgoingLetter.do,
+                /ContractorAddActionShippingCalculationState.do,
+                /ContactPersonsAction.do,/ContactPersonAction.do,
+                /ContactPersonEditActionConditionForContract.do,
+                /ContactPersonAddAction.do,
+                /ContactPersonAddActionConditionForContract.do,
+                /ContactPersonAddActionOrder.do,
+                /ContactPersonAddActionContractorRequest.do,
+                /ContactPersonAddActionOutgoingLetter.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <declarant/>
+    <other_user_in_Minsk/>
+    <logistic/>
+  </action>
+  <action name="/DepartmentsAction.do,/DepartmentAction.do">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/CurrenciesAction.do?dispatch=receiveFromBankCourses">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/CurrenciesAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+  <action name="/CurrencyAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/CurrencyAction.do?dispatch=edit">
+    <admin/>
+  </action>
+  <action name="/CurrencyRatesAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+  <action name="/CurrencyRateAction.do">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/StuffCategoriesAction.do?dispatch=show">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+  <action name="/StuffCategoryAction.do?dispatch=edit">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/StuffCategoryAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+  <action name="/MontageAdjustmentsAction.do,/MontageAdjustmentsHistoryAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <user_in_lithuania/>
+  </action>
+  <action name="/MontageAdjustmentAction.do,/MontageAdjustmentHistoryAction.do">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/RoutesAction.do,/RouteAction.do">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/SellersAction.do,/SellerAction.do">
+    <admin/>
+  </action>
+
+<!-- справочник Единицы измерения -->
+  <action name="/UnitsAction.do,/UnitAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+  </action>
+  <action name="/UnitAction.do?dispatch=edit">
+    <admin/>
+  </action>
+
+<!-- справочник Назначений (для поступающих товаров) -->
+  <action name="/PurposesAction.do,/PurposeAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+  </action>
+  <action name="/PurposeAction.do?dispatch=edit">
+    <admin/>
+  </action>
+
+  <!-- Типы отгрузочных документов производителей -->
+  <action name="/ShippingDocTypesAction.do">
+    <admin/>
+    <economist/>
+		<declarant/>
+		<logistic/>
+	</action>
+  <action name="/ShippingDocTypeAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+    <logistic/>
+	</action>
+  <action name="/ShippingDocTypeAction.do?dispatch=edit">
+    <admin/>
+    <economist/>
+	</action>
+
+<!-- Ставки НДС -->
+  <action name="/RateNDSAction.do">
+    <admin/>
+    <economist/>
+	</action>
+
+  <!-- Страны -->
+  <action name="/CountriesAction.do?dispatch=show,/CountryAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+    <lawyer/>
+    <other_user_in_Minsk/>
+  </action>
+
+<!-- Список репутаций, Редактирование репутации -->
+  <action name="/ReputationsAction.do,/ReputationAction.do">
+    <admin/>
+  </action>
+
+<!-- справочник Фирменные бланки редактирование -->
+  <action name="/BlanksAction.do,/BlankAction.do">
+    <admin/>
+  </action>
+
+<!-- справочник Системные настройки редактирование -->
+  <action name="/SettingsAction.do,/SettingAction.do">
+    <admin/>
+  </action>
+
+<!-- справочник Событий редактирование -->
+  <action name="/ActionsAction.do,/ActionAction.do,/ActionRolesAction.do">
+    <admin/>
+  </action>
+
+<!-- справочник Таможенные коды редактирование -->
+  <action name="/CustomCodesAction.do,/CustomCodeAction.do,/CustomCodeFastCreateAction.do,/CustomCodeHistoryAction.do,/CustomCodeFromHistoryAction.do">
+    <admin/>
+    <declarant/>
+  </action>
+
+<!-- Коммерческое предложение журнал -->
+  <action name="/CommercialProposalsAction.do?dispatch=input,/CommercialProposalsAction.do?dispatch=filter">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+  </action>
+
+<!-- Коммерческое предложение редактирование -->
+  <action name="/CommercialProposalsAction.do,/CommercialProposalAction.do,/CommercialProposalProduceAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+
+  <!-- Условия для составления договора (контракта) журнал -->
+  <action name="/ConditionsForContractAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+  </action>
+
+  <!-- Условия для составления договора (контракта) -->
+  <action name="/ConditionForContractAction.do?dispatch=input,/ConditionForContractAction.do?dispatch=clone">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+
+  <!-- Условия для составления договора (контракта) -->
+  <action name="/ConditionForContractAction.do?dispatch=edit">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+  </action>
+
+  <action name="/ConditionForContractProduceAction.do">
+    <admin/>
+    <manager/>
+  </action>
+
+  <!-- Договор создание нового -->
+  <action name="/ContractAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+    <lawyer/>
+  </action>
+
+  <!-- Договора редактирование -->
+  <action name="/ContractsAction.do,/ContractAction.do,/ContractActionCalculationState.do,
+                /SpecificationAction.do,
+                /SpecificationActionCalculationState.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <user_in_lithuania/>
+	  <logistic/>
+  </action>
+
+  <!-- Заказы редактирование -->
+	<action name="/OrdersAction.do">
+		<admin/>
+		<economist/>
+		<manager/>
+		<user_in_lithuania/>
+    <logistic/>
+	</action>
+
+	<action name="/OrderAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+	<action name="/OrderAction.do?dispatch=edit,/OrderAction.do?dispatch=cloneProduce,/OrderAction.do?dispatch=editProduce">
+   <admin/>
+   <economist/>
+   <manager/>
+   <user_in_lithuania/>
+   <logistic/>
+ </action>
+  <action name="/OrderAction.do?dispatch=clone">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+
+  <!-- Заявки на доставку редактирование -->
+  <action name="/DeliveryRequestsActionIn.do,/DeliveryRequestsActionOut.do,/DeliveryRequestAction.do?dispatch=edit,/DeliveryRequestActionIn.do?dispatch=edit,/DeliveryRequestActionOut.do?dispatch=edit">
+    <admin/>
+    <manager/>
+    <economist/>
+    <declarant/>
+  </action>
+  <action name="/DeliveryRequestAction.do?dispatch=input,/DeliveryRequestActionIn.do?dispatch=input,/DeliveryRequestActionOut.do?dispatch=input">
+    <admin/>
+    <manager/>
+    <economist/>
+  </action>
+  <action name="/DeliveryRequestProduceAction.do,/DeliveryRequestPositionsAction.do,
+                /DeliveryRequestPrintAction.do">
+    <admin/>
+    <manager/>
+    <economist/>
+    <declarant/>
+  </action>
+
+  <!-- Собрать-разобрать -->
+  <action name="/AssemblesAction.do,/AssembleAction.do?dispatch=edit">
+    <admin/>
+    <manager/>
+    <economist/>
+    <declarant/>
+  </action>
+  <action name="/AssembleAction.do?dispatch=input,/AssemblePositionsAction.do">
+    <admin/>
+    <manager/>
+    <economist/>
+  </action>
+
+  <!-- Спецификации (импорт) редактирование -->
+  <action name="/SpecificationImportsAction.do,/SpecificationImportAction.do?dispatch=edit">
+    <admin/>
+    <economist/>
+    <declarant/>
+    <manager/>
+  </action>
+
+  <action name="/SpecificationImportAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+    <declarant/>
+  </action>
+
+  <!-- Товар-себестоимость редактирование -->
+  <action name="/ProduceCostAction.do,/ProducesCostAction.do,
+                /ProduceCostProduceAction.do, /ProduceCostCustomAction.do">
+    <admin/>
+    <economist/>
+    <declarant/>
+  </action>
+
+<!-- Оплаты создание новых и копирование имеющихся -->
+  <action name="/PaymentAction.do?dispatch=clone,/PaymentAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+  </action>
+
+  <!-- Оплаты редактирование -->
+  <action name="/PaymentsAction.do,/PaymentAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+	  <lawyer/>
+  </action>
+
+  <!-- Оплаты редактирование -->
+  <action name="/PaySumAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+
+  <!-- Отгрузка журнал -->
+  <action name="/ShippingsAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+  </action>
+
+  <!-- Отгрузка создание -->
+  <action name="/ShippingAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+  </action>
+
+  <!-- Отгрузка редактировать таблицу -->
+  <action name="/ShippingAction.do?dispatch=editShippingPositions">
+    <admin/>
+    <economist/>
+  </action>
+
+  <!-- Отгрузка редактирование -->
+  <action name="/ShippingAction.do?dispatch=edit,/ShippingActionCalculationState.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+  </action>
+
+  <!-- Закрытые договора редактирование -->
+  <action name="/ContractClosedAction.do,/ContractsClosedAction.do,
+                /ClosedRecordAction.do">
+    <admin/>
+    <economist/>
+  </action>
+
+  <!-- Заявки от контрагентов редактирование -->
+  <action name="/ContractorRequestsAction.do,/ContractorRequestAction.do">
+    <admin/>
+    <economist/>
+    <staff_of_service/>
+    <manager/>
+  </action>
+
+  <!-- Табель учёта рабочего времени редактирование -->
+  <action name="/TimeboardsAction.do">
+    <admin/>
+    <economist/>
+    <staff_of_service/>
+  </action>
+  <action name="/TimeboardAction.do?dispatch=input">
+    <admin/>
+    <staff_of_service/>
+  </action>
+  <action name="/TimeboardAction.do?dispatch=edit,
+                /TimeboardWorkAction.do">
+    <admin/>
+    <economist/>
+    <staff_of_service/>
+  </action>
+
+  <!-- Текущие работы -->
+  <action name="/CurrentWorksAction.do">
+    <admin/>
+    <economist/>
+    <staff_of_service/>
+  </action>
+
+
+  <!-- Рабочие файлы (Деревообработка) -->
+  <action name="/WoodworkWorkFilesAction.do?dispatch=delete,/WoodworkWorkFilesUploadFileAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+    <staff_of_service/>
+  </action>
+
+  <!-- Исходящие письма редактирование -->
+  <action name="/OutgoingLettersAction.do,/OutgoingLetterAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+    <lawyer/>
+    <other_user_in_Minsk/>
+    <logistic/>
+  </action>
+
+  <!-- Приказы, распоряжения, инструкции - создание -->     
+  <action name="/InstructionAction.do?dispatch=input">
+    <admin/>
+    <lawyer/>
+  </action>
+
+  <!-- Маржа, Остатки товаров -->
+  <action name="/MarginAction.do,/ShippingReportAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+  <!-- Development: Margin (AG Grid) — те же роли, что и Отчеты → Маржа -->
+  <action name="/MarginDevAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+  <action name="/MarginDevData.do">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+
+  <!-- Development: Состояние расчетов (AG Grid) -->
+  <action name="/CalculationStateDevAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <declarant/>
+    <user_in_lithuania/>
+  </action>
+  <action name="/CalculationStateDevData.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <declarant/>
+    <user_in_lithuania/>
+  </action>
+
+  <!-- Остатки товаров -->
+  <action name="/GoodsRestAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <declarant/>
+  </action>
+
+  <!-- Товарооборот -->
+  <action name="/GoodsCirculationAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+  </action>
+
+  <!-- Состояние расчетов -->
+  <action name="/CalculationStateAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <declarant/>
+    <user_in_lithuania/>
+  </action>
+
+  <!-- Товар-себестоимость -->
+  <action name="/ProduceCostReportAction.do">
+    <admin/>
+    <economist/>
+    <user_in_lithuania/>
+  </action>
+
+  <!-- Заказы - исполненные -->
+  <action name="/OrdersStatisticsAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <declarant/>
+    <user_in_lithuania/>
+  </action>
+
+  <!-- Заказы - логистика -->
+  <action name="/OrdersLogisticsAction.do">
+    <admin/>
+    <economist/>
+    <manager/>
+    <lawyer/>
+    <user_in_lithuania/>
+    <logistic/>
+  </action>
+
+  <!-- Заказы неисполненные -->
+  <action name="/OrdersUnexecutedAction.do">
+    <admin/>
+    <economist/>
+    <user_in_lithuania/>
+    <logistic/>
+  </action>
+
+  <action name="/Sessions.do,/LockedRecords.do">
+    <admin/>
+  </action>
+
+  <!-- Справочник языков -->
+  <action name="/LanguagesAction.do,/LanguageAction.do">
+    <admin/>
+  </action>
+
+  <!-- Справочник товаров -->
+	<action name="/NomenclatureAction.do?dispatch=importProduces">
+    <admin/>
+		<declarant/>
+		<economist/>
+		<manager/>
+    <lawyer/>
+	</action>
+  <action name="/NomenclatureAction.do?dispatch=fakeDispatchForMove">
+    <admin/>
+		<declarant/>
+		<economist/>
+		<manager/>
+	</action>
+	<action name="/NomenclatureAction.do?dispatch=createNomenclatureProduce,/NomenclatureAction.do?dispatch=fakeDispatchForEdit,/NomenclatureAction.do?dispatch=fakeDispatchForDelete,/NomenclatureProduceAction.do?dispatch=copy,/NomenclatureProduceAction.do?dispatch=fakeDispatchForAdd,/NomenclatureProduceAction.do?dispatch=fakeDispatchForDelete">
+    <admin/>
+    <manager/>
+    <economist/>
+	</action>
+	<action name="/NomenclatureAction.do?dispatch=fakeDispatchForMerging,/NomenclatureProducesImportAction">
+    <admin/>
+	</action>
+	<action name="/NomenclatureProduceAction.do?dispatch=attach,/AttachmentsAction.do?dispatch=delete&amp;referencedTable=DCL_PRODUCE,/UploadFileAction.do?dispatch=input&amp;referencedTable=DCL_PRODUCE">
+    <admin/>
+		<economist/>
+		<manager/>
+	</action>
+	<action name="/NomenclatureProduceAction.do?dispatch=print">
+    <admin/>
+    <manager/>
+    <declarant/>
+    <economist/>
+    <user_in_lithuania/>
+	</action>
+
+	<action name="/GoodsRestLithuaniaAction.do?dispatch=delete,/GoodsRestLithuaniaUploadFileAction.do?dispatch=input">
+    <admin/>
+    <economist/>
+	</action>
+
+</xml-permissions>

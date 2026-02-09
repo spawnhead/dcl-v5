@@ -1,0 +1,3 @@
+global.dev-mode=true
+db.substituteParams=true
+reload.packages=(net\.sam\.dcl\.action.*)|(net\.sam\.dcl\.controller.*)

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+                                 http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+  <!--
+    Stage 4: JPA/ORM alignment scaffold (no behavior change)
+    - This file introduces a JPA 2.2 persistence unit used later when we gradually migrate ORM wiring.
+    - It should NOT be auto-loaded by the legacy runtime unless explicitly referenced.
+    - Connection is intentionally left abstract (prefer JNDI datasource). Do not enable DDL changes.
+    - Dialect and connection properties are left commented until the target DB is confirmed.
+  -->
+
+  <persistence-unit name="dclLegacyPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+    <!--
+      Entity classes:
+      - Will be added incrementally as we introduce JPA mappings.
+      - For now, keep empty to avoid classpath scanning surprises in legacy runtime.
+    -->
+    <!-- Example:
+    <class>com.lintera.domain.SomeEntity</class>
+    -->
+
+    <!-- Prefer container-managed datasource (Tomcat context.xml / JNDI) -->
+    <!-- Uncomment and set the correct resource name when available -->
+    <!--
+    <non-jta-data-source>java:comp/env/jdbc/dclDS</non-jta-data-source>
+    -->
+
+    <properties>
+      <!-- Safety: never auto create/alter schema in migration scaffold -->
+      <property name="hibernate.hbm2ddl.auto" value="validate"/>
+
+      <!-- Logging/formatting -->
+      <property name="hibernate.show_sql" value="false"/>
+      <property name="hibernate.format_sql" value="true"/>
+
+      <!-- Connection by JDBC properties (fallback when JNDI is not available)
+           Keep commented until DB type/URL are confirmed to avoid accidental use. -->
+      <!--
+      <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+      <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/dcl"/>
+      <property name="hibernate.connection.username" value="dcl"/>
+      <property name="hibernate.connection.password" value="dcl"/>
+      -->
+
+      <!-- Dialect: set explicitly once DB vendor is confirmed (examples below) -->
+      <!--
+      Firebird:     org.hibernate.dialect.FirebirdDialect
+      Oracle (11g): org.hibernate.dialect.Oracle10gDialect
+      PostgreSQL:   org.hibernate.dialect.PostgreSQL95Dialect
+      -->
+      <!-- <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/> -->
+
+      <!-- Second-level cache is off by default at this stage -->
+      <property name="hibernate.cache.use_second_level_cache" value="false"/>
+      <property name="hibernate.cache.use_query_cache" value="false"/>
+
+      <!-- JDBC fetch/statement tuning placeholders (keep conservative defaults) -->
+      <property name="hibernate.jdbc.fetch_size" value="50"/>
+      <property name="hibernate.jdbc.batch_size" value="25"/>
+    </properties>
+  </persistence-unit>
+</persistence>

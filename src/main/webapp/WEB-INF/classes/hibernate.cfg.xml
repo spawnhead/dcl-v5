@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration >
+		<session-factory >
+				<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+        <property name="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        <property name="hibernate.connection.pool_size">10</property>
+        <property name="hibernate.current_session_context_class">org.hibernate.context.ManagedSessionContext</property>
+				<property name="hibernate.dialect">org.hibernate.dialect.FirebirdDialect</property>
+        <property name="hibernate.show_sql">true</property>
+				<mapping class="net.sam.dcl.dbo.dirty.DclTest" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclDlrListProduce" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclOccupiedContractorV" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclContractor" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclOccupiedPrcProduceV" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclRole" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclPurpose" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclUnclosedSpecV" />
+        <mapping class="net.sam.dcl.dbo.DboDeliveryRequest" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclPayListSum" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclCtcList" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclContractClosed" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclCommercialProposal" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclCurrency" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclContactPerson" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclYearNum" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclOccupiedContractV" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclOccupiedSpecV" />
+        <mapping class="net.sam.dcl.dbo.DboCustomCode" />
+        <mapping class="net.sam.dcl.dbo.DboCategory" />
+        <mapping class="net.sam.dcl.dbo.DboLanguage" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclContract" />
+        <mapping class="net.sam.dcl.dbo.DboUser"/>
+        <mapping class="net.sam.dcl.dbo.dirty.DclRoute" />
+        <mapping class="net.sam.dcl.dbo.DboStuffCategory" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclOrdListProduce" />
+        <mapping class="net.sam.dcl.dbo.DboProduce" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclConListSpec" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclShipping" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclDepartment" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclTermInco" />
+        <mapping class="net.sam.dcl.dbo.DboProduceLanguage" />
+        <mapping class="net.sam.dcl.dbo.DboUserLanguage" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclProduceCostCustom" />
+        <mapping class="net.sam.dcl.dbo.DboUnit" />
+        <mapping class="net.sam.dcl.dbo.DboUnitLanguage" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclShpListProduce" />
+        <mapping class="net.sam.dcl.dbo.DboCatalogNumber" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclPrcListProduce" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclCustomCodeV" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclPayment" />
+        <mapping class="net.sam.dcl.dbo.DboCprListProduce" />
+        <mapping class="net.sam.dcl.dbo.DboAsmListProduce" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclRestProduceCostProduceV" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclSpecificationImport" />
+        <mapping class="net.sam.dcl.dbo.dirty.DclSpiListProduce" />
+        <mapping class="net.sam.dcl.dbo.DboAttachment" />
+        <mapping class="net.sam.dcl.dbo.DboAssemble" />
+        <mapping class="net.sam.dcl.dbo.DboMontageAdjustment" />
+				<mapping resource="resources/hql-resources.xml"></mapping>
+				<mapping resource="resources/native-sql-resources.xml"></mapping>
+		</session-factory>
+</hibernate-configuration>

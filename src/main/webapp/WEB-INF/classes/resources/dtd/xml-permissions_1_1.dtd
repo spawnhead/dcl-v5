@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!ENTITY % role_attrs "
+  scope  (global|project)  'global'
+  permission  (readonly|full)  'readonly'"
+>
+
+<!ELEMENT xml-permissions (action*)>
+
+<!ELEMENT action ((admin | manager | declarant | economist | lawyer | user_in_lithuania | other_user_in_Minsk | staff_of_service | logistic)*)>
+<!ATTLIST action name CDATA  #REQUIRED>
+
+<!ELEMENT admin  EMPTY >
+
+<!ELEMENT manager EMPTY >
+
+<!ELEMENT declarant EMPTY >
+
+<!ELEMENT economist EMPTY >
+
+<!ELEMENT lawyer EMPTY >
+
+<!ELEMENT user_in_lithuania EMPTY >
+
+<!ELEMENT other_user_in_Minsk EMPTY >
+
+<!ELEMENT staff_of_service EMPTY >
+
+<!ELEMENT logistic EMPTY >

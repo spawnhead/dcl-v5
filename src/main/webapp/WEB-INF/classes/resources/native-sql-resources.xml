@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<sql-query name="category-tree"><![CDATA[
+select {c.*} from DCL_GET_CHILD_CATEGORIES(:parent, :filter_category,:filter_produce,:filter_type,:filter_params,:filter_add_params,:stf_id,:filter_cusCode, null) cc, DCL_CATEGORY c where cc.cat_id=c.cat_id
+]]></sql-query>
+</hibernate-mapping>

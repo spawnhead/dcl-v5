@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
+
+  <display-name>DCL</display-name>
+  <listener>
+    <description>Unlock records when session ends</description>
+    <listener-class >net.sam.dcl.session.SessionListener</listener-class>
+  </listener>
+
+  <filter>
+    <filter-name>HibernateSessionFilter</filter-name>
+    <filter-class>net.sam.dcl.filters.HibernateSessionFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>ResponseCollectFilter</filter-name>
+    <filter-class>net.sam.dcl.filters.ResponseCollectFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>RequestResponseSetupFilter</filter-name>
+    <filter-class>net.sam.dcl.filters.RequestResponseSetupFilter</filter-class>
+    <init-param>
+      <param-name>request-encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>response-encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter>
+    <filter-name>DefenderFilter</filter-name>
+    <filter-class>net.sam.dcl.filters.DefenderFilter</filter-class>
+    <init-param>
+      <param-name>login-page</param-name>
+      <param-value>/trusted/Login.do?dispatch=input</param-value>
+    </init-param>
+    <init-param>
+      <param-name>trusted-dirs</param-name>
+      <param-value>(/trusted.*)|(/includes.*)|(/images.*)|(/test.*)|(/api.*)</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forward-no-perm-page</param-name>
+      <param-value>/trusted/NoPermission.do</param-value>
+    </init-param>
+  </filter>
+  <filter>
+    <filter-name>ConfigReloader</filter-name>
+    <filter-class>net.sam.dcl.filters.ConfigReloader</filter-class>
+  </filter>
+  <filter>
+    <filter-name>ApiFilter</filter-name>
+    <filter-class>net.sam.dcl.api.ApiFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>UiRouterFilter</filter-name>
+    <filter-class>net.sam.dcl.api.UiRouterFilter</filter-class>
+  </filter>
+  <!-- Filter order and scope tuned for Java 21 + Jetty:
+       1) RequestResponseSetupFilter first to create session/cookies early (avoids ;jsessionid in links)
+       2) HibernateSessionFilter around all requests
+       3) ResponseCollectFilter only for dynamic pages (*.do, *.jsp) — exclude static assets to prevent EoF noise
+       4) DefenderFilter and ConfigReloader for all -->
+  <filter-mapping>
+    <filter-name>RequestResponseSetupFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>HibernateSessionFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>ApiFilter</filter-name>
+    <url-pattern>/api/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>ResponseCollectFilter</filter-name>
+    <servlet-name>action</servlet-name>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>DefenderFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>UiRouterFilter</filter-name>
+    <url-pattern>/MarginDevAction.do</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>UiRouterFilter</filter-name>
+    <url-pattern>/CalculationStateDevAction.do</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>ConfigReloader</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <description>
+      DCL servlets and JSP pages.
+  </description>
+  <!-- Define servlet-mapped and path-mapped example filters -->
+
+  <servlet>
+    <servlet-name>InitApp</servlet-name>
+    <servlet-class>net.sam.dcl.servlets.InitApp</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <!-- Standard Action Servlet Configuration (with debugging) -->
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>/WEB-INF/classes/resources/struts/struts-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>2</param-value>
+    </init-param>
+    <init-param>
+      <param-name>detail</param-name>
+      <param-value>2</param-value>
+    </init-param>
+    <init-param>
+      <param-name>convertNull</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>api</servlet-name>
+    <servlet-class>net.sam.dcl.api.ApiDispatchServlet</servlet-class>
+  </servlet>
+
+  <!-- Standard Action Servlet Mapping -->
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>api</servlet-name>
+    <url-pattern>/api/*</url-pattern>
+  </servlet-mapping>
+
+
+  <!-- The Usual Welcome File List -->
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
+
+  <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/error.do</location>
+  </error-page>
+  <!-- Struts Tag Library Descriptors -->
+  <jsp-config>
+
+
+  <taglib>
+    <taglib-uri>/tags/struts-bean</taglib-uri>
+    <taglib-location>/WEB-INF/tld/struts-bean.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-html</taglib-uri>
+    <taglib-location>/WEB-INF/tld/struts-html.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-logic</taglib-uri>
+    <taglib-location>/WEB-INF/tld/struts-logic.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-nested</taglib-uri>
+    <taglib-location>/WEB-INF/tld/struts-nested.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-tiles</taglib-uri>
+    <taglib-location>/WEB-INF/tld/struts-tiles.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/html-controls</taglib-uri>
+    <taglib-location>/WEB-INF/tld/html-controls.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/dcl-html-controls</taglib-uri>
+    <taglib-location>/WEB-INF/tld/dcl-html-controls.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/html-grid</taglib-uri>
+    <taglib-location>/WEB-INF/tld/html-grid.tld</taglib-location>
+  </taglib>
+
+		<jsp-property-group>
+      <url-pattern>*.jsp</url-pattern>
+      <page-encoding>UTF-8</page-encoding>
+    </jsp-property-group>
+
+  </jsp-config>
+</web-app>

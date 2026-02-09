@@ -1,0 +1,6389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  xml-resources SYSTEM "dtd/xml-resources_1_1.dtd">
+<xml-resources>
+
+	<entry id='test-sim'>
+		select rol_name as name, rol_id as id from dcl_role
+	</entry>
+
+
+	<entry id='select-user_settings_login'>
+		select * from dcl_user_setting where usr_id = :usr_id
+	</entry>
+
+	<entry id='select-user_settings'>
+		select * from dcl_user_setting where usr_id = :user.usr_id
+	</entry>
+
+	<entry id='user_setting-load'>
+		select * from dcl_user_setting
+		where ust_id = :ust_id
+	</entry>
+
+	<entry id='user_setting-update'>
+		update dcl_user_setting set
+		ust_description = :ust_description,
+		ust_value = :ust_value,
+		ust_value_extended = :ust_value_extended
+		where ust_id = :ust_id
+	</entry>
+
+	<entry id='user_setting-insert'>
+		insert into dcl_user_setting (
+		ust_name,
+		ust_description,
+		ust_value,
+		ust_type,
+		usr_id
+		)
+		values (
+		:ust_name,
+		:ust_description,
+		:ust_value,
+		:ust_type,
+		:usr_id
+		);
+	</entry>
+
+
+	<entry id='select-information_messages'>
+		select
+		inm_id as "id",
+		inm_create_date as "date",
+		inm_message as "message"
+		from dcl_inf_message
+		where usr_id = :user.usr_id
+	</entry>
+
+	<entry id='delete-information_message'>
+		delete from dcl_inf_message where inm_id = :id
+	</entry>
+
+	<entry id='save-information_messages'>
+		insert into dcl_inf_message(
+		usr_id,
+		inm_message
+		)
+		values(
+		:user.usr_id,
+		:message
+		)
+	</entry>
+
+
+	<entry id='select-payment_messages'>
+		select
+		pms_id,
+		pms_create_date,
+		pms_message,
+		pms_sum,
+		ctr_id as "contractor.id",
+		ctr_name as "contractor.name",
+		pms_percent,
+		pms_updated,
+		cur_id as "currency.id",
+		cur_name as "currency.name"
+		from dcl_pay_messages_load(:user.usr_id)
+	</entry>
+
+	<entry id='delete-payment_message'>
+		delete from dcl_pay_message where pms_id = :pms_id
+	</entry>
+
+	<entry id='save-payment_messages'>
+		execute procedure dcl_save_payment_messages(
+		:pay_id,
+		:managerRoleId,
+		:msgReceivedPayment,
+		:msgReceivedPaymentByCon,
+		:msgFrom,
+		:msgSpec,
+		:msgComment
+		)
+	</entry>
+
+
+	<entry id='select-contract_messages'>
+		select
+		cms_id as "id",
+		cms_create_date as "date",
+		cms_message as "message",
+		ctr_id as "contractor.id",
+		ctr_name as "contractor.name"
+		from dcl_con_messages_load(:user.usr_id)
+	</entry>
+
+	<entry id='delete-contract_message'>
+		delete from dcl_con_message where cms_id = :id
+	</entry>
+
+	<entry id='save-contract_messages'>
+		execute procedure dcl_save_contract_messages(
+		:con_id,
+		:spc_id,
+		:ctr_id,
+		:msg
+		)
+	</entry>
+
+
+	<entry id='select-condition_for_contract_messages'>
+		select
+		ccm_id as "id",
+		ccm_create_date as "date",
+		ccm_message as "message",
+		ctr_id as "contractor.id",
+		ctr_name as "contractor.name"
+		from dcl_cfc_messages_load(:user.usr_id)
+	</entry>
+
+	<entry id='delete-condition_for_contract_message'>
+		delete from dcl_cfc_message where ccm_id = :id
+	</entry>
+
+	<entry id='save-condition_for_contract_messages'>
+		execute procedure dcl_save_cfc_messages(
+		:cfc_id,
+		:ctr_id,
+		:msg
+		)
+	</entry>
+
+	<entry id='select-order_messages'>
+		select
+		orm_id as "id",
+		orm_create_date as "date",
+		orm_message as "message",
+		0 as "contractor.id",
+		ctr_name as "contractor.name"
+		from dcl_ord_messages_load(:user.usr_id)
+	</entry>
+
+	<entry id='delete-order_message'>
+		delete from dcl_ord_message where orm_id = :id
+	</entry>
+
+	<entry id='save-order_messages'>
+		execute procedure dcl_save_ord_messages(
+		:ord_id,
+		:prc_id,
+		:managerRoleId,
+		:msg
+		)
+	</entry>
+
+
+	<entry id='select-user_links'>
+		select
+		uln_id as "id",
+		uln_create_date as "date",
+		uln_url as "url",
+		uln_parameters as "parameters",
+		uln_text as "text",
+		uln_menu_id as "menuId"
+		from dcl_user_link
+		where usr_id = :usr_id
+		order by uln_create_date descending
+	</entry>
+
+	<entry id='save-condition_for_contract_messages_for_economist'>
+		execute procedure dcl_save_cfc_eco_msg(
+		:economistRoleId,
+		:url,
+		:parameters,
+		:text,
+		:menuId
+		)
+	</entry>
+
+	<entry id='delete-condition_for_contract_messages_for_economist'>
+		delete from dcl_user_link uln where uln.uln_url = :url and uln.uln_parameters = :parameters;
+	</entry>
+
+
+	<entry id='select-commercial_proposals'>
+		select * from dcl_commercial_proposal_filter(
+		:number,
+		:contractor.name,
+		:date_begin_date,
+		:date_end_date,
+		:sum_min,
+		:sum_max,
+		:user.usr_name,
+		:department.name,
+		:stuffCategory.name,
+		:cpr_proposal_received_flag_in,
+		:cpr_proposal_declined_in
+		)
+	</entry>
+
+	<entry id='commercial_proposal-insert'>
+		select cpr_id from dcl_commercial_proposal_insert (
+		:cpr_date_ts,
+		:cpr_number,
+		:contractor.id,
+		:contactPerson.cps_id,
+		:cpr_concerning,
+		:cpr_concerning_invoice,
+		:cpr_preamble,
+		:currency.id,
+		:cpr_course,
+		:cpr_nds,
+		:priceCondition.id,
+		:cpr_country,
+		:cpr_pay_condition,
+		:cpr_pay_condition_invoice,
+		:deliveryCondition.id,
+		:cpr_delivery_address,
+		:cpr_sum_transport,
+		:cpr_all_transport,
+		:cpr_delivery_term,
+		:cpr_delivery_term_invoice,
+		:cpr_add_info,
+		:cpr_final_date_ts,
+		:cpr_final_date_invoice,
+		:user.usr_id,
+		:executor.usr_id,
+		:cpr_executor_flag,
+		:cpr_date_accept_ts,
+		:blank.bln_id,
+		:cpr_img_name,
+		:cpr_proposal_received_flag,
+		:cpr_block,
+		:cpr_summ,
+		:cpr_nds_by_string,
+		:cpr_sum_assembling,
+		:cpr_old_version,
+		:currencyTable.id,
+		:cpr_assemble_minsk_store,
+		:cpr_free_prices,
+		:cpr_can_edit_invoice,
+		:cpr_comment,
+		:purchasePurpose.id,
+		:cpr_reverse_calc,
+		:contactPersonSeller.cps_id,
+		:contactPersonCustomer.cps_id,
+		:cpr_guaranty_in_month,
+		:cpr_prepay_percent,
+		:cpr_prepay_sum,
+		:cpr_delay_days,
+		:cpr_no_reservation,
+		:cpr_provider_delivery,
+		:cpr_provider_delivery_address,
+		:cpr_delivery_count_day,
+		:cpr_donot_calculate_netto,
+		:cpr_print_scale,
+		:cpr_contract_scale,
+		:cpr_invoice_scale,
+		:cpr_final_date_above,
+		:consignee.id,
+		:cpr_tender_number,
+		:cpr_tender_number_editable,
+		:cpr_proposal_declined
+		)
+	</entry>
+
+	<entry id='commercial_proposal-update'>
+		update dcl_commercial_proposal set
+		cpr_number = :cpr_number,
+		cpr_date = :cpr_date_ts,
+		ctr_id = :contractor.id,
+		cps_id = :contactPerson.cps_id,
+		cpr_concerning = :cpr_concerning,
+		cpr_concerning_invoice = :cpr_concerning_invoice,
+		cpr_preamble = :cpr_preamble,
+		cur_id = :currency.id,
+		cur_id_table = :currencyTable.id,
+		cpr_course = :cpr_course,
+		cpr_nds = :cpr_nds,
+		trm_id_price_condition = :priceCondition.id,
+		cpr_country = :cpr_country,
+		cpr_pay_condition = :cpr_pay_condition,
+		cpr_pay_condition_invoice = :cpr_pay_condition_invoice,
+		trm_id_delivery_condition = :deliveryCondition.id,
+		cpr_delivery_address = :cpr_delivery_address,
+		cpr_sum_transport = :cpr_sum_transport,
+		cpr_all_transport = :cpr_all_transport,
+		cpr_sum_assembling = :cpr_sum_assembling,
+		cpr_delivery_term = :cpr_delivery_term,
+		cpr_delivery_term_invoice = :cpr_delivery_term_invoice,
+		cpr_add_info = :cpr_add_info,
+		cpr_final_date = :cpr_final_date_ts,
+		cpr_final_date_invoice = :cpr_final_date_invoice,
+		usr_id = :user.usr_id,
+		executor_id = :executor.usr_id,
+		cpr_executor_flag = :cpr_executor_flag,
+		cpr_date_accept = :cpr_date_accept_ts,
+		bln_id = :blank.bln_id,
+		cpr_img_name = :cpr_img_name,
+		cpr_proposal_received_flag = :cpr_proposal_received_flag,
+		cpr_block = :cpr_block,
+		cpr_summ = :cpr_summ,
+		cpr_nds_by_string = :cpr_nds_by_string,
+		cpr_old_version = :cpr_old_version,
+		cpr_assemble_minsk_store = :cpr_assemble_minsk_store,
+		cpr_free_prices = :cpr_free_prices,
+		cpr_can_edit_invoice = :cpr_can_edit_invoice,
+		cpr_comment = :cpr_comment,
+		pps_id = :purchasePurpose.id,
+		cpr_reverse_calc = :cpr_reverse_calc,
+		cps_id_seller = :contactPersonSeller.cps_id,
+		cps_id_customer = :contactPersonCustomer.cps_id,
+		cpr_guaranty_in_month = :cpr_guaranty_in_month,
+		cpr_prepay_percent = :cpr_prepay_percent,
+		cpr_prepay_sum = :cpr_prepay_sum,
+		cpr_delay_days = :cpr_delay_days,
+		ctr_id_consignee = :consignee.id,
+		cpr_no_reservation = :cpr_no_reservation,
+		cpr_provider_delivery = :cpr_provider_delivery,
+		cpr_provider_delivery_address = :cpr_provider_delivery_address,
+		cpr_delivery_count_day = :cpr_delivery_count_day,
+		cpr_donot_calculate_netto = :cpr_donot_calculate_netto,
+		cpr_print_scale = :cpr_print_scale,
+		cpr_contract_scale = :cpr_contract_scale,
+		cpr_invoice_scale = :cpr_invoice_scale,
+		cpr_final_date_above = :cpr_final_date_above,
+		cpr_tender_number = :cpr_tender_number,
+		cpr_tender_number_editable = :cpr_tender_number_editable,
+		cpr_proposal_declined = :cpr_proposal_declined
+		where cpr_id = :cpr_id
+	</entry>
+
+	<entry id='commercial_proposal-update_scale'>
+		update dcl_commercial_proposal set
+		cpr_print_scale = :cpr_print_scale,
+		cpr_contract_scale = :cpr_contract_scale,
+		cpr_invoice_scale = :cpr_invoice_scale,
+		cpr_final_date_above = :cpr_final_date_above
+		where cpr_id = :cpr_id
+	</entry>
+
+	<entry id='commercial_proposal-update-block'>
+		update dcl_commercial_proposal set
+		cpr_block = :cpr_block
+		where cpr_id = :cpr_id
+	</entry>
+
+	<entry id='commercial_proposal-update-checkPrice'>
+		update dcl_commercial_proposal set
+		cpr_check_price = :cpr_check_price,
+		cpr_check_price_date = :cpr_check_price_date,
+		usr_id_check_price = :usr_id_check_price,
+		cpr_block = :cpr_block
+		where cpr_id = :cpr_id
+	</entry>
+
+	<entry id='commercial_proposal-load'>
+		select
+		usr_id_create as "createUser.usr_id",
+		usr_id_edit as "editUser.usr_id",
+		cpr_create_date as "usr_date_create",
+		cpr_edit_date as "usr_date_edit",
+		cpr_id,
+		cpr_number,
+		cpr_date,
+		ctr_id as "contractor.id",
+		cps_id as "contactPerson.cps_id",
+		cpr_concerning,
+		cpr_concerning_invoice,
+		cpr_preamble,
+		cur_id as "currency.id",
+		cur_id_table as "currencyTable.id",
+		cpr_course,
+		cpr_nds,
+		trm_id_price_condition as "priceCondition.id",
+		cpr_country,
+		cpr_pay_condition,
+		cpr_pay_condition_invoice,
+		trm_id_delivery_condition as "deliveryCondition.id",
+		cpr_delivery_address,
+		cpr_sum_transport,
+		cpr_all_transport,
+		cpr_sum_assembling,
+		cpr_delivery_term,
+		cpr_delivery_term_invoice,
+		cpr_add_info,
+		cpr_final_date,
+		cpr_final_date_invoice,
+		usr_id as "user.usr_id",
+		executor_id as "executor.usr_id",
+		cpr_executor_flag,
+		cpr_date_accept,
+		bln_id as "blank.bln_id",
+		cpr_img_name,
+		cpr_proposal_received_flag,
+		cpr_block,
+		cpr_summ,
+		cpr_nds_by_string,
+		cpr_old_version,
+		cpr_assemble_minsk_store,
+		cpr_free_prices,
+		cpr_can_edit_invoice,
+		cpr_comment,
+		pps_id as "purchasePurpose.id",
+		cpr_reverse_calc,
+		cps_id_seller as "contactPersonSeller.cps_id",
+		cps_id_customer as "contactPersonCustomer.cps_id",
+		cpr_guaranty_in_month,
+		cpr_prepay_percent,
+		cpr_prepay_sum,
+		cpr_delay_days,
+		ctr_id_consignee as "consignee.id",
+		cpr_no_reservation,
+		cpr_provider_delivery,
+		cpr_provider_delivery_address,
+		cpr_delivery_count_day,
+		cpr_donot_calculate_netto,
+		cpr_print_scale,
+		cpr_contract_scale,
+		cpr_invoice_scale,
+		cpr_final_date_above,
+		cpr_check_price,
+		cpr_tender_number,
+		cpr_tender_number_editable,
+		cpr_proposal_declined
+		from dcl_commercial_proposal cpr
+		where cpr_id = :cpr_id
+	</entry>
+
+	<entry id='commercial_proposal-load-count'>
+		select count(cpr_id) as "cpr_id"
+		from dcl_commercial_proposal
+		where bln_id = :blank.bln_id
+	</entry>
+
+	<entry id='commercial_proposal-load-random'>
+		select first 1 skip {cpr_id}
+		cpr_id
+		from dcl_commercial_proposal
+		where bln_id = :blank.bln_id
+		order by cpr_id
+	</entry>
+
+
+	<entry id='select-commercial_proposal_produces'>
+		select
+		lpr_id,
+		cpr_id,
+		lpr_produce_name,
+		lpr_catalog_num,
+		lpr_price_brutto,
+		lpr_discount,
+		lpr_price_netto,
+		lpr_count,
+		cus_id,
+		cus_id as "customCode.id",
+		cus_code as "customCode.code",
+		cus_percent as "customCode.custom_percent",
+		lpr_coeficient,
+		stf_id as "stuffCategory.id",
+		stf_name as "stuffCategory.name",
+		prd_id as "produce.id",
+		lpr_comment,
+		lpc_id,
+		lpc_cost_one_by,
+		lpc_price_list_by,
+		lpc_1c_number,
+		lpr_sale_price,
+		lpr_sale_cost_parking_trans
+		from dcl_cpr_list_produces_load(:cpr_id, :cpr_date_tm)
+	</entry>
+
+
+	<entry id='insert_commercial_proposal_produce'>
+		insert into dcl_cpr_list_produce (
+		lpr_id,
+		cpr_id,
+		lpr_produce_name,
+		lpr_catalog_num,
+		lpr_price_brutto,
+		lpr_discount,
+		lpr_price_netto,
+		lpr_count,
+		cus_id,
+		lpr_coeficient,
+		stf_id,
+		prd_id,
+		lpr_comment,
+		lpc_id,
+		lpr_sale_price,
+		lpr_sale_cost_parking_trans
+		)
+		values (
+		:lpr_id,
+		:cpr_id,
+		:lpr_produce_name,
+		:lpr_catalog_num,
+		:lpr_price_brutto,
+		:lpr_discount,
+		:lpr_price_netto,
+		:lpr_count,
+		:customCode.id,
+		:lpr_coeficient,
+		:stuffCategory.id,
+		:produce.id,
+		:lpr_comment,
+		:lpc_id,
+		:lpr_sale_price,
+		:lpr_sale_cost_parking_trans
+		);
+	</entry>
+
+	<entry id='delete_commercial_proposal_produces'>
+		delete from dcl_cpr_list_produce
+		where cpr_id = :cpr_id
+	</entry>
+
+	<entry id='select-commercial_proposal_transports'>
+		select
+		trn_id,
+		cpr_id,
+		stf_id as "stuffCategory.id",
+		stf_name as "stuffCategory.name",
+		trn_sum
+		from dcl_cpr_transports_load(:cpr_id)
+	</entry>
+
+
+	<entry id='insert_commercial_proposal_transport'>
+		insert into dcl_cpr_transport (
+		trn_id,
+		cpr_id,
+		stf_id,
+		trn_sum
+		)
+		values(
+		:trn_id,
+		:cpr_id,
+		:stuffCategory.id,
+		:trn_sum
+		)
+	</entry>
+
+	<entry id='delete_commercial_proposal_transports'>
+		delete from dcl_cpr_transport
+		where cpr_id = :cpr_id
+	</entry>
+
+	<entry id='produce_cost-positions-available-for-commercial_proposal'>
+		select
+		lpc_id as "doc_id",
+		prc_id as "id",
+		prc_number as "number",
+		prc_date as "date",
+		prd_id as "produce.id",
+		lpc_count as "count",
+		reserved,
+		free_count as "shipped_count",
+		lpc_1c_number,
+		ctn_number
+		from dcl_get_rest_lpc_for_cpr(:cpr_id, :route.id, :number_1c, :prc_date_min_ts)
+		order by prc_date descending, prc_id, lpc_id
+	</entry>
+
+	<entry id='select-reserved-produce_cost-for-commercial_proposal'>
+		select * from dcl_get_rest_lpc_for_lpr(:cpr_id, :lpc_id)
+	</entry>
+
+	<entry id='load-reserved_info'>
+		select * from dcl_get_reserved_info(:cpr_id, :lpc_id)
+	</entry>
+
+
+	<entry id='select-conditions_for_contract'>
+		select * from dcl_cond_for_contract_filter(
+			:contractor.name,
+			:user.usr_name,
+			:date_begin_date,
+			:date_end_date,
+			:seller.name,
+			:cfc_not_executed,
+			:annul_exclude,
+			:cfc_not_placed
+		)
+		order by executed_and_placed, cfc_place_date descending
+	</entry>
+
+	<entry id='condition_for_contract-insert'>
+		select cfc_id from dcl_cond_for_contract_insert (
+			:cfc_place,
+			:cfc_execute,
+			:seller.id,
+			:contractor.id,
+			:cfc_doc_type,
+			:cfc_con_number_txt,
+			:cfc_con_date_ts,
+			:currency.id,
+			:contract.con_id,
+			:cfc_spc_number_txt,
+			:cfc_spc_date_ts,
+			:cfc_pay_cond,
+			:cfc_custom_point,
+			:cfc_delivery_cond,
+			:cfc_guarantee_cond,
+			:cfc_montage_cond,
+			:cfc_date_con_to_ts,
+			:cfc_count_delivery,
+			:contactPersonSign.cps_id,
+			:contactPerson.cps_id,
+			:cfc_delivery_count,
+			:purchasePurpose.id,
+			:cfc_comment,
+			:cfc_need_invoice,
+			:cfc_annul,
+			:cfc_annul_date
+		)
+	</entry>
+
+	<entry id='condition_for_contract-update'>
+		update dcl_cond_for_contract set
+			cfc_place = :cfc_place,
+			cfc_execute = :cfc_execute,
+			sln_id = :seller.id,
+			ctr_id = :contractor.id,
+			cfc_doc_type = :cfc_doc_type,
+			cfc_con_number_txt = :cfc_con_number_txt,
+			cfc_con_date = :cfc_con_date_ts,
+			cur_id = :currency.id,
+			con_id = :contract.con_id,
+			cfc_spc_number_txt = :cfc_spc_number_txt,
+			cfc_spc_date = :cfc_spc_date_ts,
+			cfc_pay_cond = :cfc_pay_cond,
+			cfc_custom_point = :cfc_custom_point,
+			cfc_delivery_cond = :cfc_delivery_cond,
+			cfc_guarantee_cond = :cfc_guarantee_cond,
+			cfc_montage_cond = :cfc_montage_cond,
+			cfc_date_con_to = :cfc_date_con_to_ts,
+			cfc_count_delivery = :cfc_count_delivery,
+			cps_id_sign = :contactPersonSign.cps_id,
+			cps_id = :contactPerson.cps_id,
+			cfc_delivery_count = :cfc_delivery_count,
+			pps_id = :purchasePurpose.id,
+			cfc_comment = :cfc_comment,
+			cfc_need_invoice = :cfc_need_invoice,
+			cfc_annul = :cfc_annul,
+			cfc_annul_date = :cfc_annul_date,
+			cfc_check_price = :cfc_check_price,
+			cfc_check_price_date = :cfc_check_price_date,
+			usr_id_check_price = :usr_id_check_price
+		where cfc_id = :cfc_id
+	</entry>
+
+	<entry id='execute_condition_for_contract'>
+		update dcl_cond_for_contract set
+		cfc_execute = :cfc_execute,
+		usr_id_execute = :executeUser.usr_id
+		where cfc_id = :cfc_id
+	</entry>
+
+	<entry id='select-cfc_specifications_numbers-for-contract-id'>
+		select
+		cfc_spc_number_txt,
+		cfc_execute
+		from dcl_cond_for_contract
+		where cfc_id != coalesce(:cfc_id, -1) and con_id = :contract.con_id
+	</entry>
+
+	<entry id='condition_for_contract-update-checkPrice'>
+		update dcl_cond_for_contract set
+			cfc_check_price = :cfc_check_price,
+			cfc_check_price_date = :cfc_check_price_date,
+			usr_id_check_price = :usr_id_check_price
+		where cfc_id = :cfc_id
+	</entry>
+
+	<entry id='condition_for_contract-load'>
+		select
+			usr_id_create as "createUser.usr_id",
+			usr_id_edit as "editUser.usr_id",
+			usr_id_place as "placeUser.usr_id",
+			usr_id_execute as "executeUser.usr_id",
+			usr_id_edit_annul as "annulUser.usr_id",
+			cfc_create_date as "usr_date_create",
+			cfc_edit_date as "usr_date_edit",
+			cfc_place_date as "usr_date_place",
+			cfc_execute_date as "usr_date_execute",
+			cfc_edit_annul_date as "usr_date_annul",
+			cfc_place,
+			cfc_execute,
+			sln_id as "seller.id",
+			ctr_id as "contractor.id",
+			cfc_doc_type,
+			cfc_con_number_txt,
+			cfc_con_date,
+			cur_id as "currency.id",
+			con_id as "contract.con_id",
+			cfc_spc_number_txt,
+			cfc_spc_date,
+			cfc_pay_cond,
+			cfc_custom_point,
+			cfc_delivery_cond,
+			cfc_guarantee_cond,
+			cfc_montage_cond,
+			cfc_date_con_to,
+			cfc_count_delivery,
+			cps_id_sign as "contactPersonSign.cps_id",
+			cps_id as "contactPerson.cps_id",
+			cfc_delivery_count,
+			pps_id as "purchasePurpose.id",
+			cfc_comment,
+			cfc_need_invoice,
+			cfc_check_price,
+			cfc_check_price_date,
+			usr_id_check_price,
+			cfc_annul,
+			cfc_annul_date
+		from dcl_cond_for_contract cfc
+		where cfc_id = :cfc_id
+	</entry>
+
+	<entry id='select-condition_for_contract_produces'>
+		select
+			ccp_id,
+			cfc_id,
+			stf_id as "stuffCategory.id",
+			stf_name as "stuffCategory.name",
+			prd_id as "produce.id",
+			ccp_price,
+			ccp_count,
+			ccp_nds_rate,
+			cpr_id,
+			cpr_number,
+			cpr_date
+		from dcl_cfc_produces_select(:cfc_id)
+	</entry>
+
+	<entry id='insert_condition_for_contract_produce'>
+		insert into dcl_cfc_list_produce (
+		cfc_id,
+		stf_id,
+		prd_id,
+		ccp_price,
+		ccp_count,
+		ccp_nds_rate,
+		cpr_id
+		)
+		values(
+		:cfc_id,
+		:stuffCategory.id,
+		:produce.id,
+		:ccp_price,
+		:ccp_count,
+		:ccp_nds_rate,
+		:cpr_id
+		);
+	</entry>
+
+	<entry id='delete_condition_for_contract_produces'>
+		delete from dcl_cfc_list_produce
+		where cfc_id = :cfc_id
+	</entry>
+
+
+	<entry id='select-contracts'>
+		select * from dcl_contract_filter(
+			:number,
+			:contractor.name,
+			:date_begin_date,
+			:date_end_date,
+			:sum_min,
+			:sum_max,
+			:user.usr_name,
+			:con_executed,
+			:oridinal_absent,
+			:seller.name
+		)
+		order by con_reminder descending, con_date descending, con_number descending
+	</entry>
+
+	<entry id='select-contracts-for-contractor-id'>
+		select
+			con_id,
+			con_number,
+			con_date,
+			sln_id as "seller.id",
+			sln_name as "seller.name",
+			sln_is_resident as "seller.resident",
+			cur_id as "currency.id",
+			cur_name as "currency.name",
+			con_reusable,
+			con_final_date,
+			con_annul
+		from dcl_contract_for_contractor(
+			:ctr_id,
+			:cur_id,
+			:filter,
+			:con_seller,
+			:allCon,
+			:onlyReusable,
+			:conFinalDateAfterDb
+		)
+	</entry>
+
+	<entry id="select-contracts-ids-for-contractor">
+		select con_id from dcl_contract where ctr_id = :ctr_id
+	</entry>
+
+	<entry id='select-contracts-for-contractor-id-for_cc'>
+		select * from dcl_contract_for_cc_filter(:ctr_id)
+	</entry>
+
+	<entry id='contract-insert'>
+		select con_id from dcl_contract_insert(
+			:con_date,
+			:contractor.id,
+			:currency.id,
+			:con_number,
+			:con_executed,
+			:con_summ,
+			:con_original,
+			:con_annul,
+			:con_annul_date,
+			:con_comment,
+			:seller.id,
+			:con_reusable,
+			:con_final_date
+		)
+	</entry>
+
+	<entry id='contract-update'>
+		update dcl_contract set
+			con_number = :con_number,
+			con_date = :con_date,
+			ctr_id = :contractor.id,
+			cur_id = :currency.id,
+			con_executed = :con_executed,
+			con_summ = :con_summ,
+			con_original = :con_original,
+			con_annul = :con_annul,
+			con_annul_date = :con_annul_date,
+			con_comment = :con_comment,
+			sln_id = :seller.id,
+			con_reusable = :con_reusable,
+			con_final_date = :con_final_date
+		where con_id = :con_id
+	</entry>
+
+	<entry id='contract-load'>
+		select
+			usr_id_create as "createUser.usr_id",
+			usr_id_edit as "editUser.usr_id",
+			con_create_date as "usr_date_create",
+			con_edit_date as "usr_date_edit",
+			con_id,
+			con_number,
+			con_date,
+			ctr_id as "contractor.id",
+			cur_id as "currency.id",
+			con_summ,
+			con_original,
+			(select con_id from DCL_OCCUPIED_CONTRACT_V where con_id = con.con_id) as con_occupied,
+			con_annul,
+			con_annul_date,
+			con_comment,
+			sln_id as "seller.id",
+			con_reusable,
+			con_final_date
+		from dcl_contract con
+		where con_id = :con_id
+	</entry>
+
+	<entry id='contract-load-comment'>
+		select
+		con_comment
+		from dcl_contract
+		where con_id = :con_id
+	</entry>
+
+	<entry id='contract-delete'>
+		delete from dcl_contract where con_id = :con_id
+	</entry>
+
+	<entry id='select-specifications'>
+		select
+		spc_id,
+		con_id,
+		spc_number,
+		spc_date,
+		spc_summ,
+		spc_summ_nds,
+		spc_executed,
+		spc_nds_rate,
+		spc_delivery_date,
+		spc_add_pay_cond,
+		spc_delivery_cond,
+		spc_delivery_term_type as "deliveryTerm.id",
+		spc_percent_or_sum,
+		spc_delivery_percent,
+		spc_delivery_sum,
+		spc_original,
+		spc_montage,
+		spc_pay_after_montage,
+		spc_group_delivery,
+		spc_annul,
+		spc_annul_date,
+		spc_comment,
+		spc_occupied,
+		spc_occupied_in_pay_shp,
+		spc_in_ctc,
+		payed_summ,
+		payed_date,
+		attachments_count as "attachmentsCount",
+		usr_id as "user.usr_id",
+		usr_name as "user.usr_name",
+		spc_letter1_date,
+		spc_letter2_date,
+		spc_letter3_date,
+		spc_complaint_in_court_date,
+		spc_additional_days_count
+		from dcl_con_list_specs_load(:con_id)
+	</entry>
+
+	<entry id='select-specifications-for-contract-id'>
+		select
+		spc_id,
+		spc_number,
+		spc_date,
+		spc_summ,
+		spc_original,
+		spc_annul
+		from dcl_con_list_spec
+		where con_id = :con_id and spc_executed is null
+	</entry>
+
+	<entry id='select-specifications-for-contract-id-include-exec'>
+		select
+		spc_id,
+		spc_number,
+		spc_date,
+		spc_summ,
+		spc_original,
+		spc_annul
+		from dcl_con_list_spec
+		where con_id = :con_id
+	</entry>
+
+	<entry id='select-specifications_numbers-for-contract-id'>
+		select
+		spc_number
+		from dcl_con_list_spec
+		where con_id = :con_id
+		order by spc_date descending
+	</entry>
+
+	<entry id='select-not_closed_payments-for-spec'>
+		select
+		psum.lps_summ as "summ",
+		pay.pay_date as "date"
+		from
+		dcl_payment pay,
+		dcl_pay_list_summ psum
+		where
+		psum.spc_id = :spc_id and
+		pay.pay_id = psum.pay_id and
+		not exists ( select lps_id from dcl_ctc_pay where lps_id = psum.lps_id )
+		order by pay.pay_date
+	</entry>
+
+	<entry id='select-payments-for-spec'>
+		select
+		psum.lps_summ as "summ",
+		pay.pay_date as "date"
+		from
+		dcl_payment pay,
+		dcl_pay_list_summ psum
+		where
+		psum.spc_id = :spc_id and
+		pay.pay_id = psum.pay_id
+		order by pay.pay_date
+	</entry>
+
+	<entry id='select-payed_sum-for-spec'>
+		select
+		sum(lps_summ) as "payed_summ"
+		from
+		dcl_pay_list_summ
+		where
+		spc_id = :spc_id
+	</entry>
+
+	<entry id='select-payed_date-for-spec'>
+		select
+		payed_date
+		from
+		dcl_get_payed_date(
+		:spc_id,
+		:spc_summ,
+		:spc_percent_or_sum,
+		:spc_delivery_percent,
+		:spc_delivery_sum
+		)
+	</entry>
+
+	<entry id='select-shipped_sum-for-spec'>
+		select
+		sum(shp_summ_plus_nds) as "shipped_summ"
+		from
+		dcl_shipping
+		where
+		spc_id = :spc_id and shp_id != :shp_id
+	</entry>
+
+	<entry id='specification-load'>
+		select
+		spc_id,
+		con_id,
+		spc_number,
+		spc_date,
+		spc_summ,
+		spc_summ_nds,
+		spc_executed,
+		spc_nds_rate,
+		spc_delivery_date,
+		spc_add_pay_cond,
+		spc_delivery_cond,
+		spc_delivery_term_type as "deliveryTerm.id",
+		spc_percent_or_sum,
+		spc_delivery_percent,
+		spc_delivery_sum,
+		spc_original,
+		spc_montage,
+		spc_pay_after_montage,
+		spc_group_delivery,
+		usr_id as "user.usr_id",
+		usr_name as "user.usr_name"
+		from dcl_con_list_spec_load(:spc_id)
+	</entry>
+
+	<entry id='specification-load-comment'>
+		select
+		spc_comment
+		from dcl_con_list_spec
+		where spc_id = :spc_id
+	</entry>
+
+	<entry id='specification-load-for-payment'>
+		select
+			spc_id,
+			con_id,
+			spc_number,
+			spc_date,
+			spc_summ,
+			spc_summ_nds,
+			spc_executed,
+			spc_nds_rate,
+			spc_delivery_date,
+			spc_delivery_cond,
+			spc_delivery_term_type as "deliveryTerm.id",
+			spc_percent_or_sum,
+			spc_delivery_percent,
+			spc_delivery_sum,
+			spc_add_pay_cond,
+			spc_original,
+			spc_montage,
+			spc_pay_after_montage,
+			spc_group_delivery,
+			(spc_summ - dNVL(cast( (select sum(lps_summ) from dcl_pay_list_summ where spc_id = spc.spc_id and pay_id !=
+			coalesce(:pay_id, -1) ) as double precision), 0)) as spc_summ_nr
+		from dcl_con_list_spec spc
+		where spc_id = :spc_id
+	</entry>
+
+
+	<entry id='specification-insert'>
+		select spc_id from dcl_con_list_spec_insert (
+			:con_id,
+			:spc_number,
+			:spc_date,
+			:spc_summ,
+			:spc_summ_nds,
+			:spc_nds_rate,
+			:spc_executed,
+			:spc_delivery_date,
+			:spc_delivery_cond,
+			:deliveryTerm.id,
+			:spc_percent_or_sum,
+			:spc_delivery_percent,
+			:spc_delivery_sum,
+			:spc_add_pay_cond,
+			:spc_original,
+			:spc_montage,
+			:spc_pay_after_montage,
+			:spc_group_delivery,
+			:spc_annul,
+			:spc_annul_date,
+			:spc_comment,
+			:user.usr_id,
+			:spc_letter1_date,
+			:spc_letter2_date,
+			:spc_letter3_date,
+			:spc_complaint_in_court_date,
+			:spc_additional_days_count
+		);
+	</entry>
+
+	<entry id='specification-update'>
+		update dcl_con_list_spec set
+			con_id = :con_id,
+			spc_number = :spc_number,
+			spc_date = :spc_date,
+			spc_summ = :spc_summ,
+			spc_summ_nds = :spc_summ_nds,
+			spc_nds_rate = :spc_nds_rate,
+			spc_executed = :spc_executed,
+			spc_delivery_date = :spc_delivery_date,
+			spc_delivery_cond = :spc_delivery_cond,
+			spc_delivery_term_type = :deliveryTerm.id,
+			spc_percent_or_sum = :spc_percent_or_sum,
+			spc_delivery_percent = :spc_delivery_percent,
+			spc_delivery_sum = :spc_delivery_sum,
+			spc_add_pay_cond = :spc_add_pay_cond,
+			spc_original = :spc_original,
+			spc_montage = :spc_montage,
+			spc_pay_after_montage = :spc_pay_after_montage,
+			spc_group_delivery = :spc_group_delivery,
+			spc_annul = :spc_annul,
+			spc_annul_date = :spc_annul_date,
+			spc_comment = :spc_comment,
+			usr_id = :user.usr_id,
+			spc_letter1_date = :spc_letter1_date,
+			spc_letter2_date = :spc_letter2_date,
+			spc_letter3_date = :spc_letter3_date,
+			spc_complaint_in_court_date = :spc_complaint_in_court_date,
+			spc_additional_days_count = :spc_additional_days_count
+		where
+			spc_id = :spc_id;
+	</entry>
+
+	<entry id='delete_specifications'>
+		delete from dcl_con_list_spec spc
+		where
+			con_id = :con_id and
+			not exists ( select spc_id from DCL_OCCUPIED_SPEC_V where spc_id = spc.spc_id ) and
+			spc_id not in ({exist_ids})
+	</entry>
+
+
+	<entry id='select-specification_payments'>
+		select * from dcl_spc_list_payment where spc_id = :spc_id order by spp_id
+	</entry>
+
+	<entry id='delete_specification_payments'>
+		delete from dcl_spc_list_payment where spc_id = :spc_id
+	</entry>
+
+	<entry id='insert_specification_payment'>
+		insert into dcl_spc_list_payment (
+		spc_id,
+		spp_percent,
+		spp_sum,
+		spp_date
+		)
+		values (
+		:spc_id,
+		:spp_percent,
+		:spp_sum,
+		:spp_date
+		)
+	</entry>
+
+
+	<entry id='select-delivery_requests_in'>
+		select * from dcl_delivery_request_filter(
+			:number,
+			:date_begin_date,
+			:date_end_date,
+			:user.usr_name,
+			:dlr_fair_trade,
+			:unexecuted,
+			0, -- 0 - to Minsk
+			:annul_exclude,
+			:specification_numbers
+		)
+	</entry>
+
+	<entry id='select-delivery_requests_out'>
+		select * from dcl_delivery_request_filter(
+			:number,
+			:date_begin_date,
+			:date_end_date,
+			:user.usr_name,
+			:dlr_fair_trade,
+			:unexecuted,
+			1, -- 1 - from Minsk
+			:annul_exclude,
+			:specification_numbers
+		)
+	</entry>
+
+	<entry id='delivery_request-insert'>
+		select dlr_id from dcl_delivery_request_insert (
+			:dlr_date_ts,
+			:dlr_number,
+			:dlr_fair_trade,
+			:dlr_wherefrom,
+			:dlr_comment,
+			:dlr_place_request,
+			:dlr_minsk,
+			:dlr_need_deliver,
+			:dlr_ord_not_form,
+			:dlr_guarantee_repair,
+			:dlr_include_in_spec,
+			:dlr_annul,
+			:dlr_executed
+		)
+	</entry>
+
+	<entry id='delivery_request-update'>
+		update dcl_delivery_request set
+			dlr_number = :dlr_number,
+			dlr_date = :dlr_date_ts,
+			dlr_fair_trade = :dlr_fair_trade,
+			dlr_wherefrom = :dlr_wherefrom,
+			dlr_comment = :dlr_comment,
+			dlr_place_request = :dlr_place_request,
+			dlr_minsk = :dlr_minsk,
+			dlr_need_deliver = :dlr_need_deliver,
+			dlr_ord_not_form = :dlr_ord_not_form,
+			dlr_guarantee_repair = :dlr_guarantee_repair,
+			dlr_include_in_spec = :dlr_include_in_spec,
+			dlr_annul = :dlr_annul,
+			dlr_executed = :dlr_executed
+		where dlr_id = :dlr_id
+	</entry>
+
+	<entry id='delivery_request-update-place_request'>
+		update dcl_delivery_request set
+		dlr_place_request = :dlr_place_request
+		where dlr_id = :dlr_id
+	</entry>
+
+
+	<entry id='delivery_request-load'>
+		select
+			dlr_id,
+			usr_id_create as "createUser.usr_id",
+			usr_id_edit as "editUser.usr_id",
+			usr_id_place as "placeUser.usr_id",
+			dlr_create_date as "usr_date_create",
+			dlr_edit_date as "usr_date_edit",
+			dlr_place_date as "usr_date_place",
+			dlr_number,
+			dlr_date,
+			dlr_fair_trade,
+			dlr_wherefrom,
+			dlr_comment,
+			dlr_place_request,
+			dlr_minsk,
+			dlr_need_deliver,
+			dlr_ord_not_form,
+			dlr_guarantee_repair,
+			dlr_include_in_spec,
+			dlr_annul,
+			dlr_executed,
+			(
+				select count_rest_drp from dcl_get_count_rest_drp(:dlr_id, dlr.dlr_need_deliver)
+			) as count_rest_drp
+		from dcl_delivery_request dlr
+		where dlr_id = :dlr_id
+	</entry>
+
+	<entry id='delivery_request-load_by_drp_id'>
+		select
+			dlr.dlr_id,
+			usr_id_create as "createUser.usr_id",
+			usr_id_edit as "editUser.usr_id",
+			usr_id_place as "placeUser.usr_id",
+			dlr_create_date as "usr_date_create",
+			dlr_edit_date as "usr_date_edit",
+			dlr_place_date as "usr_date_place",
+			dlr_number,
+			dlr_date,
+			dlr_fair_trade,
+			dlr_wherefrom,
+			dlr_comment,
+			dlr_place_request,
+			dlr_minsk,
+			dlr_need_deliver,
+			dlr_ord_not_form,
+			dlr_include_in_spec,
+			dlr_annul
+		from dcl_delivery_request dlr,
+				 dcl_dlr_list_produce drp
+		where
+			dlr.dlr_id = drp.dlr_id
+			and drp.drp_id = :drp_id
+	</entry>
+
+	<entry id='delivery_request-delete'>
+		delete from dcl_delivery_request where dlr_id = :dlr_id
+	</entry>
+
+	<entry id='select-delivery_request_produces'>
+		select
+		drp_id,
+		dlr_id,
+		prd_id as "produce.id",
+		drp_price,
+		drp_count,
+		stf_id as "stuffCategory.id",
+		stf_name as "stuffCategory.name",
+		ctr_id as "customer.id",
+		ctr_name as "customer.name",
+		spc_id as "specification.spc_id",
+		spc_number as "specification.spc_number",
+		spc_date as "specification.spc_date",
+		con_id as "contract.con_id",
+		con_number as "contract.con_number",
+		con_date as "contract.con_date",
+		opr_id,
+		asm_id,
+		apr_id,
+		sip_id,
+		prs_id as "purpose.id",
+		prs_name as "purpose.name",
+		drp_purpose,
+		drp_occupied,
+		receive_manager_id as "receiveManager.usr_id",
+		receive_manager_name as "receiveManager.usr_name",
+		receive_manager_surname as "receiveManager.usr_surname",
+		receive_date,
+		ord_number,
+		ord_date,
+		spi_number,
+		spi_date,
+		spi_numbers as "specificationNumbers",
+		drp_have_depend,
+		ord_info as "ordInfoAssemble",
+		ord_info_contractor_for as "customerAssemble",
+		drp_max_extra
+		from
+		dcl_dlr_list_produces_load(:dlr_id)
+	</entry>
+
+	<entry id='delivery_request_produce-load'>
+		select
+			drp_id,
+			dlr_id,
+			prd_id as "produce.id",
+			drp_price,
+			drp_count,
+			stf_id as "stuffCategory.id",
+			stf_name as "stuffCategory.name",
+			ctr_id as "customer.id",
+			ctr_name as "customer.name",
+			spc_id as "specification.spc_id",
+			spc_number as "specification.spc_number",
+			spc_date as "specification.spc_date",
+			con_id as "contract.con_id",
+			con_number as "contract.con_number",
+			con_date as "contract.con_date",
+			cur_name as "contract.currency.name",
+			opr_id,
+			asm_id,
+			apr_id,
+			sip_id,
+			prs_id as "purpose.id",
+			prs_name as "purpose.name",
+			drp_purpose,
+			drp_occupied,
+			receive_manager_id as "receiveManager.usr_id",
+			receive_manager_name as "receiveManager.usr_name",
+			receive_manager_surname as "receiveManager.usr_surname",
+			receive_date,
+			ord_number,
+			ord_date,
+			spi_number,
+			spi_date,
+			spi_numbers as "specificationNumbers",
+			ord_info as "ordInfoAssemble",
+			ord_info_contractor_for as "customerAssemble",
+			dlr_ord_not_form,
+			drp_have_depend,
+			drp_max_extra
+		from
+			dcl_dlr_list_produce_load(:drp_id)
+	</entry>
+
+	<entry id='select-drp_depended_lines'>
+		select
+		id,
+		prd_id as "produce.id",
+		stf_id as "stuffCategory.id",
+		prd_count as "drp_count"
+		from dcl_drp_depended_lines(:asm_id)
+	</entry>
+
+	<entry id='insert_delivery_request_produce'>
+		insert into dcl_dlr_list_produce (
+		drp_id,
+		dlr_id,
+		prd_id,
+		opr_id,
+		asm_id,
+		apr_id,
+		sip_id,
+		drp_price,
+		drp_count,
+		stf_id,
+		ctr_id,
+		spc_id,
+		prs_id,
+		drp_purpose,
+		receive_manager_id,
+		receive_date,
+		drp_max_extra
+		)
+		values (
+		:drp_id,
+		:dlr_id,
+		:produce.id,
+		:opr_id,
+		:asm_id,
+		:apr_id,
+		:sip_id,
+		:drp_price,
+		:drp_count,
+		:stuffCategory.id,
+		:customer.id,
+		:specification.spc_id,
+		:purpose.id,
+		:drp_purpose,
+		:receiveManager.usr_id,
+		:receive_date,
+		:drp_max_extra
+		);
+	</entry>
+
+	<entry id='update_delivery_request_produce'>
+		update dcl_dlr_list_produce set
+		dlr_id = :dlr_id,
+		prd_id = :produce.id,
+		opr_id = :opr_id,
+		asm_id = :asm_id,
+		apr_id = :apr_id,
+		sip_id = :sip_id,
+		drp_price = :drp_price,
+		drp_count = :drp_count,
+		stf_id = :stuffCategory.id,
+		ctr_id = :customer.id,
+		spc_id = :specification.spc_id,
+		prs_id = :purpose.id,
+		drp_purpose = :drp_purpose,
+		receive_manager_id = :receiveManager.usr_id,
+		receive_date = :receive_date,
+		drp_max_extra = :drp_max_extra
+		where
+		drp_id = :drp_id;
+	</entry>
+
+	<entry id='delete_delivery_request_produces'>
+		delete from dcl_dlr_list_produce drp
+		where
+		dlr_id = :dlr_id
+		and
+		not exists ( select drp_id from DCL_OCCUPIED_DLR_PRODUCE_V where drp_id = drp.drp_id )
+	</entry>
+
+	<entry id='order-positions-available-for-delivery-request'>
+		select
+			opr_id as "doc_id",
+			ord_id as "id",
+			ord_number as "number",
+			ord_date as "date",
+			ctr_name as "contractor",
+			prd_id as "produce.id",
+			opr_count_executed as "count",
+			ctn_number,
+			seller,
+			contractor_name as "orderProduceContractor",
+			specification_number as "specification",
+			contract_number as "contract"
+		from dcl_get_rest_opr_for_dlr(:dlr_id, :manager.usr_id)
+		order by ord_date descending, ord_id, opr_id
+	</entry>
+
+	<entry id='assemble-positions-available-for-delivery-request'>
+		select
+		apr_id as "doc_id",
+		asm_id as "id",
+		asm_number as "number",
+		asm_date as "date",
+		prd_id as "produce.id",
+		apr_count as "count"
+		from dcl_get_rest_asm_for_dlr(:dlr_id)
+		order by asm_date descending, asm_id, apr_id
+	</entry>
+
+	<entry id='specification-import-available-for-delivery-request'>
+		select
+		sip_id as "doc_id",
+		spi_id as "id",
+		spi_number as "number",
+		spi_date as "date",
+		prd_id as "produce.id",
+		sip_count as "count"
+		from dcl_get_rest_sip_for_dlr(:dlr_id)
+		order by spi_date descending, spi_id, sip_id
+	</entry>
+
+
+	<entry id='select-assembles'>
+		select * from dcl_assemble_filter(
+		:number,
+		:date_begin_date,
+		:date_end_date,
+		:user.usr_name
+		)
+	</entry>
+
+	<entry id='assembles-load'>
+		select
+		asm_id,
+		usr_id_create as "createUser.usr_id",
+		usr_id_edit as "editUser.usr_id",
+		asm_create_date as "usr_date_create",
+		asm_edit_date as "usr_date_edit",
+		asm_number,
+		asm_date,
+		asm_block,
+		asm_count,
+		prd_id as "produce.id",
+		stf_id as "stuffCategory.id",
+		opr_id,
+		asm_type
+		from dcl_assemble asm
+		where asm_id = :asm_id
+	</entry>
+
+	<entry id='assemble-insert'>
+		select asm_id from dcl_assemble_insert (
+		:asm_date_ts,
+		:asm_number,
+		:asm_count,
+		:produce.id,
+		:stuffCategory.id,
+		:opr_id,
+		:asm_type
+		)
+	</entry>
+
+	<entry id='assemble-update'>
+		update dcl_assemble set
+		asm_date = :asm_date_ts,
+		asm_block = :asm_block,
+		asm_count = :asm_count,
+		prd_id = :produce.id,
+		stf_id = :stuffCategory.id,
+		opr_id = :opr_id,
+		asm_type = :asm_type
+		where asm_id = :asm_id
+	</entry>
+
+	<entry id='assemble-load'>
+		select
+		asm_id,
+		usr_id_create as "createUser.usr_id",
+		usr_id_edit as "editUser.usr_id",
+		asm_create_date as "usr_date_create",
+		asm_edit_date as "usr_date_edit",
+		asm_number,
+		asm_date,
+		asm_block,
+		asm_count,
+		prd_id as "produce.id",
+		stf_id as "stuffCategory.id",
+		opr_id,
+		asm_type,
+		asm_occupied,
+		ord_info as "ordInfo",
+		ord_info_contractor_for as "ordInfoContractorFor"
+		from dcl_assemble_load(:asm_id)
+	</entry>
+
+	<entry id='assemble-load_by_apr_id'>
+		select
+		asm.asm_id,
+		asm.usr_id_create as "createUser.usr_id",
+		asm.usr_id_edit as "editUser.usr_id",
+		asm.asm_create_date as "usr_date_create",
+		asm.asm_edit_date as "usr_date_edit",
+		asm.asm_number,
+		asm.asm_date,
+		asm.asm_block,
+		asm.asm_count,
+		asm.prd_id as "produce.id",
+		asm.stf_id as "stuffCategory.id",
+		asm.opr_id,
+		asm.asm_type,
+		(select asm_id from DCL_OCCUPIED_ASM_PRODUCE_V where asm_id = asm.asm_id) as asm_occupied
+		from dcl_assemble asm,
+		dcl_asm_list_produce apr
+		where asm.asm_id = apr.asm_id and
+		apr.apr_id = :apr_id
+	</entry>
+
+	<entry id='select-assemble_produces'>
+		select
+		apr_id,
+		asm_id,
+		prd_id as "produce.id",
+		stf_id,
+		stf_name,
+		opr_id,
+		apr_count,
+		apr_occupied,
+		ctn_number
+		from dcl_asm_list_produces_load(:asm_id)
+	</entry>
+
+	<entry id='assemble_produce-load'>
+		select
+		apr_id,
+		asm_id,
+		prd_id as "produce.id",
+		stf_id,
+		stf_name,
+		opr_id,
+		apr_count,
+		apr_occupied,
+		ctn_number
+		from dcl_asm_list_produce_load(:apr_id)
+	</entry>
+
+	<entry id='insert_assemble_produce'>
+		insert into dcl_asm_list_produce (
+		apr_id,
+		asm_id,
+		prd_id,
+		opr_id,
+		apr_count
+		)
+		values (
+		:apr_id,
+		:asm_id,
+		:produce.id,
+		:opr_id,
+		:apr_count
+		)
+	</entry>
+
+	<entry id='update_assemble_produce'>
+		update dcl_asm_list_produce set
+		asm_id = :asm_id,
+		prd_id = :produce.id,
+		opr_id = :opr_id,
+		apr_count = :apr_count
+		where
+		apr_id = :apr_id;
+	</entry>
+
+	<entry id='delete_assemble_produces'>
+		delete from dcl_asm_list_produce arp
+		where
+		asm_id = :asm_id
+		and
+		not exists ( select apr_id from DCL_OCCUPIED_APR_PRODUCE_V where apr_id = arp.apr_id )
+	</entry>
+
+	<entry id='order-positions-available-for-assemble'>
+		select
+		opr_id as "doc_id",
+		ord_id as "id",
+		ord_number as "number",
+		ord_date as "date",
+		prd_id as "produce.id",
+		opr_count_executed as "count"
+		from dcl_get_rest_opr_for_asm(:stf_id)
+		order by ord_date descending, ord_id, opr_id
+	</entry>
+
+
+	<entry id='select-specification_imports'>
+		select * from dcl_specification_import_filter(
+		:number,
+		:date_begin_date,
+		:date_end_date,
+		:user.userFullName
+		)
+	</entry>
+
+	<entry id='specification_import-insert'>
+		select spi_id from dcl_specification_import_insert (
+		:spi_date_ts,
+		:spi_number,
+		:spi_comment,
+		:spi_course,
+		:spi_koeff,
+		:spi_arrive,
+		:spi_cost
+		)
+	</entry>
+
+	<entry id='specification_import-update'>
+		update dcl_specification_import set
+		spi_number = :spi_number,
+		spi_date = :spi_date_ts,
+		spi_comment = :spi_comment,
+		spi_course = :spi_course,
+		spi_koeff = :spi_koeff,
+		spi_arrive = :spi_arrive,
+		spi_cost = :spi_cost
+		where spi_id=:spi_id
+	</entry>
+
+	<entry id='specification_import-update-arrive'>
+		update dcl_specification_import set
+		spi_arrive = :spi_arrive
+		where spi_id=:spi_id
+	</entry>
+
+	<entry id='specification_import-update-send_date'>
+		update dcl_specification_import set
+		spi_send_date = :spi_send_date_ts
+		where spi_id=:spi_id
+	</entry>
+
+
+	<entry id='specification_import-load'>
+		select
+		spi_id,
+		usr_id_create as "createUser.usr_id",
+		usr_id_edit as "editUser.usr_id",
+		spi_create_date as "usr_date_create",
+		spi_edit_date as "usr_date_edit",
+		spi_number,
+		spi_date,
+		spi_comment,
+		spi_course,
+		spi_koeff,
+		spi_arrive
+		from dcl_specification_import spi
+		where spi_id = :spi_id
+	</entry>
+
+	<entry id='specification_import-load_by_sip_id'>
+		select
+		spi.spi_id,
+		usr_id_create as "createUser.usr_id",
+		usr_id_edit as "editUser.usr_id",
+		spi_create_date as "usr_date_create",
+		spi_edit_date as "usr_date_edit",
+		spi_number,
+		spi_date,
+		spi_comment,
+		spi_course,
+		spi_koeff,
+		spi_arrive
+		from dcl_specification_import spi,
+		dcl_spi_list_produce sip
+		where spi.spi_id = sip.spi_id and
+		sip.sip_id = :sip_id
+	</entry>
+
+	<entry id='select-specification_import_produces'>
+		select
+			spi_id,
+			sip_id,
+			drp_id,
+			opr_id,
+			prd_id as "produce.id",
+			sip_price,
+			sip_count,
+			sip_weight,
+			sip_percent,
+			sip_cost,
+			prs_id as "purpose.id",
+			prs_name as "purpose.name",
+			sip_occupied,
+			drp_price,
+			drp_max_extra,
+			stf_id as "stuffCategory.id",
+			stf_name as "stuffCategory.name",
+			ctr_id as "customer.id",
+			ctr_name as "customer.name",
+			ord_number,
+			ord_date,
+			dlr_ord_not_form,
+			count_day,
+			spc_number,
+			spc_date,
+			spc_delivery_date,
+			con_number,
+			con_date,
+			cur_name as "currency.name",
+			have_depend,
+			spc_add_pay_cond,
+			pay_persent
+		from
+			dcl_spi_list_produces_load(:spi_id, :usr_id)
+	</entry>
+
+	<entry id='specification_import_produce-load'>
+		select
+		sip_id,
+		spi_id,
+		drp_id,
+		opr_id,
+		prd_id as "produce.id",
+		sip_price,
+		sip_count,
+		sip_weight,
+		sip_percent,
+		sip_cost,
+		prs_id as "purpose.id",
+		prs_name as "purpose.name",
+		sip_occupied,
+		drp_price,
+		drp_max_extra,
+		stf_id as "stuffCategory.id",
+		stf_name as "stuffCategory.name",
+		ctr_id as "customer.id",
+		ctr_name as "customer.name",
+		ord_number,
+		ord_date
+		from
+		dcl_spi_list_produce_load(:sip_id)
+	</entry>
+
+	<entry id='select-sip_depended_lines'>
+		select
+		id,
+		prd_id as "produce.id",
+		stf_id as "stuffCategory.id",
+		stf_name as "stuffCategory.name",
+		prd_count as "sip_count",
+		ord_number,
+		ord_date
+		from dcl_sip_depended_lines(:opr_id, :drp_id)
+	</entry>
+
+	<entry id='insert_specification_import_produce'>
+		insert into dcl_spi_list_produce (
+		sip_id,
+		spi_id,
+		drp_id,
+		opr_id,
+		sip_price,
+		sip_count,
+		sip_cost,
+		sip_weight,
+		sip_percent,
+		prd_id,
+		prs_id
+		)
+		values(
+		:sip_id,
+		:spi_id,
+		:drp_id,
+		:opr_id,
+		:sip_price,
+		:sip_count,
+		:sip_cost,
+		:sip_weight,
+		:sip_percent,
+		:produce.id,
+		:purpose.id
+		);
+	</entry>
+
+	<entry id='update_specification_import_produce'>
+		update dcl_spi_list_produce set
+		spi_id = :spi_id,
+		drp_id = :drp_id,
+		opr_id = :opr_id,
+		sip_price = :sip_price,
+		sip_count = :sip_count,
+		sip_cost = :sip_cost,
+		sip_weight = :sip_weight,
+		sip_percent = :sip_percent,
+		prd_id = :produce.id,
+		prs_id = :purpose.id
+		where
+		sip_id = :sip_id
+	</entry>
+
+	<entry id='delete_specification_import_produces'>
+		delete from dcl_spi_list_produce sip
+		where
+		spi_id = :spi_id
+		and
+		not exists ( select sip_id from DCL_OCCUPIED_SPI_PRODUCE_V where sip_id = sip.sip_id )
+	</entry>
+
+	<entry id='order-positions-available-for-specification-import'>
+		select
+			opr_id as "doc_id",
+			ord_id as "id",
+			ord_number as "number",
+			ord_date as "date",
+			ctr_name as "contractor",
+			prd_id as "produce.id",
+			opr_count_executed as "count",
+			seller,
+			guarantee
+		from dcl_get_rest_opr_for_spi(:spi_id)
+		order by ord_date descending, ord_id, opr_id
+	</entry>
+
+	<entry id='delivery_request-positions-available-for-specification-import'>
+		select
+		drp_id as "doc_id",
+		dlr_id as "id",
+		dlr_number as "number",
+		dlr_date as "date",
+		prd_id as "produce.id",
+		drp_count as "count",
+		guarantee
+		from dcl_get_rest_drp_for_spi(:spi_id)
+		order by dlr_date descending, dlr_id, drp_id
+	</entry>
+
+	<entry id='load-produce_in_spc_import'>
+		select * from dcl_produce_in_spc_import(:prd_id)
+	</entry>
+
+
+	<entry id='select-orders'>
+		select * from dcl_order_filter (
+			:number,
+			:contractor.name,
+			:contractor_for.name,
+			:stuffCategory.name,
+			:date_begin_date,
+			:date_end_date,
+			:sum_min,
+			:sum_max,
+			:user.userFullName,
+			:department.id,
+			:ord_executed,
+			:ord_ready_for_deliv,
+			:sellerForWho.name,
+			:state_a,
+			:state_3,
+			:state_b,
+			:state_exclamation,
+			:state_c,
+			:ord_num_conf,
+			:ord_annul_not_show,
+			:contractNumber,
+			:specificationNumber
+		)
+		order by {order_by}
+	</entry>
+
+	<entry id='order-insert'>
+		select ord_id from dcl_order_insert (
+			:ord_date_ts,
+			:ord_number,
+			:blank.bln_id,
+			:contractor.id,
+			:contact_person.cps_id,
+			:ord_concerning,
+			:ord_preamble,
+			:deliveryCondition.id,
+			:ord_addr,
+			:ord_pay_condition,
+			:ord_delivery_term,
+			:ord_add_info,
+			:director.usr_id,
+			:logist.usr_id,
+			:director_rb.usr_id,
+			:chief_dep.usr_id,
+			:manager.usr_id,
+			:contractor_for.id,
+			:specification.spc_id,
+			:stuffCategory.id,
+			:ord_sent_to_prod_date_ts,
+			:ord_received_conf_date_ts,
+			:ord_num_conf,
+			:ord_date_conf_ts,
+			:ord_conf_sent_date_ts,
+			:ord_ready_for_deliv_date_ts,
+			:ord_executed_date_ts,
+			:ord_block,
+			:ord_summ,
+			:ord_delivery_cost_by,
+			:ord_delivery_cost,
+			:ord_donot_calculate_netto,
+			:currency.id,
+			:ord_include_nds,
+			:ord_nds_rate,
+			:sellerForWho.id,
+			:seller.id,
+			:ord_discount_all,
+			:ord_discount,
+			:ord_count_itog_flag,
+			:ord_add_reduction_flag,
+			:ord_add_reduction,
+			:ord_add_red_pre_pay_flag,
+			:ord_add_red_pre_pay,
+			:ord_all_include_in_spec,
+			:ord_annul,
+			:ord_in_one_spec,
+			:ord_comment,
+			:ord_comment_covering_letter,
+			:ord_date_conf_all,
+			:ord_ready_for_deliv_date_all,
+			:shippingDocType.id,
+			:ord_shp_doc_number,
+			:ord_by_guaranty,
+			:ord_ship_from_stock,
+			:ord_arrive_in_lithuania,
+			:ord_print_scale,
+			:ord_letter_scale,
+			:ord_logist_signature,
+			:ord_director_rb_signature,
+			:ord_chief_dep_signature,
+			:ord_manager_signature
+		)
+	</entry>
+
+	<entry id='order-update'>
+		update dcl_order set
+			ord_number = :ord_number,
+			ord_date = :ord_date_ts,
+			bln_id = :blank.bln_id,
+			ctr_id = :contractor.id,
+			cps_id = :contact_person.cps_id,
+			ord_concerning = :ord_concerning,
+			ord_preamble = :ord_preamble,
+			ord_delivery_term = :ord_delivery_term,
+			ord_pay_condition = :ord_pay_condition,
+			ord_addr = :ord_addr,
+			trm_id = :deliveryCondition.id,
+			ord_add_info = :ord_add_info,
+			usr_id_director = :director.usr_id,
+			usr_id_logist = :logist.usr_id,
+			usr_id_director_rb = :director_rb.usr_id,
+			usr_id_chief_dep = :chief_dep.usr_id,
+			usr_id_manager = :manager.usr_id,
+			ctr_id_for = :contractor_for.id,
+			spc_id = :specification.spc_id,
+			stf_id = :stuffCategory.id,
+			ord_sent_to_prod_date = :ord_sent_to_prod_date_ts,
+			ord_received_conf_date = :ord_received_conf_date_ts,
+			ord_num_conf = :ord_num_conf,
+			ord_date_conf = :ord_date_conf_ts,
+			ord_conf_sent_date = :ord_conf_sent_date_ts,
+			ord_ready_for_deliv_date = :ord_ready_for_deliv_date_ts,
+			ord_executed_date = :ord_executed_date_ts,
+			ord_block = :ord_block,
+			ord_summ = :ord_summ,
+			ord_delivery_cost_by = :ord_delivery_cost_by,
+			ord_delivery_cost = :ord_delivery_cost,
+			ord_donot_calculate_netto = :ord_donot_calculate_netto,
+			cur_id = :currency.id,
+			ord_include_nds = :ord_include_nds,
+			ord_nds_rate = :ord_nds_rate,
+			sln_id_for_who = :sellerForWho.id,
+			sln_id = :seller.id,
+			ord_discount_all = :ord_discount_all,
+			ord_discount = :ord_discount,
+			ord_count_itog_flag = :ord_count_itog_flag,
+			ord_add_reduction_flag = :ord_add_reduction_flag,
+			ord_add_reduction = :ord_add_reduction,
+			ord_add_red_pre_pay_flag = :ord_add_red_pre_pay_flag,
+			ord_add_red_pre_pay = :ord_add_red_pre_pay,
+			ord_all_include_in_spec = :ord_all_include_in_spec,
+			ord_annul = :ord_annul,
+			ord_in_one_spec = :ord_in_one_spec,
+			ord_comment = :ord_comment,
+			ord_comment_covering_letter = :ord_comment_covering_letter,
+			ord_date_conf_all = :ord_date_conf_all,
+			ord_ready_for_deliv_date_all = :ord_ready_for_deliv_date_all,
+			sdt_id = :shippingDocType.id,
+			ord_shp_doc_number = :ord_shp_doc_number,
+			ord_by_guaranty = :ord_by_guaranty,
+			ord_ship_from_stock = :ord_ship_from_stock,
+			ord_arrive_in_lithuania = :ord_arrive_in_lithuania,
+			ord_print_scale = :ord_print_scale,
+			ord_letter_scale = :ord_letter_scale,
+			ord_logist_signature = :ord_logist_signature,
+			ord_director_rb_signature =	:ord_director_rb_signature,
+			ord_chief_dep_signature =	:ord_chief_dep_signature,
+			ord_manager_signature =	:ord_manager_signature
+		where ord_id = :ord_id
+	</entry>
+
+	<entry id='order-update_scale'>
+		update dcl_order set
+		ord_print_scale = :ord_print_scale,
+		ord_letter_scale = :ord_letter_scale
+		where ord_id = :ord_id
+	</entry>
+
+	<entry id='order-update-block'>
+		update dcl_order set
+		ord_block = :ord_block
+		where ord_id = :ord_id
+	</entry>
+
+
+	<entry id='order-load'>
+		select
+			ord_id,
+			usr_id_create as "createUser.usr_id",
+			usr_id_edit as "editUser.usr_id",
+			ord_create_date as "usr_date_create",
+			ord_edit_date as "usr_date_edit",
+			ord_number,
+			ord_date,
+			bln_id as "blank.bln_id",
+			ctr_id as "contractor.id",
+			cps_id as "contact_person.cps_id",
+			ord_concerning,
+			ord_preamble,
+			ord_delivery_term,
+			ord_pay_condition,
+			ord_addr,
+			trm_id as "deliveryCondition.id",
+			ord_add_info,
+			usr_id_director as "director.usr_id",
+			usr_id_logist as "logist.usr_id",
+			usr_id_director_rb as "director_rb.usr_id",
+			usr_id_chief_dep as "chief_dep.usr_id",
+			usr_id_manager as "manager.usr_id",
+			ctr_id_for as "contractor_for.id",
+			spc_id as "specification.spc_id",
+			stf_id as "stuffCategory.id",
+			ord_sent_to_prod_date,
+			ord_received_conf_date,
+			ord_num_conf,
+			ord_date_conf,
+			ord_conf_sent_date,
+			ord_ready_for_deliv_date,
+			ord_executed_date,
+			ord_block,
+			ord_summ,
+			ord_delivery_cost_by,
+			ord_delivery_cost,
+			ord_donot_calculate_netto,
+			cur_id as "currency.id",
+			ord_include_nds,
+			ord_nds_rate,
+			sln_id_for_who as "sellerForWho.id",
+			sln_id as "seller.id",
+			ord_discount_all,
+			ord_discount,
+			ord_count_itog_flag,
+			ord_add_reduction_flag,
+			ord_add_reduction,
+			ord_add_red_pre_pay_flag,
+			ord_add_red_pre_pay,
+			ord_all_include_in_spec,
+			ord_annul,
+			current_date - ord_sent_to_prod_date as count_day_curr_minus_sent_to_prod,
+			ord_in_one_spec,
+			ord_comment,
+			ord_comment_covering_letter,
+			ord_date_conf_all,
+			ord_ready_for_deliv_date_all,
+			sdt_id as "shippingDocType.id",
+			ord_shp_doc_number,
+			ord_by_guaranty,
+			ord_ship_from_stock,
+			ord_arrive_in_lithuania,
+			ord_print_scale,
+			ord_letter_scale,
+			ord_logist_signature,
+			ord_director_rb_signature,
+			ord_chief_dep_signature,
+			ord_manager_signature
+		from dcl_order
+		where ord_id = :ord_id
+	</entry>
+
+	<entry id='order-load-assemblies'>
+		select * from dcl_get_asm_list_for_ord(:ord_id)
+	</entry>
+
+	<entry id='order-load-specifications_import'>
+		select * from dcl_get_spi_list_for_ord(:ord_id)
+	</entry>
+
+	<entry id='order-load-cost_produces'>
+		select * from dcl_get_prc_list_for_ord(:ord_id)
+	</entry>
+
+	<entry id='order-load-contract'>
+		select
+		con_number as "contract.con_number",
+		con_date as "contract.con_date",
+		cur_name as "contract.currency.name"
+		from dcl_order_load_contract(:ord_id)
+	</entry>
+
+	<entry id='order-load_by_opr_id'>
+		select
+		ord.ord_id,
+		ord.usr_id_create as "createUser.usr_id",
+		ord.usr_id_edit as "editUser.usr_id",
+		ord.ord_create_date as "usr_date_create",
+		ord_edit_date as "usr_date_edit",
+		ord.ord_number,
+		ord.ord_date,
+		ord.ctr_id as "contractor.id",
+		ord.ctr_id_for as "contractor_for.id",
+		ord.stf_id as "stuffCategory.id",
+		ord.ord_in_one_spec,
+		ord.spc_id as "specification.spc_id",
+		ord.cur_id as "currency.id"
+		from dcl_order ord,
+		dcl_ord_list_produce opr
+		where
+		ord.ord_id = opr.ord_id and
+		opr.opr_id = :opr_id
+	</entry>
+
+	<entry id='order-load_id_by_produce_cost_produce'>
+		select * from dcl_get_ord_id_by_lpc(:opr_id, :asm_id, :apr_id, :drp_id, :sip_id)
+	</entry>
+
+	<entry id='order-load-warn'>
+		select is_warn from dcl_is_warm_by_delivery_date(:ord_date_conf_ts, :specification.spc_delivery_date)
+	</entry>
+
+	<entry id='order-load-count'>
+		select count(ord_id) as "ord_id"
+		from dcl_order
+		where bln_id = :blank.bln_id
+	</entry>
+
+	<entry id='order-load-random'>
+		select first 1 skip {ord_id}
+		ord_id
+		from dcl_order
+		where bln_id = :blank.bln_id
+		order by ord_id
+	</entry>
+
+	<entry id='select-order_produces'>
+		select
+		opr_id,
+		ord_id,
+		opr_produce_name,
+		opr_catalog_num,
+		opr_count,
+		opr_price_brutto,
+		opr_discount,
+		opr_price_netto,
+		opr_summ,
+		opr_use_prev_number,
+		prd_id as "produce.id",
+		opr_count_executed,
+		opr_comment,
+		drp_price,
+		drp_max_extra,
+		ctr_id as "contractor.id",
+		ctr_name as "contractor.name",
+		con_id as "contract.con_id",
+		con_number as "contract.con_number",
+		sln_id as "contract.seller.id",
+		sln_name as "contract.seller.name",
+		sln_is_resident as "contract.seller.resident",
+		spc_id as "specification.spc_id",
+		spc_number as "specification.spc_number",
+		stf_id,
+		opr_count_occupied,
+		opr_occupied,
+		specification_numbers as "specificationNumbers",
+		opr_parent_id,
+		opr_have_depend
+		from dcl_ord_list_produces_load(:ord_id, null)
+	</entry>
+
+	<entry id='select-order_produces_for_clone'>
+		select
+		opr_id,
+		ord_id,
+		opr_produce_name,
+		opr_catalog_num,
+		opr_count,
+		opr_price_brutto,
+		opr_discount,
+		opr_price_netto,
+		opr_summ,
+		opr_use_prev_number,
+		prd_id as "produce.id",
+		opr_count_executed,
+		opr_comment,
+		drp_price,
+		drp_max_extra,
+		ctr_id as "contractor.id",
+		ctr_name as "contractor.name",
+		con_id as "contract.con_id",
+		con_number as "contract.con_number",
+		spc_id as "specification.spc_id",
+		spc_number as "specification.spc_number",
+		stf_id,
+		opr_count_occupied,
+		opr_occupied,
+		specification_numbers as "specificationNumbers",
+		opr_parent_id,
+		opr_have_depend
+		from dcl_ord_list_produces_load(:ord_id, 1)
+	</entry>
+
+	<entry id="order_produce-load">
+		select
+		opr_id,
+		ord_id,
+		drp_price,
+		drp_max_extra,
+		opr_count_executed,
+		ctr_id as "contractor.id",
+		ctr_name as "contractor.name",
+		spc_id as "specification.spc_id",
+		spc_number as "specification.spc_number",
+		spc_date as "specification.spc_date",
+		spc_delivery_date as "specification.spc_delivery_date",
+		con_number as "contract.con_number",
+		con_date as "contract.con_date",
+		cur_name as "contract.currency.name",
+		opr_have_depend,
+		opr_price_netto,
+		prd_id as "produce.id"
+		from dcl_ord_list_produce_load(:opr_id)
+	</entry>
+
+	<entry id="order_produce-load_circulation_and_rest">
+		select * from dcl_get_circ_and_rest_for_prd(:produce.id)
+	</entry>
+
+	<entry id='insert_order_produce'>
+		select opr_id from dcl_ord_list_produce_insert (
+		:ord_id,
+		:opr_produce_name,
+		:opr_catalog_num,
+		:opr_count,
+		:opr_price_brutto,
+		:opr_discount,
+		:opr_price_netto,
+		:opr_summ,
+		:opr_use_prev_number,
+		:produce.id,
+		:opr_comment,
+		:drp_price,
+		:contractor.id,
+		:specification.spc_id,
+		:opr_parent_id,
+		:opr_have_depend,
+		:drp_max_extra
+		)
+	</entry>
+
+	<entry id='update_order_produce'>
+		update dcl_ord_list_produce set
+		ord_id = :ord_id,
+		opr_produce_name = :opr_produce_name,
+		opr_catalog_num = :opr_catalog_num,
+		opr_count = :opr_count,
+		opr_price_brutto = :opr_price_brutto,
+		opr_discount = :opr_discount,
+		opr_price_netto = :opr_price_netto,
+		opr_summ = :opr_summ,
+		opr_use_prev_number = :opr_use_prev_number,
+		prd_id = :produce.id,
+		opr_comment = :opr_comment,
+		drp_price = :drp_price,
+		drp_max_extra = :drp_max_extra,
+		ctr_id = :contractor.id,
+		spc_id = :specification.spc_id,
+		opr_parent_id = :opr_parent_id,
+		opr_have_depend = :opr_have_depend
+		where
+		opr_id = :opr_id;
+	</entry>
+
+	<entry id='delete_order_produce'>
+		delete from dcl_ord_list_produce opr where opr_id = :opr_id
+	</entry>
+
+	<entry id="select-production_terms_for_opr_id">
+		select
+		ptr_id,
+		opr_id,
+		ptr_count,
+		ptr_date,
+		ptr_comment
+		from dcl_production_term
+		where opr_id = :opr_id
+		order by ptr_date
+	</entry>
+
+	<entry id="delete_production_term">
+		delete from dcl_production_term where opr_id = :opr_id
+	</entry>
+
+	<entry id="insert_production_term">
+		insert into dcl_production_term (
+		opr_id,
+		ptr_count,
+		ptr_date,
+		ptr_comment
+		)
+		values (
+		:opr_id,
+		:ptr_count,
+		:ptr_date,
+		:ptr_comment
+		)
+	</entry>
+
+
+	<entry id="select-ready_for_shipping_for_opr_id">
+		select
+		rfs.rfs_id,
+		rfs.opr_id,
+		rfs.sdt_id as "shippingDocType.id",
+		sdt.sdt_name as "shippingDocType.name",
+		rfs.rfs_number,
+		rfs.rfs_count,
+		rfs.rfs_date,
+		rfs.rfs_ship_from_stock,
+		rfs.rfs_arrive_in_lithuania,
+		rfs.rfs_weight,
+		rfs.rfs_gabarit,
+		rfs.rfs_comment
+		from dcl_ready_for_shipping rfs,
+		dcl_shp_doc_type sdt
+		where rfs.opr_id = :opr_id and
+		sdt.sdt_id = rfs.sdt_id
+		order by rfs_date
+	</entry>
+
+	<entry id="delete_ready_for_shipping">
+		delete from dcl_ready_for_shipping where opr_id = :opr_id
+	</entry>
+
+	<entry id="insert_ready_for_shipping">
+		insert into dcl_ready_for_shipping (
+		opr_id,
+		sdt_id,
+		rfs_number,
+		rfs_count,
+		rfs_date,
+		rfs_ship_from_stock,
+		rfs_arrive_in_lithuania,
+		rfs_weight,
+		rfs_gabarit,
+		rfs_comment
+		)
+		values (
+		:opr_id,
+		:shippingDocType.id,
+		:rfs_number,
+		:rfs_count,
+		:rfs_date,
+		:rfs_ship_from_stock,
+		:rfs_arrive_in_lithuania,
+		:rfs_weight,
+		:rfs_gabarit,
+		:rfs_comment
+		)
+	</entry>
+
+
+	<entry id='select-order_payments'>
+		select * from dcl_ord_list_payment where ord_id = :ord_id order by orp_id
+	</entry>
+
+	<entry id='delete_order_payments'>
+		delete from dcl_ord_list_payment where ord_id = :ord_id
+	</entry>
+
+	<entry id='insert_order_payment'>
+		insert into dcl_ord_list_payment (
+		ord_id,
+		orp_percent,
+		orp_sum,
+		orp_date
+		)
+		values (
+		:ord_id,
+		:orp_percent,
+		:orp_sum,
+		:orp_date
+		)
+	</entry>
+
+
+	<entry id='select-order_pay_sums'>
+		select * from dcl_ord_list_pay_sum where ord_id = :ord_id order by ops_id
+	</entry>
+
+	<entry id='delete_order_pay_sums'>
+		delete from dcl_ord_list_pay_sum where ord_id = :ord_id
+	</entry>
+
+	<entry id='insert_order_pay_sums'>
+		insert into dcl_ord_list_pay_sum (
+		ord_id,
+		ops_sum,
+		ops_date
+		)
+		values (
+		:ord_id,
+		:ops_sum,
+		:ops_date
+		)
+	</entry>
+
+
+	<entry id='select-order_produces_executed'>
+		select
+		*
+		from dcl_opr_list_executed executed,
+		dcl_ord_list_produce opr
+		where opr.ord_id = :ord_id and
+		executed.opr_id = opr.opr_id
+		order by opr.opr_id
+	</entry>
+
+	<entry id='delete_order_produces_executed'>
+		delete from dcl_opr_list_executed executed where opr_id = :opr_id
+	</entry>
+
+	<entry id='insert_order_produces_executed'>
+		insert into dcl_opr_list_executed (
+		opr_id,
+		opr_count_executed,
+		opr_date_executed
+		)
+		values (
+		:opr_id,
+		:opr_count_executed,
+		:opr_date_executed
+		)
+	</entry>
+
+	<entry id='process-order_produces_unexecuted'>
+		execute procedure dcl_process_opr_unexecuted(:ord_id, :ord_executed_date_ts)
+	</entry>
+
+
+	<entry id='select-produce_cost'>
+		select * from dcl_produce_cost_filter(
+		:number,
+		:route.name,
+		:date_begin_date,
+		:date_end_date,
+		:number_1c,
+		:block_in_filter
+		)
+	</entry>
+
+	<entry id='produce_cost-insert'>
+		select prc_id from dcl_produce_cost_insert (
+		:prc_date_ts,
+		:route.id,
+		:prc_number,
+		:prc_block,
+		:prc_sum_transport,
+		:prc_weight,
+		:prc_course_ltl_eur
+		)
+	</entry>
+
+	<entry id='produce_cost-update'>
+		update dcl_produce_cost set
+		prc_number = :prc_number,
+		prc_date = :prc_date_ts,
+		rut_id = :route.id,
+		prc_block = :prc_block,
+		prc_sum_transport = :prc_sum_transport,
+		prc_weight = :prc_weight,
+		prc_course_ltl_eur = :prc_course_ltl_eur
+		where prc_id = :prc_id
+	</entry>
+
+	<entry id='produce_cost-update-block'>
+		update dcl_produce_cost set
+		prc_block=:prc_block
+		where prc_id=:prc_id
+	</entry>
+
+	<entry id='produce_cost-load'>
+		select
+		usr_id_create as "createUser.usr_id",
+		usr_id_edit as "editUser.usr_id",
+		prc_create_date as "usr_date_create",
+		prc_edit_date as "usr_date_edit",
+		prc_id,
+		prc_number,
+		prc_date,
+		rut_id as "route.id",
+		(select rut_name from dcl_route where rut_id = prc.prc_id) as "route.name",
+		prc_sum_transport,
+		prc_weight,
+		prc_course_ltl_eur,
+		prc_block
+		from dcl_produce_cost prc
+		where prc_id=:prc_id
+	</entry>
+
+	<entry id='select-produce_cost_produces'>
+		select
+		lpc_id,
+		prc_id,
+		lpc_produce_name,
+		stf_id as "stuffCategory.id",
+		stf_name as "stuffCategory.name",
+		usr_id as "manager.usr_id",
+		usr_name as "manager.usr_name",
+		usr_code as "manager.usr_code",
+		lpc_count,
+		lpc_cost_one_ltl,
+		lpc_cost_one_by,
+		lpc_price_list_by,
+		lpc_cost_one,
+		lpc_weight,
+		lpc_summ,
+		lpc_sum_transport,
+		lpc_custom,
+		lpc_percent as "lpc_percent_dcl_1_4",
+		lpc_1c_number,
+		lpc_occupied,
+		prs_id as "purpose.id",
+		prs_name as "purpose.name",
+		prd_id as "produce.id",
+		opr_id,
+		asm_id,
+		apr_id,
+		drp_id,
+		sip_id,
+		dep_id as "department.id",
+		dep_name as "department.name",
+		lpc_comment,
+		no_round as "noRound"
+		from dcl_prc_list_produces_load(:prc_id)
+	</entry>
+
+	<entry id='insert_produce_cost_produce'>
+		insert into dcl_prc_list_produce (
+		lpc_id,
+		prc_id,
+		lpc_produce_name,
+		stf_id,
+		usr_id,
+		lpc_count,
+		lpc_cost_one_ltl,
+		lpc_cost_one_by,
+		lpc_price_list_by,
+		lpc_cost_one,
+		lpc_weight,
+		lpc_summ,
+		lpc_sum_transport,
+		lpc_custom,
+		lpc_1c_number,
+		prs_id,
+		prd_id,
+		opr_id,
+		asm_id,
+		apr_id,
+		drp_id,
+		sip_id,
+		lpc_percent,
+		dep_id,
+		lpc_comment
+		)
+		values(
+		:lpc_id,
+		:prc_id,
+		:lpc_produce_name,
+		:stuffCategory.id,
+		:manager.usr_id,
+		:lpc_count,
+		:lpc_cost_one_ltl,
+		:lpc_cost_one_by,
+		:lpc_price_list_by,
+		:lpc_cost_one,
+		:lpc_weight,
+		:lpc_summ,
+		:lpc_sum_transport,
+		:lpc_custom,
+		:lpc_1c_number,
+		:purpose.id,
+		:produce.id,
+		:opr_id,
+		:asm_id,
+		:apr_id,
+		:drp_id,
+		:sip_id,
+		:lpc_percent_dcl_1_4,
+		:department.id,
+		:lpc_comment
+		)
+	</entry>
+
+	<entry id='update_produce_cost_produce'>
+		update dcl_prc_list_produce set
+		prc_id = :prc_id,
+		lpc_produce_name = :lpc_produce_name,
+		stf_id = :stuffCategory.id,
+		usr_id = :manager.usr_id,
+		lpc_count = :lpc_count,
+		lpc_cost_one_ltl = :lpc_cost_one_ltl,
+		lpc_cost_one_by = :lpc_cost_one_by,
+		lpc_price_list_by = :lpc_price_list_by,
+		lpc_cost_one = :lpc_cost_one,
+		lpc_weight = :lpc_weight,
+		lpc_summ = :lpc_summ,
+		lpc_sum_transport = :lpc_sum_transport,
+		lpc_custom = :lpc_custom,
+		lpc_percent = :lpc_percent_dcl_1_4,
+		lpc_1c_number = :lpc_1c_number,
+		prs_id = :purpose.id,
+		prd_id = :produce.id,
+		opr_id = :opr_id,
+		asm_id = :asm_id,
+		apr_id = :apr_id,
+		drp_id = :drp_id,
+		sip_id = :sip_id,
+		dep_id = :department.id
+		where
+		lpc_id = :lpc_id;
+	</entry>
+
+	<entry id='delete_produce_cost_produce'>
+		delete from dcl_prc_list_produce lpc
+		where
+		prc_id = :prc_id
+		and not exists ( select lpc_id from DCL_OCCUPIED_PRC_PRODUCE_V where lpc_id = lpc.lpc_id )
+		and not exists ( select lpc_id from DCL_OCCUPIED_PRC_PRODUCE_CPR_V where lpc_id = lpc.lpc_id )
+	</entry>
+
+	<entry id='order-positions-available-for-produce-cost'>
+		select
+			opr_id as "doc_id",
+			ord_id as "id",
+			ord_number as "number",
+			ord_date as "date",
+			ctr_name as "contractor",
+			prd_id as "produce.id",
+			opr_count_executed as "count",
+			ctn_number,
+			seller
+		from dcl_get_rest_opr_for_prc(:prc_id)
+		order by ord_date descending, ord_id, opr_id
+	</entry>
+
+	<entry id='assemble-positions-available-for-produce-cost'>
+		select
+		apr_id as "doc_id",
+		asm_id as "id",
+		asm_number as "number",
+		asm_date as "date",
+		prd_id as "produce.id",
+		apr_count as "count",
+		ctn_number
+		from dcl_get_rest_asm_for_prc(:prc_id)
+		order by asm_date descending, asm_id, apr_id
+	</entry>
+
+	<entry id='delivery_request-positions-available-for-produce-cost'>
+		select
+		drp_id as "doc_id",
+		dlr_id as "id",
+		dlr_number as "number",
+		dlr_date as "date",
+		prd_id as "produce.id",
+		drp_count as "count",
+		ctn_number
+		from dcl_get_rest_drp_for_prc(:prc_id)
+		order by dlr_date descending, dlr_id, drp_id
+	</entry>
+
+	<entry id='specification-import-positions-available-for-produce-cost'>
+		select
+		sip_id as "doc_id",
+		spi_id as "id",
+		spi_number as "number",
+		spi_date as "date",
+		prd_id as "produce.id",
+		sip_count as "count",
+		ctn_number
+		from dcl_get_rest_sip_for_prc(:prc_id)
+	</entry>
+
+	<entry id='select-produce_cost_custom'>
+		select
+		prc_id,
+		lpc_percent,
+		lpc_summ,
+		lpc_summ_allocation
+		from dcl_produce_cost_custom pcc
+		where prc_id=:prc_id
+	</entry>
+
+	<entry id='insert_produce_cost_custom'>
+		insert into dcl_produce_cost_custom (
+		prc_id,
+		lpc_percent,
+		lpc_summ,
+		lpc_summ_allocation
+		)
+		values(
+		:prc_id,
+		:lpc_percent,
+		:lpc_summ,
+		:lpc_summ_allocation
+		)
+	</entry>
+
+	<entry id='delete_produce_cost_custom'>
+		delete from dcl_produce_cost_custom
+		where
+		prc_id = :prc_id
+	</entry>
+
+	<entry id="produce_cost_produce-load">
+		select
+		lpc_id,
+		prc_id,
+		lpc_produce_name,
+		stf_id as "stuffCategory.id",
+		stf_name as "stuffCategory.name",
+		usr_id as "manager.usr_id",
+		lpc_count,
+		lpc_cost_one_ltl,
+		lpc_cost_one_by,
+		lpc_price_list_by,
+		lpc_cost_one,
+		lpc_weight,
+		lpc_summ,
+		lpc_sum_transport,
+		lpc_custom,
+		lpc_percent as "lpc_percent_dcl_1_4",
+		lpc_1c_number,
+		prs_id as "purpose.id",
+		prs_name as "purpose.name",
+		prd_id as "produce.id",
+		dep_id as "department.id",
+		dep_name as "department.name"
+		from dcl_prc_list_produce_load(:lpc_id)
+	</entry>
+
+	<entry id='select-payments'>
+		select * from dcl_payment_filter(
+		:contractor.name,
+		:contractor.id,
+		:date_begin_date,
+		:date_end_date,
+		:sum_min,
+		:sum_max,
+		:block,
+		:currency.id,
+		:closed,
+		:pay_account
+		)
+	</entry>
+
+	<entry id='select-payments_by_spc_id'>
+		select
+		pay.pay_id as pay_id,
+		pay.pay_date as pay_date,
+		sum(lps_summ) as pay_summ
+		from
+		dcl_payment pay,
+		dcl_pay_list_summ psum
+		where
+		psum.spc_id = :specification.spc_id and
+		pay.pay_id = psum.pay_id and
+		pay.pay_block = 1 and
+		not exists ( select distinct lps_id from dcl_ctc_pay ctc_pay where ctc_pay.lcc_id != coalesce(:lcc_id, -1) and
+		ctc_pay.lps_id = psum.lps_id )
+		group by pay.pay_id, pay.pay_date
+	</entry>
+
+	<entry id='payment-insert'>
+		select pay_id from dcl_payment_insert (
+		:pay_date_ts,
+		:pay_account,
+		:contractor.id,
+		:currency.id,
+		:pay_block,
+		:pay_summ,
+		:pay_course,
+		:pay_comment,
+		:pay_course_nbrb,
+		:pay_course_nbrb_date_ts
+		)
+	</entry>
+
+	<entry id='payment-update'>
+		update dcl_payment set
+		pay_date = :pay_date_ts,
+		pay_account = :pay_account,
+		ctr_id = :contractor.id,
+		cur_id = :currency.id,
+		pay_block = :pay_block,
+		pay_summ = :pay_summ,
+		pay_course = :pay_course,
+		pay_comment = :pay_comment,
+		pay_course_nbrb = :pay_course_nbrb,
+		pay_course_nbrb_date = :pay_course_nbrb_date_ts
+		where pay_id = :pay_id
+	</entry>
+
+	<entry id='payment-load'>
+		select
+		usr_id_create as "createUser.usr_id",
+		usr_id_edit as "editUser.usr_id",
+		pay_create_date as "usr_date_create",
+		pay_edit_date as "usr_date_edit",
+		pay_id,
+		pay_date,
+		pay_account,
+		ctr_id as "contractor.id",
+		(select ctr_name from dcl_contractor where ctr_id = pay.ctr_id) as "contractor.name",
+		cur_id as "currency.id",
+		(select cur_name from dcl_currency where cur_id = pay.cur_id) as "currency.name",
+		pay_block,
+		pay_summ,
+		pay_course,
+		pay_comment,
+		( select is_pay_closed from dcl_is_pay_closed(:pay_id) ) as pay_closed,
+		pay_course_nbrb,
+		pay_course_nbrb_date
+		from dcl_payment pay
+		where pay_id = :pay_id
+	</entry>
+
+	<entry id='select-pay_summs-dao'>
+		select
+		lps_id,
+		pay_id,
+		spc.con_id as "contract.con_id",
+		(select con_number from dcl_contract where con_id=spc.con_id) as "contract.con_number",
+		(select con_date from dcl_contract where con_id=spc.con_id) as "contract.con_date",
+		(select cur_id from dcl_contract where con_id=spc.con_id) as "contract.currency.id",
+		lps.spc_id as "specification.spc_id",
+		(select spc_number from dcl_con_list_spec where spc_id=lps.spc_id) as "specification.spc_number",
+		(select spc_date from dcl_con_list_spec where spc_id=lps.spc_id) as "specification.spc_date",
+		(select spc_nds_rate from dcl_con_list_spec where spc_id=lps.spc_id) as "specification.spc_nds_rate",
+		lps_summ,
+		(select lps_id from dcl_ctc_pay where lps_id = lps.lps_id) as lps_occupied
+		from dcl_pay_list_summ lps,
+		dcl_con_list_spec spc
+		where pay_id = :pay_id and
+		spc.spc_id = lps.spc_id
+		order by lps_id
+	</entry>
+
+	<entry id='insert_pay_summ'>
+		insert into dcl_pay_list_summ (
+		lps_id,
+		pay_id,
+		spc_id,
+		lps_summ,
+		lps_summ_eur,
+		lps_summ_out_nds
+		)
+		values(
+		:lps_id,
+		:pay_id,
+		:specification.spc_id,
+		:lps_summ,
+		:lps_summ_eur,
+		:lps_summ_out_nds
+		)
+	</entry>
+
+	<entry id='update_pay_summ'>
+		update dcl_pay_list_summ set
+		pay_id = :pay_id,
+		spc_id = :specification.spc_id,
+		lps_summ = :lps_summ,
+		lps_summ_eur = :lps_summ_eur,
+		lps_summ_out_nds = :lps_summ_out_nds
+		where lps_id = :lps_id
+	</entry>
+
+	<entry id='update_delivery_date'>
+		execute procedure dcl_update_delivery_date(:specification.spc_id);
+	</entry>
+
+	<entry id='pay_sum-load'>
+		select
+		lps_id,
+		pay_id,
+		spc_id as "specification.spc_id",
+		lps_summ,
+		lps_summ_eur,
+		lps_summ_out_nds
+		from dcl_pay_list_summ
+		where lps_id = :lps_id
+	</entry>
+
+	<entry id='delete_pay_summs'>
+		delete from dcl_pay_list_summ lps
+		where
+		pay_id = :pay_id
+		and
+		not exists ( select lps_id from dcl_ctc_pay where lps_id = lps.lps_id )
+	</entry>
+
+
+	<entry id='select-shippings'>
+		select * from dcl_shipping_filter(
+			:number,
+			:contractor.name,
+			:date_begin_date,
+			:date_end_date,
+			:sum_min,
+			:sum_max,
+			:block,
+			:closed,
+			:currency.id,
+			:seller.name
+		)
+	</entry>
+
+	<entry id='select-shipping_by_spc_id'>
+		select
+		shp_id,
+		shp_date as shp_date_ts,
+		shp_number,
+		shp_summ_plus_nds,
+		shp_summ_transport,
+		shp_sum_update,
+		shp_original
+		from
+		dcl_shipping shp
+		where
+		spc_id = :specification.spc_id and
+		shp_block = 1 and
+		not exists ( select distinct shp_id from dcl_ctc_shp ctc_shp where ctc_shp.lcc_id != coalesce(:lcc_id, -1) and
+		ctc_shp.shp_id = shp.shp_id )
+		/*
+		and
+		(
+		select
+		coalesce(count(lps.lps_id), 0)
+		from
+		dcl_shipping shp1,
+		dcl_shp_list_produce lps,
+		dcl_prc_list_produce lpc,
+		dcl_produce_cost prc
+		where
+		shp1.spc_id = :specification.spc_id and
+		lps.shp_id = shp.shp_id and
+		lpc.lpc_id = lps.lpc_id and
+		prc.prc_id = lpc.prc_id and
+		prc.prc_block is null
+		) = 0
+		*/
+	</entry>
+
+	<entry id='shipping-load'>
+		select
+		shp_number,
+		shp_create_date,
+		shp.usr_id_create as "createUser.usr_id",
+		shp_edit_date,
+		shp.usr_id_edit as "editUser.usr_id",
+		shp_date as shp_date_ts,
+		shp_date_expiration as shp_date_expiration_ts,
+		shp.ctr_id as "contractor.id",
+		shp.spc_id as "specification.spc_id",
+		shp_summ_plus_nds,
+		shp_summ_transport,
+		shp_sum_update,
+		shp_block,
+		shp.cur_id "currency.id",
+		shp_letter1_date,
+		shp_letter2_date,
+		shp_letter3_date,
+		shp_complaint_in_court_date,
+		shp_comment,
+		shp_montage,
+		shp_serial_num_year_out,
+		( select is_shp_closed from dcl_is_shp_closed(:shp_id) ) as shp_closed,
+		shp.ctr_id_where as "contractorWhere.id",
+		shp.con_id_where as "contractWhere.con_id",
+		shp_notice_date,
+		shp_original
+		from dcl_shipping shp
+		where shp_id = :shp_id
+	</entry>
+
+	<entry id='shipping-insert'>
+		select shp_id from dcl_shipping_insert (
+		:shp_number,
+		:shp_date_ts,
+		:shp_date_expiration_ts,
+		:specification.spc_id,
+		:shp_summ_plus_nds,
+		:currency.id,
+		:contractor.id,
+		:shp_letter1_date_ts,
+		:shp_letter2_date_ts,
+		:shp_letter3_date_ts,
+		:shp_complaint_in_court_date_ts,
+		:shp_comment,
+		:shp_montage,
+		:shp_serial_num_year_out,
+		:contractorWhere.id,
+		:contractWhere.con_id,
+		:shp_notice_date_ts,
+		:shp_summ_transport,
+		:shp_original,
+		:shp_sum_update
+		)
+	</entry>
+
+	<entry id='shipping-update'>
+		update dcl_shipping set
+		shp_number = :shp_number,
+		shp_date = :shp_date_ts,
+		shp_date_expiration = :shp_date_expiration_ts,
+		spc_id = :specification.spc_id,
+		shp_summ_plus_nds = :shp_summ_plus_nds,
+		shp_summ_transport = :shp_summ_transport,
+		shp_sum_update = :shp_sum_update,
+		cur_id = :currency.id,
+		ctr_id = :contractor.id,
+		shp_letter1_date = :shp_letter1_date_ts,
+		shp_letter2_date = :shp_letter2_date_ts,
+		shp_letter3_date = :shp_letter3_date_ts,
+		shp_complaint_in_court_date = :shp_complaint_in_court_date_ts,
+		shp_comment = :shp_comment,
+		shp_montage = :shp_montage,
+		shp_serial_num_year_out = :shp_serial_num_year_out,
+		ctr_id_where = :contractorWhere.id,
+		con_id_where = :contractWhere.con_id,
+		shp_notice_date = :shp_notice_date_ts,
+		shp_original = :shp_original
+		where shp_id = :shp_id
+	</entry>
+
+	<entry id='shipping-update-block'>
+		update dcl_shipping set
+		shp_block = :shp_block
+		where shp_id = :shp_id
+	</entry>
+
+	<entry id='shipping-set-block'>
+		update dcl_shipping set
+		shp_block = '1'
+		where shp_id = :shp_id
+	</entry>
+
+	<entry id='shipping-positions-available'>
+		select
+		lpc_id,
+		prc_id,
+		prc_number,
+		prc_date,
+		prd_name as "produce_name",
+		prd_type as "type",
+		prd_params as "params",
+		prd_add_params as "add_params",
+		stf_id as "stuffCategory.id",
+		stf_name as "stuffCategory.name",
+		lpc_count,
+		free_count,
+		free_count as shipped_count,
+		rut_id,
+		lpc_1c_number,
+		ctn_number,
+		lpr_id,
+		cpr_ctr_name,
+		cpr_number
+		from dcl_get_rest_lpc_for_shp(:route.id, :number_1c, :prc_date_min_ts, :contractorForPositions.id)
+		order by prc_date descending, prc_id, lpc_id, lpr_id
+	</entry>
+
+	<entry id='shipping_position-load'>
+		select lps.shp_id,
+		lps.stf_id as "stuffCategory.id",
+		lps.lpc_id as "produce.lpc_id",
+		lps.lps_count as "count",
+		lps.lps_summ_plus_nds as "saleSumPlusNds",
+		lps.lps_enter_in_use_date as "enterInUseDate",
+		lps.lps_montage_time as "montageTime",
+		lps.lps_montage_off as "montageOff",
+		lps.lps_serial_num as "serialNumber",
+		lps.lps_year_out as "yearOut",
+		lps.lpr_id as "lprId",
+		(
+		select
+		ctn_number_list
+		from
+		dcl_get_ctn_num_list_by_prd_id(lpc.prd_id)
+		) as ctn_number,
+		prc.prc_date
+		from dcl_shp_list_produce lps,
+		dcl_prc_list_produce lpc,
+		dcl_produce_cost prc
+		where lps.lps_id = :id and
+		lpc.lpc_id = lps.lpc_id and
+		prc.prc_id = lpc.prc_id
+	</entry>
+
+	<entry id='select-shipping-positions'>
+		select lps_id as "id"
+		from dcl_shp_list_produce
+		where shp_id = :shp_id
+	</entry>
+
+	<entry id='shipping_position-delete'>
+		delete from dcl_shp_list_produce where lps_id = :id
+	</entry>
+
+	<entry id='shipping_position-insert'>
+		select lps_id as "id" from dcl_shp_list_produce_insert (
+		:shp_id,
+		:stuffCategory.id,
+		:produce.lpc_id,
+		:count,
+		:saleSumPlusNds,
+		:enterInUseDateTs,
+		:montageTime,
+		:montageOff,
+		:serialNumber,
+		:yearOut,
+		:lprId
+		)
+	</entry>
+
+	<entry id='shipping_position-update'>
+		update dcl_shp_list_produce l set
+		l.lps_summ_plus_nds = :saleSumPlusNds,
+		l.stf_id = :stuffCategory.id,
+		l.lps_enter_in_use_date = :enterInUseDateTs,
+		l.lps_montage_time = :montageTime,
+		l.lps_montage_off = :montageOff,
+		l.lps_serial_num = :serialNumber,
+		l.lps_year_out = :yearOut,
+		l.lpr_id = :lprId
+		where l.lps_id = :id
+	</entry>
+
+	<entry id='shipping_position-rut_id'>
+		select rut_id as "id"
+		from dcl_produce_cost
+		where prc_id = :prc_id
+	</entry>
+
+	<entry id='select-shipping_managers'>
+		select manager from dcl_get_managers_by_shp_id(:shp_id)
+	</entry>
+
+	<entry id='select-shipping_products'>
+		select distinct stf.stf_name
+		from dcl_shp_list_produce lps,
+		dcl_stuff_category stf
+		where lps.shp_id = :shp_id and
+		stf.stf_id = lps.stf_id
+	</entry>
+
+	<entry id='shipping_position_occupied-load'>
+		select occupied_ids as "deletedPositionOccupiedIds" from dcl_get_occupied_shp_pos(:deletedPositionIds)
+	</entry>
+
+	<entry id='select-managers_for_shipping_position'>
+		select
+		lmn.lmn_id as "id",
+		lmn.lps_id as "parentId",
+		usr_lng.usr_id as "manager.usr_id",
+		usr_lng.usr_name as "manager.usr_name",
+		usr_lng.usr_surname as "manager.usr_surname",
+		lmn.lmn_percent as "percent"
+		from
+		dcl_user_language usr_lng,
+		dcl_lps_list_manager lmn
+		where
+		lmn.lps_id = :id and
+		usr_lng.usr_id = lmn.usr_id and
+		usr_lng.lng_id = 1
+	</entry>
+
+	<entry id='delete-managers_for_shipping_position'>
+		delete from dcl_lps_list_manager where lps_id = :id
+	</entry>
+
+	<entry id='insert-managers_for_shipping_position'>
+		insert into dcl_lps_list_manager(
+		lps_id,
+		usr_id,
+		lmn_percent
+		)
+		values(
+		:parentId,
+		:manager.usr_id,
+		:percent
+		)
+	</entry>
+
+
+	<entry id='select-contracts_closed'>
+		select * from dcl_contract_closed_filter(
+		:contract.con_number,
+		:contractor.name,
+		:date_begin_date,
+		:date_end_date,
+		:not_block
+		)
+	</entry>
+
+	<entry id='contract_closed-insert'>
+		select ctc_id from dcl_contract_closed_insert (
+		:ctc_date_ts,
+		:ctc_block)
+	</entry>
+
+	<entry id='contract_closed-load'>
+		select
+		usr_id_create as "createUser.usr_id",
+		usr_id_edit as "editUser.usr_id",
+		ctc_create_date as "usr_date_create",
+		ctc_edit_date as "usr_date_edit",
+		ctc_number,
+		ctc_id,
+		ctc_date,
+		ctc_block
+		from dcl_contract_closed
+		where ctc_id = :ctc_id
+	</entry>
+
+	<entry id='contract_closed-update'>
+		update dcl_contract_closed set
+		usr_id_edit = :editUser.usr_id,
+		ctc_date = :ctc_date_ts,
+		ctc_block = :ctc_block
+		where ctc_id = :ctc_id
+	</entry>
+
+	<entry id='contract_closed-unblock'>
+		update dcl_contract_closed set
+		ctc_block = :ctc_block
+		where ctc_id = :ctc_id
+	</entry>
+
+	<entry id='contract_closed-block-selected'>
+		update dcl_contract_closed set
+		ctc_block = 1
+		where ctc_id in ( {ctc_id_list} )
+	</entry>
+
+	<entry id='contract_closed-delete'>
+		execute procedure dcl_delete_contract_closed(:ctc_id)
+	</entry>
+
+	<entry id='select-contracts_closed_new-dao'>
+		select
+		ctr_id as "contractor.id",
+		ctr_name as "contractor.name",
+		con_id as "contract.con_id",
+		con_number as "contract.con_number",
+		con_date as "contract.con_date",
+		con_original as "contract.con_original",
+		spc_id as "specification.spc_id",
+		spc_number as "specification.spc_number",
+		spc_date as "specification.spc_date",
+		spc_summ as "specification.spc_summ",
+		spc_group_delivery as "specification.spc_group_delivery",
+		spc_original as "specification.spc_original",
+		( select sum_out_nds_eur from dcl_get_sum_out_nds_eur(prc.spc_id) ) as sum_out_nds_eur,
+		have_unblocked_prc
+		from dcl_unclosed_spec prc
+		order by upper(ctr_name)
+	</entry>
+
+	<entry id='select-contracts_closed-dao'>
+		select
+		lcc_id,
+		ctc_id,
+		ctr_id as "contractor.id",
+		ctr_name as "contractor.name",
+		con_id as "contract.con_id",
+		con_number as "contract.con_number",
+		con_date as "contract.con_date",
+		con_original as "contract.con_original",
+		spc_id as "specification.spc_id",
+		spc_number as "specification.spc_number",
+		spc_date as "specification.spc_date",
+		spc_summ as "specification.spc_summ",
+		spc_group_delivery as "specification.spc_group_delivery",
+		spc_original as "specification.spc_original",
+		sum_out_nds_eur,
+		lcc_charges,
+		lcc_montage,
+		lcc_update_sum,
+		have_unblocked_prc
+		from dcl_contracts_closed_load(:ctc_id)
+	</entry>
+
+	<entry id='select-deleted_closed_record_shipping'>
+		select
+		shp_id
+		from
+		dcl_shipping shp
+		where
+		spc_id = :specification.spc_id and
+		not exists ( select shp_id from dcl_ctc_shp where lcc_id = :lcc_id and shp_id = shp.shp_id )
+	</entry>
+
+	<entry id='select-deleted_closed_record_payments'>
+		select
+		pay.pay_id as pay_id
+		from
+		dcl_payment pay,
+		dcl_pay_list_summ psum
+		where
+		pay.pay_id = psum.pay_id and
+		psum.spc_id = :specification.spc_id and
+		not exists ( select lps_id from dcl_ctc_pay where lcc_id = :lcc_id and lps_id = psum.lps_id )
+		group by pay.pay_id
+	</entry>
+
+	<entry id='sum_out_nds_eur_part-load'>
+		select sum_out_nds_eur from dcl_get_sum_out_nds_eur_part(:specification.spc_id, :deletedPayIdsFinal,
+		:deletedShpIdsFinal)
+	</entry>
+
+	<entry id='insert_closed_record'>
+		select lcc_id from dcl_closed_record_insert (
+		:ctc_id,
+		:specification.spc_id,
+		:lcc_charges,
+		:lcc_montage,
+		:lcc_transport,
+		:lcc_update_sum
+		)
+	</entry>
+
+	<entry id='inactive_triger_contract'>
+		alter trigger dcl_contract_bu0 inactive
+	</entry>
+
+	<entry id='close_contract'>
+		execute procedure dcl_close_contract(:specification.spc_id)
+	</entry>
+
+	<entry id='active_triger_contract'>
+		alter trigger dcl_contract_bu0 active
+	</entry>
+
+	<entry id='insert_closed_record_shipping'>
+		insert into dcl_ctc_shp (lcc_id, shp_id)
+		values(:lcc_id, :shp_id)
+	</entry>
+
+	<entry id='insert_closed_record_payment'>
+		insert into dcl_ctc_pay (lcc_id, lps_id)
+		select :lcc_id, lps_id from dcl_pay_list_summ where pay_id = :pay_id and spc_id = :spc_id
+	</entry>
+
+	<entry id='delete_closed_records'>
+		delete from dcl_ctc_list
+		where
+		ctc_id = :ctc_id
+	</entry>
+
+
+	<entry id='select-contractor_requests'>
+		select * from dcl_contractor_request_filter(
+			:number,
+			:contractor.name,
+			:requestType.id,
+			:crq_equipment,
+			:exclude_annul,
+			:crqNotDeliver,
+			:crq_ticket_number,
+			:seller.id,
+			:stuffCategory.name
+		)
+	</entry>
+
+	<entry id='contractor_request-insert'>
+		select crq_id from dcl_contractor_request_insert(
+			:crq_number,
+			:crq_receive_date_ts,
+			:contractor.id,
+			:contactPerson.cps_id,
+			:requestType.id,
+			:contract.con_id,
+			:lps_id,
+			:produce.id,
+			:crq_deliver,
+			:seller.id,
+			:manager.usr_id,
+			:chief.usr_id,
+			:specialist.usr_id,
+			:crq_city,
+			:contractorOther.id,
+			:crq_no_contract,
+			:stuffCategory.id,
+			:crq_serial_num,
+			:crq_year_out,
+			:crq_enter_in_use_date_ts,
+			:crq_operating_time,
+			:crq_annul,
+			:crq_ticket_number,
+			:crq_comment,
+			:contractForWork.con_id
+		)
+	</entry>
+
+	<entry id='contractor_request-update'>
+		update dcl_contractor_request set
+			crq_receive_date = :crq_receive_date_ts,
+			ctr_id = :contractor.id,
+			cps_id = :contactPerson.cps_id,
+			crq_request_type_id = :requestType.id,
+			con_id = :contract.con_id,
+			lps_id = :lps_id,
+			prd_id = :produce.id,
+			crq_deliver = :crq_deliver,
+			sln_id = :seller.id,
+			usr_id_manager = :manager.usr_id,
+			usr_id_chief = :chief.usr_id,
+			usr_id_specialist = :specialist.usr_id,
+			crq_city = :crq_city,
+			ctr_id_other = :contractorOther.id,
+			crq_no_contract = :crq_no_contract,
+			stf_id = :stuffCategory.id,
+			crq_serial_num = :crq_serial_num,
+			crq_year_out = :crq_year_out,
+			crq_enter_in_use_date = :crq_enter_in_use_date_ts,
+			crq_operating_time = :crq_operating_time,
+			crq_annul = :crq_annul,
+			crq_ticket_number = :crq_ticket_number,
+			crq_comment = :crq_comment,
+			con_id_for_work = :contractForWork.con_id
+		where crq_id = :crq_id
+	</entry>
+
+	<entry id='contractor_request-load'>
+		select
+			usr_id_create as "createUser.usr_id",
+			usr_id_edit as "editUser.usr_id",
+			crq_create_date as "usr_date_create",
+			crq_edit_date as "usr_date_edit",
+			crq_number,
+			crq_receive_date,
+			ctr_id as "contractor.id",
+			cps_id as "contactPerson.cps_id",
+			crq_request_type_id as "requestType.id",
+			con_id as "contract.con_id",
+			lps_id,
+			crq_equipment,
+			ctn_number,
+			stf_id as "stuffCategory.id",
+			stf_name1 as "stuffCategory.name",
+			stf_name,
+			lps_serial_num,
+			lps_year_out,
+			lps_enter_in_use_date,
+			prd_id as "produce.id",
+			mad_complexity,
+			crq_deliver,
+			sln_id as "seller.id",
+			sln_name as "seller.name",
+			manager_id as "manager.usr_id",
+			manager_name as "manager.usr_name",
+			manager_surname as "manager.usr_surname",
+			chief_id as "chief.usr_id",
+			chief_name as "chief.usr_name",
+			chief_surname as "chief.usr_surname",
+			specialist_id as "specialist.usr_id",
+			specialist_name as "specialist.usr_name",
+			specialist_surname as "specialist.usr_surname",
+			crq_city,
+			ctr_id_other as "contractorOther.id",
+			ctr_name_other as "contractorOther.name",
+			crq_no_contract,
+			crq_serial_num,
+			crq_year_out,
+			crq_enter_in_use_date,
+			crq_operating_time,
+			crq_annul,
+			crq_ticket_number,
+			shp_date,
+			con_number,
+			con_date,
+			spc_number,
+			spc_date,
+			con_seller_id,
+			con_seller,
+			crq_comment,
+			con_id_for_work as "contractForWork.con_id"
+		from dcl_contractor_request_load(:crq_id)
+	</entry>
+
+	<entry id='contractor_request-load-count-for_act'>
+		select count(crq_id) as "crq_id"
+		from dcl_contractor_request
+		where sln_id = :seller.id
+	</entry>
+
+	<entry id='contractor_request-load-random-for_act'>
+		select first 1 skip {crq_id}
+		crq_id
+		from dcl_contractor_request
+		where sln_id = :seller.id
+		order by crq_id
+	</entry>
+
+	<entry id='contractor_request-load-count-for_letter'>
+		select count(crq_id) as "crq_id"
+		from dcl_contractor_request
+	</entry>
+
+	<entry id='contractor_request-load-random-for_letter'>
+		select first 1 skip {crq_id}
+		crq_id
+		from dcl_contractor_request
+		order by crq_id
+	</entry>
+
+
+	<entry id='delete_contractor_request_stages'>
+		delete from dcl_crq_stage where crq_id = :crq_id
+	</entry>
+
+	<entry id='insert_contractor_request_stage'>
+		insert into dcl_crq_stage(
+		crq_id,
+		crs_name,
+		crs_comment,
+		crs_print
+		)
+		values(
+		:parentId,
+		:name,
+		:comment,
+		:needPrint
+		)
+	</entry>
+
+	<entry id='select-contractor_request_stages'>
+		select
+		crs_id as "id",
+		crq_id as "parentId",
+		crs_name as "name",
+		crs_comment as "comment",
+		crs_print as "needPrint"
+		from dcl_crq_stage
+		where crq_id = :crq_id
+	</entry>
+
+	<entry id='delete_contractor_request_prints'>
+		delete from dcl_crq_print where crq_id = :crq_id
+	</entry>
+
+	<entry id='insert_contractor_request_print'>
+		insert into dcl_crq_print(
+		crq_id,
+		crp_reclamation_date,
+		crp_lintera_request_date,
+		crp_no_defect_act,
+		crp_no_reclamation_act,
+		crp_lintera_agreement_date,
+		crp_deliver
+		)
+		values(
+		:crq_id,
+		:crp_reclamation_date,
+		:crp_lintera_request_date,
+		:crp_no_defect_act,
+		:crp_no_reclamation_act,
+		:crp_lintera_agreement_date,
+		:crp_deliver
+		)
+	</entry>
+
+	<entry id='select-contractor_request_prints'>
+		select * from dcl_crq_print where crq_id = :crq_id
+	</entry>
+
+
+	<entry id='delete_contractor_request_orders'>
+		delete from dcl_crq_ord_link where crq_id = :crq_id
+	</entry>
+
+	<entry id='insert_contractor_request_order'>
+		insert into dcl_crq_ord_link(
+		crq_id,
+		ord_id
+		)
+		values(
+		:crq_id,
+		:ord_id
+		)
+	</entry>
+
+	<entry id='select-contractor_request_orders'>
+		select
+		ord.ord_id,
+		ord.ord_number,
+		ord.ord_date
+		from dcl_crq_ord_link link,
+		dcl_order ord
+		where link.crq_id = :crq_id and
+		ord.ord_id = link.ord_id
+	</entry>
+
+
+	<entry id='current_work-load_additional_info'>
+		select * from dcl_current_work_add_info(:ord_id)
+	</entry>
+
+
+	<entry id='select-timeboards'>
+		select * from dcl_timeboard_filter(
+		:tmb_date_ts,
+		:user.usr_name
+		)
+	</entry>
+
+	<entry id='timeboard-insert'>
+		select tmb_id from dcl_timeboard_insert(
+		:user.usr_id,
+		:tmb_date_ts,
+		:tmb_checked
+		)
+	</entry>
+
+	<entry id='timeboard-update'>
+		update dcl_timeboard set
+		usr_id = :user.usr_id,
+		tmb_date = :tmb_date_ts,
+		tmb_checked = :tmb_checked
+		where tmb_id = :tmb_id
+	</entry>
+
+	<entry id='timeboard-update-checked'>
+		update dcl_timeboard set
+		tmb_checked = :tmb_checked
+		where tmb_id = :tmb_id
+	</entry>
+
+	<entry id='timeboard-load'>
+		select
+		usr_id_create as "createUser.usr_id",
+		usr_id_edit as "editUser.usr_id",
+		tmb_create_date as "usr_date_create",
+		tmb_edit_date as "usr_date_edit",
+		usr_id as "user.usr_id",
+		tmb_date,
+		tmb_checked,
+		tmb_checked_date,
+		usr_id_checked as "checkedUser.usr_id"
+		from dcl_timeboard_load(:tmb_id)
+	</entry>
+
+	<entry id='timeboard-load-by_usr_id_tmb_date'>
+		select
+		tmb_id
+		from dcl_timeboard_load_check_idx(:user.usr_id, :tmb_date_ts)
+	</entry>
+
+
+	<entry id='select-timeboard_works'>
+		select
+		tbw_id,
+		tmb_id,
+		tbw_date,
+		tbw_from as "tbw_from_db",
+		tbw_to as "tbw_to_db",
+		tbw_hours_update,
+		crq_id as "contractorRequest.crq_id",
+		tbw_comment,
+		crq_number as "contractorRequest.crq_number",
+		crq_request_type_id as "contractorRequest.requestType.id",
+		ctr_id as "contractorRequest.contractor.id",
+		ctr_name as "contractorRequest.contractor.name",
+		crq_equipment as "contractorRequest.crq_equipment",
+		crq_deliver as "contractorRequest.crq_deliver"
+		from dcl_tmb_list_works_load(:tmb_id)
+	</entry>
+
+	<entry id='delete_timeboard_works'>
+		delete from dcl_tmb_list_work where tmb_id = :tmb_id
+	</entry>
+
+	<entry id='insert_timeboard_work'>
+		insert into dcl_tmb_list_work(
+		tmb_id,
+		tbw_date,
+		tbw_from,
+		tbw_to,
+		tbw_hours_update,
+		crq_id,
+		tbw_comment
+		)
+		values(
+		:tmb_id,
+		:tbw_date,
+		:tbw_from,
+		:tbw_to,
+		:tbw_hours_update,
+		:contractorRequest.crq_id,
+		:tbw_comment
+		)
+	</entry>
+
+
+	<entry id='select-current_works'>
+		select * from dcl_current_works_filter(
+		:contractor.name,
+		:requestType.id,
+		:crq_equipment,
+		:stuffCategory.name,
+		:user.usr_name
+		)
+	</entry>
+
+
+	<entry id='select-outgoing_letters'>
+		select * from dcl_outgoing_letter_filter(
+			:number,
+			:contractor.name,
+			:date_begin_date,
+			:date_end_date,
+			:user.usr_name,
+			:seller.name
+		)
+	</entry>
+
+	<entry id='outgoing_letter-insert'>
+		select otl_id from dcl_outgoing_letter_insert(
+			:otl_number,
+			:otl_date_ts,
+			:seller.id,
+			:contractor.id,
+			:contactPerson.cps_id,
+			:otl_comment
+		)
+	</entry>
+
+	<entry id='outgoing_letter-load'>
+		select
+			usr_id_create as "createUser.usr_id",
+			usr_id_edit as "editUser.usr_id",
+			otl_create_date as "usr_date_create",
+			otl_edit_date as "usr_date_edit",
+			otl_number,
+			otl_date,
+			sln_id as "seller.id",
+			sln_name as "seller.name",
+			ctr_id as "contractor.id",
+			ctr_name as "contractor.name",
+			cps_id as "contactPerson.cps_id",
+			cps_name as "contactPerson.cps_name",
+			otl_comment
+		from dcl_outgoing_letter_load(:otl_id)
+	</entry>
+
+	<entry id='outgoing_letter-update'>
+		update dcl_outgoing_letter set
+			otl_date = :otl_date_ts,
+			sln_id = :seller.id,
+			ctr_id = :contractor.id,
+			cps_id = :contactPerson.cps_id,
+			otl_comment = :otl_comment
+		where otl_id = :otl_id
+	</entry>
+
+
+	<entry id='select-instructions'>
+		select * from dcl_instruction_filter(
+			:type.id,
+			:number,
+			:date_begin_date,
+			:date_end_date,
+			:showActive,
+			:ins_concerning
+		)
+	</entry>
+
+	<entry id='instruction-insert'>
+		select ins_id from dcl_instruction_insert(
+		:type.id,
+		:ins_number,
+		:ins_date_sign_ts,
+		:ins_date_from_ts,
+		:ins_date_to_ts,
+		:ins_concerning
+		)
+	</entry>
+
+	<entry id='instruction-load'>
+		select
+		usr_id_create as "createUser.usr_id",
+		usr_id_edit as "editUser.usr_id",
+		ins_create_date as "usr_date_create",
+		ins_edit_date as "usr_date_edit",
+		ist_id as "type.id",
+		ist_name as "type.name",
+		ins_number,
+		ins_date_sign,
+		ins_date_from,
+		ins_date_to,
+		ins_concerning
+		from dcl_instruction_load(:ins_id)
+	</entry>
+
+	<entry id='instruction-update'>
+		update dcl_instruction set
+		ist_id = :type.id,
+		ins_number = :ins_number,
+		ins_date_sign = :ins_date_sign_ts,
+		ins_date_from = :ins_date_from_ts,
+		ins_date_to = :ins_date_to_ts,
+		ins_concerning = :ins_concerning
+		where ins_id = :ins_id
+	</entry>
+
+
+	<entry id='select-users-filter'>
+		select * from dcl_user_filter(:filter, :dep_id, :responsPersonInt)
+	</entry>
+
+	<entry id='select-users'>
+		select * from dcl_user_filter_full(:department.name)
+	</entry>
+
+	<entry id='user-insert'>
+		select usr_id from dcl_user_insert (
+		:usr_code,
+		:usr_login,
+		:usr_passwd,
+		:department.id,
+		:usr_phone,
+		:usr_block,
+		:usr_respons_person,
+		:usr_no_login,
+		:usr_chief_dep,
+		:usr_fax,
+		:usr_email,
+		:usr_local_entry,
+		:usr_internet_entry
+		)
+	</entry>
+
+	<entry id='user-update'>
+		update dcl_user set
+		usr_code = :usr_code,
+		usr_login = :usr_login,
+		usr_passwd = :usr_passwd,
+		usr_phone = :usr_phone,
+		dep_id = :department.id,
+		usr_block = :usr_block,
+		usr_respons_person = :usr_respons_person,
+		usr_no_login = :usr_no_login,
+		usr_chief_dep = :usr_chief_dep,
+		usr_fax = :usr_fax,
+		usr_email = :usr_email,
+		usr_local_entry = :usr_local_entry,
+		usr_internet_entry = :usr_internet_entry
+		where usr_id = :usr_id
+	</entry>
+
+	<entry id='user-load'>
+		select
+		(select usr_name from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_name,
+		(select usr_surname from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_surname,
+		(select usr_position from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_position,
+		usr_code,
+		usr_login,
+		usr_passwd,
+		usr_passwd as usr_passwd2,
+		usr_phone,
+		usr_block,
+		dep_id as "department.id",
+		(select dep_name from dcl_department d where dep_id=u.dep_id) as "department.name",
+		usr_respons_person,
+		usr_no_login,
+		usr_chief_dep,
+		usr_fax,
+		usr_email,
+		usr_local_entry,
+		usr_internet_entry
+		from dcl_user u
+		where usr_id = :usr_id
+	</entry>
+
+	<entry id='user-code-load'>
+		select usr_code from dcl_user where usr_id = :createUser.usr_id
+	</entry>
+
+	<entry id='user-load-login'>
+		select
+		usr_id,
+		(select usr_name from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_name,
+		(select usr_surname from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_surname,
+		(select usr_position from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_position,
+		usr_code,
+		usr_login,
+		usr_phone,
+		usr_block,
+		usr_respons_person,
+		usr_no_login,
+		usr_chief_dep,
+		usr_fax,
+		usr_email,
+		dep_id as "department.id",
+		(select dep_name from dcl_department d where dep_id=u.dep_id) as "department.name",
+		usr_local_entry,
+		usr_internet_entry
+		from dcl_user u
+		where usr_login=:usr_login
+	</entry>
+
+	<entry id='user-load-login_pwd'>
+		select
+		usr_id,
+		(select usr_name from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_name,
+		(select usr_surname from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_surname,
+		(select usr_position from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_position,
+		usr_code,
+		usr_login,
+		usr_passwd,
+		usr_phone,
+		usr_block,
+		usr_fax,
+		usr_email,
+		dep_id as "department.id",
+		(select dep_name from dcl_department d where dep_id=u.dep_id) as "department.name",
+		usr_respons_person,
+		usr_no_login,
+		usr_chief_dep,
+		usr_local_entry,
+		usr_internet_entry
+		from dcl_user u
+		where usr_login=:usr_login and
+		usr_passwd=:usr_passwd
+	</entry>
+
+	<entry id='select-user-languages'>
+		select
+		lng.lng_id,
+		lng.lng_name,
+		(select usr_id from dcl_user_language where lng_id = lng.lng_id and usr_id=:usr_id) as usr_id,
+		(select usr_name from dcl_user_language where lng_id = lng.lng_id and usr_id=:usr_id) as usr_name,
+		(select usr_surname from dcl_user_language where lng_id = lng.lng_id and usr_id=:usr_id) as usr_surname,
+		(select usr_position from dcl_user_language where lng_id = lng.lng_id and usr_id=:usr_id) as usr_position
+		from dcl_language lng
+	</entry>
+
+	<entry id='insert_user_language'>
+		insert into dcl_user_language (usr_id, usr_name, usr_surname, usr_position, lng_id)
+		values(:usr_id, :usr_name, :usr_surname, :usr_position, :lng_id)
+	</entry>
+
+	<entry id='update_user_language'>
+		update dcl_user_language set
+		usr_name = :usr_name,
+		usr_surname = :usr_surname,
+		usr_position = :usr_position
+		where usr_id = :usr_id and lng_id = :lng_id
+	</entry>
+
+	<entry id='user-update-block'>
+		execute procedure dcl_update_user_block(:usr_id, :usr_block)
+	</entry>
+
+	<entry id='select-contractors'>
+		select
+		ctr_id,
+		ctr_name,
+		ctr_full_name,
+		ctr_index,
+		ctr_region,
+		ctr_place,
+		ctr_street,
+		ctr_building,
+		ctr_add_info,
+		ctr_phone,
+		ctr_fax,
+		ctr_email,
+		ctr_bank_props,
+		ctr_block,
+		ctr_occupied
+		from dcl_contractor_filter_full (
+		:ctr_name_journal,
+		:ctr_address_journal,
+		:ctr_account_journal,
+		:ctr_email_journal,
+		:ctr_unp_journal,
+		:ctr_full_name_journal,
+		:user.userFullName,
+		:user.usr_id,
+		:department.name
+		)
+	</entry>
+
+	<entry id='select-contractors-all'>
+		select * from dcl_contractor_filter_full (
+		:ctr_name_journal,
+		:ctr_address_journal,
+		:ctr_account_journal,
+		:ctr_email_journal,
+		:ctr_unp_journal,
+		:ctr_full_name_journal,
+		:user.userFullName,
+		:user.usr_id,
+		:department.name
+		)
+	</entry>
+
+	<entry id='select-contractors-filter'>
+		select * from dcl_contractor_filter(:filter)
+	</entry>
+
+	<entry id='select-contractors-for_contracts_closed-filter'>
+		select * from dcl_contractor_for_cc_filter(:filter)
+	</entry>
+
+	<entry id='contractor-insert'>
+		select ctr_id from dcl_contractor_insert (
+		:ctr_name,
+		:ctr_full_name,
+		:country.id,
+		:ctr_index,
+		:ctr_region,
+		:ctr_place,
+		:ctr_street,
+		:ctr_building,
+		:ctr_add_info,
+		:ctr_phone,
+		:ctr_fax,
+		:ctr_email,
+		:ctr_bank_props,
+		:ctr_unp,
+		:ctr_okpo,
+		:ctr_block,
+		:reputation.id,
+		:ctr_comment
+		)
+	</entry>
+
+	<entry id='contractor-update'>
+		update dcl_contractor set
+		ctr_name = :ctr_name,
+		ctr_full_name = :ctr_full_name,
+		cut_id = :country.id,
+		ctr_index = :ctr_index,
+		ctr_region = :ctr_region,
+		ctr_place = :ctr_place,
+		ctr_street = :ctr_street,
+		ctr_building = :ctr_building,
+		ctr_add_info = :ctr_add_info,
+		ctr_phone = :ctr_phone,
+		ctr_fax = :ctr_fax,
+		ctr_email = :ctr_email,
+		ctr_bank_props = :ctr_bank_props,
+		ctr_unp = :ctr_unp,
+		ctr_okpo = :ctr_okpo,
+		ctr_block = :ctr_block,
+		rpt_id = :reputation.id,
+		ctr_comment = :ctr_comment
+		where ctr_id = :ctr_id
+	</entry>
+
+	<entry id='contractor-update-dao'>
+		update dcl_contractor set
+		ctr_name = :name,
+		ctr_full_name = :fullname,
+		ctr_index = :index,
+		ctr_region = :region,
+		ctr_place = :place,
+		ctr_street = :street,
+		ctr_building = :building,
+		ctr_add_info = :addInfo,
+		cut_id = :country.id,
+		ctr_phone = :phone,
+		ctr_fax = :fax,
+		ctr_email = :email,
+		ctr_bank_props = :bank_props,
+		ctr_unp = :unp,
+		ctr_okpo = :okpo,
+		rpt_id = :reputation.id,
+		ctr_comment = :comment
+		where ctr_id = :id
+	</entry>
+
+	<entry id='contractor-load'>
+		select
+		ctr.usr_id_create as "createUser.usr_id",
+		ctr.usr_id_edit as "editUser.usr_id",
+		ctr.ctr_create_date as "usr_date_create",
+		ctr.ctr_edit_date as "usr_date_edit",
+		ctr.ctr_id,
+		ctr.ctr_name,
+		ctr.ctr_full_name,
+		ctr.cut_id as "country.id",
+		cut.cut_name as "country.name",
+		ctr.ctr_index,
+		ctr.ctr_region,
+		ctr.ctr_place,
+		ctr.ctr_street,
+		ctr.ctr_building,
+		ctr.ctr_add_info,
+		ctr.ctr_phone,
+		ctr.ctr_fax,
+		ctr.ctr_email,
+		ctr.ctr_bank_props,
+		ctr.ctr_unp,
+		ctr.ctr_okpo,
+		ctr.ctr_block,
+		ctr.rpt_id as "reputation.id",
+		ctr.ctr_comment
+		from dcl_contractor ctr
+		left join dcl_country cut on cut.cut_id = ctr.cut_id
+		where ctr_id = :ctr_id
+	</entry>
+
+	<entry id='contractor-delete'>
+		delete from dcl_contractor where ctr_id = :ctr_id
+	</entry>
+
+	<entry id='contractor-update_depended_docs'>
+		execute procedure dcl_update_dep_docs_for_ctr(:oldId, :newId)
+	</entry>
+
+
+	<entry id='select-contact-persons'>
+		select
+		cps_id,
+		ctr_id,
+		cps_name,
+		upper(cps_name) as cps_name_sort,
+		cps_position,
+		cps_on_reason,
+		cps_phone,
+		cps_mob_phone,
+		cps_fax,
+		cps_email,
+		cps_block,
+		cps_contract_comment,
+		cps_fire
+		from dcl_contact_person
+		where ctr_id = :id
+		order by cps_name_sort
+	</entry>
+
+	<entry id='contact-person-insert'>
+		select cps_id from dcl_contact_person_insert (
+		:ctr_id,
+		:cps_name,
+		:cps_phone,
+		:cps_mob_phone,
+		:cps_fax,
+		:cps_block,
+		:cps_position,
+		:cps_on_reason,
+		:cps_email,
+		:cps_contract_comment,
+		:cps_fire
+		)
+	</entry>
+
+	<entry id='contact-person-update'>
+		update dcl_contact_person set
+		ctr_id = :ctr_id,
+		cps_name = :cps_name,
+		cps_position = :cps_position,
+		cps_on_reason = :cps_on_reason,
+		cps_phone = :cps_phone,
+		cps_mob_phone = :cps_mob_phone,
+		cps_fax = :cps_fax,
+		cps_email = :cps_email,
+		cps_block = :cps_block,
+		cps_contract_comment = :cps_contract_comment,
+		cps_fire = :cps_fire
+		where cps_id = :cps_id
+	</entry>
+
+	<entry id='contact-person-load'>
+		select
+		cps_id,
+		ctr_id,
+		cps_name,
+		cps_position,
+		cps_on_reason,
+		cps_phone,
+		cps_mob_phone,
+		cps_fax,
+		cps_email,
+		cps_block,
+		cps_contract_comment,
+		cps_fire
+		from dcl_contact_person
+		where cps_id = :cps_id
+	</entry>
+
+
+	<entry id='select-contact_person_users'>
+		select
+		cps_id,
+		usr_id as "user.usr_id",
+		(select usr_name from dcl_user_language where usr_id = cps_usr.usr_id and lng_id = 1) as "user.usr_name",
+		(select usr_surname from dcl_user_language where usr_id = cps_usr.usr_id and lng_id = 1) as "user.usr_surname"
+		from dcl_contact_person_user cps_usr
+		where cps_usr.cps_id = :cps_id
+	</entry>
+
+	<!--
+  <entry id='select-contractor_user'>
+    select
+      usr_id
+    from dcl_contractor_user
+    where ctr_id = :ctr_id and usr_id = :user.usr_id
+  </entry>
+  -->
+
+	<entry id='delete_contact_person_users'>
+		delete from dcl_contact_person_user where cps_id = :cps_id
+	</entry>
+
+	<entry id='insert_contact_person_user'>
+		insert into dcl_contact_person_user (
+		cps_id,
+		usr_id
+		)
+		values(
+		:cps_id,
+		:user.usr_id
+		)
+	</entry>
+
+	<entry id='select-accounts'>
+		select
+		acc.acc_id,
+		acc.acc_name,
+		acc.acc_account,
+		acc.cur_id as "currency.id",
+		( select cur_name from dcl_currency where cur_id = acc.cur_id ) as "currency.name",
+		acc_index
+		from dcl_account acc
+		where acc.ctr_id = :id
+		order by acc_id
+	</entry>
+
+	<entry id='delete_accounts'>
+		delete from dcl_account where ctr_id = :id
+	</entry>
+
+	<entry id='insert_account'>
+		insert into dcl_account (
+		ctr_id,
+		acc_name,
+		acc_account,
+		cur_id,
+		acc_index
+		)
+		values(
+		:ctr_id,
+		:acc_name,
+		:acc_account,
+		:currency.id,
+		:acc_index
+		)
+	</entry>
+
+
+	<entry id='select-contractor_users'>
+		select
+		ctr_id,
+		usr_id as "user.usr_id",
+		(select usr_name from dcl_user_language where usr_id = ctr_usr.usr_id and lng_id = 1) as "user.usr_name",
+		(select usr_surname from dcl_user_language where usr_id = ctr_usr.usr_id and lng_id = 1) as "user.usr_surname"
+		from dcl_contractor_user ctr_usr
+		where ctr_usr.ctr_id = :id
+	</entry>
+
+	<entry id='select-contractor_user'>
+		select
+		usr_id
+		from dcl_contractor_user
+		where ctr_id = :ctr_id and usr_id = :user.usr_id
+	</entry>
+
+	<entry id='delete_contractor_users'>
+		delete from dcl_contractor_user where ctr_id = :id
+	</entry>
+
+	<entry id='insert_contractor_user'>
+		insert into dcl_contractor_user (
+		ctr_id,
+		usr_id
+		)
+		values(
+		:ctr_id,
+		:user.usr_id
+		)
+	</entry>
+
+	<entry id='delete_payment_msg_for_users'>
+		delete from dcl_pay_message
+		where
+		ctr_id = :ctr_id
+		and usr_id not in ({new_user_ids})
+		and pms_no_curator = 1
+	</entry>
+
+	<entry id='update_payment_msg_for_contractor'>
+		update dcl_pay_message
+		set pms_no_curator = null
+		where
+		ctr_id = :ctr_id
+		and pms_no_curator = 1
+	</entry>
+
+
+	<entry id='select-departments'>
+		select * from dcl_department
+	</entry>
+
+	<entry id='department-insert'>
+		insert into dcl_department (dep_name)
+		values(:dep_name)
+	</entry>
+
+	<entry id='department-update'>
+		update dcl_department set
+		dep_name = :dep_name
+		where dep_id = :dep_id
+	</entry>
+
+	<entry id='department-load'>
+		select dep_name
+		from dcl_department
+		where dep_id = :dep_id
+	</entry>
+
+
+	<entry id='select-currencies'>
+		select
+			cur_id,
+			cur_name,
+			cur_no_round,
+			coalesce (cur_sort_order, 2) as sort_order
+		from dcl_currency order by sort_order, cur_id
+	</entry>
+
+	<entry id='currency-insert'>
+		insert into dcl_currency(cur_name, cur_no_round)
+		values(upper(:cur_name), :cur_no_round)
+	</entry>
+
+	<entry id='currency-update'>
+		update dcl_currency set
+		cur_name = upper(:cur_name),
+		cur_no_round = :cur_no_round
+		where cur_id = :cur_id
+	</entry>
+
+	<entry id='currency-load'>
+		select
+		cur_name,
+		cur_no_round
+		from dcl_currency
+		where cur_id = :cur_id
+	</entry>
+
+
+	<entry id='select-currency_rates'>
+		select
+		crt_id,
+		crt_date,
+		crt_rate
+		from dcl_currency_rate
+		where cur_id = :cur_id
+		order by crt_date descending
+	</entry>
+
+	<entry id='currency_rate-insert'>
+		insert into dcl_currency_rate(
+		cur_id,
+		crt_date,
+		crt_rate
+		)
+		values(
+		:cur_id,
+		:crt_date,
+		:crt_rate
+		)
+	</entry>
+
+	<entry id='currency_rate-update'>
+		update dcl_currency_rate set
+		crt_date = :crt_date,
+		crt_rate = :crt_rate
+		where crt_id = :crt_id
+	</entry>
+
+	<entry id='currency_rate-load'>
+		select
+		crt_date,
+		crt_rate
+		from dcl_currency_rate
+		where crt_id = :crt_id
+	</entry>
+
+	<entry id='load-currency_rate_for_date'>
+		select * from dcl_currency_rate_for_date(:cur_id, :crt_date)
+	</entry>
+
+	<entry id='load-currencies_rates_for_date'>
+		select * from dcl_currencies_rates_for_date(:courseDateTs)
+	</entry>
+
+	<entry id='load-currency_rate_for_date_count'>
+		<![CDATA[
+      select
+        count(crt_id) as "countRatesBefore"
+      from dcl_currency_rate
+      where cur_id = :cur_id and
+            crt_date = (
+                         select max(crt_date)
+                         from dcl_currency_rate
+                         where cur_id = :cur_id and
+                               crt_date <= :crt_date
+                       )
+    ]]>
+	</entry>
+
+	<entry id='currency_rate-check'>
+		select
+		crt_id
+		from dcl_currency_rate
+		where cur_id = :cur_id and
+		crt_date = :crt_date
+	</entry>
+
+	<entry id='load-currency_rate_min_date'>
+		select * from dcl_currency_rate_min_date
+	</entry>
+
+
+	<entry id='select-stuff_categories'>
+		select
+		upper(stf.stf_name) as stf_name_sort,
+		stf_id,
+		stf_name,
+		stf_show_in_montage,
+		(select stf_id from DCL_OCCUPIED_STUFF_CATEGORY_V where stf_id = stf.stf_id) as stf_occupied,
+		(select distinct stf_id from dcl_montage_adjustment where stf_id = stf.stf_id) as stf_occupied_in_montage
+		from dcl_stuff_category stf
+		order by stf_name_sort
+	</entry>
+
+	<entry id='select-stuff_categories-filter'>
+		select * from dcl_stuff_category_filter(:filter, :montage)
+	</entry>
+
+	<entry id='stuff_category-insert'>
+		insert into dcl_stuff_category(stf_name, stf_show_in_montage)
+		values(:stf_name, :stf_show_in_montage)
+	</entry>
+
+	<entry id='stuff_category-update'>
+		update dcl_stuff_category set
+		stf_name = :stf_name,
+		stf_show_in_montage = :stf_show_in_montage
+		where stf_id = :stf_id
+	</entry>
+
+	<entry id='stuff_category-load'>
+		select
+		stf_name,
+		stf_show_in_montage
+		from dcl_stuff_category
+		where stf_id = :stf_id
+	</entry>
+
+	<entry id='stuff_category-delete'>
+		delete from dcl_stuff_category where stf_id = :stf_id
+	</entry>
+
+
+	<entry id='select-montage_adjustments'>
+		<![CDATA[
+      select
+        upper(mad.mad_machine_type) as mad_machine_type_sort,
+        mad.mad_complexity as "complexityCategory.name",
+        mad.mad_id,
+        mad.mad_machine_type,
+        mad.mad_complexity,
+        mad.mad_annul,
+        madh.mad_date_from,
+        madh.mad_mech_work_tariff,
+        madh.mad_mech_work_rule_montage,
+        madh.mad_mech_work_rule_adjustment,
+        madh.mad_mech_road_tariff,
+        madh.mad_mech_road_rule,
+        madh.mad_el_work_tariff,
+        madh.mad_el_work_rule_montage,
+        madh.mad_el_work_rule_adjustment,
+        madh.mad_el_road_tariff,
+        madh.mad_el_road_rule
+      from dcl_montage_adjustment mad
+           left join dcl_montage_adjustment_h madh on
+           (
+             madh.mad_id = mad.mad_id and
+             madh.mad_date_from = (
+                                    select max(mad_date_from)
+                                    from dcl_montage_adjustment_h
+                                    where mad_id = mad.mad_id and
+                                          mad_date_from <= (SELECT CAST('NOW' AS DATE) FROM RDB$DATABASE)
+                                  )
+           )
+      where mad.stf_id = :stuffCategory.id
+      order by mad_machine_type_sort
+    ]]>
+	</entry>
+
+	<entry id='select-montage_adjustments-dao'>
+		select
+		upper(mad_machine_type) as mad_machine_type_sort,
+		mad_id,
+		mad_machine_type,
+		mad_annul
+		from dcl_montage_adjustment
+		where stf_id = :id
+		order by mad_machine_type_sort
+	</entry>
+
+	<entry id='montage_adjustment-load'>
+		select
+		mad_machine_type,
+		mad_complexity as "complexityCategory.name",
+		mad_annul
+		from dcl_montage_adjustment
+		where mad_id = :mad_id
+	</entry>
+
+	<entry id='montage_adjustment-insert'>
+		select mad_id from dcl_montage_adjustment_insert (
+		:stf_id,
+		:mad_machine_type,
+		:complexityCategory.name
+		)
+	</entry>
+
+	<entry id='montage_adjustment-update'>
+		update dcl_montage_adjustment set
+		mad_machine_type = :mad_machine_type,
+		mad_complexity = :complexityCategory.name,
+		mad_annul = :mad_annul
+		where mad_id = :mad_id
+	</entry>
+
+
+	<entry id='select-montage_adjustments_history'>
+		select
+		madh_id,
+		mad_id,
+		mad_date_from,
+		mad_mech_work_tariff,
+		mad_mech_work_rule_montage,
+		mad_mech_work_rule_adjustment,
+		mad_mech_road_tariff,
+		mad_mech_road_rule,
+		mad_el_work_tariff,
+		mad_el_work_rule_montage,
+		mad_el_work_rule_adjustment,
+		mad_el_road_tariff,
+		mad_el_road_rule
+		from dcl_montage_adjustment_h
+		where mad_id = :mad_id
+		order by mad_date_from
+	</entry>
+
+	<entry id='montage_adjustment_history-load'>
+		select
+		mad_date_from,
+		mad_mech_work_tariff,
+		mad_mech_work_rule_montage,
+		mad_mech_work_rule_adjustment,
+		mad_mech_road_tariff,
+		mad_mech_road_rule,
+		mad_el_work_tariff,
+		mad_el_work_rule_montage,
+		mad_el_work_rule_adjustment,
+		mad_el_road_tariff,
+		mad_el_road_rule
+		from dcl_montage_adjustment_h
+		where madh_id = :madh_id
+	</entry>
+
+	<entry id='montage_adjustment_history-insert'>
+		insert into dcl_montage_adjustment_h (
+		mad_id,
+		mad_date_from,
+		mad_mech_work_tariff,
+		mad_mech_work_rule_montage,
+		mad_mech_work_rule_adjustment,
+		mad_mech_road_tariff,
+		mad_mech_road_rule,
+		mad_el_work_tariff,
+		mad_el_work_rule_montage,
+		mad_el_work_rule_adjustment,
+		mad_el_road_tariff,
+		mad_el_road_rule
+		)
+		values(
+		:mad_id,
+		:mad_date_from,
+		:mad_mech_work_tariff,
+		:mad_mech_work_rule_montage,
+		:mad_mech_work_rule_adjustment,
+		:mad_mech_road_tariff,
+		:mad_mech_road_rule,
+		:mad_el_work_tariff,
+		:mad_el_work_rule_montage,
+		:mad_el_work_rule_adjustment,
+		:mad_el_road_tariff,
+		:mad_el_road_rule
+		)
+	</entry>
+
+	<entry id='montage_adjustment_history-update'>
+		update dcl_montage_adjustment_h set
+		mad_date_from = :mad_date_from,
+		mad_mech_work_tariff = :mad_mech_work_tariff,
+		mad_mech_work_rule_montage = :mad_mech_work_rule_montage,
+		mad_mech_work_rule_adjustment = :mad_mech_work_rule_adjustment,
+		mad_mech_road_tariff = :mad_mech_road_tariff,
+		mad_mech_road_rule = :mad_mech_road_rule,
+		mad_el_work_tariff = :mad_el_work_tariff,
+		mad_el_work_rule_montage = :mad_el_work_rule_montage,
+		mad_el_work_rule_adjustment = :mad_el_work_rule_adjustment,
+		mad_el_road_tariff = :mad_el_road_tariff,
+		mad_el_road_rule = :mad_el_road_rule
+		where madh_id = :madh_id
+	</entry>
+
+
+	<entry id='select-routes'>
+		select
+		rut_id,
+		rut_name,
+		(select rut_id from DCL_OCCUPIED_ROUTE_V where rut_id = rut.rut_id) as rut_occupied
+		from dcl_route rut
+	</entry>
+
+	<entry id='route-insert'>
+		insert into dcl_route(rut_name)
+		values(:rut_name)
+	</entry>
+
+	<entry id='route-update'>
+		update dcl_route set
+		rut_name = :rut_name
+		where rut_id = :rut_id
+	</entry>
+
+	<entry id='route-load'>
+		select
+		rut_name
+		from dcl_route
+		where rut_id = :rut_id
+	</entry>
+
+	<entry id='route-delete'>
+		delete from dcl_route where rut_id = :rut_id
+	</entry>
+
+
+	<entry id='select-sellers'>
+		select
+			sln_id,
+			sln_name,
+			sln_used_in_order,
+			sln_prefix_for_order,
+			sln_is_resident,
+			(select sln_id from DCL_OCCUPIED_SELLER_V where sln_id = sln.sln_id) as sln_occupied
+		from dcl_seller sln
+	</entry>
+
+	<entry id='select-sellers-dao'>
+		select
+			sln_id as "id",
+			sln_name as "name",
+			sln_used_in_order as "usedInOrder",
+			sln_prefix_for_order as "prefixForOrder",
+			sln_is_resident as "resident"
+		from dcl_seller sln
+	</entry>
+
+	<entry id='select-sellers-for-order-dao'>
+		select
+			sln_id as "id",
+			sln_name as "name",
+			sln_used_in_order as "usedInOrder",
+			sln_prefix_for_order as "prefixForOrder",
+			sln_is_resident as "resident"
+		from dcl_seller sln
+		where sln_used_in_order = 1
+	</entry>
+
+	<entry id='seller-insert'>
+		insert into dcl_seller(sln_name, sln_used_in_order, sln_prefix_for_order, sln_is_resident)
+		values(:sln_name, :sln_used_in_order, :sln_prefix_for_order, :sln_is_resident)
+	</entry>
+
+	<entry id='seller-update'>
+		update dcl_seller set
+			sln_name = :sln_name,
+			sln_used_in_order = :sln_used_in_order,
+			sln_prefix_for_order = :sln_prefix_for_order,
+			sln_is_resident = :sln_is_resident
+		where sln_id = :sln_id
+	</entry>
+
+	<entry id='seller-load'>
+		select
+			sln_name,
+			sln_used_in_order,
+			sln_prefix_for_order,
+			sln_is_resident
+		from dcl_seller
+		where sln_id = :sln_id
+	</entry>
+
+	<entry id='seller-delete'>
+		delete from dcl_seller where sln_id = :sln_id
+	</entry>
+
+
+	<entry id='select-units'>
+		select
+		unt_id,
+		(upper((select unt_name from dcl_unit_language unt_lng, dcl_language lng where unt_id = unt.unt_id and
+		unt_lng.lng_id = lng.lng_id and lng.lng_letter_id = 'RU'))),
+		(select unt_name from dcl_unit_language unt_lng, dcl_language lng where unt_id = unt.unt_id and unt_lng.lng_id =
+		lng.lng_id and lng.lng_letter_id = 'RU') as unt_name_ru,
+		(select unt_name from dcl_unit_language unt_lng, dcl_language lng where unt_id = unt.unt_id and unt_lng.lng_id =
+		lng.lng_id and lng.lng_letter_id = 'EN') as unt_name_en,
+		(select unt_name from dcl_unit_language unt_lng, dcl_language lng where unt_id = unt.unt_id and unt_lng.lng_id =
+		lng.lng_id and lng.lng_letter_id = 'DE') as unt_name_de
+		from dcl_unit unt
+		order by 2
+	</entry>
+
+	<entry id='select-units-with-contract-accept'>
+		select
+		unt_id,
+		(upper((select unt_name from dcl_unit_language unt_lng, dcl_language lng where unt_id = unt.unt_id and
+		unt_lng.lng_id = lng.lng_id and lng.lng_letter_id = 'RU'))),
+		(select unt_name from dcl_unit_language unt_lng, dcl_language lng where unt_id = unt.unt_id and unt_lng.lng_id =
+		lng.lng_id and lng.lng_letter_id = 'RU') as unt_name_ru,
+		(select unt_name from dcl_unit_language unt_lng, dcl_language lng where unt_id = unt.unt_id and unt_lng.lng_id =
+		lng.lng_id and lng.lng_letter_id = 'EN') as unt_name_en,
+		(select unt_name from dcl_unit_language unt_lng, dcl_language lng where unt_id = unt.unt_id and unt_lng.lng_id =
+		lng.lng_id and lng.lng_letter_id = 'DE') as unt_name_de,
+		is_acceptable_for_cpr
+		from dcl_unit unt
+		order by 2
+	</entry>
+
+	<entry id="select_unit_for_cpr_acceptable">
+		select is_acceptable_for_cpr from dcl_unit where unt_id=:unt_id
+	</entry>
+
+	<entry id='unit-insert'>
+		select unt_id from dcl_unit_insert(:is_acceptable_for_cpr)
+	</entry>
+
+	<entry id='unit-update'>
+		update dcl_unit set is_acceptable_for_cpr=:is_acceptable_for_cpr where unt_id=:unt_id returning 1
+	</entry>
+
+	<entry id='select-unit-languages'>
+		select
+		lng.lng_id,
+		lng.lng_name,
+		(select unt_id from dcl_unit_language where lng_id = lng.lng_id and unt_id=:unt_id) as unt_id,
+		(select unt_name from dcl_unit_language where lng_id = lng.lng_id and unt_id=:unt_id) as unt_name
+		from dcl_language lng
+	</entry>
+
+	<entry id='insert_unit_language'>
+		insert into dcl_unit_language (unt_id, unt_name, lng_id)
+		values(:unt_id, :unt_name, :lng_id)
+	</entry>
+
+	<entry id='update_unit_language'>
+		update dcl_unit_language set
+		unt_name = :unt_name
+		where unt_id = :unt_id and
+		lng_id = :lng_id
+	</entry>
+
+
+	<entry id='select-purposes'>
+		select
+		prs_id,
+		prs_name
+		from dcl_purpose
+	</entry>
+
+	<entry id='purpose-insert'>
+		insert into dcl_purpose(prs_name)
+		values(:prs_name)
+	</entry>
+
+	<entry id='purpose-update'>
+		update dcl_purpose set
+		prs_name = :prs_name
+		where prs_id = :prs_id
+	</entry>
+
+	<entry id='purpose-load'>
+		select prs_name
+		from dcl_purpose
+		where prs_id = :prs_id
+	</entry>
+
+
+	<entry id='select-purchase_purposes'>
+		select
+		pps_id,
+		pps_name
+		from dcl_purchase_purpose
+	</entry>
+
+	<entry id='purchase_purpose-insert'>
+		insert into dcl_purchase_purpose(pps_name)
+		values(:pps_name)
+	</entry>
+
+	<entry id='purchase_purpose-update'>
+		update dcl_purchase_purpose set
+		pps_name = :pps_name
+		where pps_id = :pps_id
+	</entry>
+
+	<entry id='purchase_purpose-load'>
+		select pps_name
+		from dcl_purchase_purpose
+		where pps_id = :pps_id
+	</entry>
+
+
+	<entry id='select-rates_nds'>
+		select
+		rtn_id,
+		rtn_date_from,
+		rtn_percent
+		from dcl_rate_nds
+		order by rtn_date_from
+	</entry>
+
+	<entry id='select-rate_nds_for_date'>
+		<![CDATA[
+      select first 1
+        rtn_id as "id",
+        rtn_date_from as "dateFrom",
+        rtn_percent as "percent"
+      from dcl_rate_nds
+      where rtn_date_from <= :dateFromTS
+      order by rtn_date_from descending
+    ]]>
+	</entry>
+
+	<entry id='rate_nds-insert'>
+		insert into dcl_rate_nds(rtn_date_from, rtn_percent)
+		values(:rtn_date_from, :rtn_percent)
+	</entry>
+
+	<entry id='rate_nds-update'>
+		update dcl_rate_nds set
+		rtn_date_from = :rtn_date_from,
+		rtn_percent = :rtn_percent
+		where rtn_id = :rtn_id
+	</entry>
+
+	<entry id='rate_nds-load'>
+		select
+		rtn_date_from,
+		rtn_percent
+		from dcl_rate_nds
+		where rtn_id = :rtn_id
+	</entry>
+
+
+	<entry id='select-reputations'>
+		select
+		rpt_id,
+		rpt_level,
+		rpt_description,
+		rpt_default_in_ctc
+		from dcl_reputation
+		order by rpt_level, rpt_id
+	</entry>
+
+	<entry id='reputation-insert'>
+		insert into dcl_reputation(rpt_level, rpt_description, rpt_default_in_ctc)
+		values(:number.number, :rpt_description, :rpt_default_in_ctc)
+	</entry>
+
+	<entry id='reputation-update'>
+		update dcl_reputation set
+		rpt_level = :number.number,
+		rpt_description = :rpt_description,
+		rpt_default_in_ctc = :rpt_default_in_ctc
+		where rpt_id = :rpt_id
+	</entry>
+
+	<entry id='reputation-load'>
+		select
+		rpt_level as "number.number",
+		rpt_description,
+		rpt_default_in_ctc
+		from dcl_reputation
+		where rpt_id = :rpt_id
+	</entry>
+
+
+	<entry id='select-languages'>
+		select
+		lng_id,
+		lng_name,
+		lng_letter_id
+		from dcl_language
+	</entry>
+
+	<entry id='language-insert'>
+		insert into dcl_language(lng_name, lng_letter_id)
+		values(:lng_name, :lng_letter_id)
+	</entry>
+
+	<entry id='language-update'>
+		update dcl_language set
+		lng_name=:lng_name,
+		lng_letter_id=:lng_letter_id
+		where lng_id=:lng_id
+	</entry>
+
+	<entry id='language-load'>
+		select lng_name, lng_letter_id
+		from dcl_language
+		where lng_id=:lng_id
+	</entry>
+
+
+	<entry id='select-inco_terms'>
+		select
+		trm_id,
+		trm_name,
+		trm_name_extended
+		from dcl_term_inco
+		order by trm_order_id
+	</entry>
+
+	<entry id='select-inco_terms-for-ids'>
+		select
+		trm_id as "id",
+		trm_name as "name",
+		trm_name_extended as "nameExtended"
+		from dcl_term_inco
+		where trm_name in ({names})
+	</entry>
+
+
+	<entry id='select-custom_codes'>
+		select
+		cc.cus_id,
+		cc.cus_code,
+		cc.cus_law_240_flag,
+		cc.cus_description,
+		cc.cus_percent,
+		cc.cus_instant,
+		cc.cus_block
+		from dcl_custom_code cc,
+		DCL_CUSTOM_CODE_V c
+		where cc.cus_code = c.cus_code
+		and cc.cus_instant = c.cus_instant
+	</entry>
+
+	<entry id='select-custom_codes-filter'>
+		select * from dcl_custom_code_filter(:filter)
+	</entry>
+
+	<entry id='custom_code-insert'>
+		insert into dcl_custom_code (
+		cus_id_create,
+		cus_id_edit,
+		usr_id_create,
+		usr_id_edit,
+		usr_create_date,
+		usr_edit_date,
+		cus_code,
+		cus_description,
+		cus_percent,
+		cus_instant
+		)
+		values (
+		:createUser.usr_id,
+		:editUser.usr_id,
+		:createUserMain.usr_id,
+		:editUserMain.usr_id,
+		:usr_date_create_main,
+		:usr_date_edit_main,
+		:cus_code,
+		:cus_description,
+		:cus_percent_double,
+		:cus_instant_ts
+		)
+	</entry>
+
+	<entry id='custom_code-update-percent-instant'>
+		update dcl_custom_code set
+		cus_percent = :cus_percent_double,
+		cus_instant = :cus_instant_ts,
+		cus_id_edit = :editUser.usr_id
+		where cus_id = :cus_id
+	</entry>
+
+	<entry id='custom_code-update-code-description'>
+		update dcl_custom_code set
+		cus_id_edit = :editUser.usr_id,
+		usr_id_edit = :editUserMain.usr_id,
+		usr_edit_date = :usr_date_edit_main,
+		cus_code = :cus_code,
+		cus_description = :cus_description
+		where cus_code = :cus_code_old
+	</entry>
+
+	<entry id='custom_code-load'>
+		select
+		cus_id_create as "createUser.usr_id",
+		(select usr_surname || ' ' || usr_name from dcl_user_language where usr_id = cus.cus_id_create and lng_id = 1) as
+		"createUser.usr_name",
+		cus_id_edit as "editUser.usr_id",
+		(select usr_surname || ' ' || usr_name from dcl_user_language where usr_id = cus.cus_id_edit and lng_id = 1) as
+		"editUser.usr_name",
+		cus_create_date as "usr_date_create",
+		cus_edit_date as "usr_date_edit",
+		usr_id_create as "createUserMain.usr_id",
+		(select usr_surname || ' ' || usr_name from dcl_user_language where usr_id = cus.usr_id_create and lng_id = 1) as
+		"createUserMain.usr_name",
+		usr_id_edit as "editUserMain.usr_id",
+		(select usr_surname || ' ' || usr_name from dcl_user_language where usr_id = cus.usr_id_edit and lng_id = 1) as
+		"editUserMain.usr_name",
+		usr_create_date as "usr_date_create_main",
+		usr_edit_date as "usr_date_edit_main",
+		cus_code,
+		cus_description,
+		cus_percent as cus_percent_double,
+		cus_instant
+		from dcl_custom_code cus
+		where cus_id = :cus_id
+	</entry>
+
+	<entry id='custom_code-load-by-code'>
+		select first 1
+		cus_id_create as "createUser.usr_id",
+		(select usr_surname || ' ' || usr_name from dcl_user_language where usr_id = cus.cus_id_create and lng_id = 1) as
+		"createUser.usr_name",
+		cus_id_edit as "editUser.usr_id",
+		(select usr_surname || ' ' || usr_name from dcl_user_language where usr_id = cus.cus_id_edit and lng_id = 1) as
+		"editUser.usr_name",
+		cus_create_date as "usr_date_create",
+		cus_edit_date as "usr_date_edit",
+		usr_id_create as "createUserMain.usr_id",
+		(select usr_surname || ' ' || usr_name from dcl_user_language where usr_id = cus.usr_id_create and lng_id = 1) as
+		"createUserMain.usr_name",
+		usr_id_edit as "editUserMain.usr_id",
+		(select usr_surname || ' ' || usr_name from dcl_user_language where usr_id = cus.usr_id_edit and lng_id = 1) as
+		"editUserMain.usr_name",
+		usr_create_date as "usr_date_create_main",
+		usr_edit_date as "usr_date_edit_main",
+		cus_description
+		from dcl_custom_code cus
+		where cus_code = :cus_code
+	</entry>
+
+	<entry id='select-custom_codes-history'>
+		select
+		cus_id,
+		cus_percent,
+		cus_instant
+		from dcl_custom_code
+		where cus_code = :cus_code
+		order by cus_instant
+	</entry>
+
+
+	<entry id='select-roles'>
+		select rol_id, rol_name from dcl_role
+	</entry>
+
+	<entry id='role-load'>
+		select * from dcl_role where rol_id = :rol_id
+	</entry>
+
+	<entry id='role-insert'>
+		insert into dcl_role (rol_name)
+		values(:rol_name)
+	</entry>
+
+	<entry id='role-update'>
+		update dcl_role set
+		rol_name = :rol_name
+		where rol_id = :rol_id
+	</entry>
+
+	<entry id='select-user-roles-out'>
+		select
+		usr_id,
+		(select usr_name from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_name,
+		(select usr_surname from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_surname
+		from dcl_user u
+		where not exists ( select ur.usr_id from dcl_user_role ur where ur.rol_id = :rol_id and ur.usr_id = u.usr_id )
+		order by usr_surname
+	</entry>
+
+	<entry id='select-user-roles-in'>
+		select
+		u.usr_id,
+		(select usr_name from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_name,
+		(select usr_surname from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_surname
+		from dcl_user u, dcl_user_role ur
+		where ur.rol_id = :rol_id and
+		u.usr_id = ur.usr_id
+		order by usr_surname
+	</entry>
+
+	<entry id='test-select-user-roles-out'>
+		select
+		r.rol_id as role_id,
+		r.rol_name as role_name,
+		u.usr_id,
+		(select usr_name from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_name,
+		(select usr_surname from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_surname,
+		d.dep_id "dep.id",
+		d.dep_name "dep.name"
+		from dcl_user u, dcl_role r,
+		dcl_department d
+		where d.dep_id = u.dep_id
+		order by r.rol_name
+	</entry>
+
+	<!-- Development / test_newGrid: sample dataset for modern grid (orders filtered by date) -->
+	<entry id='test-select-orders-by-date'>
+		select first 500
+			ord.ord_id as ord_id,
+			ord.ord_number as ord_number,
+			cast(cast(ord.ord_date as date) as varchar(10)) as ord_date,
+			(select ctr_name from dcl_contractor c where c.ctr_id = ord.ctr_id) as contractor_name,
+			(select ctr_name from dcl_contractor c where c.ctr_id = ord.ctr_id_for) as contractor_for_name
+		from dcl_order ord
+		where (:ord_date is null or cast(ord.ord_date as date) = :ord_date)
+		order by ord.ord_date desc, ord.ord_id desc
+	</entry>
+
+	<entry id='test-select-user-roles-in'>
+		select
+		r.rol_name as role_name,
+		u.usr_id,
+		(select usr_name from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_name,
+		(select usr_surname from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_surname
+		from dcl_user u,
+		dcl_role r,
+		dcl_user_role urm
+		where r.rol_id = urm.rol_id and
+		urm.usr_id = u.usr_id
+		order by r.rol_name
+	</entry>
+
+	<entry id='select-user-roles'>
+		select rol_id from dcl_user_role where usr_id = :usr_id
+	</entry>
+
+	<entry id='select-user-actions'>
+		select * from dcl_user_actions(:usr_id)
+	</entry>
+
+	<entry id='add-user-roles'>
+		insert into dcl_user_role (usr_id, rol_id)
+		select usr_id, :rol_id from dcl_user where usr_id in ({selected_ids_in})
+	</entry>
+
+	<entry id='delete-user-roles'>
+		delete from dcl_user_role where usr_id in ({selected_ids_out}) and rol_id = :rol_id
+	</entry>
+
+	<entry id='delete-roles-for-user'>
+		delete from dcl_user_role where usr_id = :usr_id;
+	</entry>
+
+	<entry id='add-user-roles-all'>
+		insert into dcl_user_role (usr_id, rol_id)
+		select usr_id, :rol_id from dcl_user u
+		where not exists ( select ur.usr_id from dcl_user_role ur where ur.rol_id = :rol_id and ur.usr_id = u.usr_id )
+	</entry>
+
+	<entry id='delete-user-roles-all'>
+		delete from dcl_user_role where rol_id = :rol_id
+	</entry>
+
+	<entry id='select-blanks'>
+		select * from dcl_blanks_load(:type)
+	</entry>
+
+	<entry id='blank-insert'>
+		select bln_id from dcl_blank_insert (
+			:blankType.id,
+			:bln_name,
+			:seller.id,
+			:language.id,
+			:bln_charset,
+			:bln_preamble,
+			:bln_note,
+			:bln_usage
+		)
+	</entry>
+
+	<entry id='blank-update'>
+		update dcl_blank set
+			bln_type = :blankType.id,
+			bln_name = :bln_name,
+			sln_id = :seller.id,
+			lng_id = :language.id,
+			bln_charset = :bln_charset,
+			bln_preamble = :bln_preamble,
+			bln_note = :bln_note,
+			bln_usage = :bln_usage
+		where bln_id = :bln_id
+	</entry>
+
+	<entry id='blank-load'>
+		select
+			bln_type as "blankType.id",
+			bln_name,
+			cast(null as integer) as "seller.id",
+			cast(null as varchar(50)) as "seller.name",
+			lng_id as "language.id",
+			lng_name as "language.name",
+			bln_charset,
+			bln_preamble,
+			bln_note,
+			bln_usage
+		from dcl_blank_load(:bln_id)
+	</entry>
+
+	<entry id='select-images'>
+		select * from dcl_blank_image
+		where bln_id = :bln_id
+	</entry>
+
+	<entry id='delete_images'>
+		delete from dcl_blank_image
+		where bln_id = :bln_id
+	</entry>
+
+	<entry id='image-insert'>
+		insert into dcl_blank_image(
+			bln_id,
+			bim_name,
+			bim_image
+		)
+		values(
+			:bln_id,
+			:bim_name,
+			:bim_image
+		)
+	</entry>
+
+
+	<entry id='select-settings'>
+		select * from dcl_setting
+	</entry>
+
+	<entry id='setting-load'>
+		select * from dcl_setting
+		where stn_id = :stn_id
+	</entry>
+
+	<entry id='setting-update'>
+		update dcl_setting set
+		stn_description = :stn_description,
+		stn_value = :stn_value,
+		stn_value_extended = :stn_value_extended
+		where stn_id = :stn_id
+	</entry>
+
+
+	<entry id='select-actions'>
+		select * from dcl_action order by act_system_name
+	</entry>
+
+	<entry id='action-load'>
+		select * from dcl_action
+		where act_id = :act_id
+	</entry>
+
+	<entry id='action-update'>
+		update dcl_action set
+		act_name = :act_name,
+		act_logging = :act_logging,
+		act_check_access = :act_check_access
+		where act_id = :act_id
+	</entry>
+
+	<entry id='select-actions_in_list'>
+		select
+		act_id,
+		coalesce(act_name, act_system_name) as "act_name"
+		from dcl_action
+		where act_logging = 1
+	</entry>
+
+	<entry id='select-action-roles-out'>
+		select
+		rol.rol_id,
+		rol.rol_name
+		from dcl_role rol
+		where not exists ( select ar.rol_id from dcl_action_role ar where ar.act_id = :act_id and ar.rol_id = rol.rol_id )
+		order by rol_name
+	</entry>
+
+	<entry id='select-action-roles-in'>
+		select
+		rol.rol_id,
+		rol.rol_name
+		from dcl_role rol, dcl_action_role ar
+		where ar.act_id = :act_id and
+		rol.rol_id = ar.rol_id
+		order by rol_name
+	</entry>
+
+	<entry id='add-action-roles'>
+		insert into dcl_action_role (rol_id, act_id)
+		select rol_id, :act_id from dcl_role where rol_id in ({selected_ids_in})
+	</entry>
+
+	<entry id='delete-action-roles'>
+		delete from dcl_action_role where rol_id in ({selected_ids_out}) and act_id = :act_id
+	</entry>
+
+	<entry id='add-action-roles-all'>
+		insert into dcl_action_role (rol_id, act_id)
+		select rol_id, :act_id from dcl_role rol
+		where not exists ( select ar.rol_id from dcl_action_role ar where ar.act_id = :act_id and ar.rol_id = rol.rol_id )
+	</entry>
+
+	<entry id='delete-action-roles-all'>
+		delete from dcl_action_role where act_id = :act_id
+	</entry>
+
+
+	<entry id='dao-load-contractor'>
+		select
+		ctr_name as "name",
+		ctr_full_name as "fullname",
+		cut_id as "country.id",
+		cut_name as "country.name",
+		ctr_index as "index",
+		ctr_region as "region",
+		ctr_place as "place",
+		ctr_street as "street",
+		ctr_building as "building",
+		ctr_add_info as "addInfo",
+		ctr_phone as "phone",
+		ctr_fax as "fax",
+		ctr_email as "email",
+		ctr_bank_props as "bank_props",
+		account1,
+		account2,
+		accountVal as "accountVal",
+		ctr_unp as "unp",
+		ctr_okpo as "okpo",
+		ctr_block as "block",
+		rpt_id as "reputation.id",
+		rpt_description as "reputation.description",
+		ctr_double_account as "doubleAccount",
+		byn_accounts as "accountsBYN",
+		other_accounts as "accountsOther",
+		ctr_comment as "comment"
+		from dcl_contractor_load(:id)
+	</entry>
+
+	<entry id='dao-load-contractor-unp'>
+		select
+		ctr_id as id
+		from dcl_contractor
+		where ctr_unp = :unp
+	</entry>
+
+	<entry id='dao-load-contractor-account'>
+		select
+		ctr.ctr_id as "id",
+		ctr.ctr_name as "name",
+		ctr.ctr_full_name as "fullname",
+		ctr.ctr_double_account as "doubleAccount"
+		from dcl_contractor ctr
+		left join dcl_country cut on cut.cut_id = ctr.cut_id,
+		dcl_account acc
+		where acc.acc_account = :account and
+		acc.ctr_id = ctr.ctr_id
+		order by ctr.ctr_id
+	</entry>
+
+	<entry id='dao-load-contractor-double_by_account'>
+		select
+		distinct ctr_name
+		from dcl_contractor ctr,
+		dcl_account acc
+		where acc.ctr_id = ctr.ctr_id and
+		acc.acc_account = :account
+		order by ctr.ctr_id
+	</entry>
+
+	<entry id='contractor-update-block'>
+		update dcl_contractor set
+		ctr_block = :block
+		where ctr_id = :id
+	</entry>
+
+	<entry id='contact_persons-update-block'>
+		update dcl_contact_person set
+		cps_block = 1
+		where ctr_id = :id
+	</entry>
+
+	<entry id='contact_person-update-block'>
+		update dcl_contact_person set
+		cps_block = :cps_block
+		where cps_id = :cps_id
+	</entry>
+
+	<entry id='dao-load-user'>
+		select
+		(select usr_name from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_name,
+		(select usr_surname from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_surname,
+		(select usr_position from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_position,
+		usr_code,
+		usr_login,
+		usr_passwd,
+		usr_phone,
+		dep_id as "department.id",
+		usr_respons_person,
+		usr_no_login,
+		usr_chief_dep,
+		usr_fax,
+		usr_email
+		from dcl_user u
+		where usr_id = :usr_id
+	</entry>
+
+	<entry id='dao-load-user-by_dep_name_chief'>
+		select
+		usr_id,
+		(select usr_name from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_name,
+		(select usr_surname from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_surname,
+		(select usr_position from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_position,
+		usr_login,
+		usr_passwd,
+		usr_phone,
+		dep_id as "department.id",
+		usr_respons_person,
+		usr_no_login,
+		usr_chief_dep,
+		usr_fax,
+		usr_email
+		from dcl_user u
+		where dep_id = :department.id and
+		usr_chief_dep = 1 and
+		usr_no_login is null
+	</entry>
+
+	<entry id='dao-load-user-by_code'>
+		select
+		usr_id,
+		(select usr_name from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_name,
+		(select usr_surname from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_surname,
+		(select usr_position from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_position,
+		usr_login,
+		usr_passwd,
+		usr_phone,
+		dep_id as "department.id",
+		usr_respons_person,
+		usr_no_login,
+		usr_chief_dep,
+		usr_fax,
+		usr_email
+		from dcl_user u
+		where usr_code = :usr_code
+	</entry>
+
+	<entry id='dao-load-user-by_name'>
+		select
+		u.usr_id,
+		(select usr_name from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_name,
+		(select usr_surname from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_surname,
+		(select usr_position from dcl_user_language where usr_id = u.usr_id and lng_id = 1) as usr_position,
+		usr_login, usr_passwd, usr_phone, dep_id as "department.id",
+		usr_respons_person, usr_no_login, usr_chief_dep, usr_fax, usr_email
+		from dcl_user u,
+		dcl_user_language ul
+		where
+		u.usr_id = ul.usr_id and
+		ul.lng_id = 1 and
+		ul.usr_surname || ' ' || ul.usr_name like :userFullName
+	</entry>
+
+	<entry id='select-user_language-dao'>
+		select
+		usr_id,
+		lng_id as "language.id",
+		usr_name,
+		usr_surname,
+		usr_position
+		from dcl_user_language
+		where usr_id = :usr_id
+	</entry>
+
+	<entry id='dao-load-custom_code'>
+		<![CDATA[
+      select
+        cus_id,
+        cus_code as code,
+      (select cus_percent from dcl_custom_code cus where cus_code = (select cus_code from dcl_custom_code cus where cus_id=cus_g.cus_id )
+        and
+      cus_instant =
+        ( select max(cus_instant)
+          from dcl_custom_code
+          where cus_code=cus.cus_code and cus_instant <= :date )
+      ) as custom_percent
+      from dcl_custom_code cus_g
+       where cus_id=:id
+    ]]>
+	</entry>
+
+	<entry id='dao-load-custom_code-by-code'>
+		<![CDATA[
+      select
+        cus_id as id,
+        cus_code as code,
+      (select cus_percent from dcl_custom_code cus where cus_code = (select cus_code from dcl_custom_code cus where cus_id = cus_g.cus_id )
+        and
+      cus_instant =
+        ( select max(cus_instant)
+          from dcl_custom_code
+          where cus_code=cus.cus_code and cus_instant <= :date )
+      ) as custom_percent
+      from dcl_custom_code cus_g
+      where cus_code=:code
+    ]]>
+	</entry>
+
+	<entry id='dao-check-custom_code-by-code'>
+		select
+		cus_id as id
+		from dcl_custom_code
+		where cus_code=:code
+	</entry>
+
+	<entry id='dao-check-custom_code-by-code_instant'>
+		select
+		cus_id as "id"
+		from dcl_custom_code
+		where cus_code = :code and
+		cus_instant = :date
+	</entry>
+
+	<entry id='custom_code-update-block'>
+		update dcl_custom_code set
+		cus_block = :block
+		where cus_code = :code
+	</entry>
+
+	<entry id='custom_code-update-law240'>
+		update dcl_custom_code set
+		cus_law_240_flag = :law240Flag
+		where cus_code = :code
+	</entry>
+
+	<entry id='dao-load-department'>
+		select
+		dep_name as "name"
+		from dcl_department
+		where dep_id = :id
+	</entry>
+
+	<entry id='dao-load-department_by_name'>
+		select
+		dep_id as "id"
+		from dcl_department
+		where dep_name = :name
+	</entry>
+
+	<entry id='dao-load-inco_term'>
+		select
+		trm_name as "name",
+		trm_name_extended as "nameExtended"
+		from dcl_term_inco
+		where trm_id = :id
+	</entry>
+
+	<entry id='dao-load-inco_term-name'>
+		select
+		trm_id as "id",
+		trm_name_extended as "nameExtended"
+		from dcl_term_inco
+		where trm_name = :name
+	</entry>
+
+	<entry id='dao-load-currency'>
+		select
+		cur_name as name,
+		cur_no_round as no_round
+		from dcl_currency
+		where cur_id = :id
+	</entry>
+
+	<entry id='dao-load-currency-name'>
+		select
+		cur_id as id,
+		cur_name as name,
+		cur_no_round as no_round
+		from dcl_currency
+		where cur_name = :name
+	</entry>
+
+
+	<entry id='dao-load-stuff_category'>
+		select
+		stf_name as "name",
+		stf_show_in_montage as "showInMontage"
+		from dcl_stuff_category
+		where stf_id = :id
+	</entry>
+
+	<entry id='dao-load-stuff_category_by_name'>
+		select
+		stf_id as "id",
+		stf_show_in_montage as "showInMontage"
+		from dcl_stuff_category
+		where stf_name = :name
+	</entry>
+
+	<entry id='delete_duplicates_for_ctn_before_update_stf_deps'>
+		execute procedure dcl_delete_duplicate_ctn(:oldId, :newId)
+	</entry>
+
+	<entry id='stuff_category-update_depended_docs'>
+		execute procedure dcl_update_dep_docs_for_stf(:oldId, :newId)
+	</entry>
+
+	<entry id='stuff_category-update_show_in_montage'>
+		update dcl_stuff_category set
+		stf_show_in_montage = :showInMontage
+		where stf_id = :id
+	</entry>
+
+
+	<entry id='dao-load-route'>
+		select
+			rut_name as "name"
+		from dcl_route
+		where rut_id = :id
+	</entry>
+
+	<entry id='dao-load-seller'>
+		select
+			sln_name as "name",
+			sln_used_in_order as "usedInOrder",
+			sln_prefix_for_order as "prefixForOrder",
+			sln_is_resident as "resident"
+		from dcl_seller
+		where sln_id = :id
+	</entry>
+
+	<entry id='dao-load-unit'>
+		select
+		unt_name as name
+		from dcl_unit
+		where unt_id = :id
+	</entry>
+
+	<entry id='dao-load-purpose'>
+		select prs_name as name
+		from dcl_purpose
+		where prs_id = :id
+	</entry>
+
+	<entry id='dao-load-purpose-by_name'>
+		select
+		prs_id as id
+		from dcl_purpose
+		where prs_name = :name
+	</entry>
+
+	<entry id='dao-load-purchase_purpose'>
+		select pps_name as name
+		from dcl_purchase_purpose
+		where pps_id = :id
+	</entry>
+
+	<entry id='dao-load-reputation'>
+		select
+		rpt_level as "level",
+		rpt_description as "description",
+		rpt_default_in_ctc as "defaultInContractor"
+		from dcl_reputation
+		where rpt_id = :id
+	</entry>
+
+	<entry id='dao-load-default-reputation'>
+		select
+		rpt_id as "id",
+		rpt_level as "level",
+		rpt_description as "description",
+		rpt_default_in_ctc as "defaultInContractor"
+		from dcl_reputation
+		where rpt_level = 1
+	</entry>
+
+	<entry id='reputation-update-set_default_for_ctc'>
+		update dcl_reputation set
+		rpt_default_in_ctc = 1
+		where rpt_id = :id
+	</entry>
+
+
+	<entry id='dao-load-language'>
+		select
+		lng_name as "name",
+		lng_letter_id as "letterId"
+		from dcl_language
+		where lng_id = :id
+	</entry>
+
+	<entry id='dao-load-language_by_tetter_id'>
+		select
+		lng_id as "id",
+		lng_name as "name"
+		from dcl_language
+		where lng_letter_id = :letterId
+	</entry>
+
+
+	<entry id='dao-load-role'>
+		select
+		rol_name as "name"
+		from dcl_role
+		where rol_id = :id
+	</entry>
+
+
+	<entry id='select-shipping_doc_types'>
+		select
+		sdt_id,
+		sdt_name,
+		(select sdt_id from DCL_OCCUPIED_SHP_DOC_TYPE_V where sdt_id = sdt.sdt_id) as occupied
+		from dcl_shp_doc_type sdt
+	</entry>
+
+	<entry id='dao-load-shipping_doc_type'>
+		select
+		sdt_name as name
+		from dcl_shp_doc_type
+		where sdt_id = :id
+	</entry>
+
+	<entry id='shipping_doc_type-insert'>
+		insert into dcl_shp_doc_type(sdt_name)
+		values(:sdt_name)
+	</entry>
+
+	<entry id='shipping_doc_type-update'>
+		update dcl_shp_doc_type set
+		sdt_name = :sdt_name
+		where sdt_id = :sdt_id
+	</entry>
+
+	<entry id='shipping_doc_type-delete'>
+		delete from dcl_shp_doc_type where sdt_id = :sdt_id
+	</entry>
+
+	<entry id='shipping_doc_type-load'>
+		select sdt_name
+		from dcl_shp_doc_type
+		where sdt_id = :sdt_id
+	</entry>
+
+
+	<entry id='select-countries'>
+		select
+		cut_id,
+		cut_name,
+		(select cut_id from DCL_OCCUPIED_COUNTRY_V where cut_id = cut.cut_id) as occupied
+		from dcl_country cut
+		order by upper(cut_name)
+	</entry>
+
+	<entry id='country-insert'>
+		select cut_id from dcl_country_insert (
+		:cut_name
+		)
+	</entry>
+
+	<entry id='country-update'>
+		update dcl_country set
+		cut_name = :cut_name
+		where cut_id = :cut_id
+	</entry>
+
+	<entry id='country-delete'>
+		delete from dcl_country where cut_id = :cut_id
+	</entry>
+
+	<entry id='country-load'>
+		select
+		usr_id_create as "createUser.usr_id",
+		usr_id_edit as "editUser.usr_id",
+		cut_create_date as "usr_date_create",
+		cut_edit_date as "usr_date_edit",
+		cut_name
+		from dcl_country
+		where cut_id = :cut_id
+	</entry>
+
+	<entry id='dao-load-country'>
+		select
+		cut_name as "name"
+		from dcl_country
+		where cut_id = :id
+	</entry>
+
+	<entry id='country-update_depended_docs'>
+		execute procedure dcl_update_dep_docs_for_cut(:oldId, :newId)
+	</entry>
+
+
+	<entry id='select-files_paths'>
+		select
+		flp_id,
+		flp_table_name,
+		flp_path,
+		flp_description
+		from dcl_files_path
+	</entry>
+
+	<entry id='files_path-update'>
+		update dcl_files_path set
+		flp_path = :flp_path,
+		flp_description = :flp_description
+		where flp_id = :flp_id
+	</entry>
+
+	<entry id='files_path-load'>
+		select
+		flp_table_name,
+		flp_path,
+		flp_description
+		from dcl_files_path
+		where flp_id = :flp_id
+	</entry>
+
+	<entry id='dao-load-files_path'>
+		select
+		flp_id as "id",
+		flp_path as "path",
+		flp_description as "description"
+		from dcl_files_path
+		where flp_table_name = :tableName
+	</entry>
+
+
+	<entry id='select-margin-common'>
+		<![CDATA[
+    select {select_list} from dcl_margin(
+        :department.id,
+        :user.usr_id, 
+        :contractor.id,
+        :stuffCategory.id,
+        :route.id,
+        :date_begin_date,
+        :date_end_date,
+        :ctc_block
+    )
+    {group_by}
+  ]]>
+	</entry>
+
+	<entry id='select-margin_proc-common'>
+		<![CDATA[
+    select {select_list} from dcl_margin1(
+        :department.id,
+        :user.usr_id,
+        :contractor.id,
+        :stuffCategory.id,
+        :route.id,
+        :date_begin_date,
+        :date_end_date,
+        :ctc_block
+    )
+    {group_by}
+  ]]>
+	</entry>
+
+	<entry id='select-margin-common-paged'>
+		<![CDATA[
+    select first :pageSize skip :offset {select_list} from dcl_margin(
+        :department.id,
+        :user.usr_id,
+        :contractor.id,
+        :stuffCategory.id,
+        :route.id,
+        :date_begin_date,
+        :date_end_date,
+        :ctc_block
+    )
+    {group_by}
+  ]]>
+	</entry>
+
+	<entry id='select-margin_proc-common-paged'>
+		<![CDATA[
+    select first :pageSize skip :offset {select_list} from dcl_margin1(
+        :department.id,
+        :user.usr_id,
+        :contractor.id,
+        :stuffCategory.id,
+        :route.id,
+        :date_begin_date,
+        :date_end_date,
+        :ctc_block
+    )
+    {group_by}
+  ]]>
+	</entry>
+
+	<entry id='select-margin-common-count'>
+		<![CDATA[
+    select count(*) as total_count from (
+      select 1 as c from dcl_margin(
+        :department.id,
+        :user.usr_id,
+        :contractor.id,
+        :stuffCategory.id,
+        :route.id,
+        :date_begin_date,
+        :date_end_date,
+        :ctc_block
+      )
+      {group_by}
+    ) t
+  ]]>
+	</entry>
+
+	<entry id='select-margin_proc-common-count'>
+		<![CDATA[
+    select count(*) as total_count from (
+      select 1 as c from dcl_margin1(
+        :department.id,
+        :user.usr_id,
+        :contractor.id,
+        :stuffCategory.id,
+        :route.id,
+        :date_begin_date,
+        :date_end_date,
+        :ctc_block
+      )
+      {group_by}
+    ) t
+  ]]>
+	</entry>
+
+	<entry id='select-goods_rest'>
+		select {select_list} from dcl_goods_rest(:date_begin_date, :user.usr_id, :department.id, :date_end_date,
+		:purpose.id, :stuffCategory.id) {group_by} {order_by}
+	</entry>
+
+	<entry id='select-shipping_goods'>
+		select {select_list} from dcl_shipping_goods(:date_begin_date, :user.usr_id, :department.id, :date_end_date,
+		:stuffCategory.id) {group_by} {order_by}
+	</entry>
+
+	<entry id='select-calculation_state'>
+		select * from dcl_calculation_state (
+		:contractorCalcState.id,
+		:currencyCalcState.id,
+		:not_include_zero,
+		:include_all_specs,
+		:sellerCalcState.id,
+		:contract.con_id,
+		:not_show_annul,
+		:earliest_doc_date_ts,
+		:userCalcState.usr_id,
+		:departmentCalcState.id
+		)
+	</entry>
+
+	<entry id='select-calculation_state_debet'>
+		select * from dcl_calculation_state_debet(
+		:contractorCalcState.id,
+		:currencyCalcState.id,
+		:sellerCalcState.id,
+		:userCalcState.usr_id,
+		:departmentCalcState.id
+		)
+	</entry>
+
+	<entry id='select-orders_statistics'>
+		select
+		stf_name,
+		sum(ord_summ) as ord_summ,
+		sum(ord_summ_sent_to_prod) as ord_summ_sent_to_prod,
+		sum(ord_summ_part_executed) as ord_summ_part_executed,
+		sum(ord_summ_executed) as ord_summ_executed,
+		sum(ord_summ_executed_before) as ord_summ_executed_before,
+		cur_name
+		from dcl_orders_statistics(:date_begin_date, :date_end_date, :department.id, :stuffCategory.id, :contractor.id,
+		:contractor_for.id)
+		group by stf_name, cur_name
+	</entry>
+
+	<entry id='select-orders_unexecuted'>
+		select * from dcl_orders_unexecuted {order_by}
+	</entry>
+
+	<entry id='select-orders_logistics'>
+		select {select_list} from dcl_orders_logistics(:date_begin_date, :date_end_date, :include_empty_dates)
+		order by include_empty_dates_sort, conf_date_sort
+	</entry>
+
+	<entry id='select-shipping-report'>
+		<![CDATA[
+    select {select_list} from dcl_shipping_report(:date_begin_date, :date_end_date, :contractor.id, :not_include_zero, :includeType) {group_by} {order_by}
+  ]]>
+	</entry>
+
+	<entry id='select-shipping-report-for-user'>
+		<![CDATA[
+    select {select_list} from dcl_shipping_report_user(:date_begin_date, :date_end_date, :user.usr_id, :department.id, :contractor.id, :not_include_zero, :includeType) {group_by} {order_by}
+  ]]>
+	</entry>
+
+	<entry id='select-goods_circulation'>
+		select * from dcl_goods_circulation(:date_begin, :date_end, :produceName, :stf_id, :sln_id, :ctr_id)
+	</entry>
+
+	<entry id='select-goods_circulation_rest'>
+		select * from dcl_goods_circulation_rest(:produceName, :stf_id, :ctr_id)
+	</entry>
+
+	<entry id='select-produce_cost_report'>
+		select * from dcl_produce_cost_report(:date_begin, :date_end, :only_block)
+	</entry>
+
+	<entry id='select-produce_cost_report_sum'>
+		select * from dcl_produce_cost_report_sum(:date_begin, :date_end, :only_block)
+	</entry>
+
+	<entry id='select-produce_movement'>
+		select * from dcl_movement_load(:prd_id, :stf_id, 1, null) order by ord_date, ord_id, trn_date, prc_date, shp_date
+	</entry>
+
+
+	<entry id='select-nomenclature-produces'>
+		select
+		prd_id as id,
+		prd_name as name,
+		prd_type as "type",
+		prd_params as params,
+		prd_add_params as "addParams",
+		cus_code as "cusCode",
+		prd_not_check_double as "notCheckDouble",
+		product_list as "productList",
+		ctn_number_list as "numberList",
+		prd_block,
+		(select count(*) from dcl_attachment a where a.att_parent_table='DCL_PRODUCE' and a.att_parent_id = pc.prd_id ) as
+		"attachmentsCount",
+		prd_user as "createUserName",
+		(select unt_lng.unt_name from dcl_unit_language unt_lng where unt_lng.unt_id = pc.unt_id and unt_lng.lng_id = 1) as
+		"unitName"
+		from dcl_get_produces_for_cat(:cat_id_integer, :filter_produce, :filter_type, :filter_params, :filter_add_params,
+		:stf_id, :filter_cusCode, :filter_catalog_number,:show_blocked,:filter_common) pc
+	</entry>
+
+	<entry id="update-lpc_comment">
+		update dcl_prc_list_produce set lpc_comment = :lpc_comment where lpc_id = :lpc_id
+	</entry>
+
+	<entry id="update-lpc_department">
+		update dcl_prc_list_produce set dep_id = :departmentId where lpc_id = :lpc_id
+	</entry>
+
+
+	<entry id='get-num_commercial_proposal'>
+		select * from DCL_GET_NUM('DCL_COMMERCIAL_PROPOSAL')
+	</entry>
+	<entry id='get-num_order'>
+		select * from DCL_GET_NUM('DCL_ORDER')
+	</entry>
+	<entry id='get-num_delivery_request'>
+		select * from DCL_GET_NUM('DCL_DELIVERY_REQUEST')
+	</entry>
+	<entry id='get-num_assemble'>
+		select * from DCL_GET_NUM('DCL_ASSEMBLE')
+	</entry>
+	<entry id='get-num_contractor_request'>
+		select * from DCL_GET_NUM('DCL_CONTRACTOR_REQUEST')
+	</entry>
+	<entry id='get-num_outgoing_letter'>
+		select * from DCL_GET_NUM('DCL_OUTGOING_LETTER')
+	</entry>
+
+	<entry id='select-equipment_dep_con_id'>
+		select * from dcl_equipment_filter(:con_id, :filter, :requestTypeId)
+	</entry>
+
+	<entry id='select-serial_number_dep_prd_id'>
+		select * from dcl_serial_number_filter(:prd_id, :filter)
+	</entry>
+
+
+	<entry id='controlComment-insert'>
+		insert into dcl_field_comment(fcm_key, fcm_value) values (:fcm_key, :fcm_value)
+	</entry>
+
+	<entry id='controlComment-update'>
+		update dcl_field_comment set
+		fcm_value = :fcm_value
+		where fcm_key = :fcm_key
+	</entry>
+
+	<entry id='controlComment-load'>
+		select fcm_value
+		from dcl_field_comment
+		where fcm_key = :fcm_key
+	</entry>
+
+
+	<entry id='select-instruction_types'>
+		select
+		ist_id,
+		ist_name
+		from dcl_instruction_type
+	</entry>
+
+	<entry id='instruction_type-insert'>
+		insert into dcl_instruction_type(ist_name)
+		values(:ist_name)
+	</entry>
+
+	<entry id='instruction_type-update'>
+		update dcl_instruction_type set
+		ist_name = :ist_name
+		where ist_id = :ist_id
+	</entry>
+
+	<entry id='instruction_type-load'>
+		select
+		ist_name
+		from dcl_instruction_type
+		where ist_id = :ist_id
+	</entry>
+
+	<entry id='select-logs'>
+		select * from dcl_log_filter(
+		:action.act_id,
+		:user.usr_name,
+		:ip,
+		:date_begin_date,
+		:date_end_date
+		)
+	</entry>
+
+	<entry id='log-insert'>
+		execute procedure dcl_log_insert(:user.usr_id, :action.act_id, :log_ip)
+	</entry>
+
+	<entry id='log-insert_by_action_system_name'>
+		execute procedure dcl_log_insert_by_act_sys_name(:action.act_system_name, :log_ip)
+	</entry>
+
+	<entry id='inactive_triger_commercial_proposal'>
+		alter trigger dcl_commercial_proposal_bu0 inactive
+	</entry>
+
+	<entry id='close_reserved_in_commercial_proposal'>
+		execute procedure dcl_close_reserved_in_cpr
+	</entry>
+
+	<entry id='active_triger_commercial_proposal'>
+		alter trigger dcl_commercial_proposal_bu0 active
+	</entry>
+
+	<entry id='select_all_sellers_id'>
+		select sln_id from dcl_seller
+	</entry>
+
+	<entry id="insert_into_1C_number_history">
+		insert into dcl_1c_number_history (prd_id, number_1c, date_created) values(:prd_id,:number_1c,:date_created)
+	</entry>
+
+	<entry id="select_from_1C_number_history">
+		select * from dcl_1c_number_history where prd_id=:prd_id order by date_created desc
+	</entry>
+
+	<entry id="select_from_1C_number_history_by_prc_id_and_number_1_C">
+		select * from dcl_1c_number_history where prd_id=:prd_id and number_1c=:number_1c
+	</entry>
+
+	<entry id="select_from_dcl_1c_number_history_for_grid">
+		select id, number_1c, date_created from dcl_1c_number_history where prd_id=:prd_id order by date_created desc
+	</entry>
+
+	<entry id="select_from_dcl_1c_number_history_by_id">
+		select number_1c, date_created from dcl_1c_number_history where id=:id
+	</entry>
+
+	<entry id="update_dcl_1c_number_history">
+		update dcl_1c_number_history h set h.number_1c=:number_1c, h.date_created=:date_created where h.id=:id
+	</entry>
+
+	<entry id="select_rest_info_for_order_letter">
+		select * from dcl_get_decode_rests_in_minsk(:produce.id, :stf_id)
+	</entry>
+
+	<entry id="select_rest_in_lithuania_info_for_order_letter">
+		select distinct * from dcl_get_decode_rests_in_lit(:produce.id, :stf_id)
+	</entry>
+
+	<entry id="select_all_custom_codes_for_product">
+		select * from dcl_cus_code_history where prd_id=:prd_id order by date_created desc
+	</entry>
+
+	<entry id="insert_into_produce_custom_code_history">
+		insert into dcl_cus_code_history (prd_id, cus_code, date_created) values(:prd_id,:cus_code,:date_created)
+	</entry>
+
+	<entry id="update_produce_custom_code_history">
+		update dcl_cus_code_history h set h.cus_code=:cus_code, h.date_created=:date_created where h.id=:id
+	</entry>
+
+	<entry id="select_custom_code_by_id_from_dcl_custom_code_history">
+		select cus_code, date_created from dcl_cus_code_history where id=:id
+	</entry>
+
+	<entry id="custom_code_load_light">
+		select first 1 cus_code as code, cus_id as id from dcl_custom_code where cus_code=:cus_code order by cus_instant
+		desc
+	</entry>
+
+	<entry id="update_produce_code">
+		update dcl_produce set cus_code=:cus_code where prd_id=:prd_id
+	</entry>
+
+	<entry id="select_custom_code_by_prd_and_date_from_dcl_custom_code_history">
+		<![CDATA[select first 1 cus_code from DCL_CUS_CODE_HISTORY where prd_id=:prd_id
+    and date_created <= :date_created order by date_created desc]]>
+	</entry>
+
+</xml-resources>

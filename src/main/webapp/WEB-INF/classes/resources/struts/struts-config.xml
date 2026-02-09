@@ -1,0 +1,1834 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts-config PUBLIC
+				"-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+				"http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<!--
+     This is a blank Struts configuration file with an example
+     welcome action/page and other commented sample elements.
+     Tiles and the Struts Validator are configured using the factory defaults
+     and are ready-to-use.
+     NOTE: If you have a generator tool to create the corresponding Java classes
+     for you, you could include the details in the "form-bean" declarations.
+     Otherwise, you would only define the "form-bean" element itself, with the
+     corresponding "name" and "type" attributes, as shown here.
+-->
+<struts-config>
+	<!-- ======================================== Form Bean Definitions -->
+	<form-beans>
+		<form-bean name="Test" type="net.sam.dcl.test.TestForm"/>
+		<form-bean name="test-grid" type="net.sam.dcl.test.TestGridForm"/>
+		<form-bean name="YesNo" type="net.sam.dcl.form.YesNoForm"/>
+		<form-bean name="ErrorDialog" type="net.sam.dcl.form.ErrorDialogForm"/>
+
+
+		<form-bean name="login" type="net.sam.dcl.form.LoginForm"/>
+
+		<form-bean name="Office" type="net.sam.dcl.form.OfficeForm"/>
+
+		<form-bean name="UserSettings" type="net.sam.dcl.form.UserSettingsForm"/>
+		<form-bean name="UserSetting" type="net.sam.dcl.form.UserSettingForm"/>
+
+		<form-bean name="CommercialProposals" type="net.sam.dcl.form.CommercialProposalsForm"/>
+		<form-bean name="CommercialProposal" type="net.sam.dcl.form.CommercialProposalForm"/>
+		<form-bean name="CommercialProposalPrint" type="net.sam.dcl.form.CommercialProposalPrintForm"/>
+
+		<form-bean name="CommercialProposalProduce" type="net.sam.dcl.form.CommercialProposalProduceForm"/>
+		<form-bean name="ProducesForAssembleMinsk" type="net.sam.dcl.form.ProducesForAssembleMinskForm"/>
+
+
+		<form-bean name="ConditionsForContract" type="net.sam.dcl.form.ConditionsForContractForm"/>
+		<form-bean name="ConditionForContract" type="net.sam.dcl.form.ConditionForContractForm"/>
+		<form-bean name="ConditionForContractProduce" type="net.sam.dcl.form.ConditionForContractProduceForm"/>
+		<form-bean name="ConditionForContractPrint" type="net.sam.dcl.form.ConditionForContractPrintForm"/>
+
+
+		<form-bean name="Contracts" type="net.sam.dcl.form.ContractsForm"/>
+		<form-bean name="Contract" type="net.sam.dcl.form.ContractForm"/>
+
+		<form-bean name="Specification" type="net.sam.dcl.form.SpecificationForm"/>
+
+
+		<form-bean name="Orders" type="net.sam.dcl.form.OrdersForm"/>
+		<form-bean name="Order" type="net.sam.dcl.form.OrderForm"/>
+		<form-bean name="OrderPrint" type="net.sam.dcl.form.OrderPrintForm"/>
+		<form-bean name="OrderProduce" type="net.sam.dcl.form.OrderProduceForm"/>
+		<form-bean name="OrderExecutedProduces" type="net.sam.dcl.form.OrderExecutedProducesForm"/>
+		<form-bean name="CoveringLetterForOrderPrint" type="net.sam.dcl.form.CoveringLetterForOrderPrintForm"/>
+
+
+		<form-bean name="DeliveryRequests" type="net.sam.dcl.form.DeliveryRequestsForm"/>
+		<form-bean name="DeliveryRequest" type="net.sam.dcl.form.DeliveryRequestForm"/>
+		<form-bean name="DeliveryRequestPositions" type="net.sam.dcl.form.DeliveryRequestPositionsForm"/>
+		<form-bean name="DeliveryRequestPrint" type="net.sam.dcl.form.DeliveryRequestPrintForm"/>
+		<form-bean name="DeliveryRequestProduce" type="net.sam.dcl.form.DeliveryRequestProduceForm"/>
+
+
+		<form-bean name="Assembles" type="net.sam.dcl.form.AssemblesForm"/>
+		<form-bean name="Assemble" type="net.sam.dcl.form.AssembleForm"/>
+		<form-bean name="AssemblePositions" type="net.sam.dcl.form.AssemblePositionsForm"/>
+
+
+		<form-bean name="SpecificationImports" type="net.sam.dcl.form.SpecificationImportsForm"/>
+		<form-bean name="SpecificationImport" type="net.sam.dcl.form.SpecificationImportForm"/>
+		<form-bean name="SpecificationImportPositions" type="net.sam.dcl.form.SpecificationImportPositionsForm"/>
+
+
+		<form-bean name="ProducesCost" type="net.sam.dcl.form.ProducesCostForm"/>
+		<form-bean name="ProduceCost" type="net.sam.dcl.form.ProduceCostForm"/>
+		<form-bean name="ProduceCostPositions" type="net.sam.dcl.form.ProduceCostPositionsForm"/>
+		<form-bean name="ProduceCostProduce" type="net.sam.dcl.form.ProduceCostProduceForm"/>
+		<form-bean name="ProduceCostCustom" type="net.sam.dcl.form.ProduceCostCustomForm"/>
+		<form-bean name="ImportFile" type="net.sam.dcl.form.ImportFileForm"/>
+
+
+		<form-bean name="Payments" type="net.sam.dcl.form.PaymentsForm"/>
+		<form-bean name="Payment" type="net.sam.dcl.form.PaymentForm"/>
+
+		<form-bean name="PaySum" type="net.sam.dcl.form.PaySumForm"/>
+
+		<form-bean name="Shippings" type="net.sam.dcl.form.ShippingsForm"/>
+		<form-bean name="Shipping" type="net.sam.dcl.form.ShippingForm"/>
+		<form-bean name="ShippingPositions" type="net.sam.dcl.form.ShippingPositionsForm"/>
+		<form-bean name="NoticeForShippingPrint" type="net.sam.dcl.form.NoticeForShippingPrintForm"/>
+
+
+		<form-bean name="ContractsClosed" type="net.sam.dcl.form.ContractsClosedForm"/>
+		<form-bean name="ContractClosed" type="net.sam.dcl.form.ContractClosedForm"/>
+
+		<form-bean name="ClosedRecord" type="net.sam.dcl.form.ClosedRecordForm"/>
+
+
+		<form-bean name="ContractorRequests" type="net.sam.dcl.form.ContractorRequestsForm"/>
+		<form-bean name="ContractorRequest" type="net.sam.dcl.form.ContractorRequestForm"/>
+		<form-bean name="ContractorRequestPrintLetterRequest"
+		           type="net.sam.dcl.form.ContractorRequestPrintLetterRequestForm"/>
+		<form-bean name="ContractorRequestPrintAct" type="net.sam.dcl.form.ContractorRequestPrintActForm"/>
+
+
+		<form-bean name="Timeboards" type="net.sam.dcl.form.TimeboardsForm"/>
+		<form-bean name="Timeboard" type="net.sam.dcl.form.TimeboardForm"/>
+
+		<form-bean name="TimeboardWork" type="net.sam.dcl.form.TimeboardWorkForm"/>
+
+
+		<form-bean name="CurrentWorks" type="net.sam.dcl.form.CurrentWorksForm"/>
+
+
+		<form-bean name="OutgoingLetters" type="net.sam.dcl.form.OutgoingLettersForm"/>
+		<form-bean name="OutgoingLetter" type="net.sam.dcl.form.OutgoingLetterForm"/>
+
+
+		<form-bean name="Instructions" type="net.sam.dcl.form.InstructionsForm"/>
+		<form-bean name="Instruction" type="net.sam.dcl.form.InstructionForm"/>
+
+
+		<form-bean name="contractors" type="net.sam.dcl.form.ContractorsForm"/>
+		<form-bean name="ContractorsPrint" type="net.sam.dcl.form.ContractorsPrintForm"/>
+		<form-bean name="MergeContractors" type="net.sam.dcl.form.MergeContractorsForm"/>
+		<form-bean name="Roles" type="net.sam.dcl.form.RolesForm"/>
+		<form-bean name="Role" type="net.sam.dcl.form.RoleForm"/>
+		<form-bean name="Blanks" type="net.sam.dcl.form.BlanksForm"/>
+		<form-bean name="Blank" type="net.sam.dcl.form.BlankForm"/>
+		<form-bean name="BlanksList" type="net.sam.dcl.form.BlanksListForm"/>
+		<form-bean name="Settings" type="net.sam.dcl.form.SettingsForm"/>
+		<form-bean name="Setting" type="net.sam.dcl.form.SettingForm"/>
+		<form-bean name="Actions" type="net.sam.dcl.form.ActionsForm"/>
+		<form-bean name="Action" type="net.sam.dcl.form.ActionForm"/>
+		<form-bean name="ActionRoles" type="net.sam.dcl.form.ActionRolesForm"/>
+		<form-bean name="users" type="net.sam.dcl.form.UsersForm"/>
+		<form-bean name="user" type="net.sam.dcl.form.UserForm"/>
+		<form-bean name="contractor" type="net.sam.dcl.form.ContractorForm"/>
+		<form-bean name="ContactPerson" type="net.sam.dcl.form.ContactPersonForm"/>
+		<form-bean name="departments" type="net.sam.dcl.form.DepartmentsForm"/>
+		<form-bean name="department" type="net.sam.dcl.form.DepartmentForm"/>
+		<form-bean name="Currencies" type="net.sam.dcl.form.CurrenciesForm"/>
+		<form-bean name="currency" type="net.sam.dcl.form.CurrencyForm"/>
+		<form-bean name="CurrencyRates" type="net.sam.dcl.form.CurrencyRatesForm"/>
+		<form-bean name="CurrencyRate" type="net.sam.dcl.form.CurrencyRateForm"/>
+		<form-bean name="StuffCategories" type="net.sam.dcl.form.StuffCategoriesForm"/>
+		<form-bean name="StuffCategory" type="net.sam.dcl.form.StuffCategoryForm"/>
+		<form-bean name="MontageAdjustments" type="net.sam.dcl.form.MontageAdjustmentsForm"/>
+		<form-bean name="MontageAdjustment" type="net.sam.dcl.form.MontageAdjustmentForm"/>
+		<form-bean name="MontageAdjustmentsHistory" type="net.sam.dcl.form.MontageAdjustmentsHistoryForm"/>
+		<form-bean name="MontageAdjustmentHistory" type="net.sam.dcl.form.MontageAdjustmentHistoryForm"/>
+		<form-bean name="Routes" type="net.sam.dcl.form.RoutesForm"/>
+		<form-bean name="Route" type="net.sam.dcl.form.RouteForm"/>
+		<form-bean name="Sellers" type="net.sam.dcl.form.SellersForm"/>
+		<form-bean name="Seller" type="net.sam.dcl.form.SellerForm"/>
+		<form-bean name="Units" type="net.sam.dcl.form.UnitsForm"/>
+		<form-bean name="Unit" type="net.sam.dcl.form.UnitForm"/>
+		<form-bean name="Purposes" type="net.sam.dcl.form.PurposesForm"/>
+		<form-bean name="Purpose" type="net.sam.dcl.form.PurposeForm"/>
+		<form-bean name="PurchasePurposes" type="net.sam.dcl.form.PurchasePurposesForm"/>
+		<form-bean name="PurchasePurpose" type="net.sam.dcl.form.PurchasePurposeForm"/>
+		<form-bean name="ShippingDocTypes" type="net.sam.dcl.form.ShippingDocTypesForm"/>
+		<form-bean name="ShippingDocType" type="net.sam.dcl.form.ShippingDocTypeForm"/>
+		<form-bean name="RatesNDS" type="net.sam.dcl.form.RatesNDSForm"/>
+		<form-bean name="RateNDS" type="net.sam.dcl.form.RateNDSForm"/>
+		<form-bean name="Countries" type="net.sam.dcl.form.CountriesForm"/>
+		<form-bean name="Country" type="net.sam.dcl.form.CountryForm"/>
+		<form-bean name="Reputations" type="net.sam.dcl.form.ReputationsForm"/>
+		<form-bean name="Reputation" type="net.sam.dcl.form.ReputationForm"/>
+		<form-bean name="InstructionTypes" type="net.sam.dcl.form.InstructionTypesForm"/>
+		<form-bean name="InstructionType" type="net.sam.dcl.form.InstructionTypeForm"/>
+		<form-bean name="FilesPaths" type="net.sam.dcl.form.FilesPathsForm"/>
+		<form-bean name="FilesPath" type="net.sam.dcl.form.FilesPathForm"/>
+		<form-bean name="Languages" type="net.sam.dcl.form.LanguagesForm"/>
+		<form-bean name="Language" type="net.sam.dcl.form.LanguageForm"/>
+		<form-bean name="CustomCodes" type="net.sam.dcl.form.CustomCodesForm"/>
+		<form-bean name="CustomCodeHistory" type="net.sam.dcl.form.CustomCodeHistoryForm"/>
+		<form-bean name="CustomCode" type="net.sam.dcl.form.CustomCodeForm"/>
+		<form-bean name="UserRoles" type="net.sam.dcl.form.UserRolesForm"/>
+
+
+		<form-bean name="DeliveryConditionList" type="net.sam.dcl.form.DeliveryConditionListForm"/>
+		<form-bean name="CustomCodesList" type="net.sam.dcl.form.CustomCodesListForm"/>
+		<form-bean name="IncoTermsList" type="net.sam.dcl.form.IncoTermsListForm"/>
+		<form-bean name="ContractorsList" type="net.sam.dcl.form.ContractorsListForm"/>
+		<form-bean name="ContractorsForContractsClosedList" type="net.sam.dcl.form.ContractorsForContractsClosedListForm"/>
+		<form-bean name="ContactPersonsList" type="net.sam.dcl.form.ContactPersonsListForm"/>
+		<form-bean name="ContractsDepFromContractorList" type="net.sam.dcl.form.ContractsDepFromContractorListForm"/>
+		<form-bean name="SpecificationsDepFromContractList" type="net.sam.dcl.form.SpecificationsDepFromContractListForm"/>
+		<form-bean name="MontageAdjustmentList" type="net.sam.dcl.form.MontageAdjustmentListForm"/>
+		<form-bean name="EquipmentList" type="net.sam.dcl.form.EquipmentListForm"/>
+		<form-bean name="SerialNumberList" type="net.sam.dcl.form.SerialNumberListForm"/>
+
+
+		<form-bean name="UsersList" type="net.sam.dcl.form.UsersListForm"/>
+		<form-bean name="DepartmentsList" type="net.sam.dcl.form.DepartmentsListForm"/>
+		<form-bean name="StuffCategoriesList" type="net.sam.dcl.form.StuffCategoriesListForm"/>
+		<form-bean name="RoutesList" type="net.sam.dcl.form.RoutesListForm"/>
+		<form-bean name="SellersList" type="net.sam.dcl.form.SellersListForm"/>
+		<form-bean name="UnitsList" type="net.sam.dcl.form.UnitsListForm"/>
+		<form-bean name="PurposesList" type="net.sam.dcl.form.PurposesListForm"/>
+		<form-bean name="PurchasePurposesList" type="net.sam.dcl.form.PurchasePurposesListForm"/>
+		<form-bean name="InstructionTypesList" type="net.sam.dcl.form.InstructionTypesListForm"/>
+
+
+		<form-bean name="Reports" type="net.sam.dcl.form.ReportsForm"/>
+
+		<form-bean name="Margin" type="net.sam.dcl.form.MarginForm"/>
+		<form-bean name="GoodsRest" type="net.sam.dcl.form.GoodsRestForm"/>
+		<form-bean name="CalculationState" type="net.sam.dcl.form.CalculationStateForm"/>
+		<form-bean name="OrdersStatistics" type="net.sam.dcl.form.OrdersStatisticsForm"/>
+		<form-bean name="OrdersUnexecuted" type="net.sam.dcl.form.OrdersUnexecutedForm"/>
+		<form-bean name="OrdersLogistics" type="net.sam.dcl.form.OrdersLogisticsForm"/>
+		<form-bean name="ShippingReport" type="net.sam.dcl.form.ShippingReportForm"/>
+		<form-bean name="GoodsCirculation" type="net.sam.dcl.form.GoodsCirculationForm"/>
+		<form-bean name="ProduceCostReport" type="net.sam.dcl.form.ProduceCostReportForm"/>
+
+		<form-bean name="ProduceMovement" type="net.sam.dcl.form.ProduceMovementForm"/>
+
+
+		<form-bean name="TestHirGrid" type="net.sam.dcl.test.TestHirGridForm"/>
+		<form-bean name="TestNewGrid" type="net.sam.dcl.test.TestNewGridForm"/>
+		<form-bean name="Sessions" type="net.sam.dcl.session.SessionsForm"/>
+		<form-bean name="LockedRecords" type="net.sam.dcl.locking.LockedRecordsForm"/>
+		<form-bean name="TestSelect" type="net.sam.dcl.test.TestSelectForm"/>
+
+		<form-bean name="Nomenclature" type="net.sam.dcl.form.NomenclatureActionBean"/>
+		<form-bean name="NomenclatureProduce" type="net.sam.dcl.action.NomenclatureProduceActionBean"/>
+		<form-bean name="NomenclatureProducesMerge" type="net.sam.dcl.action.NomenclatureProducesMergeActionBean"/>
+
+		<form-bean name="Attachments" type="net.sam.dcl.action.AttachmentsActionBean"/>
+		<form-bean name="GoodsRestLithuania" type="net.sam.dcl.action.GoodsRestLithuaniaActionBean"/>
+		<form-bean name="WoodworkWorkFiles" type="net.sam.dcl.action.WoodworkWorkFilesActionBean"/>
+		<form-bean name="DeferredAttachments" type="net.sam.dcl.action.DeferredAttachmentsActionBean"/>
+		<form-bean name="UploadFile" type="net.sam.dcl.action.UploadFileActionBean"/>
+		<form-bean name="DefferedUploadFile" type="net.sam.dcl.action.DeferredUploadFileActionBean"/>
+		<form-bean name="MultipleFileUpload" type="net.sam.dcl.action.MultipleFileUploadActionBean"/>
+
+		<form-bean name="ControlComment" type="net.sam.dcl.action.ControlCommentActionBean"/>
+
+		<form-bean name="Logs" type="net.sam.dcl.form.LogsForm"/>
+		<form-bean name="Number1CHistory" type="net.sam.dcl.form.Number1CHistoryForm"/>
+		<form-bean name="Number1CFromHistory" type="net.sam.dcl.form.Number1CFromHistoryForm"/>
+		<form-bean name="NomenclatureProduceCustomCodeHistory"
+		           type="net.sam.dcl.form.NomenclatureProduceCustomCodeHistoryForm"/>
+		<form-bean name="NomenclatureProduceCustomCodeFromHistory"
+		           type="net.sam.dcl.form.NomenclatureProduceCustomCodeFromHistoryForm"/>
+	</form-beans>
+
+	<!-- ================================= Global Exception Definitions -->
+	<global-exceptions>
+		<!-- sample exception handler
+		<exception
+				key="expired.password"
+				type="app.ExpiredPasswordException"
+				path="/changePassword.jsp"/>
+		end sample -->
+	</global-exceptions>
+	<!-- =================================== Global Forward Definitions -->
+	<global-forwards>
+		<forward name="list-default-forward" path=".default-list"/>
+		<forward name="map-default-forward" path=".default-map"/>
+		<forward name="office-forward" path="/OfficeAction.do?dispatch=input"/>
+		<forward name="invitation-forward" path=".invitation"/>
+		<forward name="global-error" path="/error.do"/>
+		<forward name="global-lock-error" path=".global-lock-error"/>
+		<forward name="global-show-prev-response" path="/ShowPrevResponse.do"/>
+		<forward name="ajax" path=".ajax"/>
+		<forward name="ajax-error-forward" path=".ajax"/>
+		<forward name="deferredAttach" path="/DefferedUploadFileAction.do?dispatch=input"/>
+		<forward name="multipleAttach" path="/MultipleFileUpload.do?dispatch=input"/>
+		<forward name=".TestNewGrid" path=".TestNewGrid"/>
+		<forward name=".MarginDev" path=".MarginDev"/>
+	</global-forwards>
+	<!-- =================================== Action Mapping Definitions -->
+	<action-mappings type="org.apache.struts.action.RequestActionMapping">
+
+		<!--    <action path="/error" type="net.sam.dcl.controller.actions.ErrorAction" input=".error">-->
+		<!--      <forward name="dialog" path=".error-dialog"/>-->
+		<!--    </action>-->
+
+		<action path="/Menu" type="net.sam.dcl.action.MenuAction"/>
+
+		<action
+						path="/Test"
+						type="net.sam.dcl.action.test.TestAction"
+						name="Test"
+						input=".Test">
+			<forward name="test" path="/Test.do?dispatch=test1"/>
+		</action>
+		<action
+						path="/TestSelectAction"
+						type="net.sam.dcl.test.TestSelectAction"
+						name="TestSelect"
+						input=".TestSelect">
+			<forward name="selectCP" path="/TestSelectKPAction.do?dispatch=input"/>
+			<forward name="select_nomenclature" path="/TestSelectNomenclatureAction.do?dispatch=input"/>
+		</action>
+		<action
+						path="/TestSelectKPAction"
+						type="net.sam.dcl.controller.actions.SelectFromGridAction"
+						input="/CommercialProposalsAction.do?dispatch=input">
+			<forward name="return" path="/TestSelectAction.do?dispatch=return_select_kp"/>
+		</action>
+		<action
+						path="/TestSelectNomenclatureAction"
+						type="net.sam.dcl.controller.actions.SelectFromGridAction"
+						input="/NomenclatureAction.do?dispatch=input">
+			<forward name="return" path="/TestSelectAction.do?dispatch=returnFromSelectNomenclature"/>
+		</action>
+		<action
+						path="/TestEnc"
+						type="net.sam.dcl.action.test.TestAction"
+						name="Test"
+						input=".TestEnc">
+		</action>
+		<action
+						path="/TestErr"
+						type="net.sam.dcl.test.TestErrAction"
+						name="Test"
+						input=".Test">
+		</action>
+		<action
+						path="/Subdir/Test"
+						type="net.sam.dcl.action.test.TestAction"
+						name="Test"
+						input=".Test">
+			<forward name="test" path="/Test.do?dispatch=test1"/>
+		</action>
+		<action
+						path="/Test-tags"
+						type="net.sam.dcl.action.test.TestAction"
+						name="Test"
+						input=".Test-tags">
+		</action>
+		<action
+						path="/test-list"
+						type="net.sam.dcl.test.TestListAction"
+						name="Test"
+						input=".default-list">
+		</action>
+		<action
+						path="/test-map"
+						type="net.sam.dcl.test.TestMapAction"
+						name="Test"
+						input=".default-map">
+		</action>
+
+		<action path="/TestGridAction" type="net.sam.dcl.test.TestGridAction" input=".test-grid" name="test-grid"/>
+
+		<action path="/InvitationAction" type="net.sam.dcl.action.InvitationAction" input=".invitation"/>
+
+
+		<action path="/PersonalOfficeAction" type="net.sam.dcl.action.PersonalOfficeAction" input=".PersonalOffice"/>
+
+		<action path="/OfficeAction" type="net.sam.dcl.action.OfficeAction" input=".Office" name="Office">
+			<forward name="ajaxMessagesGrid" path=".MessagesGrid"/>
+		</action>
+
+		<action path="/UserSettingsAction" type="net.sam.dcl.action.UserSettingsAction" input=".UserSettings"
+		        name="UserSettings"/>
+		<action path="/UserSettingAction" type="net.sam.dcl.action.UserSettingAction" input=".UserSetting"
+		        name="UserSetting">
+			<forward name="back" path="/UserSettingsAction.do"/>
+		</action>
+
+		<action path="/JournalsAction" type="net.sam.dcl.action.JournalsAction" input=".Journals"/>
+
+		<action path="/CommercialProposalsAction" type="net.sam.dcl.action.CommercialProposalsAction"
+		        input=".CommercialProposals" name="CommercialProposals">
+			<forward name="cloneLikeOldVersion" path="/CommercialProposalAction.do?dispatch=cloneLikeOldVersion"/>
+			<forward name="cloneLikeNewVersion" path="/CommercialProposalAction.do?dispatch=cloneLikeNewVersion"/>
+		</action>
+
+		<action scope="session" path="/CommercialProposalAction" type="net.sam.dcl.action.CommercialProposalAction"
+		        input="/CommercialProposalAction.do?dispatch=show"
+		        name="CommercialProposal">
+			<forward name="form" path=".CommercialProposal"/>
+			<forward name="back" path="/CommercialProposalsAction.do?dispatch=restore"/>
+			<forward name="newContractor" path="/ContractorAddActionCommercialProposal.do?dispatch=create"/>
+			<forward name="newContactPerson" path="/ContactPersonAddAction.do?dispatch=create"/>
+			<forward name="newProduce" path="/CommercialProposalProduceAction.do?dispatch=insert"/>
+			<forward name="newProduceForAssembleMinsk" path="/ProducesForAssembleMinskAction.do?dispatch=input"/>
+			<forward name="editProduce" path="/CommercialProposalProduceAction.do?dispatch=edit"/>
+			<forward name="editPurchasePurposes" path="/PurchasePurposesActionCommercialProposal.do?dispatch=execute"/>
+			<forward name="importExcel" path="/CommercialProposalImportAction.do?dispatch=input"/>
+			<forward name="uploadTemplate" path="/UploadFileTemplateCPAction.do?dispatch=input"/>
+			<forward name="ajaxProducesForAssembleMinskGrid" path=".ProducesForAssembleMinskGrid"/>
+			<forward name="ajaxProducesCommercialProposalGrid" path=".ProducesCommercialProposalGrid"/>
+			<forward name="backFromAttach" path="/CommercialProposalAction.do?dispatch=retFromAttach"/>
+		</action>
+		<action path="/CommercialProposalPrintAction" type="net.sam.dcl.action.CommercialProposalPrintAction"
+		        name="CommercialProposalPrint"/>
+		<action path="/CommercialProposalImportAction" type="net.sam.dcl.action.CommercialProposalImportAction"
+		        input=".ImportFile" name="ImportFile">
+			<forward name="back" path="/CommercialProposalAction.do?dispatch=retFromProduceOperation"/>
+		</action>
+		<action path="/ProducesForAssembleMinskAction" type="net.sam.dcl.action.ProducesForAssembleMinskAction"
+		        input="/ProducesForAssembleMinskAction.do?dispatch=input"
+		        name="ProducesForAssembleMinsk" scope="session">
+			<forward name="form" path=".ProducesForAssembleMinsk"/>
+			<forward name="ajaxReservedInfoGrid" path=".ReservedInfoGrid"/>
+			<forward name="back" path="/CommercialProposalAction.do?dispatch=backFromSelect"/>
+		</action>
+
+
+		<action scope="session" path="/CommercialProposalProduceAction"
+		        type="net.sam.dcl.action.CommercialProposalProduceAction"
+		        input=".CommercialProposalProduce" name="CommercialProposalProduce">
+			<forward name="back" path="/CommercialProposalAction.do?dispatch=retFromProduceOperation"/>
+			<forward name="selectProduce" path="/CommercialProposalProduceSelectNomenclatureAction.do?dispatch=input"/>
+		</action>
+
+		<action path="/CommercialProposalProduceSelectNomenclatureAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/NomenclatureAction.do?dispatch=input">
+			<forward name="return" path="/CommercialProposalProduceAction.do?dispatch=returnFromSelectNomenclature"/>
+		</action>
+
+
+		<action path="/ConditionsForContractAction" type="net.sam.dcl.action.ConditionsForContractAction"
+		        input=".ConditionsForContract" name="ConditionsForContract"/>
+		<action scope="session" path="/ConditionForContractAction" type="net.sam.dcl.action.ConditionForContractAction"
+		        input="/ConditionForContractAction.do?dispatch=show"
+		        name="ConditionForContract">
+			<forward name="form" path=".ConditionForContract"/>
+			<forward name="back" path="/ConditionsForContractAction.do?dispatch=restore"/>
+			<forward name="newContractor" path="/ContractorAddActionConditionForContract.do?dispatch=create"/>
+			<forward name="editContractor" path="/ContractorEditActionConditionForContract.do?dispatch=edit"/>
+			<forward name="newContactPerson" path="/ContactPersonAddActionConditionForContract.do?dispatch=create"/>
+			<forward name="editContactPerson" path="/ContactPersonEditActionConditionForContract.do?dispatch=edit"/>
+			<forward name="editPurchasePurposes" path="/PurchasePurposesActionConditionForContract.do?dispatch=execute"/>
+			<forward name="newProduce" path="/ConditionForContractProduceAction.do?dispatch=insert"/>
+			<forward name="cloneProduce" path="/ConditionForContractProduceAction.do?dispatch=clone"/>
+			<forward name="editProduce" path="/ConditionForContractProduceAction.do?dispatch=edit"/>
+			<forward name="selectCP" path="/SelectKPConditionForContractAction.do?dispatch=input"/>
+			<forward name="importExcel" path="/ConditionForContractImportAction.do?dispatch=input"/>
+			<forward name="uploadTemplate" path="/UploadFileTemplateCFCAction.do?dispatch=input"/>
+			<forward name="backFromAttach" path="/ConditionForContractAction.do?dispatch=retFromProduceOperation"/>
+		</action>
+
+		<action path="/SelectKPConditionForContractAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/CommercialProposalsAction.do?dispatch=input">
+			<forward name="return" path="/ConditionForContractAction.do?dispatch=returnFromSelectCP"/>
+		</action>
+
+		<action scope="session" path="/ConditionForContractProduceAction"
+		        type="net.sam.dcl.action.ConditionForContractProduceAction"
+		        input=".ConditionForContractProduce" name="ConditionForContractProduce">
+			<forward name="back" path="/ConditionForContractAction.do?dispatch=retFromProduceOperation"/>
+			<forward name="selectProduce" path="/ConditionForContractProduceSelectNomenclatureAction.do?dispatch=input"/>
+		</action>
+
+		<action path="/ConditionForContractProduceSelectNomenclatureAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/NomenclatureAction.do?dispatch=input">
+			<forward name="return" path="/ConditionForContractProduceAction.do?dispatch=returnFromSelectNomenclature"/>
+		</action>
+
+		<action path="/ConditionForContractImportAction" type="net.sam.dcl.action.ConditionForContractImportAction"
+		        input=".ImportFile" name="ImportFile">
+			<forward name="back" path="/ConditionForContractAction.do?dispatch=retFromProduceOperation"/>
+		</action>
+
+		<action path="/ConditionForContractPrintAction" type="net.sam.dcl.action.ConditionForContractPrintAction"
+		        name="ConditionForContractPrint"/>
+
+
+		<action path="/ContractsAction" type="net.sam.dcl.action.ContractsAction" input=".Contracts" name="Contracts">
+			<forward name="selectCP" path="/SelectCPContractsAction.do?dispatch=input"/>
+		</action>
+
+		<action path="/SelectCPContractsAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/CommercialProposalsAction.do?dispatch=input">
+			<forward name="return" path="/ContractAction.do?dispatch=importCP"/>
+		</action>
+
+		<action scope="session" path="/ContractAction" type="net.sam.dcl.action.ContractAction"
+		        input="/ContractAction.do?dispatch=show"
+		        name="Contract">
+			<forward name="form" path=".Contract"/>
+			<forward name="back" path="/ContractsAction.do?dispatch=restore"/>
+			<forward name="newContractor" path="/ContractorAddActionContract.do?dispatch=create"/>
+			<forward name="newSpecification" path="/SpecificationAction.do?dispatch=insert"/>
+			<forward name="editSpecification" path="/SpecificationAction.do?dispatch=edit"/>
+			<forward name="attach" path="/SpecificationAction.do?dispatch=attach"/>
+			<forward name="backFromAttach" path="/ContractAction.do?dispatch=retFromSpecificationOperation"/>
+		</action>
+
+		<action scope="session" path="/SpecificationAction" type="net.sam.dcl.action.SpecificationAction"
+		        input=".Specification" name="Specification">
+			<forward name="back" path="/ContractAction.do?dispatch=retFromSpecificationOperation"/>
+			<forward name="backFromAttach" path="/SpecificationAction.do?dispatch=backFromAttach"/>
+			<forward name="attach" path="/DeferredAttachmentsAction.do?dispatch=init" redirect="true"/>
+			<forward name="backFromAttachList" path="/ContractAction.do?dispatch=retFromSpecificationOperation"/>
+			<forward name="ajaxSpecificationPaymentsGrid" path=".SpecificationPaymentsGrid"/>
+		</action>
+
+		<action scope="session" path="/ContractActionCalculationState" type="net.sam.dcl.action.ContractAction"
+		        input="/ContractAction.do?dispatch=show"
+		        name="Contract">
+			<forward name="form" path=".Contract"/>
+			<forward name="back" path="/CalculationStateAction.do?dispatch=backToCalcStateFromContract"/>
+			<forward name="newContractor" path="/ContractorAddActionContractCalculationState.do?dispatch=create"/>
+			<forward name="newSpecification" path="/SpecificationActionCalculationState.do?dispatch=insert"/>
+			<forward name="editSpecification" path="/SpecificationActionCalculationState.do?dispatch=edit"/>
+			<forward name="attach" path="/SpecificationActionCalculationState.do?dispatch=attach"/>
+			<forward name="backFromAttach" path="/ContractActionCalculationState.do?dispatch=retFromSpecificationOperation"/>
+		</action>
+
+		<action scope="session" path="/SpecificationActionCalculationState" type="net.sam.dcl.action.SpecificationAction"
+		        input=".Specification" name="Specification">
+			<forward name="back" path="/ContractActionCalculationState.do?dispatch=retFromSpecificationOperation"/>
+			<forward name="backFromAttach" path="/SpecificationActionCalculationState.do?dispatch=backFromAttach"/>
+			<forward name="attach" path="/DeferredAttachmentsAction.do?dispatch=init" redirect="true"/>
+			<forward name="backFromAttachList"
+			         path="/ContractActionCalculationState.do?dispatch=retFromSpecificationOperation"/>
+			<forward name="ajaxSpecificationPaymentsGrid" path=".SpecificationPaymentsGrid"/>
+		</action>
+
+		<action path="/ContractAttacmentsListAction" type="net.sam.dcl.action.ContractAttacmentsListAction"/>
+
+		<action path="/OrdersAction" type="net.sam.dcl.action.OrdersAction" input=".Orders" name="Orders">
+			<forward name="form" path=".Orders"/>
+		</action>
+		<action scope="session" path="/OrderAction" type="net.sam.dcl.action.OrderAction"
+		        input="/OrderAction.do?dispatch=show"
+		        name="Order">
+			<forward name="form" path=".Order"/>
+			<forward name="back" path="/OrdersAction.do?dispatch=restore"/>
+			<forward name="newContractor" path="/ContractorAddActionOrder.do?dispatch=create"/>
+			<forward name="newContactPerson" path="/ContactPersonAddActionOrder.do?dispatch=create"/>
+			<forward name="newProduce" path="/OrderProduceAction.do?dispatch=insert"/>
+			<forward name="cloneProduce" path="/OrderProduceAction.do?dispatch=clone"/>
+			<forward name="editProduce" path="/OrderProduceAction.do?dispatch=edit"/>
+			<forward name="selectCP" path="/SelectCPOrderAction.do?dispatch=input"/>
+			<forward name="importExcel" path="/OrderImportAction.do?dispatch=input"/>
+			<forward name="produceMovement" path="/ProduceMovementForOrderAction.do?dispatch=input"/>
+			<forward name="uploadTemplate" path="/UploadFileTemplateOrderAction.do?dispatch=input"/>
+			<forward name="backFromAttach" path="/OrderAction.do?dispatch=retFromAttach"/>
+			<forward name="editExecuted" path="/OrderExecutedProducesAction.do?dispatch=edit"/>
+			<forward name="ajaxOrderPaymentsGrid" path=".OrderPaymentsGrid"/>
+			<forward name="ajaxOrderPaySumsGrid" path=".OrderPaySumsGrid"/>
+		</action>
+
+		<action path="/SelectCPOrderAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/CommercialProposalsAction.do?dispatch=input">
+			<forward name="return" path="/OrderAction.do?dispatch=returnFromSelectCP"/>
+		</action>
+
+		<action scope="session" path="/OrderProduceAction" type="net.sam.dcl.action.OrderProduceAction"
+		        input=".OrderProduce" name="OrderProduce">
+			<forward name="back" path="/OrderAction.do?dispatch=retFromProduceOperation"/>
+			<forward name="selectProduce" path="/OrderProduceSelectNomenclatureAction.do?dispatch=input"/>
+		</action>
+
+		<action path="/OrderProduceSelectNomenclatureAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/NomenclatureAction.do?dispatch=input">
+			<forward name="return" path="/OrderProduceAction.do?dispatch=returnFromSelectNomenclature"/>
+		</action>
+
+		<action path="/OrderPrintAction" type="net.sam.dcl.action.OrderPrintAction" name="OrderPrint"/>
+		<action path="/CoveringLetterForOrderPrintAction" type="net.sam.dcl.action.CoveringLetterForOrderPrintAction"
+		        name="CoveringLetterForOrderPrint"/>
+		<action path="/OrderImportAction" type="net.sam.dcl.action.OrderImportAction" input=".ImportFile" name="ImportFile">
+			<forward name="back" path="/OrderAction.do?dispatch=retFromProduceOperation"/>
+		</action>
+
+		<action scope="session" path="/OrderExecutedProducesAction" type="net.sam.dcl.action.OrderExecutedProducesAction"
+		        input=".OrderExecutedProduces" name="OrderExecutedProduces">
+			<forward name="ajaxOrderExecutedProducesGrid" path=".OrderExecutedProducesGrid"/>
+			<forward name="back" path="/OrderAction.do?dispatch=retFromProduceOperation"/>
+		</action>
+
+
+		<action path="/DeliveryRequestsAction" type="net.sam.dcl.action.DeliveryRequestsAction" input=".DeliveryRequests"
+		        name="DeliveryRequests"/>
+		<action scope="session" path="/DeliveryRequestAction" type="net.sam.dcl.action.DeliveryRequestAction"
+		        input="/DeliveryRequestAction.do?dispatch=show"
+		        name="DeliveryRequest">
+			<forward name="form" path=".DeliveryRequest"/>
+			<forward name="back" path="/DeliveryRequestsAction.do?dispatch=restore"/>
+			<forward name="newProduce" path="/DeliveryRequestProduceAction.do?dispatch=insert"/>
+			<forward name="editProduce" path="/DeliveryRequestProduceAction.do?dispatch=edit"/>
+			<forward name="selectDocsForDeliveryRequest" path="/DeliveryRequestPositionsAction.do?dispatch=input"/>
+		</action>
+
+		<action path="/DeliveryRequestPositionsAction" type="net.sam.dcl.action.DeliveryRequestPositionsAction"
+		        input="/DeliveryRequestPositionsAction.do?dispatch=input"
+		        name="DeliveryRequestPositions" scope="session">
+			<forward name="form" path=".DeliveryRequestPositions"/>
+			<forward name="back" path="/DeliveryRequestAction.do?dispatch=backFromSelect"/>
+		</action>
+
+		<action scope="session" path="/DeliveryRequestProduceAction" type="net.sam.dcl.action.DeliveryRequestProduceAction"
+		        input=".DeliveryRequestProduce" name="DeliveryRequestProduce">
+			<forward name="back" path="/DeliveryRequestAction.do?dispatch=retFromProduceOperation"/>
+			<forward name="selectProduce" path="/DeliveryRequestProduceSelectNomenclatureAction.do?dispatch=input"/>
+		</action>
+		<action path="/DeliveryRequestProduceSelectNomenclatureAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/NomenclatureAction.do?dispatch=input">
+			<forward name="return" path="/DeliveryRequestProduceAction.do?dispatch=returnFromSelectNomenclature"/>
+		</action>
+
+		<action path="/DeliveryRequestPrintAction" type="net.sam.dcl.action.DeliveryRequestPrintAction"
+		        name="DeliveryRequestPrint"/>
+
+
+		<action path="/AssemblesAction" type="net.sam.dcl.action.AssemblesAction" input=".Assembles" name="Assembles"/>
+		<action scope="session" path="/AssembleAction" type="net.sam.dcl.action.AssembleAction"
+		        input="/AssembleAction.do?dispatch=show"
+		        name="Assemble">
+			<forward name="form" path=".Assemble"/>
+			<forward name="back" path="/AssemblesAction.do?dispatch=restore"/>
+			<forward name="selectProduce" path="/AssembleSelectNomenclatureAction.do?dispatch=input"/>
+			<forward name="selectFromOrder" path="/AssemblePositionsAction.do?dispatch=input"/>
+		</action>
+		<action path="/AssembleSelectNomenclatureAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/NomenclatureAction.do?dispatch=input">
+			<forward name="return" path="/AssembleAction.do?dispatch=returnFromSelectNomenclature"/>
+		</action>
+
+		<action path="/AssemblePositionsAction" type="net.sam.dcl.action.AssemblePositionsAction"
+		        input="/AssemblePositionsAction.do?dispatch=input"
+		        name="AssemblePositions" scope="session">
+			<forward name="form" path=".AssemblePositions"/>
+			<forward name="back" path="/AssembleAction.do?dispatch=backFromSelect"/>
+		</action>
+
+
+		<action path="/SpecificationImportsAction" type="net.sam.dcl.action.SpecificationImportsAction"
+		        input=".SpecificationImports" name="SpecificationImports" scope="session"/>
+		<action scope="session" path="/SpecificationImportAction" type="net.sam.dcl.action.SpecificationImportAction"
+		        input="/SpecificationImportAction.do?dispatch=show"
+		        name="SpecificationImport">
+			<forward name="form" path=".SpecificationImport"/>
+			<forward name="back" path="/SpecificationImportsAction.do?dispatch=restore"/>
+			<forward name="selectDocsForSpecImport" path="/SpecificationImportPositionsAction.do?dispatch=input"/>
+			<forward name="SpecificationImportRecalcPriceByCustomPercent" path=".SpecificationImportRecalcPriceByCustomPercent"/>
+			<forward name="SpecificationImportRecalcCostByPrice" path=".SpecificationImportRecalcCostByPrice"/>
+			<forward name="produceView" path="/NomenclatureProduceForSpecificationImportAction.do?dispatch=edit"/>
+		</action>
+
+		<action path="/SpecificationImportPositionsAction" type="net.sam.dcl.action.SpecificationImportPositionsAction"
+		        input="/SpecificationImportPositionsAction.do?dispatch=input"
+		        name="SpecificationImportPositions" scope="session">
+			<forward name="form" path=".SpecificationImportPositions"/>
+			<forward name="back" path="/SpecificationImportAction.do?dispatch=backFromSelect"/>
+		</action>
+
+
+		<action path="/NomenclatureProduceForSpecificationImportAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/NomenclatureProduceAction.do?dispatch=edit" name="NomenclatureProduce" scope="session">
+			<forward name="form" path=".NomenclatureProduce"/>
+			<forward name="back" path="/SpecificationImportAction.do?dispatch=show"/>
+			<forward name="ajaxCNGrid" path=".NomenclatureProduceCNGrid"/>
+			<forward name="ajaxLTGrid" path=".NomenclatureProduceLTGrid"/>
+
+			<forward name="backFromAttach" path="/NomenclatureProduceAction.do?dispatch=show"/>
+		</action>
+
+
+		<action path="/ProducesCostAction" type="net.sam.dcl.action.ProducesCostAction" input=".ProducesCost"
+		        name="ProducesCost"/>
+		<action scope="session" path="/ProduceCostAction" type="net.sam.dcl.action.ProduceCostAction"
+		        input="/ProduceCostAction.do?dispatch=show"
+		        name="ProduceCost">
+			<forward name="form" path=".ProduceCost"/>
+			<forward name="back" path="/ProducesCostAction.do?dispatch=restore"/>
+			<forward name="newProduce" path="/ProduceCostProduceAction.do?dispatch=insert"/>
+			<forward name="editProduce" path="/ProduceCostProduceAction.do?dispatch=edit"/>
+			<forward name="editCustom" path="/ProduceCostCustomAction.do?dispatch=edit"/>
+			<forward name="importExcel" path="/ProduceCostImportAction.do?dispatch=input"/>
+			<forward name="selectFromDocs" path="/ProduceCostPositionsAction.do?dispatch=input"/>
+		</action>
+
+		<action path="/ProduceCostPositionsAction" type="net.sam.dcl.action.ProduceCostPositionsAction"
+		        input="/ProduceCostPositionsAction.do?dispatch=input"
+		        name="ProduceCostPositions" scope="session">
+			<forward name="form" path=".ProduceCostPositions"/>
+			<forward name="back" path="/ProduceCostAction.do?dispatch=backFromSelect"/>
+		</action>
+
+		<action path="/ProduceCostImportAction" type="net.sam.dcl.action.ProduceCostImportAction" input=".ImportFile"
+		        name="ImportFile">
+			<forward name="back" path="/ProduceCostAction.do?dispatch=retFromProduceOperation"/>
+		</action>
+
+		<action scope="session" path="/ProduceCostProduceAction" type="net.sam.dcl.action.ProduceCostProduceAction"
+		        input=".ProduceCostProduce" name="ProduceCostProduce">
+			<forward name="back" path="/ProduceCostAction.do?dispatch=retFromProduceOperation"/>
+			<forward name="selectProduce" path="/ProduceCostProduceSelectNomenclatureAction.do?dispatch=input"/>
+		</action>
+		<action path="/ProduceCostProduceSelectNomenclatureAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/NomenclatureAction.do?dispatch=input">
+			<forward name="return" path="/ProduceCostProduceAction.do?dispatch=returnFromSelectNomenclature"/>
+		</action>
+
+		<action path="/ProduceCostCustomAction" type="net.sam.dcl.action.ProduceCostCustomAction" input=".ProduceCostCustom"
+		        name="ProduceCostCustom">
+			<forward name="back" path="/ProduceCostAction.do?dispatch=retFromProduceOperation"/>
+		</action>
+
+
+		<action path="/PaymentsAction" type="net.sam.dcl.action.PaymentsAction" input=".Payments" name="Payments"/>
+
+		<action scope="session" path="/PaymentAction" type="net.sam.dcl.action.PaymentAction"
+		        input="/PaymentAction.do?dispatch=show"
+		        name="Payment">
+			<forward name="form" path=".Payment"/>
+			<forward name="back" path="/PaymentsAction.do?dispatch=restore"/>
+			<forward name="backToReport" path="/CalculationStateAction.do?dispatch=backToCalcStateFromPayment"/>
+			<forward name="newContractor" path="/ContractorAddActionPayment.do?dispatch=create"/>
+			<forward name="newPaySum" path="/PaySumAction.do?dispatch=insert"/>
+			<forward name="editPaySum" path="/PaySumAction.do?dispatch=edit"/>
+			<forward name="ajaxPaymentSumsGrid" path=".PaymentSumsGrid"/>
+		</action>
+
+		<action scope="session" path="/PaySumAction" type="net.sam.dcl.action.PaySumAction"
+		        input="/PaySumAction.do?dispatch=input" name="PaySum">
+			<forward name="form" path=".PaySum"/>
+			<forward name="back" path="/PaymentAction.do?dispatch=retFromPaySumOperation"/>
+		</action>
+
+		<action path="/PaymentActionCalculationState" type="net.sam.dcl.action.PaymentAction"
+		        input="/PaymentAction.do?dispatch=show"
+		        name="Payment" scope="session">
+			<forward name="form" path=".Payment"/>
+			<forward name="back" path="/CalculationStateAction.do?dispatch=backToCalcStateFromPayment"/>
+			<forward name="newContractor" path="/ContractorAddActionPaymentCalculationState.do?dispatch=create"/>
+			<forward name="newPaySum" path="/PaySumActionCalculationState.do?dispatch=insert"/>
+			<forward name="editPaySum" path="/PaySumActionCalculationState.do?dispatch=edit"/>
+			<forward name="ajaxPaymentSumsGrid" path=".PaymentSumsGrid"/>
+		</action>
+
+		<action scope="session" path="/PaySumActionCalculationState" type="net.sam.dcl.action.PaySumAction"
+		        input="/PaySumAction.do?dispatch=input" name="PaySum">
+			<forward name="form" path=".PaySum"/>
+			<forward name="back" path="/PaymentActionCalculationState.do?dispatch=retFromPaySumOperation"/>
+		</action>
+
+
+		<action path="/ShippingsAction" type="net.sam.dcl.action.ShippingsAction" input=".Shippings" name="Shippings"/>
+
+		<action path="/ShippingAction" type="net.sam.dcl.action.ShippingAction"
+		        input="/ShippingAction.do?dispatch=show"
+		        name="Shipping" scope="session">
+			<forward name="form" path=".Shipping"/>
+			<forward name="back" path="/ShippingsAction.do?dispatch=restore" redirect="true"/>
+			<forward name="editShippingPositions" path="/ShippingPositionsAction.do?dispatch=input"/>
+			<forward name="newContractor" path="/ContractorAddActionShipping.do?dispatch=create"/>
+			<forward name="ajaxShippingsGrid" path=".ShippingsGrid"/>
+			<forward name="ajaxManagersGrid" path=".ShippingManagersGrid"/>
+		</action>
+		<action path="/ShippingPositionsAction" type="net.sam.dcl.action.ShippingPositionsAction"
+		        input="/ShippingPositionsAction.do?dispatch=input"
+		        name="ShippingPositions" scope="session">
+			<forward name="form" path=".ShippingPositions"/>
+			<forward name="back" path="/ShippingAction.do?dispatch=backFromEditPosition"/>
+		</action>
+
+		<action path="/ShippingActionCalculationState" type="net.sam.dcl.action.ShippingAction"
+		        input="/ShippingAction.do?dispatch=show"
+		        name="Shipping" scope="session">
+			<forward name="form" path=".Shipping"/>
+			<forward name="back" path="/CalculationStateAction.do?dispatch=backToCalcStateFromShipping"/>
+			<forward name="editShippingPositions" path="/ShippingPositionsActionCalculationState.do?dispatch=input"/>
+			<forward name="newContractor" path="/ContractorAddActionShippingCalculationState.do?dispatch=create"/>
+		</action>
+		<action path="/ShippingPositionsActionCalculationState" type="net.sam.dcl.action.ShippingPositionsAction"
+		        input="/ShippingPositionsActionCalculationState.do?dispatch=input"
+		        name="ShippingPositions" scope="session">
+			<forward name="form" path=".ShippingPositions"/>
+			<forward name="back" path="/ShippingActionCalculationState.do?dispatch=backFromEditPosition"/>
+		</action>
+
+		<action path="/NoticeForShippingPrintAction" type="net.sam.dcl.action.NoticeForShippingPrintAction"
+		        name="NoticeForShippingPrint"/>
+
+		<action scope="session" path="/ContractsClosedAction" type="net.sam.dcl.action.ContractsClosedAction"
+		        input=".ContractsClosed" name="ContractsClosed">
+			<forward name="create" path="/ContractClosedAction.do?dispatch=input"/>
+			<forward name="edit" path="/ContractClosedAction.do?dispatch=edit"/>
+		</action>
+		<action scope="session" path="/ContractClosedAction" type="net.sam.dcl.action.ContractClosedAction"
+		        input="/ContractClosedAction.do?dispatch=show"
+		        name="ContractClosed">
+			<forward name="form" path=".ContractClosed"/>
+			<forward name="back" path="/ContractsClosedAction.do?dispatch=restore"/>
+			<forward name="editClosedRecord" path="/ClosedRecordAction.do?dispatch=edit"/>
+			<forward name="ajaxClosedContractRecordsGrid" path=".ClosedContractRecordsGrid"/>
+		</action>
+
+		<action scope="session" path="/ClosedRecordAction" type="net.sam.dcl.action.ClosedRecordAction"
+		        input="/ClosedRecordAction.do?dispatch=input" name="ClosedRecord">
+			<forward name="form" path=".ClosedRecord"/>
+			<forward name="back" path="/ContractClosedAction.do?dispatch=retClosedRecord"/>
+		</action>
+
+
+		<action path="/ContractorRequestsAction" type="net.sam.dcl.action.ContractorRequestsAction"
+		        input=".ContractorRequests" name="ContractorRequests"/>
+		<action scope="session" path="/ContractorRequestAction" type="net.sam.dcl.action.ContractorRequestAction"
+		        input="/ContractorRequestAction.do?dispatch=show"
+		        name="ContractorRequest">
+			<forward name="form" path=".ContractorRequest"/>
+			<forward name="back" path="/ContractorRequestsAction.do?dispatch=restore"/>
+			<forward name="newContractor" path="/ContractorAddActionContractorRequest.do?dispatch=create"/>
+			<forward name="newContactPerson" path="/ContactPersonAddActionContractorRequest.do?dispatch=create"/>
+			<forward name="selectProduce" path="/ContractorRequestSelectNomenclatureAction.do?dispatch=input"/>
+			<forward name="backFromAttach" path="/ContractorRequestAction.do?dispatch=retFromAttach"/>
+			<forward name="selectOrder" path="/SelectOrderContractorRequestAction.do?dispatch=input"/>
+			<forward name="ajaxContractorRequestPrintGrid" path=".ContractorRequestPrintGrid"/>
+			<forward name="ajaxLinkedOrdersGrid" path=".LinkedOrdersGrid"/>
+		</action>
+		<action path="/ContractorRequestSelectNomenclatureAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/NomenclatureAction.do?dispatch=input">
+			<forward name="return" path="/ContractorRequestAction.do?dispatch=retFromProduceOperation"/>
+		</action>
+		<action path="/ContractorRequestPrintLetterRequestAction"
+		        type="net.sam.dcl.action.ContractorRequestPrintLetterRequestAction"
+		        name="ContractorRequestPrintLetterRequest"/>
+		<action path="/ContractorRequestPrintActAction" type="net.sam.dcl.action.ContractorRequestPrintActAction"
+		        name="ContractorRequestPrintAct"/>
+
+		<action path="/SelectOrderContractorRequestAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/OrdersAction.do?dispatch=input">
+			<forward name="return" path="/ContractorRequestAction.do?dispatch=returnFromSelectOrder"/>
+		</action>
+
+		<action path="/MultipleFileUploadHelper" type="net.sam.dcl.action.MultipleFileUploadHelperAction"
+		        parameter="method">
+			<forward name="form" path=".MultipleFileUpload" redirect="true"/>
+		</action>
+
+		<action path="/MultipleFileUpload" type="net.sam.dcl.controller.actions.HibernateAction" name="MultipleFileUpload">
+			<forward name="form" path=".MultipleFileUpload" redirect="true"/>
+		</action>
+
+
+		<action path="/TimeboardsAction" type="net.sam.dcl.action.TimeboardsAction" input=".Timeboards" name="Timeboards"/>
+		<action scope="session" path="/TimeboardAction" type="net.sam.dcl.action.TimeboardAction"
+		        input="/TimeboardAction.do?dispatch=show"
+		        name="Timeboard">
+			<forward name="form" path=".Timeboard"/>
+			<forward name="back" path="/TimeboardsAction.do?dispatch=restore"/>
+			<forward name="newWork" path="/TimeboardWorkAction.do?dispatch=insert"/>
+			<forward name="cloneWork" path="/TimeboardWorkAction.do?dispatch=clone"/>
+			<forward name="editWork" path="/TimeboardWorkAction.do?dispatch=edit"/>
+			<forward name="selectContractorRequest" path="/SelectContractorRequestTimeboardAction.do?dispatch=input"/>
+		</action>
+
+		<action path="/SelectContractorRequestTimeboardAction"
+		        type="net.sam.dcl.controller.actions.SelectFromGridAction"
+		        input="/ContractorRequestsAction.do?dispatch=inputFromTimeboard">
+			<forward name="return" path="/TimeboardAction.do?dispatch=retSelectContractorRequest"/>
+		</action>
+
+		<action path="/TimeboardWorkAction" type="net.sam.dcl.action.TimeboardWorkAction"
+		        input=".TimeboardWork" name="TimeboardWork">
+			<forward name="back" path="/TimeboardAction.do?dispatch=retFromWorkOperation"/>
+		</action>
+
+
+		<action path="/CurrentWorksAction" type="net.sam.dcl.action.CurrentWorksAction" input=".CurrentWorks"
+		        name="CurrentWorks"/>
+
+
+		<action path="/OutgoingLettersAction" type="net.sam.dcl.action.OutgoingLettersAction" input=".OutgoingLetters"
+		        name="OutgoingLetters"/>
+		<action scope="session" path="/OutgoingLetterAction" type="net.sam.dcl.action.OutgoingLetterAction"
+		        input="/OutgoingLetterAction.do?dispatch=show"
+		        name="OutgoingLetter">
+			<forward name="form" path=".OutgoingLetter"/>
+			<forward name="back" path="/OutgoingLettersAction.do?dispatch=restore"/>
+			<forward name="newContractor" path="/ContractorAddActionOutgoingLetter.do?dispatch=create"/>
+			<forward name="newContactPerson" path="/ContactPersonAddActionOutgoingLetter.do?dispatch=create"/>
+			<forward name="backFromAttach" path="/OutgoingLetterAction.do?dispatch=retFromAttach"/>
+		</action>
+
+
+		<action path="/InstructionsAction" type="net.sam.dcl.action.InstructionsAction" input=".Instructions"
+		        name="Instructions"/>
+		<action scope="session" path="/InstructionAction" type="net.sam.dcl.action.InstructionAction"
+		        input="/InstructionAction.do?dispatch=show"
+		        name="Instruction">
+			<forward name="form" path=".Instruction"/>
+			<forward name="back" path="/InstructionsAction.do?dispatch=restore"/>
+			<forward name="editType" path="/InstructionTypesAction.do?dispatch=execute"/>
+			<forward name="backFromAttach" path="/InstructionAction.do?dispatch=retFromAttach"/>
+		</action>
+
+
+		<action path="/CustomCodesListAction" type="net.sam.dcl.action.CustomCodesListAction" input=".CustomCodesList"
+		        name="CustomCodesList"/>
+		<action path="/CalcStateReportTypesListAction" type="net.sam.dcl.action.CalcStateReportTypesListAction"
+		        input=".default-map"/>
+		<action path="/ComplexityCategoryListAction" type="net.sam.dcl.action.ComplexityCategoryListAction"
+		        input=".default-map"/>
+		<action path="/ContractorRequestTypeListAction" type="net.sam.dcl.action.ContractorRequestTypeListAction"
+		        input=".default-map"/>
+		<action path="/BlankTypesListAction" type="net.sam.dcl.action.BlankTypesListAction" input=".default-map"/>
+		<action path="/LogoImgsListAction" type="net.sam.dcl.action.LogoImgsListAction" input=".default-list"/>
+
+		<action scope="session" path="/BlanksAction" type="net.sam.dcl.action.BlanksAction" input=".Blanks" name="Blanks"/>
+		<action scope="session" path="/BlankAction" type="net.sam.dcl.action.BlankAction" input=".Blank" name="Blank">
+			<forward name="back" path="/BlanksAction.do?dispatch=execute"/>
+		</action>
+		<action path="/BlanksListAction" type="net.sam.dcl.action.BlanksListAction" input=".default-map" name="BlanksList"/>
+
+		<action path="/HeadImgsListAction" type="net.sam.dcl.action.HeadImgsListAction" input=".default-list"/>
+
+
+		<action path="/SettingsAction" type="net.sam.dcl.action.SettingsAction" input=".Settings" name="Settings"/>
+		<action path="/SettingAction" type="net.sam.dcl.action.SettingAction" input=".Setting" name="Setting">
+			<forward name="back" path="/SettingsAction.do"/>
+		</action>
+
+
+		<action path="/ActionsAction" type="net.sam.dcl.action.ActionsAction" input=".Actions" name="Actions"/>
+		<action path="/ActionAction" type="net.sam.dcl.action.ActionAction" input=".Action" name="Action">
+			<forward name="back" path="/ActionsAction.do"/>
+		</action>
+		<action path="/ActionRolesAction" type="net.sam.dcl.action.ActionRolesAction"
+		        input="/ActionRolesAction.do?dispatch=show"
+		        name="ActionRoles">
+			<forward name="form" path=".ActionRoles"/>
+		</action>
+
+
+		<action path="/UsersAction" type="net.sam.dcl.action.UsersAction" input=".users" name="users"/>
+		<action scope="session" path="/UserAction" type="net.sam.dcl.action.UserAction" input=".user" name="user">
+			<forward name="back" path="/UsersAction.do?dispatch=execute"/>
+			<forward name="backFromAttach" path="/UserAction.do?dispatch=retFromAttach"/>
+		</action>
+		<action path="/UsersListAction" type="net.sam.dcl.action.UsersListAction" input=".default-map" name="UsersList"/>
+
+
+		<action scope="session" path="/ContractorsAction" type="net.sam.dcl.action.ContractorsAction" input=".contractors"
+		        name="contractors">
+			<forward name="mergeContractors" path="/MergeContractorsAction.do?dispatch=merge"/>
+		</action>
+
+		<action path="/ContractorsPrintAction" type="net.sam.dcl.action.ContractorsPrintAction" name="ContractorsPrint"/>
+		<action path="/MergeContractorsAction" type="net.sam.dcl.action.MergeContractorsAction" input=".MergeContractors"
+		        name="MergeContractors">
+			<forward name="back" path="/ContractorsAction.do?dispatch=restore"/>
+		</action>
+
+		<action scope="session" path="/ContractorAction" type="net.sam.dcl.action.ContractorAction" input=".contractor"
+		        name="contractor">
+			<forward name="back" path="/ContractorsAction.do?dispatch=restore"/>
+			<forward name="editReputation" path="/ReputationsAction.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryAction.do?dispatch=create"/>
+			<forward name="editPersonInContractor" path="/ContactPersonAction.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor" path="/ContactPersonAction.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/ContactPersonAction" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAction.do?dispatch=fromContactPerson"/>
+		</action>
+
+		<action scope="session" path="/ContractorEditActionConditionForContract" type="net.sam.dcl.action.ContractorAction"
+		        input=".contractor" name="contractor">
+			<forward name="back" path="/ConditionForContractAction.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionEditConditionForContract.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionEditConditionForContract.do?dispatch=create"/>
+			<forward name="editPersonInContractor"
+			         path="/PersonActionEditActionConditionForContract.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor"
+			         path="/PersonActionEditActionConditionForContract.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionEditActionConditionForContract"
+		        type="net.sam.dcl.action.ContactPersonAction" input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorEditActionConditionForContract.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorEditActionCalculationState" type="net.sam.dcl.action.ContractorAction"
+		        input=".contractor" name="contractor">
+			<forward name="back" path="/CalculationStateAction.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionEditCalculationState.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionEditCalculationState.do?dispatch=create"/>
+			<forward name="editPersonInContractor"
+			         path="/PersonActionEditActionCalculationState.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor"
+			         path="/PersonActionEditActionCalculationState.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionEditActionCalculationState" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorEditActionCalculationState.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorAddActionCommercialProposal" type="net.sam.dcl.action.ContractorAction"
+		        input=".contractor" name="contractor">
+			<forward name="back" path="/CommercialProposalAction.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionAddCommercialProposal.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionAddCommercialProposal.do?dispatch=create"/>
+			<forward name="editPersonInContractor" path="/PersonActionAddCommercialProposal.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor" path="/PersonActionAddCommercialProposal.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionAddCommercialProposal" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAddActionCommercialProposal.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorAddActionConditionForContract" type="net.sam.dcl.action.ContractorAction"
+		        input=".contractor" name="contractor">
+			<forward name="back" path="/ConditionForContractAction.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionAddConditionForContract.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionAddConditionForContract.do?dispatch=create"/>
+			<forward name="editPersonInContractor"
+			         path="/PersonActionAddActionConditionForContract.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor"
+			         path="/PersonActionAddActionConditionForContract.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionAddActionConditionForContract"
+		        type="net.sam.dcl.action.ContactPersonAction" input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAddActionConditionForContract.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorAddActionContract" type="net.sam.dcl.action.ContractorAction"
+		        input=".contractor" name="contractor">
+			<forward name="back" path="/ContractAction.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionAddContract.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionAddContract.do?dispatch=create"/>
+			<forward name="editPersonInContractor" path="/PersonActionAddActionContract.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor" path="/PersonActionAddActionContract.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionAddActionContract" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAddActionContract.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorAddActionContractCalculationState"
+		        type="net.sam.dcl.action.ContractorAction" input=".contractor" name="contractor">
+			<forward name="back" path="/ContractActionCalculationState.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionAddContractCalculationState.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionAddContractCalculationState.do?dispatch=create"/>
+			<forward name="editPersonInContractor"
+			         path="/PersonActionAddActionContractCalculationState.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor"
+			         path="/PersonActionAddActionContractCalculationState.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionAddActionContractCalculationState"
+		        type="net.sam.dcl.action.ContactPersonAction" input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAddActionContractCalculationState.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorAddActionOrder" type="net.sam.dcl.action.ContractorAction"
+		        input=".contractor" name="contractor">
+			<forward name="back" path="/OrderAction.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionAddOrder.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionAddOrder.do?dispatch=create"/>
+			<forward name="editPersonInContractor" path="/PersonActionAddActionOrder.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor" path="/PersonActionAddActionOrder.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionAddActionOrder" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAddActionOrder.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorAddActionPayment" type="net.sam.dcl.action.ContractorAction"
+		        input=".contractor" name="contractor">
+			<forward name="back" path="/PaymentAction.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionAddPayment.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionAddPayment.do?dispatch=create"/>
+			<forward name="editPersonInContractor" path="/PersonActionAddActionPayment.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor" path="/PersonActionAddActionPayment.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionAddActionPayment" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAddActionPayment.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorAddActionShipping" type="net.sam.dcl.action.ContractorAction"
+		        input=".contractor" name="contractor">
+			<forward name="back" path="/ShippingAction.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionAddShipping.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionAddShipping.do?dispatch=create"/>
+			<forward name="editPersonInContractor" path="/PersonActionAddActionShipping.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor" path="/PersonActionAddActionShipping.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionAddActionShipping" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAddActionShipping.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorAddActionContractorRequest" type="net.sam.dcl.action.ContractorAction"
+		        input=".contractor" name="contractor">
+			<forward name="back" path="/ContractorRequestAction.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionAddContractorRequest.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionAddContractorRequest.do?dispatch=create"/>
+			<forward name="editPersonInContractor"
+			         path="/PersonActionAddActionContractorRequest.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor"
+			         path="/PersonActionAddActionContractorRequest.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionAddActionContractorRequest" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAddActionContractorRequest.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorAddActionOutgoingLetter" type="net.sam.dcl.action.ContractorAction"
+		        input=".contractor" name="contractor">
+			<forward name="back" path="/OutgoingLetterAction.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionAddOutgoingLetter.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionAddOutgoingLetter.do?dispatch=create"/>
+			<forward name="editPersonInContractor" path="/PersonActionAddActionOutgoingLetter.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor"
+			         path="/PersonActionAddActionOutgoingLetter.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionAddActionOutgoingLetter" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAddActionOutgoingLetter.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorAddActionShippingCalculationState"
+		        type="net.sam.dcl.action.ContractorAction" input=".contractor" name="contractor">
+			<forward name="back" path="/ShippingActionCalculationState.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionAddShippingCalculationState.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionAddShippingCalculationState.do?dispatch=create"/>
+			<forward name="editPersonInContractor"
+			         path="/PersonActionAddActionShippingCalculationState.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor"
+			         path="/PersonActionAddActionShippingCalculationState.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionAddActionShippingCalculationState"
+		        type="net.sam.dcl.action.ContactPersonAction" input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAddActionShippingCalculationState.do?dispatch=fromContactPerson"/>
+		</action>
+		<action scope="session" path="/ContractorAddActionPaymentCalculationState"
+		        type="net.sam.dcl.action.ContractorAction" input=".contractor" name="contractor">
+			<forward name="back" path="/PaymentActionCalculationState.do?dispatch=retFromContractor"/>
+			<forward name="editReputation" path="/ReputationsActionAddPaymentCalculationState.do?dispatch=execute"/>
+			<forward name="addCountry" path="/AddCountryActionAddPaymentCalculationState.do?dispatch=create"/>
+			<forward name="editPersonInContractor"
+			         path="/PersonActionAddActionPaymentCalculationState.do?dispatch=editInContractor"/>
+			<forward name="addPersonInContractor"
+			         path="/PersonActionAddActionPaymentCalculationState.do?dispatch=createFromContractor"/>
+		</action>
+		<action scope="session" path="/PersonActionAddActionPaymentCalculationState"
+		        type="net.sam.dcl.action.ContactPersonAction" input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorAddActionPaymentCalculationState.do?dispatch=fromContactPerson"/>
+		</action>
+
+		<action scope="session" path="/ContactPersonAddAction" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/CommercialProposalAction.do?dispatch=retFromContractor"/>
+		</action>
+		<action scope="session" path="/ContactPersonAddActionConditionForContract"
+		        type="net.sam.dcl.action.ContactPersonAction" input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ConditionForContractAction.do?dispatch=retFromContractor"/>
+		</action>
+		<action scope="session" path="/ContactPersonEditActionConditionForContract"
+		        type="net.sam.dcl.action.ContactPersonAction" input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ConditionForContractAction.do?dispatch=retFromContractor"/>
+		</action>
+		<action scope="session" path="/ContactPersonAddActionOrder" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/OrderAction.do?dispatch=retFromContractor"/>
+		</action>
+		<action scope="session" path="/ContactPersonAddActionContractorRequest"
+		        type="net.sam.dcl.action.ContactPersonAction" input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/ContractorRequestAction.do?dispatch=retFromContractor"/>
+		</action>
+		<action scope="session" path="/ContactPersonAddActionOutgoingLetter" type="net.sam.dcl.action.ContactPersonAction"
+		        input=".ContactPerson" name="ContactPerson">
+			<forward name="back" path="/OutgoingLetterAction.do?dispatch=retFromContractor"/>
+		</action>
+
+		<action path="/ContractorsListAction" type="net.sam.dcl.action.ContractorsListAction" input=".ContractorsList"
+		        name="ContractorsList"/>
+		<action path="/ContractorsForContractsClosedListAction"
+		        type="net.sam.dcl.action.ContractorsForContractsClosedListAction" input=".ContractorsForContractsClosedList"
+		        name="ContractorsForContractsClosedList"/>
+
+		<action path="/DepartmentsAction" type="net.sam.dcl.action.DepartmentsAction" input=".departments"
+		        name="departments"/>
+		<action path="/DepartmentAction" type="net.sam.dcl.action.DepartmentAction" input=".department" name="department">
+			<forward name="back" path="/DepartmentsAction.do"/>
+		</action>
+		<action path="/DepartmentsListAction" type="net.sam.dcl.action.DepartmentsListAction" input=".default-map"
+		        name="DepartmentsList"/>
+
+		<action scope="session" path="/CurrenciesAction" type="net.sam.dcl.action.CurrenciesAction" input=".Currencies"
+		        name="Currencies"/>
+		<action path="/CurrencyAction" type="net.sam.dcl.action.CurrencyAction" input=".currency" name="currency">
+			<forward name="back" path="/CurrenciesAction.do?dispatch=execute"/>
+		</action>
+		<action path="/CurrenciesListAction" type="net.sam.dcl.action.CurrenciesListAction" input=".default-map"/>
+
+		<action scope="session" path="/CurrencyRatesAction" type="net.sam.dcl.action.CurrencyRatesAction"
+		        input=".CurrencyRates" name="CurrencyRates"/>
+		<action path="/CurrencyRateAction" type="net.sam.dcl.action.CurrencyRateAction" input=".CurrencyRate"
+		        name="CurrencyRate">
+			<forward name="back" path="/CurrencyRatesAction.do?dispatch=execute"/>
+		</action>
+
+
+		<action path="/StuffCategoriesAction" type="net.sam.dcl.action.StuffCategoriesAction" input=".StuffCategories"
+		        name="StuffCategories"/>
+		<action path="/StuffCategoryAction" type="net.sam.dcl.action.StuffCategoryAction" input=".StuffCategory"
+		        name="StuffCategory">
+			<forward name="back" path="/StuffCategoriesAction.do?dispatch=show"/>
+		</action>
+		<action path="/StuffCategoriesListAction" type="net.sam.dcl.action.StuffCategoriesListAction" input=".default-map"
+		        name="StuffCategoriesList"/>
+
+		<action scope="session" path="/MontageAdjustmentsAction" type="net.sam.dcl.action.MontageAdjustmentsAction"
+		        input=".MontageAdjustments"
+		        name="MontageAdjustments"/>
+		<action path="/MontageAdjustmentAction" type="net.sam.dcl.action.MontageAdjustmentAction" input=".MontageAdjustment"
+		        name="MontageAdjustment">
+			<forward name="back" path="/MontageAdjustmentsAction.do?dispatch=show"/>
+		</action>
+		<action scope="session" path="/MontageAdjustmentsHistoryAction"
+		        type="net.sam.dcl.action.MontageAdjustmentsHistoryAction" input=".MontageAdjustmentsHistory"
+		        name="MontageAdjustmentsHistory">
+			<forward name="back" path="/MontageAdjustmentsAction.do?dispatch=show"/>
+		</action>
+		<action path="/MontageAdjustmentHistoryAction" type="net.sam.dcl.action.MontageAdjustmentHistoryAction"
+		        input=".MontageAdjustmentHistory" name="MontageAdjustmentHistory">
+			<forward name="back" path="/MontageAdjustmentsHistoryAction.do?dispatch=show"/>
+		</action>
+
+		<action path="/RoutesAction" type="net.sam.dcl.action.RoutesAction" input=".Routes" name="Routes"/>
+		<action path="/RouteAction" type="net.sam.dcl.action.RouteAction" input=".Route" name="Route">
+			<forward name="back" path="/RoutesAction.do?dispatch=execute"/>
+		</action>
+		<action path="/RoutesListAction" type="net.sam.dcl.action.RoutesListAction" input=".default-map" name="RoutesList"/>
+
+		<action path="/SellersAction" type="net.sam.dcl.action.SellersAction" input=".Sellers" name="Sellers"/>
+		<action path="/SellerAction" type="net.sam.dcl.action.SellerAction" input=".Seller" name="Seller">
+			<forward name="back" path="/SellersAction.do?dispatch=execute"/>
+		</action>
+		<action path="/SellersListAction" type="net.sam.dcl.action.SellersListAction" input=".SellersList" name="SellersList"/>
+
+		<action path="/UnitsAction" type="net.sam.dcl.action.UnitsAction" input=".Units"
+		        name="Units"/>
+		<action scope="session" path="/UnitAction" type="net.sam.dcl.action.UnitAction" input=".Unit" name="Unit">
+			<forward name="back" path="/UnitsAction.do"/>
+		</action>
+		<action path="/UnitsListAction" type="net.sam.dcl.action.UnitsListAction" input=".default-map" name="UnitsList"/>
+
+		<action path="/PurposesAction" type="net.sam.dcl.action.PurposesAction" input=".Purposes" name="Purposes"/>
+		<action path="/PurposeAction" type="net.sam.dcl.action.PurposeAction" input=".Purpose" name="Purpose">
+			<forward name="back" path="/PurposesAction.do"/>
+		</action>
+		<action path="/PurposesListAction" type="net.sam.dcl.action.PurposesListAction" input=".default-map"
+		        name="PurposesList"/>
+
+		<action path="/PurchasePurposesActionCommercialProposal" type="net.sam.dcl.action.PurchasePurposesAction"
+		        input=".PurchasePurposes" name="PurchasePurposes">
+			<forward name="input" path="/PurchasePurposeActionCommercialProposal.do?dispatch=input"/>
+			<forward name="edit" path="/PurchasePurposeActionCommercialProposal.do?dispatch=edit"/>
+			<forward name="back" path="/CommercialProposalAction.do?dispatch=retFromProduceOperation"/>
+		</action>
+		<action path="/PurchasePurposeActionCommercialProposal" type="net.sam.dcl.action.PurchasePurposeAction"
+		        input=".PurchasePurpose" name="PurchasePurpose">
+			<forward name="back" path="/PurchasePurposesActionCommercialProposal.do?dispatch=execute"/>
+		</action>
+
+		<action path="/PurchasePurposesActionConditionForContract" type="net.sam.dcl.action.PurchasePurposesAction"
+		        input=".PurchasePurposes" name="PurchasePurposes">
+			<forward name="input" path="/PurchasePurposeActionConditionForContract.do?dispatch=input"/>
+			<forward name="edit" path="/PurchasePurposeActionConditionForContract.do?dispatch=edit"/>
+			<forward name="back" path="/ConditionForContractAction.do?dispatch=retFromProduceOperation"/>
+		</action>
+		<action path="/PurchasePurposeActionConditionForContract" type="net.sam.dcl.action.PurchasePurposeAction"
+		        input=".PurchasePurpose" name="PurchasePurpose">
+			<forward name="back" path="/PurchasePurposesActionConditionForContract.do?dispatch=execute"/>
+		</action>
+
+		<action path="/PurchasePurposesListAction" type="net.sam.dcl.action.PurchasePurposesListAction" input=".default-map"
+		        name="PurchasePurposesList"/>
+
+		<action path="/ShippingDocTypesAction" type="net.sam.dcl.action.ShippingDocTypesAction" input=".ShippingDocTypes"
+		        name="ShippingDocTypes"/>
+		<action path="/ShippingDocTypeAction" type="net.sam.dcl.action.ShippingDocTypeAction" input=".ShippingDocType"
+		        name="ShippingDocType">
+			<forward name="back" path="/ShippingDocTypesAction.do"/>
+		</action>
+		<action path="/ShippingDocTypesListAction" type="net.sam.dcl.action.ShippingDocTypesListAction"
+		        input=".default-map"/>
+
+		<action path="/RatesNDSAction" type="net.sam.dcl.action.RatesNDSAction" input=".RatesNDS" name="RatesNDS"/>
+		<action path="/RateNDSAction" type="net.sam.dcl.action.RateNDSAction" input=".RateNDS" name="RateNDS">
+			<forward name="back" path="/RatesNDSAction.do"/>
+		</action>
+
+		<action path="/CountriesAction" type="net.sam.dcl.action.CountriesAction" input=".Countries" name="Countries"/>
+		<action path="/CountryAction" type="net.sam.dcl.action.CountryAction" input=".Country" name="Country">
+			<forward name="back" path="/CountriesAction.do?dispatch=show"/>
+		</action>
+		<action path="/AddCountryAction" type="net.sam.dcl.action.CountryAction" input=".Country" name="Country">
+			<forward name="back" path="/ContractorAction.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionEditConditionForContract" type="net.sam.dcl.action.CountryAction" input=".Country"
+		        name="Country">
+			<forward name="back" path="/ContractorEditActionConditionForContract.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionEditCalculationState" type="net.sam.dcl.action.CountryAction" input=".Country"
+		        name="Country">
+			<forward name="back" path="/ContractorEditActionCalculationState.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionAddCommercialProposal" type="net.sam.dcl.action.CountryAction" input=".Country"
+		        name="Country">
+			<forward name="back" path="/ContractorAddActionCommercialProposal.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionAddConditionForContract" type="net.sam.dcl.action.CountryAction" input=".Country"
+		        name="Country">
+			<forward name="back" path="/ContractorAddActionCommercialProposal.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionAddContract" type="net.sam.dcl.action.CountryAction" input=".Country" name="Country">
+			<forward name="back" path="/ContractorAddActionConditionForContract.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionAddContractCalculationState" type="net.sam.dcl.action.CountryAction" input=".Country"
+		        name="Country">
+			<forward name="back" path="/ContractorAddActionContractCalculationState.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionAddOrder" type="net.sam.dcl.action.CountryAction" input=".Country" name="Country">
+			<forward name="back" path="/ContractorAddActionOrder.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionAddPayment" type="net.sam.dcl.action.CountryAction" input=".Country" name="Country">
+			<forward name="back" path="/ContractorAddActionPayment.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionAddShipping" type="net.sam.dcl.action.ReputationAction" input=".Country"
+		        name="Country">
+			<forward name="back" path="/ContractorAddActionShipping.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionAddContractorRequest" type="net.sam.dcl.action.CountryAction" input=".Country"
+		        name="Country">
+			<forward name="back" path="/ContractorAddActionContractorRequest.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionAddOutgoingLetter" type="net.sam.dcl.action.CountryAction" input=".Country"
+		        name="Country">
+			<forward name="back" path="/ContractorAddActionOutgoingLetter.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionAddShippingCalculationState" type="net.sam.dcl.action.CountryAction" input=".Country"
+		        name="Country">
+			<forward name="back" path="/ContractorAddActionShippingCalculationState.do?dispatch=fromAddCountry"/>
+		</action>
+		<action path="/AddCountryActionAddPaymentCalculationState" type="net.sam.dcl.action.CountryAction" input=".Country"
+		        name="Country">
+			<forward name="back" path="/ContractorAddActionPaymentCalculationState.do?dispatch=fromAddCountry"/>
+		</action>
+
+		<action path="/CountriesListAction" type="net.sam.dcl.action.CountriesListAction" input=".default-map"/>
+
+		<action path="/ReputationsAction" type="net.sam.dcl.action.ReputationsAction" input=".Reputations"
+		        name="Reputations">
+			<forward name="input" path="/ReputationAction.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationAction.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAction.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionEditConditionForContract" type="net.sam.dcl.action.ReputationsAction"
+		        input=".Reputations" name="Reputations">
+			<forward name="input" path="/ReputationActionEditConditionForContract.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionEditConditionForContract.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorEditActionConditionForContract.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionEditCalculationState" type="net.sam.dcl.action.ReputationsAction"
+		        input=".Reputations" name="Reputations">
+			<forward name="input" path="/ReputationActionEditCalculationState.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionEditCalculationState.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorEditActionCalculationState.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionAddCommercialProposal" type="net.sam.dcl.action.ReputationsAction"
+		        input=".Reputations" name="Reputations">
+			<forward name="input" path="/ReputationActionAddCommercialProposal.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionAddCommercialProposal.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAddActionCommercialProposal.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionAddConditionForContract" type="net.sam.dcl.action.ReputationsAction"
+		        input=".Reputations" name="Reputations">
+			<forward name="input" path="/ReputationActionAddConditionForContract.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionAddConditionForContract.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAddActionConditionForContract.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionAddContract" type="net.sam.dcl.action.ReputationsAction" input=".Reputations"
+		        name="Reputations">
+			<forward name="input" path="/ReputationActionAddContract.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionAddContract.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAddActionContract.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionAddContractCalculationState" type="net.sam.dcl.action.ReputationsAction"
+		        input=".Reputations" name="Reputations">
+			<forward name="input" path="/ReputationActionAddContractCalculationState.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionAddContractCalculationState.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAddActionContractCalculationState.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionAddOrder" type="net.sam.dcl.action.ReputationsAction" input=".Reputations"
+		        name="Reputations">
+			<forward name="input" path="/ReputationActionAddOrder.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionAddOrder.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAddActionOrder.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionAddPayment" type="net.sam.dcl.action.ReputationsAction" input=".Reputations"
+		        name="Reputations">
+			<forward name="input" path="/ReputationActionAddPayment.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionAddPayment.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAddActionPayment.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionAddShipping" type="net.sam.dcl.action.ReputationsAction" input=".Reputations"
+		        name="Reputations">
+			<forward name="input" path="/ReputationActionAddShipping.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionAddShipping.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAddActionShipping.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionAddContractorRequest" type="net.sam.dcl.action.ReputationsAction"
+		        input=".Reputations" name="Reputations">
+			<forward name="input" path="/ReputationActionAddContractorRequest.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionAddContractorRequest.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAddActionContractorRequest.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionAddOutgoingLetter" type="net.sam.dcl.action.ReputationsAction" input=".Reputations"
+		        name="Reputations">
+			<forward name="input" path="/ReputationActionAddOutgoingLetter.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionAddOutgoingLetter.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAddActionOutgoingLetter.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionAddShippingCalculationState" type="net.sam.dcl.action.ReputationsAction"
+		        input=".Reputations" name="Reputations">
+			<forward name="input" path="/ReputationActionAddShippingCalculationState.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionAddShippingCalculationState.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAddActionShippingCalculationState.do?dispatch=fromEditReputation"/>
+		</action>
+		<action path="/ReputationsActionAddPaymentCalculationState" type="net.sam.dcl.action.ReputationsAction"
+		        input=".Reputations" name="Reputations">
+			<forward name="input" path="/ReputationActionAddPaymentCalculationState.do?dispatch=input"/>
+			<forward name="edit" path="/ReputationActionAddPaymentCalculationState.do?dispatch=edit"/>
+			<forward name="back" path="/ContractorAddActionPaymentCalculationState.do?dispatch=fromEditReputation"/>
+		</action>
+
+		<action path="/ReputationAction" type="net.sam.dcl.action.ReputationAction" input=".Reputation" name="Reputation">
+			<forward name="back" path="/ReputationsAction.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionEditConditionForContract" type="net.sam.dcl.action.ReputationAction"
+		        input=".Reputation" name="Reputation">
+			<forward name="back" path="/ReputationsActionEditConditionForContract.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionEditCalculationState" type="net.sam.dcl.action.ReputationAction" input=".Reputation"
+		        name="Reputation">
+			<forward name="back" path="/ReputationsActionEditCalculationState.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionAddCommercialProposal" type="net.sam.dcl.action.ReputationAction" input=".Reputation"
+		        name="Reputation">
+			<forward name="back" path="/ReputationsActionAddCommercialProposal.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionAddConditionForContract" type="net.sam.dcl.action.ReputationAction"
+		        input=".Reputation" name="Reputation">
+			<forward name="back" path="/ReputationsActionAddConditionForContract.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionAddContract" type="net.sam.dcl.action.ReputationAction" input=".Reputation"
+		        name="Reputation">
+			<forward name="back" path="/ReputationsActionAddContract.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionAddContractCalculationState" type="net.sam.dcl.action.ReputationAction"
+		        input=".Reputation" name="Reputation">
+			<forward name="back" path="/ReputationsActionAddContractCalculationState.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionAddOrder" type="net.sam.dcl.action.ReputationAction" input=".Reputation"
+		        name="Reputation">
+			<forward name="back" path="/ReputationsActionAddOrder.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionAddPayment" type="net.sam.dcl.action.ReputationAction" input=".Reputation"
+		        name="Reputation">
+			<forward name="back" path="/ReputationsActionAddPayment.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionAddShipping" type="net.sam.dcl.action.ReputationAction" input=".Reputation"
+		        name="Reputation">
+			<forward name="back" path="/ReputationsActionAddShipping.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionAddContractorRequest" type="net.sam.dcl.action.ReputationAction" input=".Reputation"
+		        name="Reputation">
+			<forward name="back" path="/ReputationsActionAddContractorRequest.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionAddOutgoingLetter" type="net.sam.dcl.action.ReputationAction" input=".Reputation"
+		        name="Reputation">
+			<forward name="back" path="/ReputationsActionAddOutgoingLetter.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionAddShippingCalculationState" type="net.sam.dcl.action.ReputationAction"
+		        input=".Reputation" name="Reputation">
+			<forward name="back" path="/ReputationsActionAddShippingCalculationState.do?dispatch=execute"/>
+		</action>
+		<action path="/ReputationActionAddPaymentCalculationState" type="net.sam.dcl.action.ReputationAction"
+		        input=".Reputation" name="Reputation">
+			<forward name="back" path="/ReputationsActionAddPaymentCalculationState.do?dispatch=execute"/>
+		</action>
+
+		<action path="/ReputationsListAction" type="net.sam.dcl.action.ReputationsListAction" input=".default-map"/>
+
+
+		<action path="/InstructionTypesAction" type="net.sam.dcl.action.InstructionTypesAction" input=".InstructionTypes"
+		        name="InstructionTypes">
+			<forward name="input" path="/InstructionTypeAction.do?dispatch=input"/>
+			<forward name="edit" path="/InstructionTypeAction.do?dispatch=edit"/>
+			<forward name="back" path="/InstructionAction.do?dispatch=retFromAttach"/>
+		</action>
+		<action path="/InstructionTypeAction" type="net.sam.dcl.action.InstructionTypeAction" input=".InstructionType"
+		        name="InstructionType">
+			<forward name="back" path="/InstructionTypesAction.do?dispatch=execute"/>
+		</action>
+
+
+		<action path="/FilesPathsAction" type="net.sam.dcl.action.FilesPathsAction" input=".FilesPaths" name="FilesPaths"/>
+		<action path="/FilesPathAction" type="net.sam.dcl.action.FilesPathAction" input=".FilesPath" name="FilesPath">
+			<forward name="back" path="/FilesPathsAction.do"/>
+		</action>
+
+
+		<action path="/LanguagesAction" type="net.sam.dcl.action.LanguagesAction" input=".Languages"
+		        name="Languages"/>
+		<action path="/LanguageAction" type="net.sam.dcl.action.LanguageAction" input=".Language" name="Language">
+			<forward name="back" path="/LanguagesAction.do"/>
+		</action>
+		<action path="/LanguagesListAction" type="net.sam.dcl.action.LanguagesListAction" input=".default-map"/>
+
+
+		<action path="/IncoTermsListAction" type="net.sam.dcl.action.IncoTermsListAction" input=".IncoTermsList"
+		        name="IncoTermsList"/>
+		<action path="/DeliveryConditionListAction" type="net.sam.dcl.action.DeliveryConditionListAction"
+		        input=".default-map" name="DeliveryConditionList"/>
+		<action path="/ContactPersonsListAction" type="net.sam.dcl.action.ContactPersonsListAction"
+		        input=".ContactPersonsList" name="ContactPersonsList"/>
+		<action path="/ContractsDepFromContractorListAction" type="net.sam.dcl.action.ContractsDepFromContractorListAction"
+		        input=".ContractsDepFromContractorList" name="ContractsDepFromContractorList"/>
+		<action path="/SpecificationsDepFromContractListAction"
+		        type="net.sam.dcl.action.SpecificationsDepFromContractListAction" input=".SpecificationsDepFromContractList"
+		        name="SpecificationsDepFromContractList"/>
+		<action path="/MontageAdjustmentListAction" type="net.sam.dcl.action.MontageAdjustmentListAction"
+		        input=".default-map" name="MontageAdjustmentList"/>
+		<action path="/InstructionTypesListAction" type="net.sam.dcl.action.InstructionTypesListAction" input=".default-map"
+		        name="InstructionTypesList"/>
+		<action path="/EquipmentListAction" type="net.sam.dcl.action.EquipmentListAction" input=".EquipmentList" name="EquipmentList"/>
+		<action path="/SerialNumberListAction" type="net.sam.dcl.action.SerialNumberListAction" input=".SerialNumberList" name="SerialNumberList"/>
+
+
+		<action path="/CustomCodesAction" type="net.sam.dcl.action.CustomCodesAction" input=".CustomCodes"
+		        name="CustomCodes"/>
+		<action path="/CustomCodeAction" type="net.sam.dcl.action.CustomCodeAction" input=".CustomCode" name="CustomCode">
+			<forward name="back" path="/CustomCodesAction.do?dispatch=execute"/>
+		</action>
+		<action path="/CustomCodeFastCreateAction" type="net.sam.dcl.action.CustomCodeFastCreateAction" input=".CustomCode"
+		        name="CustomCode">
+			<forward name="back" path="/CustomCodesAction.do?dispatch=execute"/>
+		</action>
+		<action path="/CustomCodeFromHistoryAction" type="net.sam.dcl.action.CustomCodeFromHistoryAction"
+		        input=".CustomCode" name="CustomCode">
+			<forward name="back" path="/CustomCodeHistoryAction.do"/>
+		</action>
+		<action path="/CustomCodeHistoryAction" type="net.sam.dcl.action.CustomCodeHistoryAction" input=".CustomCodeHistory"
+		        name="CustomCodeHistory"/>
+		<action path="/Number1CHistoryAction" type="net.sam.dcl.action.Number1CHistoryAction"
+		        input="/Number1CHistoryAction.do?dispatch=show" name="Number1CHistory">
+			<forward name="form" path=".Number1CHistory"/>
+		</action>
+		<action path="/NomenclatureProduceCustomCodeHistoryAction"
+		        type="net.sam.dcl.action.NomenclatureProduceCustomCodeHistoryAction"
+		        input="/NomenclatureProduceCustomCodeHistoryAction.do?dispatch=show"
+		        name="NomenclatureProduceCustomCodeHistory">
+			<forward name="form" path=".NomenclatureProduceCustomCodeHistory"/>
+		</action>
+
+		<action path="/Number1CFromHistoryAction" type="net.sam.dcl.action.Number1CFromHistoryAction"
+		        name="Number1CFromHistory">
+			<forward name="back" path="/Number1CHistoryAction.do?dispatch=show"/>
+			<forward name="form" path=".Number1C"/>
+		</action>
+
+		<action path="/NomenclatureProduceCustomCodeFromHistoryAction"
+		        type="net.sam.dcl.action.NomenclatureProduceCustomCodeFromHistoryAction"
+		        name="NomenclatureProduceCustomCodeFromHistory">
+			<forward name="back" path="/NomenclatureProduceCustomCodeHistoryAction.do?dispatch=show"/>
+			<forward name="form" path=".NomenclatureProduceCustomCodeFromHistory"/>
+		</action>
+
+		<action path="/RolesAction" type="net.sam.dcl.action.RolesAction" input=".Roles" name="Roles"/>
+		<action path="/RoleAction" type="net.sam.dcl.action.RoleAction" input=".Role" name="Role">
+			<forward name="back" path="/RolesAction.do"/>
+		</action>
+
+		<action path="/UserRolesAction" type="net.sam.dcl.action.UserRolesAction"
+		        input="/UserRolesAction.do?dispatch=show"
+		        name="UserRoles">
+			<forward name="form" path=".UserRoles"/>
+		</action>
+
+		<action path="/TestHirGridAction" type="net.sam.dcl.test.TestHirGridAction" scope="session"
+		        input="/TestHirGridAction.do?dispatch=show"
+		        name="TestHirGrid">
+			<forward name="form" path=".TestHirGrid"/>
+		</action>
+
+		<action path="/TestNewGridAction" type="net.sam.dcl.test.TestNewGridAction" scope="session"
+		        input="/TestNewGridAction.do?dispatch=show"
+		        name="TestNewGrid">
+			<forward name="form" path=".TestNewGrid"/>
+		</action>
+		<!-- test_newGrid (trusted): позволяет грузить standalone/данные без логина (dev/test) -->
+		<action path="/trusted/TestNewGridAction" type="net.sam.dcl.test.TestNewGridAction" scope="session"
+		        input="/trusted/TestNewGridAction.do?dispatch=show"
+		        name="TestNewGrid">
+			<forward name="form" path=".TestNewGrid"/>
+		</action>
+		<!-- test_newGrid: страница с гридом внутри основного layout (Development) -->
+		<action path="/TestNewGridPage" type="org.apache.struts.actions.ForwardAction" parameter=".TestNewGrid"/>
+
+		<action path="/ReferencesAction" type="net.sam.dcl.action.ReferencesAction" input=".References"/>
+
+		<action path="/DeliveryTermTypesListAction" type="net.sam.dcl.action.DeliveryTermTypesListAction"
+		        input=".default-map"/>
+
+		<action path="/ActionsListAction" type="net.sam.dcl.action.ActionsListAction" input=".default-map"/>
+
+		<action path="/YesNo" type="org.apache.struts.actions.ForwardAction" parameter=".YesNo" name="YesNo"/>
+
+		<action path="/error" type="net.sam.dcl.controller.actions.ErrorAction" input=".error"/>
+		<action path="/DevZone" type="org.apache.struts.actions.ForwardAction" parameter=".DevZone"/>
+		<action path="/AdmZone" type="org.apache.struts.actions.ForwardAction" parameter=".AdmZone"/>
+		<action path="/Sessions" type="net.sam.dcl.session.SessionsAction" name="Sessions" input=".Sessions"/>
+		<action path="/LockedRecords" type="net.sam.dcl.locking.LockedRecordsAction" name="LockedRecords"
+		        input=".LockedRecords"/>
+		<action path="/PrepareAppToShutdown" type="net.sam.dcl.action.PrepareAppToShutdownAction" input="/AdmZone.do"/>
+		<action path="/FixAttachments" type="net.sam.dcl.action.FixAttachmentsAction" input=".FixAttachments"/>
+
+		<action path="/NomenclatureAction" type="net.sam.dcl.controller.actions.HibernateAction" input=".Nomenclature"
+		        name="Nomenclature" scope="session">
+			<forward name="ajaxTree" path=".NomenclatureTree"/>
+			<forward name="ajaxGrid" path=".NomenclatureGrid"/>
+			<forward name="ajaxCNGrid" path=".NomenclatureCNGrid"/>
+			<forward name="ajaxAddCategory" path=".NomenclatureAddCategory"/>
+			<forward name="createNomenclatureProduce" path="/NomenclatureProduceAction.do?dispatch=input"/>
+			<forward name="mergeProduces" path="/NomenclatureProducesMergeAction.do?dispatch=merge"/>
+			<forward name="importProduces" path="/NomenclatureProducesImportAction.do?dispatch=input"/>
+			<forward name="uploadTemplate" path="/UploadFileTemplateNomenclatureAction.do?dispatch=input"/>
+		</action>
+
+		<action path="/NomenclatureProduceAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/NomenclatureProduceAction.do?dispatch=show" name="NomenclatureProduce" scope="session">
+			<forward name="form" path=".NomenclatureProduce"/>
+			<forward name="back" path="/NomenclatureAction.do?dispatch=retFromEdit"/>
+			<forward name="ajaxCNGrid" path=".NomenclatureProduceCNGrid"/>
+			<forward name="ajaxLTGrid" path=".NomenclatureProduceLTGrid"/>
+
+			<forward name="backFromAttach" path="/NomenclatureProduceAction.do?dispatch=show"/>
+		</action>
+
+		<action path="/NomenclatureProducesMergeAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/NomenclatureProducesMergeAction.do?dispatch=show" name="NomenclatureProducesMerge" scope="session">
+			<forward name="form" path=".NomenclatureProducesMerge"/>
+			<forward name="back" path="/NomenclatureAction.do?dispatch=retFromEdit"/>
+		</action>
+
+		<action path="/NomenclatureProducesImportAction" type="net.sam.dcl.action.NomenclatureProducesImportAction"
+		        input=".ImportFile" name="ImportFile">
+			<forward name="back" path="/NomenclatureAction.do?dispatch=retFromEdit"/>
+		</action>
+		<action path="/NomenclatureProducePrintAction" type="net.sam.dcl.action.NomenclatureProducePrintAction"/>
+
+		<action path="/ReportsAction" type="net.sam.dcl.action.ReportsAction" input=".Reports" name="Reports"/>
+
+		<action path="/GoodsRestLithuaniaAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        name="GoodsRestLithuania" scope="session"
+		        input="/GoodsRestLithuaniaAction.do?dispatch=show">
+			<forward name="form" path=".GoodsRestLithuania"/>
+		</action>
+
+		<action path="/WoodworkWorkFilesAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        name="WoodworkWorkFiles" scope="session"
+		        input="/WoodworkWorkFilesAction.do?dispatch=show">
+			<forward name="form" path=".WoodworkWorkFiles"/>
+		</action>
+
+		<action path="/NomenctlatureAttachmentsAction" type="net.sam.dcl.controller.actions.AttachmentsForwarderAction"
+		        input="/AttachmentsAction.do?dispatch=show" parameter="DCL_PRODUCE">
+			<forward name="back" path="/NomenclatureAction.do?dispatch=retFromEdit"/>
+		</action>
+
+		<action path="/AttachmentsAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/AttachmentsAction.do?dispatch=show" name="Attachments" scope="session">
+			<forward name="form" path=".Attachments"/>
+		</action>
+
+		<action path="/DeferredAttachmentsAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/DeferredAttachmentsAction.do?dispatch=show" name="DeferredAttachments" scope="session">
+			<forward name="form" path=".DeferredAttachments"/>
+			<forward name="back" path="/DeferredAttachmentsAction.do?dispatch=show"/>
+		</action>
+
+		<action path="/UploadFileAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/UploadFileAction.do?dispatch=input" name="UploadFile">
+			<forward name="back" path="/AttachmentsAction.do?dispatch=show"/>
+			<forward name="form" path=".UploadFile" redirect="true"/>
+		</action>
+		<action path="/GoodsRestLithuaniaUploadFileAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/GoodsRestLithuaniaUploadFileAction.do?dispatch=input" name="UploadFile">
+			<forward name="back" path="/GoodsRestLithuaniaAction.do?dispatch=show" redirect="true"/>
+			<forward name="form" path=".UploadFile" redirect="true"/>
+		</action>
+		<action path="/WoodworkWorkFilesUploadFileAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/WoodworkWorkFilesUploadFileAction.do?dispatch=input" name="UploadFile">
+			<forward name="back" path="/WoodworkWorkFilesAction.do?dispatch=show" redirect="true"/>
+			<forward name="form" path=".UploadFile" redirect="true"/>
+		</action>
+		<action path="/DefferedUploadFileAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/DefferedUploadFileAction.do?dispatch=input" name="DefferedUploadFile">
+			<forward name="form" path=".DefferedUploadFile" redirect="true"/>
+		</action>
+		<action path="/UploadFileTemplateCPAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/UploadFileTemplateCPAction.do?dispatch=input" name="UploadFile">
+			<forward name="back" path="/CommercialProposalAction.do?dispatch=retFromProduceOperation"/>
+			<forward name="form" path=".UploadFile" redirect="true"/>
+		</action>
+		<action path="/UploadFileTemplateCFCAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/UploadFileTemplateCFCAction.do?dispatch=input" name="UploadFile">
+			<forward name="back" path="/ConditionForContractAction.do?dispatch=retFromProduceOperation"/>
+			<forward name="form" path=".UploadFile" redirect="true"/>
+		</action>
+		<action path="/UploadFileTemplateOrderAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/UploadFileTemplateOrderAction.do?dispatch=input" name="UploadFile">
+			<forward name="back" path="/OrderAction.do?dispatch=retFromProduceOperation"/>
+			<forward name="form" path=".UploadFile" redirect="true"/>
+		</action>
+		<action path="/UploadFileTemplateNomenclatureAction" type="net.sam.dcl.controller.actions.HibernateAction"
+		        input="/UploadFileTemplateNomenclatureAction.do?dispatch=input" name="UploadFile">
+			<forward name="back" path="/NomenclatureAction.do?dispatch=retFromEdit"/>
+			<forward name="form" path=".UploadFile" redirect="true"/>
+		</action>
+
+
+		<action path="/MarginAction" type="net.sam.dcl.action.MarginAction" input=".Margin" name="Margin"/>
+		<!-- Development: Margin (AG Grid) -->
+		<action path="/MarginDevAction" type="net.sam.dcl.action.MarginAction" input=".MarginDev" name="Margin" scope="request"/>
+		<action path="/MarginDevData" type="net.sam.dcl.action.MarginDevDataAction"/>
+		<action path="/CalculationStateDevAction" type="org.apache.struts.actions.ForwardAction" parameter=".CalculationStateDev"/>
+		<action path="/CalculationStateDevData" type="net.sam.dcl.action.CalculationStateDevDataAction"/>
+		<action scope="session" path="/GoodsRestAction" type="net.sam.dcl.action.GoodsRestAction" input=".GoodsRest"
+		        name="GoodsRest"/>
+		<action scope="session" path="/CalculationStateAction" type="net.sam.dcl.action.CalculationStateAction"
+		        input=".CalculationState" name="CalculationState">
+			<forward name="editContractor" path="/ContractorEditActionCalculationState.do?dispatch=edit"/>
+			<forward name="shipping" path="/ShippingActionCalculationState.do?dispatch=edit"/>
+			<forward name="payment" path="/PaymentActionCalculationState.do?dispatch=edit"/>
+			<forward name="contract" path="/ContractActionCalculationState.do?dispatch=edit"/>
+			<forward name="showGrid" path="/CalculationStateAction.do?dispatch=showGrid" redirect="true"/>
+			<forward name="calculationStateGrid" path=".CalculationStateGrid"/>
+		</action>
+		<action path="/OrdersStatisticsAction" type="net.sam.dcl.action.OrdersStatisticsAction" input=".OrdersStatistics"
+		        name="OrdersStatistics"/>
+		<action path="/OrdersUnexecutedAction" type="net.sam.dcl.action.OrdersUnexecutedAction" input=".OrdersUnexecuted"
+		        name="OrdersUnexecuted"/>
+		<action path="/OrdersLogisticsAction" type="net.sam.dcl.action.OrdersLogisticsAction" input=".OrdersLogistics"
+		        name="OrdersLogistics"/>
+		<action path="/ShippingReportAction" type="net.sam.dcl.action.ShippingReportAction" input=".ShippingReport"
+		        name="ShippingReport"/>
+		<action scope="session" path="/GoodsCirculationAction" type="net.sam.dcl.action.GoodsCirculationAction" input=".GoodsCirculation"
+		        name="GoodsCirculation"/>
+		<action path="/ProduceCostReportAction" type="net.sam.dcl.action.ProduceCostReportAction" input=".ProduceCostReport"
+		        name="ProduceCostReport"/>
+
+		<action scope="session" path="/ProduceMovementForOrderAction" type="net.sam.dcl.action.ProduceMovementAction"
+		        input="/ProduceMovementForOrderAction.do?dispatch=input" name="ProduceMovement">
+			<forward name="form" path=".ProduceMovement"/>
+			<forward name="back" path="/OrderAction.do?dispatch=fromProduceMovement"/>
+		</action>
+		<action scope="session" path="/ProduceMovementForGoodsRestAction" type="net.sam.dcl.action.ProduceMovementAction"
+		        input="/ProduceMovementForGoodsRestAction.do?dispatch=input" name="ProduceMovement">
+			<forward name="form" path=".ProduceMovement"/>
+			<forward name="back" path="/GoodsRestAction.do?dispatch=fromProduceMovement"/>
+		</action>
+		<action scope="session" path="/ProduceMovementForGoodsCirculationAction" type="net.sam.dcl.action.ProduceMovementAction"
+		        input="/ProduceMovementForGoodsCirculationAction.do?dispatch=input" name="ProduceMovement">
+			<forward name="form" path=".ProduceMovement"/>
+			<forward name="back" path="/GoodsCirculationAction.do?dispatch=fromProduceMovement"/>
+		</action>
+		<action scope="session" path="/ProduceMovementForNomenclatureAction" type="net.sam.dcl.action.ProduceMovementAction"
+		        input="/ProduceMovementForNomenclatureAction.do?dispatch=input" name="ProduceMovement">
+			<forward name="form" path=".ProduceMovement"/>
+			<forward name="back" path="/NomenclatureAction.do?dispatch=retFromEdit"/>
+		</action>
+
+		<action path="/ControlCommentAction" type="net.sam.dcl.controller.actions.DBTransactionAction"
+		        input=".ajax" name="ControlComment">
+		</action>
+		<action path="/NumbersListAction" type="net.sam.dcl.action.NumbersListAction" input=".default-map"/>
+
+		<action scope="session" path="/LogsAction" type="net.sam.dcl.action.LogsAction" input=".Logs" name="Logs"/>
+
+		<action path="/trusted/ErrorDialog" type="org.apache.struts.actions.ForwardAction" parameter=".ErrorDialog"
+		        name="ErrorDialog"/>
+		<action path="/trusted/Login" type="net.sam.dcl.action.LoginAction" input=".login" name="login">
+			<forward name="login-disabled" path=".login-disabled"/>
+		</action>
+
+		<action path="/trusted/Reloader" type="org.apache.struts.actions.ForwardAction" parameter="/jsp/reloader.jsp"/>
+		<action path="/Logout" type="net.sam.dcl.action.LogoutAction"/>
+		<action path="/trusted/NoPermission" type="net.sam.dcl.action.NoPermissionAction" input=".no_permission"/>
+		<action path="/trusted/css" type="org.apache.struts.actions.ForwardAction" parameter="/includes/dcl.css"/>
+		<action path="/trusted/calendar" type="org.apache.struts.actions.ForwardAction" parameter="/includes/calendar.js"/>
+		<action path="/trusted/wz_tooltip" type="org.apache.struts.actions.ForwardAction"
+		        parameter="/includes/wz_tooltip.js"/>
+		<action path="/trusted/list" type="org.apache.struts.actions.ForwardAction" parameter="/includes/list.js"/>
+		<action path="/trusted/xtree" type="org.apache.struts.actions.ForwardAction" parameter="/includes/xtree.js"/>
+		<action path="/trusted/img1" type="org.apache.struts.actions.ForwardAction" parameter="/images/lintera.jpg"/>
+		<action path="/trusted/test" type="org.apache.struts.actions.ForwardAction" parameter="/test/test.html"/>
+		<action path="/trusted/caller" type="org.apache.struts.actions.ForwardAction" parameter="/test/caller.jsp"/>
+
+
+		<action path="/ShowPrevResponse" type="net.sam.dcl.action.ShowPrevResponse"/>
+	</action-mappings>
+	<!-- ===================================== Controller Configuration -->
+	<controller
+					processorClass="net.sam.dcl.util.AjaxRequestProcessor" memFileSize="1"/>
+	<!--processorClass="org.apache.struts.tiles.TilesRequestProcessor"/>-->
+	<!--processorClass="net.sam.dcl.util.DebugRequestProcessor"/>-->
+	<!-- ================================ Message Resources Definitions -->
+	<message-resources parameter="resources.application"/>
+	<!-- ======================================= Plug Ins Configuration -->
+	<plug-in className="org.apache.struts.tiles.TilesPlugin">
+		<set-property property="definitions-config" value="/WEB-INF/classes/resources/struts/tiles-defs.xml"/>
+		<set-property property="moduleAware" value="true"/>
+		<set-property property="definitions-parser-validate" value="true"/>
+	</plug-in>
+	<!-- end comment if struts1.0.x -->
+	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property
+						property="pathnames"
+						value="/WEB-INF/classes/resources/struts/validator-rules.xml,/WEB-INF/classes/resources/struts/validation.xml"/>
+	</plug-in>
+</struts-config>
+

@@ -1,0 +1,330 @@
+import { apiGetJson, buildQuery, fetchLegacyList } from "../api.js";
+import { createGrid } from "../components/grid.js";
+import { setStatus, buildOption } from "../components/toolbar.js";
+import { setButtonLoading, showGridLoading, hideGridLoading } from "../shared/loading.js";
+import { createCombobox } from "../shared/combobox.js";
+
+export function renderMargin(root) {
+  const panel = document.createElement("div");
+  panel.className = "panel";
+
+  const toolbar = document.createElement("div");
+  toolbar.className = "toolbar";
+
+  const dateBegin = inputText("Дата с", "mg_date_begin");
+  const dateEnd = inputText("по", "mg_date_end");
+  const userSel = selectField("Пользователь", "mg_user");
+  const depSel = selectField("Отдел", "mg_department");
+  const ctrSel = comboboxField("Контрагент", "mg_contractor", {
+    placeholder: "Введите контрагента",
+    minChars: 2,
+    debounceMs: 250,
+    limit: 20,
+    recentKey: "contractors",
+    fetchOptions: async (query, limit) => {
+      const json = await apiGetJson("/api/lookups/contractors/search" + buildQuery({ q: query, limit }));
+      return json.items || [];
+    },
+    onSelect: () => {
+      updateButtons();
+    }
+  });
+  const stfSel = selectField("Категория", "mg_stuffCategory");
+  const routeSel = selectField("Маршрут", "mg_route");
+  attachSelectDebug("user", userSel.select);
+
+  const onlyTotal = checkboxField("Только итог", "mg_onlyTotal");
+  const itogSpec = checkboxField("Итог по спецификации", "mg_itog_by_spec");
+  const itogUser = checkboxField("Итог по пользователю", "mg_itog_by_user");
+  const itogProduct = checkboxField("Итог по продукту", "mg_itog_by_product");
+  const notBlock = checkboxField("Не заблокированные", "mg_get_not_block");
+
+  const status = document.createElement("span");
+  status.className = "status";
+  status.textContent = "Укажите даты и хотя бы один фильтр";
+
+  const btnClear = button("Очистить", false);
+  const btnGenerate = button("Сформировать", true);
+  const btnExcel = button("Excel", false);
+
+  toolbar.append(
+    dateBegin.wrap, dateEnd.wrap,
+    userSel.wrap, depSel.wrap, ctrSel.wrap, stfSel.wrap, routeSel.wrap,
+    onlyTotal.wrap, itogSpec.wrap, itogUser.wrap, itogProduct.wrap, notBlock.wrap,
+    status, btnClear, btnGenerate, btnExcel
+  );
+
+  panel.appendChild(toolbar);
+  root.appendChild(panel);
+
+  const gridWrap = document.createElement("div");
+  gridWrap.className = "panel grid-container ag-theme-alpine";
+  root.appendChild(gridWrap);
+
+  const columnDefs = [
+    { field: "ctr_name", headerName: "Контрагент", minWidth: 160 },
+    { field: "cut_name", headerName: "Страна", minWidth: 120 },
+    { field: "con_number_formatted", headerName: "Договор", minWidth: 120 },
+    { field: "con_date_formatted", headerName: "Дата договора", minWidth: 110 },
+    { field: "spc_number_formatted", headerName: "Спецификация", minWidth: 140 },
+    { field: "spc_date_formatted", headerName: "Дата спецификации", minWidth: 130 },
+    { field: "spc_summ_formatted", headerName: "Сумма", minWidth: 120 },
+    { field: "cur_name", headerName: "Валюта", minWidth: 80 },
+    { field: "stf_name_show", headerName: "Категория", minWidth: 180 },
+    { field: "shp_number_show", headerName: "Отгрузка", minWidth: 130 },
+    { field: "shp_date_show", headerName: "Дата отгрузки", minWidth: 120 },
+    { field: "pay_date_show", headerName: "Дата оплаты", minWidth: 120 },
+    { field: "lps_summ_eur_formatted", headerName: "Сумма EUR", minWidth: 120 },
+    { field: "lps_summ_formatted", headerName: "Сумма", minWidth: 120 },
+    { field: "lps_sum_transport_formatted", headerName: "Транспорт", minWidth: 140 },
+    { field: "lcc_transport_formatted", headerName: "Транспорт (сум)", minWidth: 160 },
+    { field: "lps_custom_formatted", headerName: "Таможня", minWidth: 130 },
+    { field: "lcc_charges_formatted", headerName: "Прочие", minWidth: 130 },
+    { field: "lcc_montage_formatted", headerName: "Монтаж", minWidth: 130 },
+    { field: "lps_montage_time_formatted", headerName: "Монтаж время", minWidth: 150 },
+    { field: "montage_cost_formatted", headerName: "Стоимость монтажа", minWidth: 170 },
+    { field: "lcc_update_sum_formatted", headerName: "Доработки", minWidth: 150 },
+    { field: "summ_formatted", headerName: "Итого", minWidth: 120 },
+    { field: "summ_zak_formatted", headerName: "Сумма заказ", minWidth: 140 },
+    { field: "margin_formatted", headerName: "Маржа", minWidth: 120 },
+    { field: "koeff_formatted", headerName: "Коэфф", minWidth: 120 },
+    { field: "usr_name_show", headerName: "Пользователь", minWidth: 140 },
+    { field: "dep_name_show", headerName: "Отдел", minWidth: 140 }
+  ];
+
+  let columnApi = null;
+  let gridApi = null;
+  let currentFilters = null;
+
+  createGrid(gridWrap, columnDefs, {
+    pageSize: 50,
+    getRowClass: (params) => {
+      const d = params && params.data ? params.data : null;
+      if (!d) return null;
+      if (d.itogLine) return "row-itog";
+      const hasGroup = d.spc_group_delivery && String(d.spc_group_delivery).trim() !== "";
+      if (hasGroup) {
+        return d.haveUnblockedPrc ? "row-green-pink" : "row-green";
+      }
+      if (d.haveUnblockedPrc) return "row-pink";
+      return null;
+    },
+    onGridReady: (params) => {
+      gridApi = params.api;
+      columnApi = params.columnApi;
+    },
+    fetchRows: async ({ startRow, endRow }) => {
+      if (!currentFilters) {
+        return { rows: [], total: 0 };
+      }
+      const pageSize = endRow - startRow;
+      const page = Math.floor(startRow / pageSize) + 1;
+      const params = Object.assign({}, currentFilters, { page, pageSize });
+      let result = { rows: [], total: 0 };
+      showGridLoading(gridApi);
+      try {
+        const json = await apiGetJson("/api/margin/data" + buildQuery(params));
+        applyView(columnApi, json.view || {});
+        result = { rows: json.data || [], total: (json.meta && json.meta.totalCount) || 0 };
+        return result;
+      } catch (e) {
+        setStatus(status, e.message || "Ошибка API", true);
+        return result;
+      } finally {
+        hideGridLoading(gridApi, result.rows);
+      }
+    }
+  });
+
+  function applyView(colApi, view) {
+    if (!colApi || !view) return;
+    const v = (k) => !!view[k];
+    colApi.setColumnVisible("ctr_name", v("view_contractor"));
+    colApi.setColumnVisible("cut_name", v("view_country"));
+    colApi.setColumnVisible("con_number_formatted", v("view_contract"));
+    colApi.setColumnVisible("con_date_formatted", v("view_contract"));
+    colApi.setColumnVisible("spc_number_formatted", v("view_contract"));
+    colApi.setColumnVisible("spc_date_formatted", v("view_contract"));
+    colApi.setColumnVisible("spc_summ_formatted", v("view_contract"));
+    colApi.setColumnVisible("cur_name", v("view_contract"));
+    colApi.setColumnVisible("stf_name_show", v("view_stuff_category"));
+    colApi.setColumnVisible("shp_number_show", v("view_shipping"));
+    colApi.setColumnVisible("shp_date_show", v("view_shipping"));
+    colApi.setColumnVisible("pay_date_show", v("view_payment"));
+    colApi.setColumnVisible("lps_sum_transport_formatted", v("view_transport"));
+    colApi.setColumnVisible("lcc_transport_formatted", v("view_transport_sum"));
+    colApi.setColumnVisible("lps_custom_formatted", v("view_custom"));
+    colApi.setColumnVisible("lcc_charges_formatted", v("view_other_sum"));
+    colApi.setColumnVisible("lcc_montage_formatted", v("view_montage_sum"));
+    colApi.setColumnVisible("lps_montage_time_formatted", v("view_montage_time"));
+    colApi.setColumnVisible("montage_cost_formatted", v("view_montage_cost"));
+    colApi.setColumnVisible("lcc_update_sum_formatted", v("view_update_sum"));
+    colApi.setColumnVisible("summ_zak_formatted", v("view_summ_zak"));
+    colApi.setColumnVisible("koeff_formatted", v("view_koeff"));
+    colApi.setColumnVisible("usr_name_show", v("view_user"));
+    colApi.setColumnVisible("dep_name_show", v("view_department"));
+  }
+
+  async function loadLookups() {
+    await Promise.all([
+      loadSelectLegacy(userSel.select, "/UsersListAction.do?have_all=true"),
+      loadSelectLegacy(depSel.select, "/DepartmentsListAction.do?have_all=true"),
+      loadSelect(stfSel.select, "/api/lookups/stuff-categories?includeAll=true"),
+      loadSelect(routeSel.select, "/api/lookups/routes?includeAll=true")
+    ]);
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/c94ca453-3d7b-4b81-b417-94d1a1bdbd34',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({runId:'pre-fix',hypothesisId:'H2',location:'ui/screens/margin.js:159',message:'margin loadLookups done',data:{userCount:userSel.select.options.length,depCount:depSel.select.options.length,ctrSelected:!!ctrSel.combo.getValue()},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+  }
+
+  function canGenerate() {
+    const db = dateBegin.input.value.trim();
+    const de = dateEnd.input.value.trim();
+    const ctrValue = ctrSel.combo.getValue();
+    const ctrId = ctrValue ? ctrValue.id : "";
+    const any = userSel.select.value || depSel.select.value || ctrId ||
+      stfSel.select.value || routeSel.select.value;
+    return db && de && any;
+  }
+
+  function buildFilters() {
+    return {
+      dateBegin: dateBegin.input.value.trim(),
+      dateEnd: dateEnd.input.value.trim(),
+      userId: userSel.select.value,
+      departmentId: depSel.select.value,
+      contractorId: (ctrSel.combo.getValue() || {}).id || "",
+      stuffCategoryId: stfSel.select.value,
+      routeId: routeSel.select.value,
+      onlyTotal: onlyTotal.input.checked ? "1" : "",
+      itogBySpec: itogSpec.input.checked ? "1" : "",
+      itogByUser: itogUser.input.checked ? "1" : "",
+      itogByProduct: itogProduct.input.checked ? "1" : "",
+      getNotBlock: notBlock.input.checked ? "1" : ""
+    };
+  }
+
+  async function generate() {
+    if (!canGenerate()) {
+      setStatus(status, "Укажите даты и хотя бы один фильтр", true);
+      return;
+    }
+    setButtonLoading(btnGenerate, true);
+    setStatus(status, "Формирование...");
+    try {
+      currentFilters = buildFilters();
+      if (gridApi) gridApi.purgeInfiniteCache();
+      setStatus(status, "Результаты готовы");
+    } catch (e) {
+      setStatus(status, e.message || "Ошибка", true);
+    } finally {
+      setButtonLoading(btnGenerate, false);
+    }
+  }
+
+  btnGenerate.addEventListener("click", generate);
+  btnExcel.addEventListener("click", () => {
+    setStatus(status, "Экспорт Excel пока недоступен без session", true);
+  });
+  btnClear.addEventListener("click", () => {
+    dateBegin.input.value = "";
+    dateEnd.input.value = "";
+    [userSel, depSel, stfSel, routeSel].forEach((s) => {
+      s.select.innerHTML = "";
+    });
+    ctrSel.combo.clear();
+    currentFilters = null;
+    loadLookups();
+    setStatus(status, "Укажите даты и хотя бы один фильтр");
+  });
+
+  [dateBegin.input, dateEnd.input, userSel.select, depSel.select, stfSel.select, routeSel.select]
+    .forEach((el) => el.addEventListener("change", () => {
+      updateButtons();
+    }));
+
+  function updateButtons() {
+    btnGenerate.disabled = !canGenerate();
+    btnExcel.disabled = true;
+  }
+
+  updateButtons();
+  loadLookups();
+}
+
+function inputText(labelText, id) {
+  const wrap = document.createElement("label");
+  wrap.textContent = labelText + " ";
+  const input = document.createElement("input");
+  input.type = "text";
+  input.id = id;
+  wrap.appendChild(input);
+  return { wrap, input };
+}
+
+function selectField(labelText, id) {
+  const wrap = document.createElement("label");
+  wrap.textContent = labelText + " ";
+  const select = document.createElement("select");
+  select.id = id;
+  wrap.appendChild(select);
+  return { wrap, select };
+}
+
+function comboboxField(labelText, id, options) {
+  const wrap = document.createElement("label");
+  wrap.textContent = labelText + " ";
+  const container = document.createElement("div");
+  container.className = "combobox-field";
+  wrap.appendChild(container);
+  const combo = createCombobox(container, Object.assign({}, options, { inputId: id }));
+  return { wrap, combo };
+}
+
+function attachSelectDebug(name, select) {
+  if (!select) return;
+  const log = (eventName) => {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/c94ca453-3d7b-4b81-b417-94d1a1bdbd34',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({runId:'pre-fix',hypothesisId:'H5',location:'ui/screens/margin.js:251',message:'select event',data:{name,event:eventName,disabled:select.disabled,options:select.options.length,selectedIndex:select.selectedIndex},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+  };
+  ["mousedown", "click", "focus"].forEach((evt) => {
+    select.addEventListener(evt, () => log(evt));
+  });
+}
+
+function checkboxField(labelText, id) {
+  const wrap = document.createElement("label");
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.id = id;
+  wrap.appendChild(input);
+  wrap.appendChild(document.createTextNode(" " + labelText));
+  return { wrap, input };
+}
+
+function button(text, primary) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = primary ? "btn btn-primary" : "btn";
+  btn.textContent = text;
+  return btn;
+}
+
+async function loadSelect(select, url) {
+  const json = await apiGetJson(url);
+  select.innerHTML = "";
+  const data = json.data || [];
+  data.forEach((it) => {
+    select.appendChild(buildOption(it.id, it.label));
+  });
+}
+
+async function loadSelectLegacy(select, url) {
+  const json = await fetchLegacyList(url);
+  select.innerHTML = "";
+  const data = json.data || [];
+  data.forEach((it) => {
+    select.appendChild(buildOption(it.id, it.label));
+  });
+}

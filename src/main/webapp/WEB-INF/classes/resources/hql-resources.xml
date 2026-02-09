@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  
+  <query name="produce-custom-codes">
+    <![CDATA[
+      from DboCustomCode cc where cc.code=:code order by cc.instant
+    ]]>
+  </query>
+
+  <query name="produce-last-custom-code">
+    <![CDATA[
+    from DboCustomCode cc
+    where cc.code=:code
+      and cc.instant = (select max(cci.instant) from DboCustomCode cci where cci.code=cc.code)
+    ]]>
+  </query>
+  
+  <query name="produce-custom-code-for-date">
+    <![CDATA[
+      from DboCustomCode cc
+      where cc.code=:code
+        and cc.instant = ( select max(cus.instant)    from DboCustomCode cus   where cus.code=cc.code and cus.instant <= :date )
+    ]]>
+  </query>
+  
+  <query name="produce-by-stuffCategory-and-catalogNumber">
+    <![CDATA[
+      from DboProduce pr
+      where pr.catalogNumbers[:stf_id ].number = :number and pr.block is null
+    ]]>
+  </query>
+
+  <query name="produce-by-catalogNumber">
+    <![CDATA[
+      from DboProduce pr
+      where pr.catalogNumbers.number = :number
+    ]]>
+  </query>
+  
+  <query name="languages-except-one">
+    <![CDATA[
+      select  l.code as langCode, l.name as langName from DboLanguage l where l.code != :code
+    ]]>
+  </query>
+
+  <query name="languages-for-produce-except-one">
+    <![CDATA[
+      select  l.code as langCode, l.name as langName, pl.name as text  from DboLanguage l left join l.produceLanguages pl with pl.produce.id = :produce_id where l.code != :code
+    ]]>
+  </query>
+
+  <query name="find-produce-usage-count-prc-list-produce">
+    <![CDATA[
+      select count(*) from DclPrcListProduce pp where pp.produce = :produce
+    ]]>
+  </query>
+
+  <query name="find-produce-usage-count-dlr-list-produce">
+    <![CDATA[
+      select count(*) from DclDlrListProduce dp where dp.produce = :produce
+    ]]>
+  </query>
+
+  <query name="find-produce-usage-count-order">
+    <![CDATA[
+      select count(*) from DclOrdListProduce op where op.produce = :produce
+    ]]>
+  </query>
+
+  <query name="find-produce-usage-count-spi-list-produce">
+    <![CDATA[
+      select count(*) from DclSpiListProduce sp  where sp.produce = :produce
+    ]]>
+  </query>
+
+  <query name="produces-has-same-catalog-number-except-me">
+    <![CDATA[
+      select cn.produce from DboCatalogNumber cn where cn.number = :number and cn.produce != :produce
+    ]]>
+  </query>
+
+  <query name="produces-has-same-catalog-number">
+    <![CDATA[
+      select cn.produce from DboCatalogNumber cn where cn.number = :number
+    ]]>
+  </query>
+
+  <query name="count-produces-in-category">
+    <![CDATA[
+      select count(*) from DboProduce p where p.category.id = :cat_id
+    ]]>
+  </query>
+
+  <query name="get-produce-details">
+    <![CDATA[
+      select c from DboCatalogNumber c where c.produce.id = :prd_id
+    ]]>
+  </query>
+
+  <query name="get-max-produce-id">
+    <![CDATA[
+      select max(id) from DboProduce
+    ]]>
+  </query>
+
+</hibernate-mapping>

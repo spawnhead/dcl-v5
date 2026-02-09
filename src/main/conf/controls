@@ -1,0 +1,5 @@
+date-tag.css=trusted/css.do
+row-tag.closed-image=images/row-closed.gif
+row-tag.opened-image=images/row-opened.gif
+string.app.NaN=#####
+table.pageSize=20
