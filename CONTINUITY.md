@@ -18,6 +18,7 @@ Done:
 - Scaffolded modern backend with Country aggregate, endpoints, Flyway migration, and Testcontainers integration test.
 - Added Postgres docker-compose and deployment guide.
 - Started modern UI with AG Grid consuming generated OpenAPI types.
+- 2026-02-09: Added Cursor Project Rules (`.cursor/rules/*.mdc`) enforcing CONTINUITY workflow, bash-only, sources of truth, Modulith, Flyway, tests, docs discipline.
 
 Now:
 - Validate backend build/run and regenerate OpenAPI schema for UI.
@@ -34,3 +35,11 @@ Working set (files/ids/commands):
 - modern/ui/**
 - ops/docker-compose.yml
 - docs/DEPLOYMENT_GUIDE.md
+- .cursor/rules/000-continuity-always.mdc
+- .cursor/rules/010-bash-only.mdc
+- .cursor/rules/020-sources-of-truth.mdc
+- .cursor/rules/030-architecture-modulith.mdc
+- .cursor/rules/040-db-migrations-flyway.mdc
+- .cursor/rules/050-tests-and-repro.mdc
+- .cursor/rules/060-docs-discipline.mdc
+- .cursor/rules/999-mdc-format.mdc

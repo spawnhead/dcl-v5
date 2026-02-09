@@ -1,0 +1,12 @@
+---
+description: All commands must be bash-compatible and reproducible
+globs: "**/*"
+alwaysApply: true
+---
+# Bash-only commands
+
+- Provide commands for bash (Git Bash/WSL/Linux).
+- Do not give PowerShell commands.
+- If a Windows path is needed, still present commands in bash form.
+- When suggesting environment variables, show bash syntax (export VAR=...).
+- For long procedures, include a copy-paste runnable bash snippet.

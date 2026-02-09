@@ -1,0 +1,11 @@
+---
+description: Documentation discipline - keep docs consistent and factual
+globs: "docs/**"
+alwaysApply: true
+---
+# Documentation discipline
+
+- Documentation must be factual and traceable to code/DDL.
+- When docs describe a module or endpoint, it must match current code.
+- Update docs/DEPLOYMENT_GUIDE.md when run/build steps change.
+- Keep docs concise: no marketing text, only technical facts and steps.
