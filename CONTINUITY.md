@@ -16,6 +16,7 @@ State:
 
 Done:
 - 2026-02-10: Agent-Plan prepared spec package for Margin-first dev cycle: `docs/security/ROLE_MODEL.md`, `docs/security/DEV_BYPASS.md`, `docs/db/SEED_DATA_PLAN.md`, `docs/dev/DEV_DASHBOARD_SPEC.md`; defined role model, dev bypass headers + `/api/me`, seed marker/dataMode, and `/dev` dashboard contract.
+- 2026-02-10: Done - Plan validation for Orders pack complete (`docs/screens/orders/*`): contracts/acceptance/matrix tightened to legacy 1:1, top-5 parity risks documented with verification steps, payload samples expanded for filters/sort/pagination/reload.
 - Completed Phase 1 QC (procedures, PK/UK, feature traceability).
 - Scaffolded modern backend with Country aggregate, endpoints, Flyway migration, and Testcontainers integration test.
 - Added Postgres docker-compose and deployment guide.
@@ -51,6 +52,7 @@ Done (dev-debug 2026-02-09):
 - Устранены блокеры: MarginService — добавлен import MarginExcelExport; MarginIntegrationTest — исправлена скобка в jsonPath; backend перезапущен с JDK 21. API margin отвечает 2xx; лог logs/dev-debug-20260209-1807.log — VERIFIED.
 
 Next:
+- Dev implement Orders parity.
 - Agent-Dev implements `CurrentUser` + dev-only header bypass + `/api/me` per `docs/security/DEV_BYPASS.md`.
 - Agent-Dev implements dev seed Flyway repeatables (`db/dev`) + `/api/dev/status` dataMode according to `docs/db/SEED_DATA_PLAN.md`.
 - Agent-Dev builds `/dev` dashboard per `docs/dev/DEV_DASHBOARD_SPEC.md` and verifies Margin scenarios for admin/manager/economist roles.
@@ -62,8 +64,10 @@ Next:
 - Deep-dive into DAO/service layers for business rules and traceability.
 
 Open questions (UNCONFIRMED if needed):
+- Orders list: capture real legacy HAR for `/OrdersAction.do` scenarios (input/filter/reload/grid/block) to confirm exact wire payloads beyond code-derived examples.
 - Margin: confirm whether action-level permissions (`DCL_ACTION_ROLE`/`dcl_user_actions`) affect Generate/Excel behavior beyond URL role gating.
 - Margin: validate SQL-level row restrictions for manager vs admin/economist on identical filters (live DB check).
+
 
 Working set (files/ids/commands):
 - docs/security/ROLE_MODEL.md
