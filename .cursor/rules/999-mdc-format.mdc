@@ -1,7 +1,5 @@
 ---
-description: MDC format reminder - how to write project rules files
-globs: "**/*.mdc"
-alwaysApply: false
+alwaysApply: true
 ---
 # MDC file format reminder
 

@@ -9,9 +9,10 @@
     "preview": "vite preview",
     "generate:api": "openapi-typescript http://localhost:8080/v3/api-docs --output src/api/generated/schema.ts"
   },
-  "dependencies": {
-    "@tanstack/react-query": "^5.66.0",
-    "ag-grid-community": "^33.0.0",
+"dependencies": {
+  "@tanstack/react-query": "^5.66.0",
+  "dayjs": "^1.11.19",
+  "ag-grid-community": "^33.0.0",
     "ag-grid-react": "^33.0.0",
     "antd": "^5.24.6",
     "openapi-fetch": "^0.13.4",

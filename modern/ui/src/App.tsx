@@ -2,6 +2,7 @@ import { Layout, Menu, Typography } from 'antd';
 import { useLocation, useNavigate, Outlet, Routes, Route } from 'react-router-dom';
 import MarginPage from './features/margin/MarginPage';
 import CountriesPage from './features/countries/CountriesPage';
+import DevDashboardPage from './features/dev/DevDashboardPage';
 import './App.css';
 
 const { Header, Content } = Layout;
@@ -24,10 +25,11 @@ function AppLayout() {
       children: [
         { key: '/reports/margin', label: 'Маржа' }
       ]
-    }
+    },
+    { key: '/dev', label: 'Development' }
   ];
 
-  const openKeys = location.pathname.startsWith('/reports') ? ['reports'] : ['ref'];
+  const openKeys = location.pathname.startsWith('/reports') ? ['reports'] : location.pathname === '/dev' ? [] : ['ref'];
 
   return (
     <Layout className="app-layout">
@@ -58,6 +60,7 @@ export default function App() {
       <Route path="/" element={<AppLayout />}>
         <Route index element={<CountriesPage />} />
         <Route path="reports/margin" element={<MarginPage />} />
+        <Route path="dev" element={<DevDashboardPage />} />
       </Route>
     </Routes>
   );

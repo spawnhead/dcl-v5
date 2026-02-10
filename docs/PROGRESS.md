@@ -14,12 +14,25 @@
 - Margin screen (Reports → Margin): route /reports/margin and menu "Отчеты → Маржа" added; placeholder page (spec missing). docs/screens/margin/ created (SNAPSHOT stub, payloads/README, IMPLEMENTATION_NOTES.md). Backend margin module and full parity blocked until SNAPSHOT and payloads from Agent-Plan.
 - 2026-02-09: Merge origin/main (conflicts in CONTINUITY.md, SNAPSHOT.md resolved); margin SNAPSHOT.md full spec + payloads + network.har committed; pushed main → origin/stage.
 - 2026-02-09: Margin specs finalized with CONTRACTS + ACCEPTANCE + BEHAVIOR_MATRIX; SNAPSHOT linked to new artifacts.
+- 2026-02-09: **Margin parity (fake data).** Backend: margin modulith (api/application/domain/infrastructure), endpoints /api/margin/data, generate, cleanAll, export/excel, lookups (users, departments, contractors, stuff-categories, routes); MarginFakeDataProvider 250 rows; MarginExcelExport (POI); MarginIntegrationTest. UI: MarginPage full screen (filters, 5 selectors + aspects, options, Сбросить/Сформировать/Excel, grid 28 cols, toolbar limit/pageSize/Обновить/Экспорт CSV, row styles itogLine/spc_group_delivery/haveUnblockedPrc, loading/error). IMPLEMENTATION_NOTES checklist DONE/PARTIAL; logs/* placeholders. Run backend with JDK 21 + Postgres; UI with npm run dev.
+- 2026-02-09: **DB parity report (Agent-DB).** Postgres (Flyway) vs Firebird DDL: docs/db/PARITY_REPORT.md — PARTIAL; 2/96 domain tables; 6 blockers. logs/db-parity-20260209.log, logs/db-target-introspection.out.
+- 2026-02-09: **QA parity report** (docs/screens/margin/QA_PARITY_REPORT.md): static check vs ACCEPTANCE/CONTRACTS/BEHAVIOR_MATRIX; 3 blockers (view_* not wired, onlyTotal rules, cleanAll get_not_block), 2 non-blocking diffs; dynamic/error UNCONFIRMED.
 
 ## Now
 - (none)
 
+## Done (dev-dashboard 2026-02-10)
+- Dev Dashboard + Dev Identity + Data Mode: backend GET /api/dev/status, GET /api/me; CurrentUserProvider + X-Dev-User/X-Dev-Roles (@Profile("dev")); Flyway db/dev V10__dev_seed.sql, dataMode FAKE_SEEDED; UI /dev, DevDashboardPage, menu Development; DEPLOYMENT_GUIDE updated. Verification: logs/dev-dev-dashboard-20260210-1019.log — VERIFIED.
+
+## Done (dev-debug 2026-02-09)
+- Agent-Debug: проверка портов (5173/8080/5432), устранение блокеров сборки/запуска backend. Фиксы: MarginService import MarginExcelExport; MarginIntegrationTest скобка в jsonPath; перезапуск backend с JDK 21. API margin 2xx, proxy и страница margin 200. logs/dev-debug-20260209-1807.log — VERIFIED.
+
 ## Next
-- Agent-Dev implements margin module + UI 1:1 using these specs.
+- Optional: в браузере открыть /dev и /reports/margin, проверить Console и Network.
+- Implement missing schema objects via Flyway (per docs/db/PARITY_REPORT.md).
+- Открыть в браузере /reports/margin, убедиться: Console 0 ошибок, Network /api/margin/* 2xx (рекомендуется).
+- Agent-Dev fixes blockers from QA report (view_* wiring, onlyTotal rules, cleanAll get_not_block).
+- Replace Margin fake data with real DB queries.
 - Agent-Dev Iteration 2 Units (docs/NEXT_SLICES_PLAN.md).
 - Deep-dive into DAO/service for business rules and traceability.
 
