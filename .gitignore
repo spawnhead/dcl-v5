@@ -1,1 +1,27 @@
-﻿.txt
+# Build and runtime
+target/
+build/
+*.class
+*.jar
+*.war
+
+# Frontend
+node_modules/
+dist/
+.vite/
+
+# Logs and run output (local, not committed)
+logs/
+*.log
+*.out
+*.sql
+*.dump
+*.dumpstream
+
+# IDE / OS
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+.txt

@@ -1,3 +1,0 @@
-# Margin backend: skipped (no margin module yet)
-# Reason: docs/screens/margin/payloads/*.json missing — contract shapes undefined.
-# Run when spec exists: cd modern/backend && ./mvnw test | tee ../../logs/dev-margin-backend.log

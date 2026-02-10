@@ -1,66 +1,0 @@
-=== DATE ===
- 9 фев 2026 г. 14:10:47
-=== WHOAMI ===
-IVANIN
-=== OS ===
-MINGW64_NT-10.0-26100 IVANIN-PC 3.6.3-7674c51e.x86_64 2025-07-01 09:13 UTC x86_64 Msys
-=== JAVA ===
-java version "1.8.0_481"
-Java(TM) SE Runtime Environment (build 1.8.0_481-b10)
-Java HotSpot(TM) 64-Bit Server VM (build 25.481-b10, mixed mode)
-=== MVN ===
-Apache Maven 3.9.11 (3e54c93a704957b63ee3494413a2b544fd3d825b)
-Maven home: C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.11
-Java version: 1.8.0_481, vendor: Oracle Corporation, runtime: C:\Program Files\Java\jre1.8.0_481
-Default locale: ru_RU, platform encoding: Cp1251
-OS name: "windows 11", version: "10.0", arch: "amd64", family: "windows"
-=== NODE ===
-v22.17.1
-=== NPM ===
-11.8.0
-=== DOCKER ===
-Docker version 29.0.1, build eedd969
-=== DOCKER COMPOSE ===
-Docker Compose version v2.40.3-desktop.1
-=== PROXY ENV ===
-=== NPM REGISTRY ===
-https://registry.npmjs.org/
-=== NPM CONFIG LIST ===
-; "builtin" config from C:\Users\IVANIN\AppData\Roaming\npm\node_modules\npm\npmrc
-
-prefix = "C:\\Users\\IVANIN\\AppData\\Roaming\\npm"
-
-; node bin location = C:\Program Files\nodejs\node.exe
-; node version = v22.17.1
-; npm local prefix = c:\Users\IVANIN\dcl-v5
-; npm version = 11.8.0
-; cwd = c:\Users\IVANIN\dcl-v5
-; HOME = C:\Users\IVANIN
-; Run `npm config ls -l` to show all defaults.
-=== CURL MAVEN CENTRAL ===
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0HTTP/1.1 200 OK
-Date: Mon, 09 Feb 2026 11:10:54 GMT
-Content-Type: text/html
-Connection: keep-alive
-CF-Cache-Status: HIT
-Accept-Ranges: bytes
-Last-Modified: Mon, 09 Feb 2026 11:08:14 GMT
-Server: cloudflare
-CF-RAY: 9cb2ec443bb07908-MSQ
-
-
-=== CURL NPM REGISTRY ===
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0HTTP/1.1 200 OK
-Date: Mon, 09 Feb 2026 11:10:57 GMT
-Content-Type: application/json
-Connection: keep-alive
-CF-RAY: 9cb2ec56e81078f9-MSQ
-Cache-Control: public, immutable, max-age=31557600
-Set-Cookie: _cfuvid=WZmD704ITfm6hJBtnro_Cjg8rabGGln8ibeoePanujs-1770635457113-0.0.1.1-604800000; path=/; domain=.npmjs.org; HttpOnly; Secure; SameSite=None
-Server: cloudflare
-
-

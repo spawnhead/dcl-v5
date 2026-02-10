@@ -1,6 +1,0 @@
-
-> dcl-modern-ui@0.1.0 generate:api
-> openapi-typescript http://localhost:8080/v3/api-docs --output src/api/generated/schema.ts
-
-✨ openapi-typescript 7.12.0
-🚀 http://localhost:8080/v3/api-docs → src/api/generated/schema.ts [433.9ms]
