@@ -15,6 +15,7 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-10: Agent-Plan prepared spec package for Margin-first dev cycle: `docs/security/ROLE_MODEL.md`, `docs/security/DEV_BYPASS.md`, `docs/db/SEED_DATA_PLAN.md`, `docs/dev/DEV_DASHBOARD_SPEC.md`; defined role model, dev bypass headers + `/api/me`, seed marker/dataMode, and `/dev` dashboard contract.
 - Completed Phase 1 QC (procedures, PK/UK, feature traceability).
 - Scaffolded modern backend with Country aggregate, endpoints, Flyway migration, and Testcontainers integration test.
 - Added Postgres docker-compose and deployment guide.
@@ -33,15 +34,22 @@ Now:
 - (none)
 
 Next:
+- Agent-Dev implements `CurrentUser` + dev-only header bypass + `/api/me` per `docs/security/DEV_BYPASS.md`.
+- Agent-Dev implements dev seed Flyway repeatables (`db/dev`) + `/api/dev/status` dataMode according to `docs/db/SEED_DATA_PLAN.md`.
+- Agent-Dev builds `/dev` dashboard per `docs/dev/DEV_DASHBOARD_SPEC.md` and verifies Margin scenarios for admin/manager/economist roles.
 - Agent-Dev implements margin module + UI 1:1 using these specs.
 - Agent-Dev executes Iteration 2 Units (см. docs/NEXT_SLICES_PLAN.md).
 - Deep-dive into DAO/service layers for business rules and traceability.
 
 Open questions (UNCONFIRMED if needed):
-- Are any procedures critical for Country domain beyond ID assignment?
-- Margin screen: live HAR/screenshots missing; capture to confirm request payloads and HTML lookup responses.
+- Margin: confirm whether action-level permissions (`DCL_ACTION_ROLE`/`dcl_user_actions`) affect Generate/Excel behavior beyond URL role gating.
+- Margin: validate SQL-level row restrictions for manager vs admin/economist on identical filters (live DB check).
 
 Working set (files/ids/commands):
+- docs/security/ROLE_MODEL.md
+- docs/security/DEV_BYPASS.md
+- docs/db/SEED_DATA_PLAN.md
+- docs/dev/DEV_DASHBOARD_SPEC.md
 - docs/screens/margin/CONTRACTS.md
 - docs/screens/margin/ACCEPTANCE.md
 - docs/screens/margin/BEHAVIOR_MATRIX.md
