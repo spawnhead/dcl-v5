@@ -1,23 +1,26 @@
-# Orders List: Behavior Matrix
+# Orders (N2) → List: Behavior Matrix
 
-> Source: `docs/screens/orders/SNAPSHOT.md`, `CONTRACTS.md`. Traceability: OrdersAction, OrdersForm, Orders.jsp.
+| Area | Legacy behavior (required) | Source | How to verify |
+|---|---|---|---|
+| Initial defaults | `input` sets defaults (`not_executed=1`, `ord_annul_not_show=1`, initial `order_by`) then runs filter | `OrdersAction.input` | Open `src/main/java/net/sam/dcl/action/OrdersAction.java` and inspect `input`; capture first request in legacy Network (`dispatch=input`) |
+| Role-specific defaults | Manager auto-filters by self user; declarant/economist auto-check ready-for-delivery | `OrdersAction.input` | Inspect role branches in Action; in legacy, login under each role and capture resulting form state in HTML/request payload |
+| Filter sort override | `dispatch=filter` always sets `order_by=' ord_date descending'` and page=1 | `OrdersAction.filter` | Inspect code; submit filter in legacy and capture payload + resulting row order (first page) |
+| SQL filter mapping | Backend query is `dcl_order_filter(...) order by {order_by}` with fixed arg order | `sql-resources.xml#select-orders` | Inspect SQL entry; capture POST body fields and compare with function args |
+| Tri-state executed filter | `ord_executed` derived from `executed` + `not_executed` (null/1/0) | `OrdersForm.getOrd_executed` + JS | Toggle checkboxes in legacy and inspect submitted form/body for `ord_executed` effects |
+| State checkboxes dependency | executed disables+clears states; A/3, B, C are mutually constraining | `Orders.jsp` JS (`setDisableState`, `stateA3OnClick`, `stateBOnClick`, `stateCOnClick`) | In legacy browser, click through combinations and confirm disable/clear behavior before submit |
+| Dependent reload | Change `contractor_for` or `contract` triggers `dispatch=reload` and clears dependent fields | `Orders.jsp` JS + `OrdersAction.reload` | Capture requests after changing contractor/contract in legacy and verify `dispatch=reload` with field reset |
+| Server paging protocol | Pager posts `dispatch=grid` with `grid=NEXT_PAGE|PREV_PAGE`; Action handlers inc/dec page | `OrdersAction.processBefore`, `PageableDataHolder` | Click pager in legacy and inspect request form fields; confirm values are uppercase constants |
+| Row access gates | block toggle read-only for non-admin; edit/clone disabled for onlyManager on foreign department | `OrdersAction.internalFilter` (`blockChecker`, `editCloneChecker`) + `Orders.jsp` | Check row controls under admin vs manager (same/other dep) and compare rendered/active controls |
+| Block side effects | toggling block writes `ord_block`; blocking triggers extra DAO processing of unexecuted items | `OrdersAction.block`, `OrderDAO.saveBlock` | Trigger block/unblock in legacy and inspect DB/log/side-effects if available; at minimum confirm network action and resulting state changes |
 
-| Scenario | Steps | Expected network | Expected UI | Notes |
-|----------|--------|------------------|-------------|--------|
-| **Initial load** | Open Orders (menu) | GET `/OrdersAction.do?dispatch=input`; then list may be empty or last state; lookups as needed | Filters visible; grid empty or first page; Сбросить / Применить enabled | Legacy may restore form from session. Modern: GET /api/orders (no or default params) → items + total. |
-| **Apply filter** | Set any filter (e.g. date range, contractor) → Применить фильтр | POST (or GET) with filter params; backend runs dcl_order_filter equivalent | Grid shows first page of results; total count; pagination visible if total > pageSize | Trace: OrdersAction.filter → internalFilter, select-orders. |
-| **Clear filter** | Сбросить фильтр | Request with no filter (or reset endpoint) | Filter fields cleared; grid empty or default list | Trace: OrdersAction.input. |
-| **Pagination** | Click Next / Previous | GET /api/orders?page=2&... (same filter) | Grid shows page 2 (or prev); total unchanged | Trace: processBefore grid NEXT_PAGE/PREV_PAGE → internalFilter. |
-| **Sort** | Click column header (if supported) | GET /api/orders?order_by=ord_number&... | Grid re-fetched with new sort | Legacy order_by in SQL; default ord_date descending. |
-| **Change page size** | Select 25/50/100 | GET /api/orders?pageSize=50&page=1&... | First page with new size | If legacy supports; else document as client-only. |
-| **Dependent lookup** | Select contractor_for → open Contract dropdown | GET /api/contracts?contractor_id={id} | Contract list filtered by contractor_for | Trace: ContractsDepFromContractorListAction scriptUrl ctr_id. |
-| **Dependent lookup** | Select contract → open Specification dropdown | GET /api/specifications?contract_id={id}&contractor_id={ctr_id} | Specification list filtered | Trace: SpecificationsDepFromContractListAction. |
-| **Edit/Clone visibility** | Login as manager, open Orders | List loaded | Edit/Clone only on rows where dep_id = currentUser.department.id | Trace: editCloneChecker. |
-| **Block visibility** | Login as non-admin | List loaded | Block checkbox read-only or hidden | Trace: blockChecker. |
-| **Annulled row style** | Apply filter so some rows have ord_annul=1 | List response with ord_annul | Those rows have class "crossed-cell" | Trace: style-checker. |
-| **Warn icon** | Rows with is_warn set | List response with is_warn | Attention icon in warn column | Trace: showWarn. |
-| **Error: validation** | Submit invalid filter (e.g. date_end < date_begin) | 400 + error body | Message shown; grid unchanged | Trace: validation.xml OrdersAction:filter. |
-| **Error: no permission** | User without Orders permission | 403 or redirect to login | No data or "Нет прав" message | Trace: xml-permissions. |
-| **Create button** | Click Создать | Navigate to /order/new or OrderAction input | Order create form | Trace: OrderAction.do dispatch=input. |
-
-**Export:** Legacy Orders list does not define Excel/CSV export on this screen; if added later, document in CONTRACTS and here.
+## Top-5 parity risks and verification focus
+1. Executed tri-state derived logic drift.
+   - **How to verify:** inspect `OrdersForm.getOrd_executed`; run UI click sequence (none/both/only executed/only not_executed) and record payload + returned rows.
+2. Sort contract drift between `input` and `filter`.
+   - **How to verify:** compare first load vs after Apply Filter in legacy; verify `order_by` values in posted form and SQL trace.
+3. Reload chain drift for contractor→contract→specification.
+   - **How to verify:** inspect `Orders.jsp` callbacks + `OrdersAction.reload`; capture `dispatch=reload` requests.
+4. Permission drift on row actions.
+   - **How to verify:** inspect `blockChecker`/`editCloneChecker` and `xml-permissions.xml`; run with admin and manager in different departments.
+5. Block action side-effect omission.
+   - **How to verify:** inspect `OrderDAO.saveBlock`; verify that blocking invokes both `order-update-block` and `process-order_produces_unexecuted` (SQL log or DB delta).
