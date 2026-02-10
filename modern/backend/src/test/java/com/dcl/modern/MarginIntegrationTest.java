@@ -44,7 +44,21 @@ class MarginIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
-    void getDataReturnsGridWithMetaAndView() throws Exception {
+    void getDataWithoutGenerateReturnsEmpty() throws Exception {
+        mockMvc.perform(get("/api/margin/data").param("limit", "200"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data").isArray())
+            .andExpect(jsonPath("$.data.length()").value(0))
+            .andExpect(jsonPath("$.meta.rowsTotal").value(0))
+            .andExpect(jsonPath("$.meta.rowsReturned").value(0));
+    }
+
+    @Test
+    void generateThenGetDataReturnsRows() throws Exception {
+        mockMvc.perform(post("/api/margin/generate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"date_begin\":\"01.01.2024\",\"date_end\":\"31.01.2024\",\"contractor\":{\"id\":\"5001\",\"name\":\"ООО Контрагент-A (DEV)\"}}"))
+            .andExpect(status().isOk());
         mockMvc.perform(get("/api/margin/data").param("limit", "200"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data").isArray())

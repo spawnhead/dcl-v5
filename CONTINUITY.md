@@ -9,12 +9,14 @@ Constraints/Assumptions:
 Key decisions:
 - First vertical slice domain: Country reference data (`DCL_COUNTRY`).
 - Build tool: Maven.
+- **N2 screen (after Margin):** Orders list (Заказы — список заказов). Justification: maximum complexity among list screens (many filters, dependent lookups, role-based edit/block, grid from `dcl_order_filter`), high business value; full traceability in src (OrdersAction, OrdersForm, Orders.jsp, select-orders SQL, OrderDAO, validation.xml, xml-permissions). Alternative candidates: Contracts list, Shippings list, Payments list, Produce Cost report.
 
 State:
 - Full E2E validated (2026-02-09): Docker Desktop + Postgres (docker compose up) + backend (JAVA_HOME=JDK 21, spring-boot:run) + OpenAPI /v3/api-docs + UI generate:api + npm run dev (Vite 5173/5174). Backend requires JDK 21 and flyway-database-postgresql for Postgres 16; Modulith event_publication/event_publication_archive tables via Flyway V3/V4. Actuator/health not exposed by default.
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-10: Agent-Plan N2 spec pack (Orders list): docs/screens/orders/ created — SNAPSHOT.md, CONTRACTS.md, ACCEPTANCE.md, BEHAVIOR_MATRIX.md, payloads/README.md; traceability to OrdersAction, OrdersForm, Orders.jsp, select-orders → DCL_ORDER_FILTER; UNCONFIRMED + "How to verify" in CONTRACTS; payloads/list-request.json, list-response.json (example shapes). PROGRESS.md updated. Agent-Plan verification pass: spec pack complete for 1:1 implementation.
 - 2026-02-10: Agent-Plan prepared spec package for Margin-first dev cycle: `docs/security/ROLE_MODEL.md`, `docs/security/DEV_BYPASS.md`, `docs/db/SEED_DATA_PLAN.md`, `docs/dev/DEV_DASHBOARD_SPEC.md`; defined role model, dev bypass headers + `/api/me`, seed marker/dataMode, and `/dev` dashboard contract.
 - Completed Phase 1 QC (procedures, PK/UK, feature traceability).
 - Scaffolded modern backend with Country aggregate, endpoints, Flyway migration, and Testcontainers integration test.
@@ -43,7 +45,12 @@ Now:
 - (none)
 
 Done:
+- 2026-02-10 Agent-Plan: Margin testability pack. CONTRACTS.md — UNCONFIRMED сведены к минимуму, добавлен раздел "How to verify" с точными шагами проверки в legacy (dep_id, export, serverList filter, initial empty grid). Созданы docs/screens/margin/TEST_DATA_SPEC.md (детерминированные seed: справочники, 25–40 строк margin data, маячки для onlyTotal/itog_*/get_not_block/view_*/пагинация), docs/screens/margin/QA_ROLE_PRESETS.md (admin, manager, manager_chief, economist — X-Dev-* заголовки и ожидания на Margin). SEED_DATA_PLAN.md дополнен секцией "Margin parity dataset" со ссылкой на TEST_DATA_SPEC. QA может проверять Margin по ACCEPTANCE/BEHAVIOR_MATRIX без угадываний.
 - 2026-02-09 Agent-DB: DB parity report produced (Postgres vs Firebird baseline DDL). docs/db/PARITY_REPORT.md, logs/db-parity-20260209.log, logs/db-target-introspection.out. Status PARTIAL; 6 blockers (94 tables missing, no UK/views/procedures). Migrated tables dcl_country/dcl_currency: MAPPED_EQUIVALENT.
+Done (margin-parity 2026-02-10):
+- Margin parity: TEST_DATA_SPEC dataset (35 rows deterministic, lookups dev_admin/departments/contractors/routes/stuff); empty session on initial and after cleanAll; blockers view_*, onlyTotal rules, cleanAll get_not_block подтверждены в коде; QA_ROLE_PRESETS через X-Dev-* и /api/me. logs/dev-margin-parity-20260210-1200.log — VERIFIED (API).
+Done (dev-specs-align 2026-02-10):
+- Dev infra aligned to specs: dataMode по DCL_SETTING (DEV_SEED_VERSION, margin-v1); V11__init_dcl_setting.sql, R__dev_seed_marker.sql; DEV_BYPASS defaults admin, optional X-Dev-Department-*; /api/me contract (name, department, chiefDepartment, authMode); DevStatusResponse по DEV_DASHBOARD_SPEC (profile, serverTime, db.product/version, appliedMigrationsCount); UI /dev блоки + Повторить + CTA EMPTY; MarginController currentUser() hook; logs/dev-align-dev-specs-20260210-1120.log — VERIFIED.
 Done (dev-dashboard 2026-02-10):
 - Dev Dashboard + Dev Identity + Data Mode: GET /api/dev/status (appName, version, activeProfiles, javaVersion, db, flyway, dataMode, authMode), GET /api/me; CurrentUserProvider + DevCurrentUserFilter (X-Dev-User, X-Dev-Roles), @Profile("dev"); Flyway db/dev V10__dev_seed.sql (dev_seed_marker), dataMode FAKE_SEEDED; UI /dev, menu Development, DevDashboardPage; DEPLOYMENT_GUIDE dev profile, X-Dev-* headers, dataMode. logs/dev-dev-dashboard-20260210-1019.log — VERIFIED (API + UI 200).
 Done (dev-debug 2026-02-09):
@@ -51,10 +58,11 @@ Done (dev-debug 2026-02-09):
 - Устранены блокеры: MarginService — добавлен import MarginExcelExport; MarginIntegrationTest — исправлена скобка в jsonPath; backend перезапущен с JDK 21. API margin отвечает 2xx; лог logs/dev-debug-20260209-1807.log — VERIFIED.
 
 Next:
+- Agent-Dev implements N2 (Orders list) 1:1 per docs/screens/orders/ (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX).
 - Agent-Dev implements `CurrentUser` + dev-only header bypass + `/api/me` per `docs/security/DEV_BYPASS.md`.
 - Agent-Dev implements dev seed Flyway repeatables (`db/dev`) + `/api/dev/status` dataMode according to `docs/db/SEED_DATA_PLAN.md`.
-- Agent-Dev builds `/dev` dashboard per `docs/dev/DEV_DASHBOARD_SPEC.md` and verifies Margin scenarios for admin/manager/economist roles.
-- Agent-Dev implements margin module + UI 1:1 using these specs.
+- Agent-Dev builds `/dev` dashboard per `docs/dev/DEV_DASHBOARD_SPEC.md` and verifies Margin scenarios for admin/manager/economist roles (see `docs/screens/margin/QA_ROLE_PRESETS.md`).
+- Agent-Dev implements margin module + UI 1:1 using specs; seed/data per `docs/screens/margin/TEST_DATA_SPEC.md` and `docs/db/SEED_DATA_PLAN.md` (Margin parity dataset).
 - Implement missing schema objects via Flyway migrations (as per docs/db/PARITY_REPORT.md blockers).
 - Re-run QA (QA_PARITY_REPORT) for Margin screen.
 - Replace fake margin data with real DB queries + preserve contracts.
@@ -66,13 +74,10 @@ Open questions (UNCONFIRMED if needed):
 - Margin: validate SQL-level row restrictions for manager vs admin/economist on identical filters (live DB check).
 
 Working set (files/ids/commands):
-- docs/security/ROLE_MODEL.md
-- docs/security/DEV_BYPASS.md
-- docs/db/SEED_DATA_PLAN.md
-- docs/dev/DEV_DASHBOARD_SPEC.md
-- docs/screens/margin/CONTRACTS.md
-- docs/screens/margin/ACCEPTANCE.md
-- docs/screens/margin/BEHAVIOR_MATRIX.md
+- docs/screens/orders/ (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX, payloads/README)
+- docs/security/ROLE_MODEL.md, docs/security/DEV_BYPASS.md, docs/db/SEED_DATA_PLAN.md, docs/dev/DEV_DASHBOARD_SPEC.md
+- docs/screens/margin/CONTRACTS.md, docs/screens/margin/ACCEPTANCE.md, docs/screens/margin/BEHAVIOR_MATRIX.md
+- docs/screens/margin/TEST_DATA_SPEC.md, docs/screens/margin/QA_ROLE_PRESETS.md
 - docs/screens/margin/SNAPSHOT.md
 - docs/PROGRESS.md
 - docs/DEPLOYMENT_GUIDE.md, logs/dev-dev-dashboard-*.log

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Dev-only: current user (X-Dev-User / X-Dev-Roles).
+ * Dev-only: current user. DEV_BYPASS: returns id, name, roles, department, chiefDepartment, authMode.
  */
 @RestController
 @RequestMapping("/api")
@@ -21,7 +21,8 @@ public class MeController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<CurrentUser> me() {
-        return ResponseEntity.ok(currentUserProvider.getCurrentUser());
+    public ResponseEntity<MeResponse> me() {
+        CurrentUser u = currentUserProvider.getCurrentUser();
+        return ResponseEntity.ok(MeResponse.from(u, "DEV_BYPASS"));
     }
 }

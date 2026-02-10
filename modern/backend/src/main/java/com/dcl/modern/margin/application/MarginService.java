@@ -13,18 +13,13 @@ import org.springframework.stereotype.Service;
 
 /**
  * Margin report use cases. Legacy: MarginAction (generate/cleanAll), MarginDevDataAction (grid data).
- * This phase: in-memory session + fake data per CONTRACTS.md.
+ * This phase: in-memory session + deterministic data per TEST_DATA_SPEC.md and CONTRACTS.md.
+ * CONTRACTS: when session is null (no generate yet or after cleanAll), grid data is empty.
  */
 @Service
 public class MarginService {
 
-    private static final int FAKE_ROW_COUNT = 250;
-    private static final List<MarginLine> FAKE_LINES;
-
-    static {
-        MarginFakeDataProvider provider = new MarginFakeDataProvider();
-        FAKE_LINES = provider.generate(FAKE_ROW_COUNT);
-    }
+    private static final List<MarginLine> DETERMINISTIC_ROWS = MarginFakeDataProvider.buildDeterministicRows();
 
     private final AtomicReference<SessionState> session = new AtomicReference<>(null);
 
@@ -37,12 +32,16 @@ public class MarginService {
         session.set(null);
     }
 
+    /** CONTRACTS: empty data when no session (initial load or after cleanAll). */
     public GridResult getData(int limit) {
         int max = clampLimit(limit);
         SessionState state = session.get();
-        ViewFlags view = state != null ? state.view : ViewFlags.allVisible();
-        int total = FAKE_LINES.size();
-        List<MarginLine> slice = FAKE_LINES.stream().limit(max).toList();
+        if (state == null) {
+            return new GridResult(List.of(), ViewFlags.allVisible(), 0, 0, false);
+        }
+        ViewFlags view = state.view;
+        int total = DETERMINISTIC_ROWS.size();
+        List<MarginLine> slice = DETERMINISTIC_ROWS.stream().limit(max).toList();
         boolean limited = slice.size() < total;
         return new GridResult(slice, view, total, slice.size(), limited);
     }
@@ -63,41 +62,46 @@ public class MarginService {
 
     public record GridResult(List<MarginLine> data, ViewFlags view, long rowsTotal, int rowsReturned, boolean limited) {}
 
+    /** TEST_DATA_SPEC + QA_ROLE_PRESETS: dev_admin, dev_manager, dev_manager_chief, dev_economist. */
     public List<LookupItem> getUsers(String filter, boolean haveAll) {
         return filterLookup(List.of(
-            new LookupItem("1", "Иванов И.И."),
-            new LookupItem("2", "Петров П.П."),
-            new LookupItem("3", "Сидоров С.С.")
+            new LookupItem("1001", "dev_admin (DEV)"),
+            new LookupItem("1002", "dev_manager (DEV)"),
+            new LookupItem("1003", "dev_manager_chief (DEV)"),
+            new LookupItem("1004", "dev_economist (DEV)")
         ), filter, haveAll);
     }
 
+    /** TEST_DATA_SPEC: 2–3 departments with (DEV). */
     public List<LookupItem> getDepartments(boolean haveAll) {
         return filterLookup(List.of(
-            new LookupItem("1", "Продажи"),
-            new LookupItem("2", "Закупки"),
-            new LookupItem("3", "Логистика")
+            new LookupItem("2001", "Отдел продаж (DEV)"),
+            new LookupItem("2002", "Экономический отдел (DEV)")
         ), null, haveAll);
     }
 
+    /** TEST_DATA_SPEC: contractors with (DEV). */
     public List<LookupItem> getContractors(String filter, boolean haveAll) {
         return filterLookup(List.of(
-            new LookupItem("1", "ООО Пример"),
-            new LookupItem("2", "ИП Иванов"),
-            new LookupItem("3", "ЗАО Тест")
+            new LookupItem("5001", "ООО Контрагент-A (DEV)"),
+            new LookupItem("5002", "ООО Контрагент-B (DEV)"),
+            new LookupItem("5003", "ООО ТестКонтрагент-1 (DEV)")
         ), filter, haveAll);
     }
 
+    /** TEST_DATA_SPEC: stuff categories (DEV). */
     public List<LookupItem> getStuffCategories(String filter, boolean haveAll) {
         return filterLookup(List.of(
-            new LookupItem("1", "Категория 1"),
-            new LookupItem("2", "Категория 2")
+            new LookupItem("4001", "Категория-A (DEV)"),
+            new LookupItem("4002", "Категория-B (DEV)")
         ), filter, haveAll);
     }
 
+    /** TEST_DATA_SPEC: routes (DEV). */
     public List<LookupItem> getRoutes(boolean haveAll) {
         return filterLookup(List.of(
-            new LookupItem("1", "Маршрут 1"),
-            new LookupItem("2", "Маршрут 2")
+            new LookupItem("3001", "Маршрут Минск–РБ (DEV)"),
+            new LookupItem("3002", "Маршрут Минск–EU (DEV)")
         ), null, haveAll);
     }
 

@@ -3,87 +3,77 @@ package com.dcl.modern.margin.infrastructure;
 import com.dcl.modern.margin.domain.MarginLine;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Deterministic fake data for Margin grid (CONTRACTS.md shape).
- * Legacy: MarginAction.generate + DAO; this phase: in-memory seed for parity UI/API.
+ * Deterministic test data for Margin grid per TEST_DATA_SPEC.md and CONTRACTS.md.
+ * 35 rows: onlyTotal, itog_*, get_not_block, view_* markers; pagination (e.g. pageSize=25), sorting.
+ * No random; fixed IDs, dates in Jan 2024, names with (DEV).
  */
 public final class MarginFakeDataProvider {
 
     private static final DateTimeFormatter DD_MM_YYYY = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    private static final String[] CONTRACTORS = { "ООО Пример", "ИП Иванов", "ЗАО Тест", "ООО Контракт", "ПАО Снаб" };
-    private static final String[] COUNTRIES = { "BY", "RU", "PL", "LT", "UA" };
-    private static final String[] CURRENCIES = { "EUR", "USD", "BYN" };
-    private static final String[] PRODUCTS = { "Товар A", "Товар B", "Товар C", "Продукт 1", "Продукт 2" };
-    private static final String[] USERS = { "Иванов И.И.", "Петров П.П.", "Сидоров С.С." };
-    private static final String[] DEPTS = { "Продажи", "Закупки", "Логистика" };
+    private static final int ROW_COUNT = 35;
 
-    private final AtomicInteger seq = new AtomicInteger(0);
-
-    public List<MarginLine> generate(int count) {
-        List<MarginLine> list = new ArrayList<>(count);
-        LocalDate base = LocalDate.of(2024, 1, 1);
-        for (int i = 0; i < count; i++) {
-            int n = seq.incrementAndGet();
-            int cIdx = Math.abs(n) % CONTRACTORS.length;
-            int coIdx = Math.abs(n * 7) % COUNTRIES.length;
-            int curIdx = Math.abs(n * 11) % CURRENCIES.length;
-            int pIdx = Math.abs(n * 13) % PRODUCTS.length;
-            int uIdx = Math.abs(n * 17) % USERS.length;
-            int dIdx = Math.abs(n * 19) % DEPTS.length;
-            LocalDate d1 = base.plusDays(n % 200);
-            LocalDate d2 = d1.plusDays(5 + (n % 10));
-            LocalDate d3 = d2.plusDays(3 + (n % 5));
-            LocalDate d4 = d3.plusDays(2 + (n % 7));
-            double summ = 500 + (n % 5000);
-            double marginVal = summ * (0.05 + (n % 20) / 100.0);
-            double zak = summ - marginVal;
-            double koeff = summ / Math.max(zak, 1);
-            boolean itog = (i + 1) % 50 == 0;
-            String spcGroup = itog ? "Итого" : "";
-            boolean haveUnblocked = n % 7 == 0;
-
-            list.add(new MarginLine(
-                CONTRACTORS[cIdx],
-                COUNTRIES[coIdx],
-                "CN-" + String.format("%03d", (n % 999) + 1),
-                d1.format(DD_MM_YYYY),
-                "SPC-" + String.format("%02d", (n % 99) + 1),
-                d2.format(DD_MM_YYYY),
-                formatNum(summ),
-                CURRENCIES[curIdx],
-                PRODUCTS[pIdx],
-                "SHP-" + (100 + n % 900),
-                d3.format(DD_MM_YYYY),
-                d4.format(DD_MM_YYYY),
-                formatNum(summ),
-                formatNum(summ * 1.05),
-                formatNum(20 + n % 80),
-                formatNum(10 + n % 40),
-                formatNum(5 + n % 25),
-                formatNum(15 + n % 35),
-                formatNum(10 + n % 20),
-                formatNum(1 + (n % 10) / 2.0),
-                formatNum(5 + n % 15),
-                formatNum(n % 50),
-                formatNum(summ),
-                formatNum(zak),
-                formatNum(marginVal),
-                formatNum(koeff),
-                USERS[uIdx],
-                DEPTS[dIdx],
-                itog,
-                spcGroup,
-                haveUnblocked
-            ));
-        }
-        return list;
+    private static String fmt(double v) {
+        return String.format("%,.2f", v).replace(',', ' ');
     }
 
-    private static String formatNum(double v) {
-        return String.format("%,.2f", v).replace(',', ' ');
+    /** Deterministic dataset: same order every time. */
+    public static List<MarginLine> buildDeterministicRows() {
+        String[] contractors = { "ООО Контрагент-A (DEV)", "ООО Контрагент-B (DEV)", "ООО ТестКонтрагент-1 (DEV)" };
+        String[] users = { "dev_admin", "dev_manager", "dev_economist (DEV)" };
+        String[] depts = { "Отдел продаж (DEV)", "Экономический отдел (DEV)" };
+        String[] products = { "Категория-A (DEV)", "Категория-B (DEV)" };
+        LocalDate base = LocalDate.of(2024, 1, 1);
+
+        return java.util.stream.IntStream.range(0, ROW_COUNT).mapToObj(i -> {
+            int n = i + 1;
+            boolean itogLine = (n == 10 || n == 20 || n == 30);
+            String spcGroup = (n % 5 == 0 && n % 10 != 0) ? "Группа доставки" : (itogLine ? "Итого" : "");
+            boolean haveUnblocked = (n % 4 == 0 || n % 7 == 0);
+            double summ = 1000 + n * 100;
+            double marginVal = summ * 0.12;
+            double zak = summ - marginVal;
+            double koeff = summ / Math.max(zak, 1);
+
+            String montageTime = (n % 3 == 0) ? "" : fmt(1 + (n % 10) / 2.0);
+            String montageCost = (n % 5 == 1) ? "" : fmt(5 + n % 15);
+            String updateSum = (n % 4 == 2) ? "0" : fmt(n % 50);
+
+            return new MarginLine(
+                contractors[i % contractors.length],
+                "BY",
+                "CN-" + String.format("%03d", n),
+                base.plusDays(n % 28).format(DD_MM_YYYY),
+                "SPC-" + String.format("%02d", (n % 20) + 1),
+                base.plusDays(5 + n % 20).format(DD_MM_YYYY),
+                fmt(summ),
+                "EUR",
+                products[i % products.length],
+                "SHP-" + (100 + n),
+                base.plusDays(10 + n % 15).format(DD_MM_YYYY),
+                base.plusDays(12 + n % 12).format(DD_MM_YYYY),
+                fmt(summ),
+                fmt(summ * 1.05),
+                fmt(20 + n % 80),
+                fmt(10 + n % 40),
+                fmt(5 + n % 25),
+                fmt(15 + n % 35),
+                fmt(10 + n % 20),
+                montageTime,
+                montageCost,
+                updateSum,
+                fmt(summ),
+                fmt(zak),
+                fmt(marginVal),
+                fmt(koeff),
+                users[i % users.length],
+                depts[i % depts.length],
+                itogLine,
+                spcGroup,
+                haveUnblocked
+            );
+        }).toList();
     }
 }

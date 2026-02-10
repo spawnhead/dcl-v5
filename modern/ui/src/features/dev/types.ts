@@ -1,27 +1,30 @@
+/** DEV_DASHBOARD_SPEC: /api/dev/status contract */
 export interface DevStatusResponse {
-  appName: string;
-  version: string;
-  activeProfiles: string[];
+  profile: string;
   javaVersion: string;
+  serverTime: string;
   db: {
     ok: boolean;
+    product?: string;
+    version?: string;
     url?: string;
-    now?: string;
     error?: string;
   };
   flyway: {
     ok: boolean;
-    migrationsAppliedCount?: number;
-    currentVersion?: string;
+    appliedMigrationsCount?: number;
     error?: string;
   };
   dataMode: 'FAKE_SEEDED' | 'REAL' | 'EMPTY';
-  authMode: string;
+  authMode?: string;
 }
 
+/** DEV_BYPASS: /api/me contract */
 export interface CurrentUserResponse {
   id: string;
-  username: string;
-  displayName: string;
+  name: string;
   roles: string[];
+  department: { id: string; name: string };
+  chiefDepartment: boolean;
+  authMode: string;
 }

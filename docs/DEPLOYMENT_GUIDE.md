@@ -50,18 +50,18 @@
 
 - **Включение:** `./mvnw spring-boot:run -Dspring-boot.run.profiles=dev`
 - **Эндпоинты (только при активном профиле dev):**
-  - `GET /api/dev/status` — статус окружения (appName, version, javaVersion, db, flyway, dataMode, authMode)
-  - `GET /api/me` — текущий пользователь (id, username, displayName, roles)
+  - `GET /api/dev/status` — статус (profile, javaVersion, serverTime, db, flyway, dataMode, authMode). Контракт: docs/dev/DEV_DASHBOARD_SPEC.md.
+  - `GET /api/me` — текущий пользователь (id, name, roles, department, chiefDepartment, authMode). Контракт: docs/security/DEV_BYPASS.md.
 - **Заголовки dev-bypass (только в профиле dev):**
   - `X-Dev-User` — логин (по умолчанию `dev`)
-  - `X-Dev-Roles` — роли через запятую (по умолчанию `ADMIN,REPORTS,MARGIN`)
-  Если заголовков нет, используется пользователь `dev` с ролями по умолчанию.
-- **dataMode** (в ответе `/api/dev/status`):
-  - `FAKE_SEEDED` — применена dev-only миграция с маркером (таблица `dev_seed_marker`), данные для демо загружены
-  - `EMPTY` — БД недоступна или ключевые таблицы пусты
-  - `REAL` — БД доступна, маркер dev seed отсутствует (реальные/мигрированные данные)
-- **authMode:** `DEV_BYPASS` в профиле dev, иначе `TBD`.
-- Страница **Development** в UI: http://localhost:5173/dev (меню «Development»). Показывает статус и текущего пользователя.
+  - `X-Dev-Roles` — роли через запятую (по умолчанию `admin`)
+  - `X-Dev-Department-Id`, `X-Dev-Department-Name`, `X-Dev-Chief-Department` (0|1) — опционально для Margin-сценариев
+- **dataMode** (в ответе `/api/dev/status`), источник истины: docs/db/SEED_DATA_PLAN.md:
+  - `FAKE_SEEDED` — в таблице `dcl_setting` есть запись `STN_NAME='DEV_SEED_VERSION'` и `STN_VALUE` начинается с `margin-`
+  - `REAL` — маркера нет, но есть доменные данные
+  - `EMPTY` — маркера нет и ключевые таблицы пусты
+- **authMode:** `DEV_BYPASS` в профиле dev; при старте с dev в логе: `DEV_BYPASS_ENABLED=true`.
+- Страница **Development**: http://localhost:5173/dev (меню «Development»). Блоки по DEV_DASHBOARD_SPEC, кнопка «Повторить».
 
 ## Config changes made during dev run
 

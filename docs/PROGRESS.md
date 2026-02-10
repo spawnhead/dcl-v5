@@ -1,6 +1,8 @@
 # Progress
 
 ## Done
+- 2026-02-10: **N2 spec pack ready (Orders list).** Agent-Plan: chosen N2 = Orders (Заказы); docs/screens/orders/ created: SNAPSHOT.md, CONTRACTS.md, ACCEPTANCE.md, BEHAVIOR_MATRIX.md, payloads/README.md. Traceability to OrdersAction, OrdersForm, Orders.jsp, select-orders → DCL_ORDER_FILTER, editCloneChecker, blockChecker, style-checker. CONTINUITY Key decisions updated. Verified: payloads/list-request.json, list-response.json (example shapes); CONTRACTS "How to verify" for contract/spec UNCONFIRMED.
+- 2026-02-10: **Margin testability pack ready.** Agent-Plan: CONTRACTS.md — UNCONFIRMED сведены к минимуму, добавлен раздел "How to verify" (dep_id, export, serverList filter, initial empty grid). Созданы TEST_DATA_SPEC.md (детерминированные seed: справочники, 25–40 строк margin data, маячки для onlyTotal/itog_*/get_not_block/view_*/пагинация), QA_ROLE_PRESETS.md (admin, manager, manager_chief, economist — X-Dev-* заголовки). SEED_DATA_PLAN.md — секция "Margin parity dataset" со ссылкой на TEST_DATA_SPEC. QA может проверять Margin по ACCEPTANCE/BEHAVIOR_MATRIX без угадываний.
 - 2026-02-10: Подготовлен пакет спецификаций Agent-Plan для Margin-first dev цикла: role model, dev bypass (`X-Dev-User`/`X-Dev-Roles` + `/api/me`), seed/dataMode plan, и `/dev` dashboard contract.
 - 2026-02-09: Parsed Firebird DDL and documented schema inventory + Firebird→Postgres mapping.
 - 2026-02-09: Scanned legacy Struts config, web.xml, and JSPs to build code map and feature inventory.
@@ -21,6 +23,12 @@
 
 ## Now
 - (none)
+
+## Done (margin-parity 2026-02-10)
+- Margin parity: детерминированный dataset 35 строк (TEST_DATA_SPEC), пустая сессия при первой загрузке и после Сбросить всё; блокеры view_*, onlyTotal, cleanAll+get_not_block исправлены; lookups по TEST_DATA_SPEC/QA_ROLE_PRESETS. logs/dev-margin-parity-20260210-1200.log — VERIFIED.
+
+## Done (dev-specs-align 2026-02-10)
+- Dev infra aligned to ROLE_MODEL, DEV_BYPASS, SEED_DATA_PLAN, DEV_DASHBOARD_SPEC: dataMode по DCL_SETTING (DEV_SEED_VERSION); V11__init_dcl_setting, R__dev_seed_marker; X-Dev-Department-*; /api/me (name, department, chiefDepartment, authMode); DevStatusResponse (profile, serverTime, db.product/version); UI /dev блоки + Повторить; MarginController currentUser() hook. logs/dev-align-dev-specs-20260210-1120.log — VERIFIED.
 
 ## Done (dev-dashboard 2026-02-10)
 - Dev Dashboard + Dev Identity + Data Mode: backend GET /api/dev/status, GET /api/me; CurrentUserProvider + X-Dev-User/X-Dev-Roles (@Profile("dev")); Flyway db/dev V10__dev_seed.sql, dataMode FAKE_SEEDED; UI /dev, DevDashboardPage, menu Development; DEPLOYMENT_GUIDE updated. Verification: logs/dev-dev-dashboard-20260210-1019.log — VERIFIED.

@@ -12,6 +12,6 @@ public class DevCurrentUserProvider implements CurrentUserProvider {
     @Override
     public CurrentUser getCurrentUser() {
         CurrentUser u = DevCurrentUserHolder.get();
-        return u != null ? u : new CurrentUser("0", "anonymous", "Anonymous", java.util.List.of("USER"));
+        return u != null ? u : new CurrentUser("0", "anonymous", "Anonymous", java.util.List.of("USER"), "-1", "Все", false);
     }
 }

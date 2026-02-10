@@ -115,6 +115,25 @@
 
 ---
 
+## 5.1) Margin parity dataset
+
+Для проверки экрана «Отчеты → Маржа» по ACCEPTANCE и BEHAVIOR_MATRIX используется детерминированный набор данных, описанный в:
+
+- **`docs/screens/margin/TEST_DATA_SPEC.md`**
+
+Минимальные требования к seed для Margin:
+
+1. **Справочники (lookups):** users (4–5), departments (2–3), contractors (3–5), routes (2–3), stuff categories (2–3) с фиксированными ID и именами-маячками (например суффикс `(DEV)`).
+2. **Роли:** минимум один пользователь admin, один manager, один manager_chief (usr_chief_dep=1), один economist для сценариев из `docs/screens/margin/QA_ROLE_PRESETS.md`.
+3. **Margin data:** после Generate в диапазоне дат seed (например 2024-01-01 … 2024-01-31) должно возвращаться **25–40 строк**, с:
+   - итоговыми строками (itogLine) и детализацией для onlyTotal / itog_by_spec / itog_by_user / itog_by_product;
+   - строками с haveUnblockedPrc и spc_group_delivery для get_not_block и стилей строк;
+   - разными значениями в колонках view_* (0, null, непусто), чтобы переключение видимости колонок было заметно.
+
+Если доменная цепочка `dcl_margin` ещё не перенесена в Postgres, допускается временный источник данных (см. TEST_DATA_SPEC.md секция C); решение помечать как временное.
+
+---
+
 ## 6) UNCONFIRMED и быстрые проверки
 
 1. **UNCONFIRMED:** обязательность некоторых join-звеньев для `dcl_margin` может отличаться в edge cases (например, влияние `dcl_prc_list_produce.dep_id` и `ctc_block`).

@@ -1,11 +1,15 @@
 package com.dcl.modern.margin.api;
 
+import com.dcl.modern.dev.CurrentUser;
+import com.dcl.modern.dev.CurrentUserProvider;
 import com.dcl.modern.margin.application.MarginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * REST API for Margin report (Отчеты → Маржа).
  * Legacy: MarginAction (generate, cleanAll, generateExcel), MarginDevDataAction (grid), *ListAction (lookups).
  * CONTRACTS: docs/screens/margin/CONTRACTS.md.
+ * ROLE_MODEL: optional hook to current user/roles (dev bypass or future auth); use for access/manager read-only when implemented.
  */
 @RestController
 @RequestMapping("/api/margin")
@@ -25,8 +30,16 @@ public class MarginController {
 
     private final MarginService service;
 
+    @Autowired(required = false)
+    private CurrentUserProvider currentUserProvider;
+
     public MarginController(MarginService service) {
         this.service = service;
+    }
+
+    /** Current user when available (dev profile or future auth). For role-based behavior per ROLE_MODEL. */
+    protected Optional<CurrentUser> currentUser() {
+        return currentUserProvider != null ? Optional.of(currentUserProvider.getCurrentUser()) : Optional.empty();
     }
 
     @Operation(summary = "Get grid data", description = "CONTRACTS Margin Grid Data; limit 50|100|200|500|1000, default 200")
