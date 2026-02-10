@@ -7,6 +7,7 @@ Constraints/Assumptions:
 - Start each step by reading/updating this file.
 
 Key decisions:
+- N3 selected for current Agent-Plan cycle: Contracts list screen spec pack.
 - First vertical slice domain: Country reference data (`DCL_COUNTRY`).
 - Build tool: Maven.
 
@@ -15,6 +16,7 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-10: Agent-Plan prepared full N3 Contracts spec pack in `docs/screens/contracts/` (SNAPSHOT/CONTRACTS/ACCEPTANCE/BEHAVIOR_MATRIX/TEST_DATA_SPEC/QA_ROLE_PRESETS + payloads + screenshots README), with BLOCKED HAR capture notes and HOW TO VERIFY steps.
 - 2026-02-10: Agent-Plan prepared spec package for Margin-first dev cycle: `docs/security/ROLE_MODEL.md`, `docs/security/DEV_BYPASS.md`, `docs/db/SEED_DATA_PLAN.md`, `docs/dev/DEV_DASHBOARD_SPEC.md`; defined role model, dev bypass headers + `/api/me`, seed marker/dataMode, and `/dev` dashboard contract.
 - 2026-02-10: Done - Plan validation for Orders pack complete (`docs/screens/orders/*`): contracts/acceptance/matrix tightened to legacy 1:1, top-5 parity risks documented with verification steps, payload samples expanded for filters/sort/pagination/reload.
 - Completed Phase 1 QC (procedures, PK/UK, feature traceability).
@@ -52,6 +54,7 @@ Done (dev-debug 2026-02-09):
 - Устранены блокеры: MarginService — добавлен import MarginExcelExport; MarginIntegrationTest — исправлена скобка в jsonPath; backend перезапущен с JDK 21. API margin отвечает 2xx; лог logs/dev-debug-20260209-1807.log — VERIFIED.
 
 Next:
+- Dev реализует Contracts 1:1 по спекам (`docs/screens/contracts/*`).
 - Dev implement Orders parity.
 - Agent-Dev implements `CurrentUser` + dev-only header bypass + `/api/me` per `docs/security/DEV_BYPASS.md`.
 - Agent-Dev implements dev seed Flyway repeatables (`db/dev`) + `/api/dev/status` dataMode according to `docs/db/SEED_DATA_PLAN.md`.
@@ -70,6 +73,22 @@ Open questions (UNCONFIRMED if needed):
 
 
 Working set (files/ids/commands):
+- docs/screens/contracts/payloads/network.har.BLOCKED.md
+- docs/screens/contracts/payloads/grid-fetch.response.json
+- docs/screens/contracts/payloads/grid-fetch.request.json
+- docs/screens/contracts/payloads/lookups.response.json
+- docs/screens/contracts/payloads/lookups.request.json
+- docs/screens/contracts/payloads/initial-load.response.json
+- docs/screens/contracts/payloads/initial-load.request.json
+- docs/screens/contracts/payloads/README.md
+- docs/screens/contracts/SNAPSHOT.md
+- docs/screens/contracts/CONTRACTS.md
+- docs/screens/contracts/ACCEPTANCE.md
+- docs/screens/contracts/BEHAVIOR_MATRIX.md
+- docs/screens/contracts/TEST_DATA_SPEC.md
+- docs/screens/contracts/QA_ROLE_PRESETS.md
+- docs/screens/contracts/payloads/*.json
+- docs/screens/contracts/screenshots/README.md
 - docs/security/ROLE_MODEL.md
 - docs/security/DEV_BYPASS.md
 - docs/db/SEED_DATA_PLAN.md

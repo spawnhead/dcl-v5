@@ -1,6 +1,7 @@
 # Progress
 
 ## Done
+- 2026-02-10: N3 Contracts spec pack ready: SNAPSHOT/CONTRACTS/ACCEPTANCE/BEHAVIOR_MATRIX/TEST_DATA_SPEC/QA_ROLE_PRESETS/payloads (`docs/screens/contracts/*`).
 - 2026-02-10: Подготовлен пакет спецификаций Agent-Plan для Margin-first dev цикла: role model, dev bypass (`X-Dev-User`/`X-Dev-Roles` + `/api/me`), seed/dataMode plan, и `/dev` dashboard contract.
 - 2026-02-09: Parsed Firebird DDL and documented schema inventory + Firebird→Postgres mapping.
 - 2026-02-09: Scanned legacy Struts config, web.xml, and JSPs to build code map and feature inventory.
