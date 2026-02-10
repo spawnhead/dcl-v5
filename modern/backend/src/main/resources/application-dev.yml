@@ -1,0 +1,4 @@
+# Dev profile: extra Flyway location for dev-only seeds
+spring:
+  flyway:
+    locations: classpath:db/migration,classpath:db/dev

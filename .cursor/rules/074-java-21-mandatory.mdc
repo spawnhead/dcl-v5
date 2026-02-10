@@ -1,0 +1,62 @@
+---
+description: Backend требует строго JDK 21. Перед любым build/test/run агент обязан проверить java -version и JAVA_HOME. Если обнаружен Java 8/11/17 - это BLOCKED, нельзя продолжать.
+globs: ["modern/backend/**", "ops/**", "CONTINUITY.md", ".cursor/rules/**"]
+alwaysApply: true
+---
+# Java 21 - Mandatory Environment Gate (No Java 8)
+
+## Инвариант проекта
+Backend собирается и запускается ТОЛЬКО на **JDK 21**.
+Любая другая Java (8/11/17) = FAIL/BLOCKED.
+
+## Источник JDK 21 в этой системе (Windows + Git Bash)
+- JAVA executable (PATH):
+  - `C:\Program Files\Eclipse Adoptium\jdk-21.0.6.7-hotspot\bin\java`
+- В Git Bash:
+  - `/c/Program Files/Eclipse Adoptium/jdk-21.0.6.7-hotspot/bin/java`
+- JAVA_HOME должен указывать на:
+  - `C:\Program Files\Eclipse Adoptium\jdk-21.0.6.7-hotspot`
+
+## Обязательная проверка перед ЛЮБЫМ backend build/test/run
+В bash выполнить и зафиксировать в логе:
+- `which java`
+- `java -version`
+- `echo $JAVA_HOME`
+
+PASS критерий:
+- `java -version` показывает 21.x
+- `which java` указывает на путь Adoptium JDK 21
+- `JAVA_HOME` указывает на каталог JDK 21
+
+## Если FAIL (например, Java 8)
+1) Немедленно остановиться и пометить задачу как BLOCKED (нельзя продолжать).
+2) Диагностика (bash-only):
+- `which -a java || true`
+- `type -a java || true`
+- `echo $PATH`
+3) Исправление окружения (bash-only, временно для сессии):
+- `export JAVA_HOME="/c/Program Files/Eclipse Adoptium/jdk-21.0.6.7-hotspot"`
+- `export PATH="$JAVA_HOME/bin:$PATH"`
+4) Повторить проверки PASS.
+
+## Запрещено
+- Пытаться запускать `./mvnw` или `spring-boot:run` без PASS-проверки JDK 21.
+- Просить пользователя разбираться с Java вместо выполнения диагностики.
+- Делать выводы "по коду" вместо динамического прогона, если backend не стартовал.
+
+## Логи (обязательно)
+После environment gate создать:
+- `logs/dev-java-gate-YYYYMMDD-HHMM.log`
+
+Лог должен содержать:
+- which java
+- java -version
+- JAVA_HOME
+- итог: PASS/BLOCKED
+- если BLOCKED: какая причина и как исправлено (что добавлено в PATH/JAVA_HOME)
+
+## Условие Done для backend задач
+Backend-задачи не могут быть Done, пока:
+- Java gate = PASS
+- `./mvnw test` выполнен
+- `./mvnw spring-boot:run` поднял backend на :8080
