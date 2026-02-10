@@ -7,6 +7,7 @@ Constraints/Assumptions:
 - Start each step by reading/updating this file.
 
 Key decisions:
+- N3 selected for current Agent-Plan cycle: Contracts list screen spec pack.
 - First vertical slice domain: Country reference data (`DCL_COUNTRY`).
 - Build tool: Maven.
 - **N2 screen (after Margin):** Orders list (Заказы — список заказов). Justification: maximum complexity among list screens (many filters, dependent lookups, role-based edit/block, grid from `dcl_order_filter`), high business value; full traceability in src (OrdersAction, OrdersForm, Orders.jsp, select-orders SQL, OrderDAO, validation.xml, xml-permissions). Alternative candidates: Contracts list, Shippings list, Payments list, Produce Cost report.
@@ -18,6 +19,7 @@ State:
 Done:
 - 2026-02-10: Orders N2 parity gaps fixed: contractor_for_id filter (provider+service+tests), order_by=ord_number asc/desc (provider+tests), UI sort dropdown; browser-verified. logs/dev-orders-parity-fix-20260210-1532.log — VERIFIED.
 - 2026-02-10: Agent-Plan N2 spec pack (Orders list): docs/screens/orders/ created — SNAPSHOT.md, CONTRACTS.md, ACCEPTANCE.md, BEHAVIOR_MATRIX.md, payloads/README.md; traceability to OrdersAction, OrdersForm, Orders.jsp, select-orders → DCL_ORDER_FILTER; UNCONFIRMED + "How to verify" in CONTRACTS; payloads/list-request.json, list-response.json (example shapes). PROGRESS.md updated. Agent-Plan verification pass: spec pack complete for 1:1 implementation.
+- 2026-02-10: Agent-Plan prepared full N3 Contracts spec pack in `docs/screens/contracts/` (SNAPSHOT/CONTRACTS/ACCEPTANCE/BEHAVIOR_MATRIX/TEST_DATA_SPEC/QA_ROLE_PRESETS + payloads + screenshots README), with BLOCKED HAR capture notes and HOW TO VERIFY steps.
 - 2026-02-10: Agent-Plan prepared spec package for Margin-first dev cycle: `docs/security/ROLE_MODEL.md`, `docs/security/DEV_BYPASS.md`, `docs/db/SEED_DATA_PLAN.md`, `docs/dev/DEV_DASHBOARD_SPEC.md`; defined role model, dev bypass headers + `/api/me`, seed marker/dataMode, and `/dev` dashboard contract.
 - 2026-02-10: Done - Plan validation for Orders pack complete (`docs/screens/orders/*`): contracts/acceptance/matrix tightened to legacy 1:1, top-5 parity risks documented with verification steps, payload samples expanded for filters/sort/pagination/reload.
 - Completed Phase 1 QC (procedures, PK/UK, feature traceability).
@@ -61,6 +63,8 @@ Done (dev-debug 2026-02-09):
 
 Next:
 - Agent-Dev implements N2 (Orders list) 1:1 per docs/screens/orders/ (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX).
+- Dev реализует Contracts 1:1 по спекам (`docs/screens/contracts/*`).
+- Dev implement Orders parity.
 - Agent-Dev implements `CurrentUser` + dev-only header bypass + `/api/me` per `docs/security/DEV_BYPASS.md`.
 - Agent-Dev implements dev seed Flyway repeatables (`db/dev`) + `/api/dev/status` dataMode according to `docs/db/SEED_DATA_PLAN.md`.
 - Agent-Dev builds `/dev` dashboard per `docs/dev/DEV_DASHBOARD_SPEC.md` and verifies Margin scenarios for admin/manager/economist roles (see `docs/screens/margin/QA_ROLE_PRESETS.md`).
@@ -79,6 +83,7 @@ Open questions (UNCONFIRMED if needed):
 
 Working set (files/ids/commands):
 - docs/screens/orders/*, modern/backend/**/orders/**, modern/ui/src/features/orders/**
+- docs/screens/contracts/* (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX, TEST_DATA_SPEC, QA_ROLE_PRESETS, payloads, screenshots/README)
 - docs/security/ROLE_MODEL.md, docs/security/DEV_BYPASS.md, docs/db/SEED_DATA_PLAN.md, docs/dev/DEV_DASHBOARD_SPEC.md
 - docs/screens/margin/CONTRACTS.md, docs/screens/margin/ACCEPTANCE.md, docs/screens/margin/BEHAVIOR_MATRIX.md
 - docs/screens/margin/TEST_DATA_SPEC.md, docs/screens/margin/QA_ROLE_PRESETS.md
