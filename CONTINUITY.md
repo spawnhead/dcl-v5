@@ -15,6 +15,7 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-10: Agent-Plan prepared spec package for Margin-first dev cycle: `docs/security/ROLE_MODEL.md`, `docs/security/DEV_BYPASS.md`, `docs/db/SEED_DATA_PLAN.md`, `docs/dev/DEV_DASHBOARD_SPEC.md`; defined role model, dev bypass headers + `/api/me`, seed marker/dataMode, and `/dev` dashboard contract.
 - Completed Phase 1 QC (procedures, PK/UK, feature traceability).
 - Scaffolded modern backend with Country aggregate, endpoints, Flyway migration, and Testcontainers integration test.
 - Added Postgres docker-compose and deployment guide.
@@ -50,6 +51,10 @@ Done (dev-debug 2026-02-09):
 - Устранены блокеры: MarginService — добавлен import MarginExcelExport; MarginIntegrationTest — исправлена скобка в jsonPath; backend перезапущен с JDK 21. API margin отвечает 2xx; лог logs/dev-debug-20260209-1807.log — VERIFIED.
 
 Next:
+- Agent-Dev implements `CurrentUser` + dev-only header bypass + `/api/me` per `docs/security/DEV_BYPASS.md`.
+- Agent-Dev implements dev seed Flyway repeatables (`db/dev`) + `/api/dev/status` dataMode according to `docs/db/SEED_DATA_PLAN.md`.
+- Agent-Dev builds `/dev` dashboard per `docs/dev/DEV_DASHBOARD_SPEC.md` and verifies Margin scenarios for admin/manager/economist roles.
+- Agent-Dev implements margin module + UI 1:1 using these specs.
 - Implement missing schema objects via Flyway migrations (as per docs/db/PARITY_REPORT.md blockers).
 - Re-run QA (QA_PARITY_REPORT) for Margin screen.
 - Replace fake margin data with real DB queries + preserve contracts.
@@ -57,10 +62,19 @@ Next:
 - Deep-dive into DAO/service layers for business rules and traceability.
 
 Open questions (UNCONFIRMED if needed):
-- Are any procedures critical for Country domain beyond ID assignment?
-- Margin screen: live HAR/screenshots missing; capture to confirm request payloads and HTML lookup responses.
+- Margin: confirm whether action-level permissions (`DCL_ACTION_ROLE`/`dcl_user_actions`) affect Generate/Excel behavior beyond URL role gating.
+- Margin: validate SQL-level row restrictions for manager vs admin/economist on identical filters (live DB check).
 
 Working set (files/ids/commands):
+- docs/security/ROLE_MODEL.md
+- docs/security/DEV_BYPASS.md
+- docs/db/SEED_DATA_PLAN.md
+- docs/dev/DEV_DASHBOARD_SPEC.md
+- docs/screens/margin/CONTRACTS.md
+- docs/screens/margin/ACCEPTANCE.md
+- docs/screens/margin/BEHAVIOR_MATRIX.md
+- docs/screens/margin/SNAPSHOT.md
+- docs/PROGRESS.md
 - docs/DEPLOYMENT_GUIDE.md, logs/dev-dev-dashboard-*.log
 - db/Lintera_dcl-5_schema.ddl
 - modern/backend/src/main/resources/db/migration/*.sql
