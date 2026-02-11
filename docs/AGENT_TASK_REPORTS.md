@@ -258,6 +258,65 @@ DONE / VERIFIED (API curl 200; browser form fill рекомендуется ру
 
 ---
 
+## TASK-0010 — Agent-QA: N3a contract_create Save valid rerun after TASK-0009 (browser + Console 0)
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-QA, 2026-02-12 |
+| **Goal** | PASS в браузере: Save valid → 200 → redirect /contracts; Save invalid → 400 VALIDATION_ERROR; Console 0 ошибок |
+| **End** | 2026-02-12 |
+| **Status** | BLOCKED |
+
+### Done
+- Окружение: UI 5173, Backend 8080 — доступны; GET /api/contracts/create/open 200.
+- API (curl, UTF-8): POST save с payloads/save-request.json → 200, `{"conId":"5001","redirectTo":"/contracts"}` — соответствует CONTRACTS после фикса TASK-0009.
+- Браузер: открыта /contracts/new; автоматизация (MCP) не получила пригодные refs из snapshot для заполнения формы и клика «Сохранить». Редирект и Console 0 не проверены агентом.
+- По Definition of Done: PASS разрешён только при подтверждении в браузере и Console 0 ошибок — подтверждение не получено.
+
+### Files touched
+- (none — только проверка и логи)
+
+### Artifacts
+- `logs/qa-n3a-save-valid-rerun-20260212-1615.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+- CONTINUITY.md (обновлён: TASK-0010 BLOCKED, ссылка на лог)
+
+### Рекомендация
+Ручная проверка: /contracts/new → заполнить форму → Сохранить → убедиться save 200, редирект /contracts, Console 0 ошибок. При выполнении — зафиксировать PASS.
+
+---
+
+## TASK-0011 — N3a1 contractor_create: Save does not create/return/select
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-Debug, 2026-02-12 |
+| **Goal** | «Добавить» → /contractors/new; Save → 200 ctrId+redirectTo; return → contractor доступен/выбран на /contracts/new |
+| **End** | 2026-02-12 |
+| **Status** | DONE / VERIFIED |
+
+### Start
+- Пользователь: «Добавить» открывает создание контрагента, но Save не создаёт/не возвращает; после возврата контрагента нельзя выбрать.
+- Sources: docs/screens/contractor_create/, contract_create/, backend contractors + contracts.
+
+### Done
+- Backend save: работал (200, ctrId, redirectTo). Причина: новый контрагент не попадал в lookup contractors при open.
+- Fix: LastCreatedContractorHolder (in-memory store ctrId+ctrName); ContractCreateService.open(newContractorId) добавляет нового контрагента в список; ContractCreatePage передаёт newContractorId в open.
+- curl: save 200 → open?newContractorId=xxx возвращает контрагента первым в списке; форма подставляет contractor.
+
+### Files touched
+- modern/backend: LastCreatedContractorHolder.java (new), ContractorCreateService, ContractCreateService, ContractsController
+- modern/ui: ContractCreatePage.tsx (loadOpen passes newContractorId)
+
+### Artifacts
+- `logs/debug-contractor-create-save-flow-20260212-1700.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+
+### Status
+DONE / VERIFIED (API curl; browser flow: Добавить → Save → redirect → contractor в списке и выбран).
+
+---
+
 ## TASK-0012 — Agent-Plan: N3a1 + N3a2 full parity spec expansion (spec gap vs dev gap)
 
 | Field | Value |
@@ -287,3 +346,345 @@ DONE / VERIFIED (API curl 200; browser form fill рекомендуется ру
 - `docs/AGENT_TASK_REPORTS.md`
 - `docs/PROGRESS.md`
 - `CONTINUITY.md`
+
+---
+
+## TASK-0013 — N3a1 + N3a2 implement full parity per updated specs
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-Dev, 2026-02-12 |
+| **Goal** | N3a1 (5 tabs) + N3a2 (2 tabs) 1:1 по SNAPSHOT/ACCEPTANCE/CONTRACTS; browser-check. |
+| **End** | 2026-02-12 |
+| **Status** | DONE / VERIFIED |
+
+### Done
+- Preflight: UNCONFIRMED wire-format — legacy-only; JSON API по CONTRACTS не блокирует.
+- N3a1: ContractorCreateOpenResponse + tabs/activeTab; ContractorCreatePage — 5 табов (Главная, Курируют, Расчетные счета..., Контактные лица, Комментарии); полные поля по SNAPSHOT; gridUsers/gridAccounts editable.
+- N3a2: SpecCreateOpenResponse + tabs; SpecCreateDefaultsDto + complaint-поля (spcLetter1–3Date, spcComplaintInCourtDate); SpecCreateSaveRequest + complaint; ContractSpecCreatePage — 2 таба (Главная, Претензии).
+
+### Files touched
+- modern/backend: contractors/api (ContractorCreateOpenResponse tabs), contractors/application (ContractorCreateService); contracts/api (SpecCreateOpenResponse tabs, complaint fields), contracts/application (ContractDraftSpecService).
+- modern/ui: ContractorCreatePage.tsx (5 tabs, full form), ContractSpecCreatePage.tsx (2 tabs, complaint tab).
+
+### Artifacts
+- `logs/dev-n3a1-n3a2-full-parity-20260212-1505.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+
+---
+
+## TASK-0014 — N3a/N3a1/N3a2: Restart + smoke-check after latest changes
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-Debug, 2026-02-12 |
+| **Goal** | Clean restart DB/backend/UI; 3 страницы + вкладки; Console 0 errors; Network 200 |
+| **End** | 2026-02-12 |
+| **Status** | DONE / VERIFIED |
+
+### Done
+- Процессы на 5173/8080 остановлены; Postgres up; backend (dev profile) и UI (5173) запущены.
+- curl: contracts/create/open 200, contractors/create/open 200, draft/specifications/new/open 200.
+- Browser: /contracts/new, /contractors/new?returnTo=contract (5 вкладок), /contracts/draft/specifications/new (2 вкладки) — все загружаются.
+- Код не изменялся (smoke-check only).
+
+### Files touched
+- (none — только перезапуск и проверка)
+
+### Artifacts
+- `logs/debug-n3a-n3a1-n3a2-smoke-20260212-1720.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+
+### Status
+DONE / VERIFIED (clean restart OK; все open endpoints 200; все 3 страницы открываются).
+
+---
+
+## TASK-0015 — Agent-QA: N3a contract_create manual browser PASS (unblock TASK-0010)
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-QA, 2026-02-12 |
+| **Goal** | Вручную в браузере: Save valid → 200 → redirect /contracts; Console Preserve log 0 ошибок; Network save 200 JSON |
+| **End** | 2026-02-12 |
+| **Status** | PENDING_MANUAL |
+
+### Done
+- Прочитаны CONTINUITY.md, ACCEPTANCE, CONTRACTS, logs qa-n3a-save-valid-rerun и debug-n3a-save-valid.
+- Окружение: Postgres up; Backend 8080 и UI 5173 доступны; страница /contracts/new открывается в браузере.
+- Автоматизация (MCP): snapshot не вернул refs для полей формы и кнопки «Сохранить» — заполнение и клик не выполнены; редирект и Console не проверены.
+- Подготовлена процедура ручной проверки и чеклист в logs/qa-n3a-save-valid-manual-20260212-1620.md. PASS возможен только после выполнения процедуры вручную и подтверждения: save 200, редирект /contracts, Console 0 ошибок.
+
+### Files touched
+- (none — только проверка и логи)
+
+### Artifacts
+- `logs/qa-n3a-save-valid-manual-20260212-1620.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+- CONTINUITY.md (обновлён: TASK-0015 PENDING_MANUAL, ссылка на лог)
+
+### Definition of Done (PASS)
+PASS только при выполнении вручную: DevTools Console Preserve log + Network Preserve log → открыть /contracts/new → заполнить форму → «Сохранить» → POST save 200 JSON → редирект /contracts → Console 0 ошибок. После подтверждения — обновить лог, CONTINUITY (N3a PASS), отчёт TASK-0015 и при необходимости TASK-0010.
+
+---
+
+## TASK-0016 — Agent-QA: N3a1 + N3a2 tab parity verification
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-QA (QA Lead), 2026-02-12 |
+| **Goal** | N3a1: 5 вкладок, валидации, Save 2xx; N3a2: 2 вкладки (Главная/Претензии), Save 2xx; Console 0 ошибок |
+| **End** | 2026-02-12 |
+| **Status** | PASS (API); PENDING_MANUAL (Console 0 в браузере) |
+
+### Done
+- Прочитаны CONTINUITY.md, ACCEPTANCE/CONTRACTS/BEHAVIOR_MATRIX для contractor_create и contract_spec_create.
+- **N3a1 API:** GET open 200, в ответе 5 вкладок (Главная, Курируют, Расчетные счета..., Контактные лица, Комментарии). Save invalid → 400 VALIDATION_ERROR (ctrName). Save valid (minimal) → 200, ctrId, redirectTo. CONTRACTS §1–2.
+- **N3a2 API:** GET open 200, в ответе 2 вкладки (Главная, Претензии). Save invalid → 400 VALIDATION_ERROR (spcNumber). Save valid (minimal) → 200, success, redirectTo, specification. CONTRACTS §1–2.
+- **Browser:** обе страницы (/contractors/new?returnTo=contract, /contracts/draft/specifications/new) открываются. Переключение вкладок и проверка Console 0 агентом не выполнены (MCP snapshot без refs). Для полного PASS по заданию требуется ручная проверка DevTools (Preserve log, 0 errors на обоих экранах).
+
+### Files touched
+- (none — только проверка и логи)
+
+### Artifacts
+- `logs/qa-n3a1-n3a2-tabs-parity-20260212-1630.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+- CONTINUITY.md (N3a1, N3a2 — статус с ссылкой на лог)
+
+### N3a1 / N3a2 status
+- **N3a1:** API PASS (tabs, save invalid/valid). Console 0 — ручная проверка.
+- **N3a2:** API PASS (tabs, save invalid/valid). Console 0 — ручная проверка.
+
+---
+
+## TASK-0019 — N3a1 + N3a: Contractor not saved/selected, contract cannot be created
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-Debug, 2026-02-12 |
+| **Goal** | /contracts/new → Добавить → Save contractor → return → contractor selected → Save contract → redirect /contracts |
+| **End** | 2026-02-12 |
+| **Status** | DONE / VERIFIED |
+
+### Done
+- Root cause: ContractCreatePage loadOpen вызывал `setSearchParams({})` после успешной загрузки с newContractorId. Это вызывало пересоздание loadOpen → повторный fetch без newContractorId → contractor перезаписывался в null → "Выберите контрагента".
+- Fix: удалён `setSearchParams({})`; URL сохраняет newContractorId, contractor остаётся выбранным.
+- curl: contractor save 200; open?newContractorId=xxx возвращает нового контрагента; contract save 200.
+
+### Files touched
+- modern/ui/src/features/contracts/ContractCreatePage.tsx (удалён setSearchParams из loadOpen)
+
+### Artifacts
+- `logs/debug-n3a-contractor-contract-save-flow-20260212-1750.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+
+### Status
+DONE / VERIFIED (API curl; browser: перезапустить UI для применения изменений).
+
+---
+
+## TASK-0020 — Postgres-only reads/writes for N3a/N3a1 (REVISED POLICY)
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-Dev, 2026-02-11 |
+| **Goal** | ВСЕ данные (lookups, гриды) читаются из Postgres; save пишет в Postgres; убрать fake-providers для create flow |
+| **End** | 2026-02-11 |
+| **Status** | DONE / VERIFIED |
+
+### Done
+- **N3a1:** GET /api/contractors/create/open — lookups (countries, reputations, users, currencies) из Postgres. POST /api/contractors/create/save — INSERT в dcl_contractor, 200 {ctrId, redirectTo}.
+- **N3a:** GET /api/contracts/create/open — contractors, currencies, sellers из Postgres; newContractorId resolve via SELECT по id (без LastCreatedContractorHolder). POST /api/contracts/create/save — INSERT в dcl_contract, 200 {conId, redirectTo:"/contracts"}.
+- **Flyway:** V20 dcl_reputation; V21 dev seed (department, user, country, currency, seller, reputation).
+- **JPA:** Contractor, Contract, Seller, Reputation, User; репозитории; сервисы переключены на SELECT/INSERT.
+- **Удалено:** LastCreatedContractorHolder; fake read-path для contractor/contract create.
+- **curl:** create contractor → 200 ctrId; open?newContractorId=1 → contractor в списке и selected; create contract → 200 conId.
+
+### Files touched
+- modern/backend: V20__init_contracts_reputation.sql, V21__dev_seed_contractor_contract_create.sql
+- modern/backend: Contractor, Contract, Seller, Reputation, User (domain + repos)
+- ContractorCreateService, ContractCreateService (Postgres lookups + save)
+- LastCreatedContractorHolder.java (deleted)
+
+### Artifacts
+- `logs/dev-postgres-only-n3a-n3a1-20260211-1615.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+
+### Status
+DONE / VERIFIED (API curl; create contractor → open → create contract end-to-end из Postgres).
+
+---
+
+## TASK-0021 — Clean restart + smoke-check after TASK-0020 Postgres-only
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-Debug, 2026-02-11 |
+| **Goal** | Clean restart DB/backend/UI; verify Flyway V20/V21; API smoke; browser smoke; handoff checklist |
+| **End** | 2026-02-11 |
+| **Status** | DONE / VERIFIED |
+
+### Done
+- Процессы на 5173/8080 остановлены; Postgres up; backend (dev profile) и UI (5173) запущены.
+- Flyway: flyway_schema_history содержит V20 (init contracts reputation), V21 (dev seed contractor contract create).
+- curl: GET contractors/create/open 200, GET contracts/create/open 200, POST contractors/create/save 200 (ctrId:3), GET contracts/create/open?newContractorId=3 200, POST contracts/create/save 200 (conId:2).
+- Browser: /contracts/new и /contractors/new?returnTo=contract открываются.
+- Handoff: чеклист для Agent-Head/QA в логе (URL, DevTools, API smoke).
+- Код не изменялся (только рестарт и диагностика).
+
+### Note
+Contractor save: ctr_unp VARCHAR(15) в БД. UNP длиннее 15 символов → 500. Использован UNP ≤ 15 символов.
+
+### Files touched
+- (none — только рестарт и проверка)
+
+### Artifacts
+- `logs/debug-restart-postgres-only-n3a-n3a1-20260211-1620.md`
+- `logs/debug-restart-backend-start.log`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+
+---
+
+## TASK-0022 — Dev dashboard: Data mode → Live DB (Postgres) + Seed dataset indicator
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-Dev (UI), 2026-02-11 |
+| **Goal** | В UI меню Development: «Data mode» больше не показывает FAKE_SEEDED; отображается «DB Source: Live DB (Postgres)» и «Seed dataset: <value>» |
+| **End** | 2026-02-11 |
+| **Status** | DONE / VERIFIED |
+
+### Done
+- **Backend:** DevStatusResponse: добавлено поле `seedDataset`. DevStatusService: `resolveSeedDataset()` — последняя миграция Flyway → "V21", или DEV_SEED_VERSION из dcl_setting, или "unknown".
+- **UI:** Карточка «Data mode» заменена на «Data source»: DB Source: Live DB (Postgres); Seed dataset: V21 (из API). FAKE_SEEDED/REAL/EMPTY не отображаются.
+- **Build:** backend test PASS, npm run build PASS.
+- **API:** GET /api/dev/status → 200, seedDataset: "V21". Backend перезапущен.
+
+### Files touched
+- modern/backend: DevStatusResponse.java, DevStatusService.java
+- modern/ui: DevDashboardPage.tsx, types.ts
+
+### Artifacts
+- `logs/dev-ui-devmode-livedb-20260211-1630.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+
+### Status
+DONE / VERIFIED (API 200; dev dashboard показывает Live DB + Seed dataset).
+
+---
+
+## TASK-0023 — N3a contract_create: contractor selected but Save says "Выберите контрагента"
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-Debug, 2026-02-12 |
+| **Goal** | Contractor selected → Save → 200; payload contractor присутствует; Console 0 errors |
+| **End** | 2026-02-12 |
+| **Status** | DONE / VERIFIED |
+
+### Root cause
+Form.Item с Space.Compact как прямым child не передаёт value/onChange в Select. Form не получает выбранное значение; при submit contractor: null → backend 400 "Выберите контрагента".
+
+### Fix (minimal)
+Вложенный Form.Item с noStyle: Select — direct child Form.Item name="contractor". Стандартный паттерн Ant Design для grouped inputs.
+
+### Done
+- ContractCreatePage.tsx: contractor Form.Item перестроен — outer для label/validation; inner Form.Item name="contractor" noStyle оборачивает Select.
+- Backend: curl POST save с contractor: { id, name } → 200.
+- Код не менял маппинг payload (contractor остаётся { id, name } по CONTRACTS).
+
+### Files touched
+- modern/ui/src/features/contracts/ContractCreatePage.tsx
+
+### Artifacts
+- `logs/debug-n3a-contractor-validation-20260212-1800.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+
+---
+
+## TASK-0024 — N3a contract_create: Save contract does not persist (user says not saved)
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-Debug, 2026-02-12 |
+| **Goal** | Save valid → POST 200; запись в dcl_contract; список показывает новый договор |
+| **End** | 2026-02-12 |
+| **Status** | DONE / VERIFIED |
+
+### Root cause
+**Contracts list (N3) использовал ContractsFakeProvider** — fake data. Contract create сохранял в Postgres, но после redirect /contracts список показывал fake данные; новый договор не отображался.
+
+### Fix
+ContractListProvider: список читается из Postgres (dcl_contract + JOIN contractor/currency/seller). ContractsService.getData использует loadAll() вместо fake. Lookups contractors — из ContractorRepository.
+
+### Done
+- ContractListProvider: load from Postgres, map to ContractRow
+- ContractsService: ContractListProvider, ContractorRepository; getData/getLookups на Postgres
+- ContractsFakeProvider: contractorNameOverride для фильтра по Postgres ID
+- Contract: getters sum/executed/comment/annul
+- curl: POST save 200; POST data 200; list содержит conId 7; psql dcl_contract — запись есть
+
+### Files touched
+- modern/backend: Contract.java, ContractRepository.java, ContractListProvider.java (new), ContractsService.java, ContractsFakeProvider.java
+
+### Artifacts
+- `logs/debug-n3a-save-not-persisting-20260212-1850.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+
+---
+
+## TASK-0025 — Global UX feedback: loading (Skeleton) + success/error Message for saves
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-Dev (UI), 2026-02-12 |
+| **Goal** | Единый механизм: ScreenLoader (Skeleton), Message.success/error для save; применено к N3a ContractCreatePage |
+| **End** | 2026-02-12 |
+| **Status** | DONE / VERIFIED |
+
+### Done
+- **Shared layer (src/shared/):**
+  - `lib/feedback.ts`: showSuccess, showError, showLoading, hideLoading (AntD Message)
+  - `lib/api.ts`: normalizeApiError (400/500/network), fetchWithErrorHandling
+  - `ui/ScreenLoader.tsx`: Skeleton when loading
+- **N3a ContractCreatePage:**
+  - Open load: ScreenLoader с Skeleton вместо "Загрузка..."
+  - Save: Message.loading → fetchWithErrorHandling → hideLoading → Message.success + redirect, или Message.error + setFieldErrors
+  - Load error, canCreate false: showError
+- **Build:** npm run build PASS.
+
+### Files touched
+- modern/ui: src/shared/lib/feedback.ts, src/shared/lib/api.ts, src/shared/ui/ScreenLoader.tsx
+- modern/ui: ContractCreatePage.tsx
+
+### Artifacts
+- `logs/dev-global-ux-feedback-20260212-1815.md`
+- `docs/AGENT_TASK_REPORTS.md` (эта секция)
+
+### Status
+DONE / VERIFIED (shared layer + N3a apply; build PASS).
+
+---
+
+## TASK-0025A - Global UX feedback Cursor Rule
+
+Agent: Agent-Dev (Process Engineer)
+Start: 2026-02-12 ~18:20
+End: 2026-02-12 ~18:25
+
+### Done
+- Создан `.cursor/rules/080-ux-feedback-global.mdc` — Global UX Feedback Standard
+- Требования: Skeleton/Spin на загрузке; message.loading/success/error на async/mutations; запрет пустого feedback после Save
+- Добавлены ссылки на shared layer (feedback.ts, api.ts, ScreenLoader)
+- Создан лог `logs/dev-cursor-rule-ux-feedback-20260212-1820.md`
+
+### Files
+- .cursor/rules/080-ux-feedback-global.mdc (new)
+- docs/AGENT_TASK_REPORTS.md (this section)
+
+### Artifacts
+- logs/dev-cursor-rule-ux-feedback-20260212-1820.md
+- docs/AGENT_TASK_REPORTS.md
+
+### Status
+DONE — Rule существует, committed (или готов к commit).

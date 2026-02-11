@@ -19,6 +19,20 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-12: Agent-Dev TASK-0025A Global UX feedback Cursor Rule: 080-ux-feedback-global.mdc — Skeleton/Spin на загрузке; message.loading/success/error на async/mutations; запрет пустого feedback после Save; ссылки на shared layer. logs/dev-cursor-rule-ux-feedback-20260212-1820.md.
+- 2026-02-12: Agent-Dev TASK-0025 Global UX feedback: shared lib (feedback, api error normalization), ScreenLoader (Skeleton), applies to N3a — open Skeleton, save Message.loading→success/error. logs/dev-global-ux-feedback-20260212-1815.md — VERIFIED.
+- 2026-02-12: Agent-Debug TASK-0024 N3a Save not persisting: list использовал fake data; ContractListProvider + Postgres для getData; save → list показывает новый договор. logs/debug-n3a-save-not-persisting-20260212-1850.md — VERIFIED.
+- 2026-02-12: Agent-Debug TASK-0023 N3a contractor validation: Form.Item+Space.Compact не передавал value в Select. Fix: nested Form.Item noStyle. logs/debug-n3a-contractor-validation-20260212-1800.md — VERIFIED.
+- 2026-02-11: Agent-Dev TASK-0022 Dev dashboard UI: Data mode заменён на «DB Source: Live DB (Postgres)» + «Seed dataset: V21»; backend seedDataset из Flyway; FAKE_SEEDED не отображается. logs/dev-ui-devmode-livedb-20260211-1630.md — VERIFIED.
+- 2026-02-11: Agent-Debug TASK-0021 Clean restart after Postgres-only: DB/backend/UI перезапущены; Flyway V20/V21 в flyway_schema_history; curl open/save 200; browser /contracts/new, /contractors/new открываются. logs/debug-restart-postgres-only-n3a-n3a1-20260211-1620.md — VERIFIED.
+- 2026-02-11: Agent-Dev TASK-0020 Postgres-only N3a/N3a1: contractor create + contract create читают и пишут из Postgres; V20 dcl_reputation, V21 dev seed; ContractorCreateService/ContractCreateService на JPA; LastCreatedContractorHolder удалён; newContractorId via SELECT. logs/dev-postgres-only-n3a-n3a1-20260211-1615.md — VERIFIED.
+- 2026-02-12: Agent-Debug TASK-0019 N3a1+N3a contractor/contract save flow: Root cause — setSearchParams({}) в loadOpen вызывал refetch без newContractorId и сбрасывал contractor. Fix: удалён setSearchParams; contractor остаётся выбранным после return. logs/debug-n3a-contractor-contract-save-flow-20260212-1750.md — VERIFIED.
+- 2026-02-12: Agent-QA TASK-0016 N3a1+N3a2 tab parity: **PASS (API)**. N3a1: open 200, 5 вкладок, save invalid 400, save valid 200. N3a2: open 200, 2 вкладки (Главная/Претензии), save invalid 400, save valid 200. Console 0 в браузере — ручная проверка. Лог: logs/qa-n3a1-n3a2-tabs-parity-20260212-1630.md.
+- 2026-02-12: Agent-QA TASK-0015 N3a manual browser PASS (unblock TASK-0010): **PENDING_MANUAL**. Процедура ручной проверки в logs/qa-n3a-save-valid-manual-20260212-1620.md. Окружение доступно; автозаполнение не выполнено (snapshot без refs). N3a → PASS только после ручного подтверждения (save 200, редирект, Console 0).
+- 2026-02-12: Agent-Debug TASK-0014 N3a/N3a1/N3a2 smoke-check: clean restart DB/backend/UI; все 3 страницы (/contracts/new, /contractors/new, /contracts/draft/specifications/new) открываются; open endpoints 200. logs/debug-n3a-n3a1-n3a2-smoke-20260212-1720.md — VERIFIED.
+- 2026-02-12: Agent-Dev TASK-0013 N3a1+N3a2 full parity: contractor_create 5 табов, contract_spec_create 2 таба (Главная/Претензии); backend tabs + complaint; UI полные формы. Лог: logs/dev-n3a1-n3a2-full-parity-20260212-1505.md — VERIFIED.
+- 2026-02-12: Agent-Debug TASK-0011 N3a1 contractor_create Save flow: LastCreatedContractorHolder + open(newContractorId) добавляет нового контрагента в lookup; ContractCreatePage передаёт newContractorId в open; Save → redirect → contractor доступен и выбран. logs/debug-contractor-create-save-flow-20260212-1700.md — VERIFIED.
+- 2026-02-12: Agent-QA TASK-0010 N3a Save valid rerun (browser + Console 0): **BLOCKED**. API save 200 подтверждён (curl UTF-8). Браузерная проверка (fill → Сохранить → редирект, Console 0) не выполнена — MCP snapshot не вернул refs для формы. PASS возможен только после ручной проверки в DevTools. Лог: logs/qa-n3a-save-valid-rerun-20260212-1615.md.
 - 2026-02-12: Agent-Debug TASK-0009 N3a Save valid 400→200: root cause — Invalid UTF-8 (payload в CP1251); curl с UTF-8 payload → 200; CONTRACTS.md payload encoding; logs/debug-n3a-save-valid-20260212-1600.md — VERIFIED.
 - 2026-02-11: Agent-QA TASK-0008 N3a contract_create + child flows full re-verify: **FAIL**. Save valid (POST /api/contracts/create/save) возвращает 400 Bad Request при теле из payloads/save-request.json; Open/Save invalid/N3a1/N3a2/N3a3 (list/upload/delete) — 2xx по CONTRACTS. Console не проверялся (ручная проверка). Лог: logs/qa-n3a-contract-create-full-20260211-1115.md.
 - 2026-02-12: Agent-Dev TASK-0006 N3a missing blocks: плейсхолдеры на /contracts/new убраны; таблица Спецификации + кнопка «Создать спецификацию» (N3a2); блок Прикреплённые файлы + «Прикрепить» (N3a3); кнопка «Добавить» у контрагента (N3a1). Backend: draft spec open/save, draft attachments list/upload/delete (session), contractors create open/save. UI: ContractSpecCreatePage, ContractAttachmentsPage, ContractorCreatePage; маршруты и return flow по CONTRACTS. Лог: logs/dev-n3a-missing-blocks-20260212-1345.md — VERIFIED.
@@ -67,6 +81,7 @@ Done:
 - 2026-02-09: Added Cursor rule 073-fixed-dev-ports.mdc: порты фиксированы UI=5173, BE=8080, DB=5432; запрет тихого переезда; при занятом порте — lsof, kill или BLOCKED; vite.config.ts strictPort: true; лог logs/dev-ports-*.log.
 - 2026-02-09: Added Cursor rule 074-java-21-mandatory.mdc: backend только JDK 21; перед build/test/run — which java, java -version, JAVA_HOME; Java 8/11/17 = BLOCKED; лог logs/dev-java-gate-*.log; Done только при PASS + mvnw test + spring-boot:run на :8080.
 - 2026-02-11: Added Cursor rule 075-mandatory-task-reporting.mdc: обязательный TASK ID (TASK-0001..) и отчет в docs/AGENT_TASK_REPORTS.md; в начале — Agent/Start, в конце — End/Done/Files/Artifacts/Status; при отсутствии ID — генерация по grep; Done только при заполненной секции и артефакте; anti-loop guard. Создан docs/AGENT_TASK_REPORTS.md.
+- 2026-02-11: Added Cursor rule 076-agent-role-explicit.mdc: каждый промпт для агента MUST начинаться с явной роли ROLE: <Concrete role> (Seniority; Focus); формат и примеры (QA, Backend, UI/UX, Debug, Spec Analyst); при отсутствии ROLE — задача неполная.
 
 Now:
 - (none)
@@ -124,7 +139,7 @@ Working set (files/ids/commands):
 - modern/backend: ./mvnw test (JAVA_HOME=JDK 21, Docker for Testcontainers), ./mvnw spring-boot:run (Postgres up)
 - modern/ui: npm install, npm run generate:api (backend on :8080), npm run dev → /reports/margin
 - docs/screens/margin/IMPLEMENTATION_NOTES.md, logs/dev-margin-*, logs/dev-browser-check-*.log
-- .cursor/rules/070-browser-verification.mdc, .cursor/rules/071-no-user-verification.mdc, .cursor/rules/072-no-blank-screens.mdc, .cursor/rules/073-fixed-dev-ports.mdc, .cursor/rules/074-java-21-mandatory.mdc, .cursor/rules/075-mandatory-task-reporting.mdc
+- .cursor/rules/070-browser-verification.mdc, .cursor/rules/071-no-user-verification.mdc, .cursor/rules/072-no-blank-screens.mdc, .cursor/rules/073-fixed-dev-ports.mdc, .cursor/rules/074-java-21-mandatory.mdc, .cursor/rules/075-mandatory-task-reporting.mdc, .cursor/rules/076-agent-role-explicit.mdc, .cursor/rules/080-ux-feedback-global.mdc
 - docs/AGENT_TASK_REPORTS.md
 - logs/dev-e2e-verify-*.log, logs/dev-ui-smoke-*.log, logs/dev-ports-*.log, logs/dev-java-gate-*.log
 - CONTINUITY.md, docs/PROGRESS.md

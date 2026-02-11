@@ -1,0 +1,29 @@
+---
+description: Global UX feedback standard. All screens must show Skeleton/Spin on load and Message.success/error on mutations. Never leave user without feedback after Save.
+globs: ["modern/ui/**", "docs/AGENT_TASK_REPORTS.md"]
+alwaysApply: true
+---
+# Global UX Feedback Standard
+
+## Always
+
+### On initial data load
+- Show **Skeleton** (preferred) or **Spin** until data is ready.
+- Do not show blank content or plain "Загрузка..." text without visual indicator.
+
+### On async operations
+- Show AntD `message.loading` with key; resolve to `message.success` or `message.error`.
+- Use `src/shared/lib/feedback.ts` helpers: `showLoading`, `hideLoading`, `showSuccess`, `showError`.
+
+### On mutations (save/create/update/delete)
+- Show `message.success` on 2xx.
+- Show `message.error` on non-2xx; include error code or user-friendly text.
+- **Never leave the user without feedback after clicking Save.**
+
+### Code
+- Do not remove existing acceptance validations; UX feedback is additive.
+- Use `src/shared/lib/api.ts` `fetchWithErrorHandling` for normalized error handling.
+- Use `src/shared/ui/ScreenLoader` for loading states.
+
+### Reporting
+- Every task must add/update a TASK section in `docs/AGENT_TASK_REPORTS.md` (task id, agent, what done, artifacts).
