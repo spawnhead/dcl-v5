@@ -1,6 +1,7 @@
 # Progress
 
 ## Done
+- 2026-02-11: **Agent-Plan TASK-0012 N3a1+N3a2 full parity spec expansion.** Полный 1:1 spec pack для `contractor_create` (5 вкладок) и `contract_spec_create` (2 вкладки, включая «Претензии») с расширением SNAPSHOT/CONTRACTS/ACCEPTANCE/BEHAVIOR_MATRIX/TEST_DATA_SPEC/QA_ROLE_PRESETS + HAR BLOCKED steps; явно зафиксирован spec gap vs dev gap. Лог: logs/plan-n3a1-n3a2-full-parity-spec-20260211-1140.md.
 - 2026-02-12: **Agent-Debug TASK-0009 (N3a Save valid 400→200).** Root cause: Invalid UTF-8 (payload в CP1251); curl с UTF-8 payload → 200; CONTRACTS.md payload encoding; logs/debug-n3a-save-valid-20260212-1600.md — VERIFIED.
 - 2026-02-12: **Agent-Debug TASK-0007 (N3a visual smoke).** Clean restart DB/backend/UI; все 4 страницы (/contracts/new, /contractors/new, /contracts/draft/specifications/new, /contracts/draft/attachments) открываются; нет placeholder; API 200. logs/debug-n3a-visual-smoke-20260212-1410.md — VERIFIED.
 - 2026-02-12: **Agent-Dev TASK-0006 N3a missing blocks.** Плейсхолдеры убраны; таблица Спецификации + «Создать спецификацию» (N3a2); блок Прикреплённые файлы + «Прикрепить» (N3a3); кнопка «Добавить» у контрагента (N3a1). Backend: draft spec, draft attachments (session), contractors create. UI: ContractSpecCreatePage, ContractAttachmentsPage, ContractorCreatePage. Лог: logs/dev-n3a-missing-blocks-20260212-1345.md — VERIFIED.

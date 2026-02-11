@@ -1,27 +1,43 @@
-# N3a2 Contract specification create — Acceptance criteria (1:1)
+# N3a2 Contract specification create — Acceptance (full parity)
 
-## Parity MUST (FAIL если не выполнено)
-1. Экран открывается по клику «Добавить Спецификацию» на Contract form (при create или edit).
-2. Main tab: user, spc_number, spc_date, spc_summ, spc_summ_nds, spc_delivery_cond, deliveryTerm, spc_additional_days_count, spc_delivery_percent/sum, spc_delivery_date, spc_add_pay_cond, specificationPayments grid, spc_montage, spc_pay_after_montage, spc_fax_copy, spc_original, spc_comment.
-3. spc_number, spc_date, spc_summ, deliveryTerm — обязательные.
-4. При save: spec добавляется в Contract grid (in-memory); return to Contract form; grid показывает новую строку.
-5. «Отмена» → возврат на Contract form без добавления.
-6. При create (con_id=null): Contract в session, specs в памяти до saveCommon Contract.
+## A. Parity MUST
+1. Экран содержит **2 вкладки**: Главная / Претензии.
+2. Main tab включает поля, payment grid и attachments block как в legacy.
+3. Complaint tab включает все 4 даты + комментарий.
+4. Save проходит только при выполнении required + business validations.
+5. При save новая спецификация возвращается в Contract grid (session flow).
+6. Cancel/back не создает спецификацию.
+7. Readonly/role behavior соответствует `SpecificationAction.input()`.
 
-## Приёмочные сценарии
+## B. Scenarios
+### B1 Open
+- Trigger: Contract form -> «Добавить спецификацию».
+- Expect: 2 tabs, default payment row, currencyName inherited from contract.
 
-### 1) Open from Contract create
-- Trigger: Contract form /contracts/new, клик «Добавить Спецификацию».
-- Expected: форма спецификации, main tab, 1 payment row, currencyName из Contract.
+### B2 Save valid
+- Fill required fields + user (if not executed).
+- Expect: success + return to contract + spec row visible.
 
-### 2) Save valid
-- Trigger: заполнить spc_number, spc_date, spc_summ, deliveryTerm; Save.
-- Expected: 200, redirect /contracts/new; Contract grid содержит новую строку.
+### B3 Required validation
+- Empty `spcNumber` or `spcDate` or `spcSumm` or `deliveryTerm.id`.
+- Expect: validation errors, no insert.
 
-### 3) Validation
-- Trigger: пустые spc_number или spc_date; Save.
-- Expected: 400, сообщения об ошибках.
+### B4 Business validation (occupied)
+- Simulate occupied spec with payed/shipped sum > spcSumm.
+- Expect: corresponding business error(s), no save.
 
-### 4) Cancel
-- Trigger: Отмена.
-- Expected: return /contracts/new, spec не добавлена.
+### B5 Complaint tab persistence
+- Fill complaint dates/comment, save.
+- Expect: values persist in returned contract spec row/edit form.
+
+### B6 Attachments
+- Add copy attachment and local attachment; delete one.
+- Expect: grid updates and rollback on cancel.
+
+### B7 Role/readOnly
+- Manager-only / onlyLithuania / onlyLogistic should be readonly.
+- Admin/economist/lawyer can edit per executed-status logic.
+
+## C. Spec gap vs dev gap
+- This update closes **spec gap** (full tab/field/flow coverage incl. complaint and async flows).
+- Dev implementation should be checked against this acceptance matrix without assumptions.

@@ -1,12 +1,14 @@
 # N3a1 Contractor create — Behavior matrix
 
-| Scenario | Trigger | Expected network | Expected UI | Verify / Trace |
-|----------|---------|------------------|-------------|----------------|
-| Open from Contract | Click «Добавить» у contractor | GET /api/contractors/create/open?returnTo=contract | Форма пустая, main tab, gridUsers 1 row, gridAccounts 3 rows | ContractorAction.create |
-| Save valid | Fill ctr_name, reputation, Save | POST /api/contractors/create/save 200 | ctrId, redirect /contracts/new?newContractorId=…; Contract form contractor selected | ContractorAction.process, currentContractorId |
-| UNP duplicate | ctr_unp exists, Save | POST ... 400 | error.contractorpage.duplicate_unp | ContractorDAO.loadByUNP |
-| Cancel | Click Отмена | Navigate /contracts/new | Return without save | forward back |
-
-## UNCONFIRMED
-- Wire format legacy: HTML form POST.
-- **HOW TO VERIFY:** HAR при ContractorAddActionContract create/process.
+| Scenario | Trigger | Expected behavior | Legacy trace |
+|---|---|---|---|
+| Open create | Contract -> Add contractor | 5 tabs; defaults (1 user + 3 accounts); active main tab | ContractorAction.create/input |
+| Add user row | `addRowInUserGrid` | new row appended; non-admin row prefilled with current user | ContractorAction.addRowInUserGrid |
+| Delete user row | `deleteRowFromUserGrid` | row removed if number matches; admin-only visibility | contractor.jsp + showDeleteUserForAdmin |
+| Add account row | `addRowInAccountGrid` | row appended; first 3 rows pre-labeled by account types | ContractorAction.addRowInAccountGrid |
+| Delete account row | `deleteRowFromAccountGrid` | row removed; delete button hidden when <=3 rows | show-delete-checker |
+| Toggle contact fire/block | checkbox click | `cps_fire`/`cps_block` toggled in-session; tab stays contactPersons | ContractorAction.fireContactPerson/blockContactPerson |
+| Save valid | `process` | insert/update + save users/accounts/contacts + set `currentContractorId` | ContractorAction.process |
+| Save invalid duplicate UNP | `process` | error `error.contractorpage.duplicate_unp`, no persist | ContractorDAO.loadByUNP |
+| Save invalid accounts | `process` | account errors + active tab `accountsContractor` | ContractorAction.process |
+| Cancel | `back` | return to Contract (`retFromContractor`) without save | struts-config forward |

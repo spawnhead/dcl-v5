@@ -1,14 +1,19 @@
 # N3a2 Contract specification create — Test data spec
 
-## Domains
-- Contract в session (draft или с con_id).
-- DCL_CON_LIST_SPEC колонки: spc_number, spc_date, spc_summ, spc_summ_nds, delivery term, etc.
+## Preconditions
+- Contract draft/session exists and contains currency/seller context.
+- Delivery terms dictionary contains at least one item.
+- Users lookup contains at least one selectable user.
+- Contract attachment service has at least one file for copy-attach scenario.
 
-## Required
-- users: ≥1 (UsersListAction).
-- deliveryTerms: ≥1 (DeliveryTermTypesListAction).
-- Contract в session с currency.name (для currencyName).
+## Datasets
+1. **Happy path**: valid required fields, one payment row.
+2. **Validation set**: empty required fields, over-limit text fields, invalid dates.
+3. **Business occupied set**: occupied spec with mocked payed/shipped totals greater than sum.
+4. **Payments dynamics**: multiple rows with percent/sum/date combinations.
+5. **Complaint set**: all complaint dates + long comment near limit.
+6. **Attachment set**: copy attachment + uploaded attachment + delete case.
 
-## Verification
-- Open from /contracts/new → form loads, currencyName from Contract.
-- Save → spec in Contract.grid; return to Contract.
+## Expected
+- Deterministic pass/fail per acceptance matrix.
+- Contract grid reflects inserted specification after save.

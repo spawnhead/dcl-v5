@@ -1,103 +1,64 @@
-# N3a1 Contractor create — API Contracts
+# N3a1 Contractor create — Contracts (Dev-ready, parity-oriented)
 
-> Источник: ContractorAction (create, process), contractor.jsp, contractor-insert.
+> Legacy reference: `ContractorAddActionContract.do?dispatch=create/process`, `ContractorAction`, `contractor.jsp`.
 
-## 1) GET `/api/contractors/create/open`
+## 1) Open
+### GET `/api/contractors/create/open?returnTo=contract`
+Returns full form state:
+- `tabs` metadata (5 tabs, fixed order).
+- form defaults from create scenario.
+- lookups: countries, reputations, users, currencies.
+- role flags: `adminRole`, `readOnlyReputation`, `readOnlyComment`, checkers for grid actions.
 
-Назначение: загрузить форму создания контрагента (defaults, lookups). Query: `returnTo=contract` — возврат на Contract form после save.
+Minimal required defaults parity:
+- `gridUsers` contains current user.
+- `gridAccounts` contains 3 default rows.
+- `gridContactPersons` empty.
+- `activeTab=mainPanel`.
 
-Request: `GET /api/contractors/create/open?returnTo=contract`.
+## 2) Save
+### POST `/api/contractors/create/save`
+- Content-Type: `application/json; charset=UTF-8`.
+- Saves contractor + users + accounts + contact persons.
+- On success sets return payload with created `ctrId` and `returnTo` context.
 
-Response (200):
+Validation parity:
+- `ctrName` required, max 200.
+- `ctrFullName` required, max 300.
+- `country.id` required.
+- `ctrEmail` max 40 + email format.
+- `ctrUnp` min 6 max 15 + duplicate check.
+- `ctrComment` max 5000.
+- Account rules from legacy `process()`:
+  - default rows: if `accAccount` filled then `currency.id` required.
+  - custom rows: both `accAccount` and `currency.id` required.
+  - `accAccount` max 35.
+
+Expected success:
 ```json
-{
-  "defaults": {
-    "ctrName": "",
-    "ctrFullName": "",
-    "country": null,
-    "ctrIndex": "",
-    "ctrRegion": "",
-    "ctrPlace": "",
-    "ctrStreet": "",
-    "ctrBuilding": "",
-    "ctrAddInfo": "",
-    "ctrPhone": "",
-    "ctrFax": "",
-    "ctrEmail": "",
-    "ctrUnp": "",
-    "ctrOkpo": "",
-    "reputation": null,
-    "gridUsers": [{ "usrId": "string", "userFullName": "string" }],
-    "gridAccounts": [
-      { "accName": "Счёт 1", "accAccount": "", "currency": null },
-      { "accName": "Счёт 2", "accAccount": "", "currency": null },
-      { "accName": "Счёт валютный", "accAccount": "", "currency": null }
-    ],
-    "gridContactPersons": [],
-    "ctrBankProps": "",
-    "ctrComment": ""
-  },
-  "lookups": {
-    "countries": [{ "id": "string", "name": "string" }],
-    "reputations": [{ "id": "string", "description": "string" }],
-    "users": [{ "id": "string", "userFullName": "string" }],
-    "currencies": [{ "id": "string", "name": "string" }]
-  },
-  "returnTo": "contract"
-}
+{ "ctrId": "...", "returnTo": "contract", "redirectTo": "/contracts/new" }
 ```
 
-Traceability: ContractorAction.create() → empty contractor, default accounts, current user in gridUsers.
+## 3) Auxiliary operations (child endpoints implied by tabs)
+If modern UI supports per-tab async ops, these must preserve legacy semantics:
+- Add/remove user row.
+- Add/remove account row.
+- Toggle contact person `fire`/`block`.
+- Navigate to contact person create/edit and back.
 
-## 2) POST `/api/contractors/create/save`
+If implemented client-side before final save: keep identical validation outcome as legacy `process()`.
 
-Назначение: сохранить контрагента. При returnTo=contract — response ctrId; вызывающая сторона (Contract form) должна refresh contractors list и подставить ctrId.
+## 4) Legacy action map
+- `create` → build defaults.
+- `input` → resolve readonly/show checker flags.
+- `addRowInUserGrid`, `deleteRowFromUserGrid`.
+- `addRowInAccountGrid`, `deleteRowFromAccountGrid`.
+- `fireContactPerson`, `blockContactPerson`.
+- `addCountry`, `fromAddCountry`.
+- `editReputation`, `fromEditReputation`.
+- `addPersonInContractor`, `editPersonInContractor`, `fromContactPerson`.
+- `process` → insert/update + save child lists + set `currentContractorId`.
 
-Request body:
-```json
-{
-  "ctrName": "string",
-  "ctrFullName": "string",
-  "country": { "id": "string", "name": "string" },
-  "ctrIndex": "",
-  "ctrRegion": "",
-  "ctrPlace": "",
-  "ctrStreet": "",
-  "ctrBuilding": "",
-  "ctrAddInfo": "",
-  "ctrPhone": "",
-  "ctrFax": "",
-  "ctrEmail": "",
-  "ctrUnp": "string",
-  "ctrOkpo": "",
-  "reputation": { "id": "string", "description": "string" },
-  "gridUsers": [{ "usrId": "string", "userFullName": "string" }],
-  "gridAccounts": [{ "accName": "string", "accAccount": "string", "currency": { "id": "string", "name": "string" } }],
-  "ctrBankProps": "",
-  "ctrComment": "",
-  "returnTo": "contract"
-}
-```
-
-Validation:
-- ctr_name: required.
-- ctr_unp: duplicate check (ContractorDAO.loadByUNP) — error.contractorpage.duplicate_unp.
-- gridAccounts: если acc_account заполнен и acc_name — один из дефолтных — currency required; maxlength 35 для acc_account.
-
-Response (200):
-```json
-{
-  "ctrId": "string",
-  "redirectTo": "/contracts/new",
-  "returnTo": "contract"
-}
-```
-
-При returnTo=contract: SPA navigate на /contracts/new с query ?newContractorId={ctrId} или Contract form вызывает refresh contractors + set contractor by id.
-
-## 3) Cancel
-- Back без save: navigate /contracts/new (или returnTo URL).
-
-## 4) UNCONFIRMED / How to verify
-- Wire-формат legacy ContractorAddActionContract create/process: HTML form POST.
-- **HOW TO VERIFY:** legacy Contract → Добавить → заполнить contractor → Save; Network DevTools — URL, request body, response.
+## 5) UNCONFIRMED / BLOCKED
+- Exact legacy POST param names for nested grids (x-www-form-urlencoded) — UNCONFIRMED.
+- HAR capture instructions: `payloads/network.har.BLOCKED.md`.
