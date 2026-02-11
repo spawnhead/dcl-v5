@@ -44,8 +44,9 @@
 ### 3.2 Кнопки
 - `Очистить фильтр` → submit `dispatch=input`.
 - `Применить фильтр` → submit `dispatch=filter`.
-- `Импорт КП` → submit `dispatch=selectCP`.
-- `Создать` → link `/ContractAction.do?dispatch=input`.
+- **Action-кнопки под гридом** (в `gridBottom`, ниже таблицы, слева направо):
+  1. **«Импорт из КП»** — `button.importCP` (application.properties). Submit `dispatch=selectCP` + `scriptUrl=minsk_store=1` → legacy: `ContractsAction.do?dispatch=selectCP&minsk_store=1` → forward `selectCP` → `/SelectCPContractsAction.do?dispatch=input`. Modern route: `/contracts/import-cp`. Traceability: Contracts.jsp:123–125, struts-config ContractsAction forward selectCP.
+  2. **«Создать»** — `button.create` (application.properties). Link `/ContractAction.do?dispatch=input`. Modern route: `/contracts/new`. Роли Create: admin, economist, lawyer (xml-permissions). Для manager/user_in_lithuania/logistic — кнопка скрыта или disabled. Traceability: Contracts.jsp:126–128.
 - В гриде: row `edit`, `attachments` icon, `delete` (только admin + checker).
 
 ### 3.3 Колонки грида (порядок)
@@ -86,6 +87,10 @@
 - Pagination next/prev: `grid.page +/- 1` + `select-contracts`.
 - Export на списке Contracts: **не найдено** (кнопки/dispatch/export SQL отсутствуют).
 
+### 5.1) Navigation (no API, SPA routes)
+- Кнопка «Импорт из КП» → SPA route `/contracts/import-cp`. Spec: `docs/screens/contract_import_cp/SNAPSHOT.md` (N3b).
+- Кнопка «Создать» → SPA route `/contracts/new`. Spec: `docs/screens/contract_create/SNAPSHOT.md` (N3a).
+
 ## 6) Parity MUST checklist
 1. Фильтры и их имена совпадают 1:1 (`number`, `contractor.*`, `date_*`, `sum_*`, `user.*`, `seller.*`, `executed/not_executed/oridinal_absent`).
 2. Логика `con_executed` строго как в `ContractsForm#getCon_executed()`.
@@ -95,3 +100,4 @@
 6. Delete только admin + без спецификаций (`spc_count == 0`).
 7. Manager edit lock по `dep_id_list` (department scope).
 8. Нет export action на экране.
+9. Кнопки «Импорт из КП» и «Создать» в gridBottom под гридом; «Создать» видна только admin, economist, lawyer; клики ведут на /contracts/import-cp и /contracts/new.

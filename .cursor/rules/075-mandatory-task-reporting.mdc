@@ -1,0 +1,80 @@
+---
+description: Always apply. For any work in this repo, enforce TASK ID (TASK-0001..) and mandatory reporting to docs/AGENT_TASK_REPORTS.md. If TASK ID is missing in the prompt, generate the next TASK ID by scanning the report file.
+globs: "**/*"
+alwaysApply: true
+---
+# Mandatory task reporting (TASK ID + docs/AGENT_TASK_REPORTS.md)
+
+## Rule
+Любая работа агента в этом репозитории считается НЕ выполненной, если нет краткого отчета в `docs/AGENT_TASK_REPORTS.md` с корректным `TASK-XXXX`.
+
+## 1) TASK ID handling
+1) Если в задании (в верхней части промта) явно указан `TASK ID: TASK-XXXX` - используй его.
+2) Если TASK ID не указан - сгенерируй новый TASK ID по процедуре ниже, укажи его в начале ответа и используй в отчете.
+
+## 2) Report doc (single source of truth)
+Файл отчета: `docs/AGENT_TASK_REPORTS.md`
+
+Требование:
+- В НАЧАЛЕ работы: добавить секцию с TASK ID и заполнить минимум `Agent`, `Start`.
+- В КОНЦЕ работы: дописать `End`, блок `Done`, списки `Files`, `Artifacts`, и строку `Status`.
+
+Если задача BLOCKED сразу (не удалось стартовать, нет спеки, нет доступа, 404, порты заняты и т.д.) - секцию все равно создать и поставить `Status: BLOCKED - <одна строка причины>`.
+
+## 3) Формат секции (строго так)
+Добавляй секцию в конец файла `docs/AGENT_TASK_REPORTS.md`:
+
+## TASK-0001 - N3a contract_create - QA re-run
+Agent: Agent-QA
+Start: 2026-02-11 19:45 America/New_York
+End: 2026-02-11 20:10 America/New_York
+
+Done:
+- Поднял окружение (db/backend/ui) на 8080/5173
+- Проверил сценарии ACCEPTANCE §2-5, DevTools Network/Console
+
+Files:
+- docs/screens/contract_create/ACCEPTANCE.md
+- logs/qa-contract-create-20260211-2010.md
+
+Artifacts:
+- logs/qa-contract-create-20260211-2010.md
+
+Status: VERIFIED - PASS по ACCEPTANCE, Console 0 ошибок
+
+Важно:
+- Заголовок секции должен начинаться ровно с `## TASK-` (это нужно для авто-поиска).
+- В `Files` перечисляй только реально затронутые/проверенные пути.
+- В `Artifacts` перечисляй логи/доки, которые создал/обновил.
+
+## 4) Как сгенерировать новый TASK ID (bash-only)
+Если `docs/AGENT_TASK_REPORTS.md` отсутствует - создай его с базовым заголовком, затем используй `TASK-0001` как первый номер.
+
+Создание файла (bash):
+cat > docs/AGENT_TASK_REPORTS.md <<'EOF'
+# Agent task reports
+
+Правило: каждая задача обязана иметь TASK ID формата TASK-0001 и секцию отчета.
+Если нет отчета - задача считается НЕ выполненной.
+
+EOF
+
+Генерация следующего номера (bash):
+LAST=$(grep -Eo 'TASK-[0-9]{4}' docs/AGENT_TASK_REPORTS.md | sort | tail -n 1)
+if [ -z "$LAST" ]; then
+  echo "TASK-0001"
+else
+  N=${LAST#TASK-}
+  N=$((10#$N + 1))
+  printf "TASK-%04d\n" "$N"
+fi
+
+## 5) Definition of Done (reporting)
+Задача считается Done только если:
+- В `docs/AGENT_TASK_REPORTS.md` есть секция с правильным TASK ID,
+- Секция заполнена до `Status`,
+- Есть хотя бы один артефакт: лог в `logs/` или явная фиксация `BLOCKED` с причиной.
+
+## 6) Anti-loop guard reminder (process)
+- Не повторять одну и ту же команду больше 2 раз без change-set.
+- Если BUILD SUCCESS - не повторять команду, переходить к следующему шагу.

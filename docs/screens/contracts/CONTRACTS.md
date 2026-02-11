@@ -2,6 +2,12 @@
 
 > Источник истины — legacy Contracts list flow. Legacy HTML form/dispatch маппится в REST-паттерн modern без изменения бизнес-семантики.
 
+## 0) Navigation contracts (no API)
+Кнопки «Импорт из КП» и «Создать» — pure navigation (SPA routes). Backend API не вызывается при клике.
+- «Импорт из КП» → `/contracts/import-cp`. Spec: `docs/screens/contract_import_cp/SNAPSHOT.md` (N3b).
+- «Создать» → `/contracts/new`. Spec: `docs/screens/contract_create/SNAPSHOT.md` (N3a).
+- Traceability: Contracts.jsp:123–128, struts-config forward selectCP, xml-permissions.
+
 ## 1) Endpoint inventory (modern)
 
 ## 1.1 GET `/api/contracts/lookups`

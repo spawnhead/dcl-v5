@@ -2,6 +2,12 @@ import { Layout, Menu, Typography } from 'antd';
 import { useLocation, useNavigate, Outlet, Routes, Route } from 'react-router-dom';
 import MarginPage from './features/margin/MarginPage';
 import OrdersPage from './features/orders/OrdersPage';
+import ContractsPage from './features/contracts/ContractsPage';
+import ContractCreatePage from './features/contracts/ContractCreatePage';
+import ContractSpecCreatePage from './features/contracts/ContractSpecCreatePage';
+import ContractAttachmentsPage from './features/contracts/ContractAttachmentsPage';
+import ContractPlaceholderPage from './features/contracts/ContractPlaceholderPage';
+import ContractorCreatePage from './features/contractors/ContractorCreatePage';
 import CountriesPage from './features/countries/CountriesPage';
 import DevDashboardPage from './features/dev/DevDashboardPage';
 import './App.css';
@@ -28,10 +34,11 @@ function AppLayout() {
       ]
     },
     { key: '/orders', label: 'Заказы' },
+    { key: '/contracts', label: 'Договора' },
     { key: '/dev', label: 'Development' }
   ];
 
-  const openKeys = location.pathname.startsWith('/reports') ? ['reports'] : location.pathname === '/dev' ? [] : location.pathname === '/orders' ? [] : ['ref'];
+  const openKeys = location.pathname.startsWith('/reports') ? ['reports'] : location.pathname === '/dev' ? [] : location.pathname.startsWith('/orders') ? [] : location.pathname.startsWith('/contracts') ? [] : ['ref'];
 
   return (
     <Layout className="app-layout">
@@ -42,7 +49,7 @@ function AppLayout() {
         <Menu
           theme="dark"
           mode="horizontal"
-          selectedKeys={[location.pathname]}
+          selectedKeys={[location.pathname.startsWith('/contracts') ? '/contracts' : location.pathname.startsWith('/orders') ? '/orders' : location.pathname]}
           defaultOpenKeys={openKeys}
           items={menuItems}
           onClick={({ key }) => navigate(key)}
@@ -63,6 +70,12 @@ export default function App() {
         <Route index element={<CountriesPage />} />
         <Route path="reports/margin" element={<MarginPage />} />
         <Route path="orders" element={<OrdersPage />} />
+        <Route path="contracts/new" element={<ContractCreatePage />} />
+        <Route path="contracts/draft/specifications/new" element={<ContractSpecCreatePage />} />
+        <Route path="contracts/draft/attachments" element={<ContractAttachmentsPage />} />
+        <Route path="contracts/import-cp" element={<ContractPlaceholderPage title="Импорт из КП" />} />
+        <Route path="contracts" element={<ContractsPage />} />
+        <Route path="contractors/new" element={<ContractorCreatePage />} />
         <Route path="dev" element={<DevDashboardPage />} />
       </Route>
     </Routes>

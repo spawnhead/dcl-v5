@@ -13,6 +13,8 @@
 10. Edit disabled для manager вне своего департамента (`dep_id_list`).
 11. Delete доступен только admin и только когда `spc_count == 0`.
 12. Export на Contracts list отсутствует (кнопка/endpoint не должны появиться).
+13. **Кнопка «Импорт из КП»** видна и кликабельна; переход на экран выбора КП (legacy: `ContractsAction.do?dispatch=selectCP&minsk_store=1` → `SelectCPContractsAction.do?dispatch=input`). Modern: route `/contracts/import-cp`.
+14. **Кнопка «Создать»** видна и кликабельна; переход на форму создания договора (legacy: `/ContractAction.do?dispatch=input`). Modern: route `/contracts/new`. Роли Create: admin, economist, lawyer (xml-permissions).
 
 ## Allowed diffs
 - Пусто (не зафиксированы допустимые отклонения).
@@ -49,3 +51,13 @@
 ### 7) Validation errors
 - Trigger: невалидные дата/сумма.
 - Expected: отображается ошибка валидации, запрос в data endpoint не должен ломать UI.
+
+### 8) Click «Создать»
+- Trigger: клик по кнопке «Создать» (для ролей admin, economist, lawyer).
+- Expected: переход на `/contracts/new` (форма создания договора). Legacy: `/ContractAction.do?dispatch=input` → Contract.jsp (форма ввода). Для manager/user_in_lithuania/logistic кнопка не отображается или disabled.
+- Traceability: Contracts.jsp:126–128, xml-permissions `/ContractAction.do?dispatch=input`.
+
+### 9) Click «Импорт из КП»
+- Trigger: клик по кнопке «Импорт из КП».
+- Expected: переход на `/contracts/import-cp` (экран выбора коммерческого предложения). Legacy: `ContractsAction.selectCP` → forward → `/SelectCPContractsAction.do?dispatch=input` (SelectFromGridAction, input = CommercialProposalsAction). Выбор КП → return → ContractAction.importCP.
+- Traceability: Contracts.jsp:123–125, struts-config ContractsAction forward selectCP, SelectCPContractsAction input.

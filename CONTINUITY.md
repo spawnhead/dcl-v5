@@ -7,6 +7,8 @@ Constraints/Assumptions:
 - Start each step by reading/updating this file.
 
 Key decisions:
+- **DCL_CONTRACT_FILTER (2026-02-11):** Реализация в application layer; Postgres FUNCTION не создаётся. Детали: docs/db/DCL_CONTRACT_FILTER_DECISION.md.
+- **N3 reopened (2026-02-11):** Parity gap — missing 2 buttons: «Импорт из КП» (ContractsAction.do?dispatch=selectCP&minsk_store=1), «Создать» (ContractAction.do?dispatch=input). Legacy: Contracts.jsp lines 123–128. Plan patch specs → Dev implement → QA re-verify.
 - N3 selected for current Agent-Plan cycle: Contracts list screen spec pack.
 - First vertical slice domain: Country reference data (`DCL_COUNTRY`).
 - Build tool: Maven.
@@ -17,6 +19,26 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-12: Agent-Debug TASK-0009 N3a Save valid 400→200: root cause — Invalid UTF-8 (payload в CP1251); curl с UTF-8 payload → 200; CONTRACTS.md payload encoding; logs/debug-n3a-save-valid-20260212-1600.md — VERIFIED.
+- 2026-02-11: Agent-QA TASK-0008 N3a contract_create + child flows full re-verify: **FAIL**. Save valid (POST /api/contracts/create/save) возвращает 400 Bad Request при теле из payloads/save-request.json; Open/Save invalid/N3a1/N3a2/N3a3 (list/upload/delete) — 2xx по CONTRACTS. Console не проверялся (ручная проверка). Лог: logs/qa-n3a-contract-create-full-20260211-1115.md.
+- 2026-02-12: Agent-Dev TASK-0006 N3a missing blocks: плейсхолдеры на /contracts/new убраны; таблица Спецификации + кнопка «Создать спецификацию» (N3a2); блок Прикреплённые файлы + «Прикрепить» (N3a3); кнопка «Добавить» у контрагента (N3a1). Backend: draft spec open/save, draft attachments list/upload/delete (session), contractors create open/save. UI: ContractSpecCreatePage, ContractAttachmentsPage, ContractorCreatePage; маршруты и return flow по CONTRACTS. Лог: logs/dev-n3a-missing-blocks-20260212-1345.md — VERIFIED.
+- 2026-02-12: Agent-Debug TASK-0007: Clean restart + visual smoke-check N3a. Окружение: DB + backend (8080) + UI (5173). Все 4 страницы (/contracts/new, /contractors/new?returnTo=contract, /contracts/draft/specifications/new, /contracts/draft/attachments) открываются; нет placeholder; API 200. logs/debug-n3a-visual-smoke-20260212-1410.md — VERIFIED.
+- 2026-02-12: Agent-Plan TASK-0005: contractor_create, contract_spec_create, contract_attachments — полные spec packs (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX, TEST_DATA_SPEC, QA_ROLE_PRESETS, payloads); N3a contract_create §6 Navigation. Лог: logs/plan-n3a-missing-blocks-specpack-20260212-1200.md.
+- 2026-02-11: Agent-Plan TASK-0003 N3a parity audit: SNAPSHOT/ACCEPTANCE/BEHAVIOR_MATRIX/CONTRACTS пропатчены; stub packs contractor_create, contract_spec_create, contract_attachments. Plan gap: кнопка «Добавить»; Dev gaps: grid Спецификации, блок Прикреплённые файлы. Лог: logs/plan-contract-create-parity-audit-20260211-2300.md.
+- 2026-02-11: Agent-Plan N3b contract_import_cp spec pack: CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX, TEST_DATA_SPEC, QA_ROLE_PRESETS, payloads/network.har.BLOCKED.md. Traceability: SelectFromGridAction, CommercialProposalsAction, ContractAction.importCP. Лог: logs/plan-contract-import-cp-20260211-2100.md.
+- 2026-02-11: Agent-QA N3a contract_create: BLOCKED. GET /api/contracts/create/open возвращает 404 (backend на 8080 без N3a create endpoints в момент прогона). Код и payloads соответствуют CONTRACTS. Отчёт: logs/qa-contract-create-20260211-1945.md. Рекомендация: перезапуск backend и повторный QA.
+- 2026-02-11: Agent-Debug TASK-0001: N3a contract_create «Создать» navigation — VERIFIED. Причина 404: backend (PID 41972) запущен без N3a. Фикс: перезапуск backend. Клик «Создать» → /contracts/new, форма «Создание договора», open 200. logs/debug-contract-create-navigation-20260211-2200.md, docs/AGENT_TASK_REPORTS.md.
+- 2026-02-11: Agent-Dev N3a contract create: GET /api/contracts/create/open, POST /api/contracts/create/save с валидацией (required, con_final_date при !conReusable&&seller.id=1, maxlength). UI /contracts/new — ContractCreatePage (форма 1:1 по SNAPSHOT, Отмена/Сохранить, редирект после save, вывод ошибок). Лог: logs/dev-contract-create-20260211-1135.md — VERIFIED.
+- 2026-02-11: Agent-Grok TASK-0002: N3a contract_create UI layout polished (horizontal form, sections, widths, alignment). Log: logs/grok-contract-create-ui-layout-20260211-0900.md — VERIFIED.
+- 2026-02-11: Agent-Debug TASK-0004: Grok UI changes not visible — причина: правки не были в рабочей копии (rg: no matches). Повторно применены: labelCol/wrapperCol, Divider «Основные поля», секции Спецификации/Прикреплённые файлы. VERIFIED в браузере. logs/debug-grok-ui-not-visible-20260211-2320.md.
+- 2026-02-11: Agent-Plan N3a contract_create spec pack complete: SNAPSHOT (форма 1:1), CONTRACTS (open/save), ACCEPTANCE (7 сценариев), BEHAVIOR_MATRIX, TEST_DATA_SPEC, QA_ROLE_PRESETS, payloads (open, save request/response). Восстановлено из legacy ContractAction/Contract.jsp/ContractForm/validation.xml. Лог: logs/plan-contract-create-20260211-1900.md.
+- 2026-02-11: Agent-Dev Contracts DB migrations: Flyway V12–V19 (dcl_department, dcl_language, dcl_seller, dcl_user, dcl_user_language, dcl_contractor, dcl_contract, dcl_con_list_spec). High-priority parity gap закрыт. DCL_CONTRACT_FILTER: application layer (docs/db/DCL_CONTRACT_FILTER_DECISION.md). Лог: logs/dev-contracts-db-migrations-20260211-1109.md — VERIFIED.
+- 2026-02-11: Agent-QA N3 Contracts buttons re-verify: PASS. Кнопки «Импорт из КП» и «Создать» в gridBottom, порядок 1:1, клики → /contracts/import-cp и /contracts/new. canCreate из /api/me (admin/economist/lawyer). Отчёт: logs/qa-contracts-buttons-20260211-1855.md.
+- 2026-02-11: Agent-Dev N3 buttons parity: кнопки «Импорт из КП» и «Создать» перенесены в gridBottom (под гридом), порядок слева направо; «Создать» видна только при ролях admin/economist/lawyer (/api/me); клики → /contracts/import-cp и /contracts/new. Лог: logs/dev-contracts-buttons-20260211-1805.md — VERIFIED.
+- 2026-02-11: Agent-Plan N3 spec patch (buttons): SNAPSHOT §3.2 исправлен («Импорт из КП», placement gridBottom, traceability); ACCEPTANCE §8–9 (Click «Создать», «Импорт из КП»); BEHAVIOR_MATRIX Verify-столбец; CONTRACTS §0 Navigation; созданы docs/screens/contract_create/, contract_import_cp/ (N3a/N3b SNAPSHOT). Лог: logs/plan-contracts-buttons-patch-20260211-1700.md.
+- 2026-02-11: Agent-Orchestrator N3 parity gap fixed: reopened N3, spec patch (ACCEPTANCE §13–14, BEHAVIOR_MATRIX), Dev implemented «Импорт из КП» и «Создать» кнопки + routes /contracts/new, /contracts/import-cp. Orchestrator log: logs/orchestrator-contracts-parity-gap-20260211-1600.md. Browser: /contracts, /contracts/new, /contracts/import-cp load OK.
+- 2026-02-11: Agent-QA N3 Contracts list parity: PASS (до обнаружения gap по кнопкам). Backend запущен (port 8080 освобождён, Flyway OK); GET lookups, POST data/page/cleanAll — 2xx, JSON по CONTRACTS и payloads; сценарии ACCEPTANCE/BEHAVIOR_MATRIX проверены. Отчёт: logs/qa-contracts-20260211-0940.md. Console — ручная проверка (Preserve log) рекомендована.
+- 2026-02-10: N3 Contracts list реализован 1:1: backend (GET lookups, POST data/page/cleanAll, FAKE_SEEDED 60 строк по TEST_DATA_SPEC), UI (маршрут /contracts, меню «Договора», фильтры, грид 15 стр/стр, next/prev, crossed-cell). Сборка и тесты backend — OK. Browser-verify не выполнен: backend не запускается из‑за Flyway (миграции 10, dev seed marker). Лог: logs/dev-contracts-20260210-1740.md — NOT VERIFIED.
 - 2026-02-10: Orders N2 parity gaps fixed: contractor_for_id filter (provider+service+tests), order_by=ord_number asc/desc (provider+tests), UI sort dropdown; browser-verified. logs/dev-orders-parity-fix-20260210-1532.log — VERIFIED.
 - 2026-02-10: Agent-Plan N2 spec pack (Orders list): docs/screens/orders/ created — SNAPSHOT.md, CONTRACTS.md, ACCEPTANCE.md, BEHAVIOR_MATRIX.md, payloads/README.md; traceability to OrdersAction, OrdersForm, Orders.jsp, select-orders → DCL_ORDER_FILTER; UNCONFIRMED + "How to verify" in CONTRACTS; payloads/list-request.json, list-response.json (example shapes). PROGRESS.md updated. Agent-Plan verification pass: spec pack complete for 1:1 implementation.
 - 2026-02-10: Agent-Plan prepared full N3 Contracts spec pack in `docs/screens/contracts/` (SNAPSHOT/CONTRACTS/ACCEPTANCE/BEHAVIOR_MATRIX/TEST_DATA_SPEC/QA_ROLE_PRESETS + payloads + screenshots README), with BLOCKED HAR capture notes and HOW TO VERIFY steps.
@@ -44,6 +66,7 @@ Done:
 - 2026-02-09: Margin real progress loader (no fake): useMarginProgress + MarginProgress UI; initial (5 lookups steps), generate (request/response/render), export (XHR onprogress + steps); downloadWithProgress.ts; log dev-margin-progress-loader-20260209.log; IMPLEMENTATION_NOTES updated.
 - 2026-02-09: Added Cursor rule 073-fixed-dev-ports.mdc: порты фиксированы UI=5173, BE=8080, DB=5432; запрет тихого переезда; при занятом порте — lsof, kill или BLOCKED; vite.config.ts strictPort: true; лог logs/dev-ports-*.log.
 - 2026-02-09: Added Cursor rule 074-java-21-mandatory.mdc: backend только JDK 21; перед build/test/run — which java, java -version, JAVA_HOME; Java 8/11/17 = BLOCKED; лог logs/dev-java-gate-*.log; Done только при PASS + mvnw test + spring-boot:run на :8080.
+- 2026-02-11: Added Cursor rule 075-mandatory-task-reporting.mdc: обязательный TASK ID (TASK-0001..) и отчет в docs/AGENT_TASK_REPORTS.md; в начале — Agent/Start, в конце — End/Done/Files/Artifacts/Status; при отсутствии ID — генерация по grep; Done только при заполненной секции и артефакте; anti-loop guard. Создан docs/AGENT_TASK_REPORTS.md.
 
 Now:
 - (none)
@@ -62,6 +85,9 @@ Done (dev-debug 2026-02-09):
 - Устранены блокеры: MarginService — добавлен import MarginExcelExport; MarginIntegrationTest — исправлена скобка в jsonPath; backend перезапущен с JDK 21. API margin отвечает 2xx; лог logs/dev-debug-20260209-1807.log — VERIFIED.
 
 Next:
+- QA browser-check N3a missing blocks (при backend 8080 + UI 5173): сценарии Add contractor, Create spec, Attach file.
+- ~~Исправить POST /api/contracts/create/save (400 на валидном теле)~~ — TASK-0009: причина UTF-8 encoding; curl 200 при UTF-8 payload; CONTRACTS дополнен; повторный QA TASK-0008 для PASS.
+- Подключить ContractsService к JPA-репозиториям (при dataMode != FAKE) после появления таблиц V12–V19.
 - Agent-Dev implements N2 (Orders list) 1:1 per docs/screens/orders/ (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX).
 - Dev реализует Contracts 1:1 по спекам (`docs/screens/contracts/*`).
 - Dev implement Orders parity.
@@ -83,7 +109,7 @@ Open questions (UNCONFIRMED if needed):
 
 Working set (files/ids/commands):
 - docs/screens/orders/*, modern/backend/**/orders/**, modern/ui/src/features/orders/**
-- docs/screens/contracts/* (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX, TEST_DATA_SPEC, QA_ROLE_PRESETS, payloads, screenshots/README)
+- docs/screens/contracts/*, docs/screens/contract_create/, docs/screens/contract_import_cp/, modern/backend/**/contracts/**, modern/ui/src/features/contracts/** (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX, N3a/N3b)
 - docs/security/ROLE_MODEL.md, docs/security/DEV_BYPASS.md, docs/db/SEED_DATA_PLAN.md, docs/dev/DEV_DASHBOARD_SPEC.md
 - docs/screens/margin/CONTRACTS.md, docs/screens/margin/ACCEPTANCE.md, docs/screens/margin/BEHAVIOR_MATRIX.md
 - docs/screens/margin/TEST_DATA_SPEC.md, docs/screens/margin/QA_ROLE_PRESETS.md
@@ -98,6 +124,7 @@ Working set (files/ids/commands):
 - modern/backend: ./mvnw test (JAVA_HOME=JDK 21, Docker for Testcontainers), ./mvnw spring-boot:run (Postgres up)
 - modern/ui: npm install, npm run generate:api (backend on :8080), npm run dev → /reports/margin
 - docs/screens/margin/IMPLEMENTATION_NOTES.md, logs/dev-margin-*, logs/dev-browser-check-*.log
-- .cursor/rules/070-browser-verification.mdc, .cursor/rules/071-no-user-verification.mdc, .cursor/rules/072-no-blank-screens.mdc, .cursor/rules/073-fixed-dev-ports.mdc, .cursor/rules/074-java-21-mandatory.mdc
+- .cursor/rules/070-browser-verification.mdc, .cursor/rules/071-no-user-verification.mdc, .cursor/rules/072-no-blank-screens.mdc, .cursor/rules/073-fixed-dev-ports.mdc, .cursor/rules/074-java-21-mandatory.mdc, .cursor/rules/075-mandatory-task-reporting.mdc
+- docs/AGENT_TASK_REPORTS.md
 - logs/dev-e2e-verify-*.log, logs/dev-ui-smoke-*.log, logs/dev-ports-*.log, logs/dev-java-gate-*.log
 - CONTINUITY.md, docs/PROGRESS.md
