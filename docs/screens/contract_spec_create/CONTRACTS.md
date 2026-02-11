@@ -1,95 +1,59 @@
-# N3a2 Contract specification create — API Contracts
+# N3a2 Contract specification create — Contracts (Dev-ready)
 
-> Источник: SpecificationAction.insert, beforeSave, Contract.insertSpecification.
+> Legacy actions: `insert`, `beforeSave`, `process`, `back`, attachment and ajax dispatches.
 
-## 1) GET `/api/contracts/draft/specifications/new/open`
+## 1) Open
+### GET `/api/contracts/draft/specifications/new/open`
+Must return:
+- two-tab layout metadata (`mainPanel`, `complaintSpecification`),
+- full form defaults,
+- lookups (`users`, `deliveryTerms`, maybe contract attachments for copy list),
+- one default payment row `{percent:100, sum:0, currencyName}`,
+- role flags/readOnly flags.
 
-Назначение: открыть форму создания спецификации при create contract (con_id=null). Contract в session. Query: currencyName из Contract.
+## 2) Save
+### POST `/api/contracts/draft/specifications/save`
+- Content-Type UTF-8 JSON.
+- Equivalent to legacy `beforeSave` + `process`.
 
-Request: `GET /api/contracts/draft/specifications/new/open` (или session-based; currencyName из Contract form).
+Validation parity:
+- `spcNumber` required, max 50.
+- `spcDate` required + valid date.
+- `spcSumm` required currency.
+- `deliveryTerm.id` required.
+- `spcDeliveryCond`, `spcAddPayCond`, `spcComment` max 5000.
+- `spcAdditionalDaysCount` max 3 + integer.
+- `spcLetter1Date/2Date/3Date`, `spcComplaintInCourtDate`, `spcAnnulDate` valid dates.
+- Business validations from `beforeSave`:
+  - if occupied: `spcSumm >= payedSumm` and `spcSumm >= shippedSumm`.
+  - if not executed: `user.usrId` required.
 
-Response (200):
+Success:
 ```json
-{
-  "defaults": {
-    "user": null,
-    "spcNumber": "",
-    "spcDate": "",
-    "spcSumm": "",
-    "spcSummNds": "",
-    "spcDeliveryCond": "",
-    "deliveryTerm": null,
-    "spcAdditionalDaysCount": "",
-    "spcDeliveryPercent": "",
-    "spcDeliverySum": "",
-    "spcDeliveryDate": "",
-    "spcAddPayCond": "",
-    "specificationPayments": [{ "percent": 100, "delayDays": 0, "currencyName": "BYN" }],
-    "spcMontage": false,
-    "spcPayAfterMontage": false,
-    "spcFaxCopy": false,
-    "spcOriginal": false,
-    "spcComment": ""
-  },
-  "lookups": {
-    "users": [{ "id": "string", "userFullName": "string" }],
-    "deliveryTerms": [{ "id": "string", "name": "string" }]
-  },
-  "currencyName": "BYN"
-}
+{ "success": true, "redirectTo": "/contracts/new" }
 ```
 
-Traceability: SpecificationAction.insert() → contract.getEmptySpecification(), form payment 1 row.
+## 3) Cancel/back
+### POST/GET `/api/contracts/draft/specifications/cancel` (or client route back)
+- Must rollback deferred attachment context and return to contract screen.
 
-## 2) POST `/api/contracts/draft/specifications/save`
+## 4) Additional parity endpoints (if exposed by modern API)
+Legacy dispatches that must be represented or internally emulated:
+- `ajaxSpecificationPaymentsGrid`
+- `ajaxAddToPaymentGrid`
+- `ajaxRemoveFromPaymentGrid`
+- `ajaxRecalculatePaymentGrid`
+- `ajaxReloadPrices`
+- `ajaxReloadDate`
+- `ajaxReloadReminder`
+- `ajaxCalculateDeliveryDate`
+- `deferredAttach`
+- `deferredAttachCopy`
+- `deleteAttachment`
+- `downloadAttachment`
 
-Назначение: добавить спецификацию в session Contract (in-memory). Contract должен быть в session (из /contracts/new).
+If modern UI does calculations client-side, output/result behavior must remain 1:1 (same guardrails and errors).
 
-Request body:
-```json
-{
-  "user": { "id": "string", "userFullName": "string" },
-  "spcNumber": "string",
-  "spcDate": "DD.MM.YYYY",
-  "spcSumm": "string",
-  "spcSummNds": "string",
-  "spcDeliveryCond": "",
-  "deliveryTerm": { "id": "string", "name": "string" },
-  "spcAdditionalDaysCount": "",
-  "spcDeliveryPercent": "",
-  "spcDeliverySum": "",
-  "spcDeliveryDate": "DD.MM.YYYY",
-  "spcAddPayCond": "",
-  "specificationPayments": [{ "percent": 100, "delayDays": 0, "currencyName": "BYN" }],
-  "spcMontage": false,
-  "spcPayAfterMontage": false,
-  "spcFaxCopy": false,
-  "spcOriginal": false,
-  "spcComment": ""
-}
-```
-
-Validation (из validation.xml):
-- spc_number: required, maxlength 50.
-- spc_date: required, date.
-- spc_summ: required, currency.
-- deliveryTerm.id: required.
-- spc_delivery_cond, spc_add_pay_cond: maxlength 5000.
-- spc_comment: maxlength 5000.
-
-Response (200):
-```json
-{
-  "success": true,
-  "redirectTo": "/contracts/new"
-}
-```
-
-Backend: contract.insertSpecification(specification); return to Contract form.
-
-## 3) Cancel
-- Back без save: navigate /contracts/new (или SPA state).
-
-## 4) UNCONFIRMED / How to verify
-- Wire-формат legacy SpecificationAction.insert → input, beforeSave.
-- **HOW TO VERIFY:** HAR при Contract → Добавить Спецификацию → fill → Save.
+## 5) UNCONFIRMED / BLOCKED
+- Exact legacy wire payloads for ajax + attachments remain UNCONFIRMED.
+- HAR instructions in `payloads/network.har.BLOCKED.md`.

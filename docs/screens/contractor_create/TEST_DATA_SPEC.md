@@ -1,19 +1,23 @@
 # N3a1 Contractor create — Test data spec
 
-## Domains
-- DCL_CONTRACTOR, DCL_COUNTRY, DCL_REPUTATION (или эквивалент), DCL_CURRENCY.
+## Required reference data
+- Countries: >=1 record.
+- Reputations: >=1 record including default (for `loadDefaultForCtc`).
+- Users: includes current user.
+- Currencies: >=1 record.
 
-## Required for contractor create
-- countries: ≥1 (CountriesListAction).
-- reputations: ≥1 default (ReputationDAO.loadDefaultForCtc).
-- users: ≥1 (текущий user для gridUsers).
-- currencies: ≥1 (для accounts).
+## Data sets
+1. **Happy path** contractor:
+   - unique UNP, valid email, required fields set.
+2. **Duplicate UNP**:
+   - existing contractor with same UNP.
+3. **Accounts edge**:
+   - default row with account + empty currency.
+   - custom row with account only / currency only.
+   - `accAccount` length 36.
+4. **Role checks**:
+   - admin and non-admin test users (for user-grid delete and readonly flags).
 
-## UNP uniqueness
-- ctr_unp unique в DCL_CONTRACTOR (или UK/index).
-- Для теста duplicate: создать contractor с UNP="123456789" до теста; второй save с тем же UNP → 400.
-
-## Verification
-- GET /api/contractors/create/open → defaults, lookups populated.
-- POST save с ctr_name + reputation → 200, ctrId.
-- POST save с duplicate ctr_unp → 400.
+## Expected observable results
+- Save success returns contractor id and return context.
+- Validation failures keep form/tab and show field/business errors.

@@ -1,29 +1,39 @@
-# N3a1 Contractor create — Acceptance criteria (1:1)
+# N3a1 Contractor create — Acceptance (full parity)
 
-## Parity MUST (FAIL если не выполнено)
-1. Экран открывается по `/contractors/new?returnTo=contract` при клике «Добавить» у поля Контрагент на Contract form.
-2. Main tab: ctr_name, ctr_full_name, country, address (index, region, place, street, building, add_info), ctr_phone, ctr_fax, ctr_email, ctr_unp, ctr_okpo, reputation.
-3. ctr_name — обязательное; reputation — default из справочника.
-4. При create: gridUsers содержит текущего user; gridAccounts — 3 default rows.
-5. При save: contractor-insert; при returnTo=contract — redirect /contracts/new с newContractorId в query или эквивалент; Contract form получает contractor и подставляет в поле.
-6. UNP duplicate: при существующем UNP — error.contractorpage.duplicate_unp, форма не сохраняется.
-7. «Отмена» → возврат на /contracts/new без создания контрагента.
-8. Роли: admin, economist (xml-permissions ContractorAddActionContract).
+## A. Parity MUST
+1. Экран имеет **5 вкладок** в legacy-порядке: Главная / Курируют / Расчетные счета и банковские реквизиты / Контактные лица / Комментарии.
+2. Open из Contract «Добавить» заполняет create defaults (current user + 3 default accounts).
+3. Все main-поля и ограничения (required/maxlength/email/minlength) соблюдены.
+4. UNP duplicate блокирует save с legacy-ошибкой.
+5. Account rules (default/custom row behavior, currency/account constraints) соблюдены.
+6. Save возвращает на Contract, а созданный contractor доступен для подстановки (через `currentContractorId` эквивалент).
+7. Role/readOnly behavior: ограничения для non-admin/onlyManager/onlyOtherUserInMinsk соблюдены.
 
-## Приёмочные сценарии
+## B. Scenarios
+### B1 Open
+- Trigger: Contract form → «Добавить» у контрагента.
+- Expect: 5 tabs visible, default grids populated as legacy.
 
-### 1) Open from Contract
-- Trigger: Contract form, клик «Добавить» у contractor.
-- Expected: /contractors/new?returnTo=contract, форма пустая, lookups загружены, gridUsers с текущим user, gridAccounts с 3 rows.
+### B2 Save valid
+- Fill required fields + корректные accounts.
+- Expect: 2xx, contractor created, return to Contract with selected/new contractor.
 
-### 2) Save valid
-- Trigger: заполнить ctr_name, reputation; Save.
-- Expected: 200, ctrId; redirect /contracts/new?newContractorId=…; Contract form показывает выбранного contractor.
+### B3 Duplicate UNP
+- Existing UNP.
+- Expect: validation error, save blocked, active tab preserved.
 
-### 3) UNP duplicate
-- Trigger: ctr_unp существующий в БД; Save.
-- Expected: 400, error.contractorpage.duplicate_unp.
+### B4 Accounts validation
+- Default row with account but empty currency → fail.
+- Custom row with one empty field → fail.
+- `accAccount` length >35 → fail.
 
-### 4) Cancel
-- Trigger: Отмена.
-- Expected: redirect /contracts/new, contractor не создан.
+### B5 Role restrictions
+- Non-admin cannot delete user rows as admin-only action.
+- onlyManager / onlyOtherUserInMinsk sees readonly reputation/comment.
+
+### B6 Cancel
+- Cancel/back returns to Contract without creating entity.
+
+## C. Spec gap vs dev gap
+- This pack resolves **spec gap** (missing full tabs/fields/rules).
+- Dev gap for N3a1 already fixed in TASK-0006; this acceptance is normative for regression.

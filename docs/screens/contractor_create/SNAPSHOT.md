@@ -1,69 +1,97 @@
-# N3a1 Contractor create (from Contract) — Legacy Snapshot
+# N3a1 Contractor create (from Contract) — Legacy Snapshot (full 1:1)
 
-> Дочерний экран: открывается по кнопке «Добавить» у поля Контрагент на форме Contract. Traceability: contractor.jsp, ContractorAction, ContractorForm.
+> Дочерний экран Contract: кнопка «Добавить» у поля Контрагент. Источник истины: `contractor.jsp`, `ContractorAction`, `ContractorForm`, `validation.xml`, `struts-config.xml`, `xml-permissions.xml`.
 
-## 1) Идентификация
-- Legacy route: ContractorAddActionContract.do?dispatch=create.
-- Tile/JSP: `.contractor` → `/jsp/contractor.jsp`.
-- Modern route: `/contractors/new?returnTo=contract`.
-- Struts Action: `net.sam.dcl.action.ContractAction` newContractor → `ContractorAction` (create, process, back).
-- Permissions: xml-permissions.xml:373 — admin, economist; ContractorAddActionContract в списке.
+## 1) Идентификация и навигация
+- Вход из Contract: `ContractAction` forward `newContractor` → `/ContractorAddActionContract.do?dispatch=create`.
+- Экран: tile `.contractor` → `/jsp/contractor.jsp`.
+- Save: `Contractor(Add)ActionContract.do?dispatch=process`.
+- Return: forward `back` → `/ContractAction.do?dispatch=retFromContractor`.
+- Session handoff: `Contractor.currentContractorId` проставляется после успешного save.
 
-## 2) UI-слепок формы (порядок 1:1)
+## 2) Табы (порядок 1:1)
+1. `mainPanel` — **Главная** (`Contractor.main`)
+2. `usersContractor` — **Курируют** (`Contractor.users`)
+3. `accountsContractor` — **Расчетные счета и банковские реквизиты** (`Contractor.accounts`)
+4. `contactPersonsContractor` — **Контактные лица** (`Contractor.contactPersons`)
+5. `commentContractor` — **Комментарии** (`Contractor.comment`)
 
-### 2.1 Скрытые поля
-- ctr_id, is_new_doc, usr_date_create, usr_date_edit, createUser, editUser, lastNumber, lastNumberAcc.
+## 3) Скрытые/служебные поля
+`ctr_id`, `is_new_doc`, `usr_date_create`, `usr_date_edit`, `createUser.*`, `editUser.*`, `lastNumber`, `lastNumberAcc`.
 
-### 2.2 Main tab (Contractor.main)
-| Поле | Контрол | Обязательность | Валидация | Дефолт |
-|------|---------|----------------|-----------|--------|
-| ctr_name | text 400px | required | — | "" |
-| ctr_full_name | text 400px | — | — | "" |
-| country | serverList CountriesListAction + кнопка addAbsentInList | — | — | empty |
-| ctr_address | text readonly (computed) | — | — | from index+region+place+street+building+add_info |
-| ctr_index | text 100px | — | — | "" |
-| ctr_region | text 170px | — | — | "" |
-| ctr_place | text 285px | — | — | "" |
-| ctr_street | text 170px | — | — | "" |
-| ctr_building | text 95px | — | — | "" |
-| ctr_add_info | text 217px | — | — | "" |
-| ctr_phone | text 400px | — | — | "" |
-| ctr_fax | text 400px | — | — | "" |
-| ctr_email | text 400px | — | — | "" |
-| ctr_unp | text 400px | — | duplicate check | "" |
-| ctr_okpo | text 400px | — | — | "" |
-| reputation | serverList ReputationsListAction + кнопка editList | required | — | default from ReputationDAO.loadDefaultForCtc |
+## 4) Поля и правила
 
-### 2.3 Users tab (Contractor.users)
-- gridUsers: user (UsersListAction), Delete.
-- Кнопка «Добавить» → addRowInUserGrid.
-- При create: 1 row с текущим user.
+### 4.1 Tab «Главная»
+- `ctr_name` text 400 — **required**, maxlength 200.
+- `ctr_full_name` text 400 — **required**, maxlength 300.
+- `country` (`country.id/name`) serverList `/CountriesListAction` + кнопка `dispatch=addCountry`.
+- `ctr_address` readonly, вычисляется из `ctr_index/region/place/street/building/add_info` (JS `onAddressChanged`).
+- `ctr_index` maxlength 20.
+- `ctr_region` maxlength 50.
+- `ctr_place` maxlength 50.
+- `ctr_street` maxlength 50.
+- `ctr_building` maxlength 20.
+- `ctr_add_info` maxlength 1000.
+- `ctr_phone` maxlength 100.
+- `ctr_fax` maxlength 100.
+- `ctr_email` maxlength 40 + email validator.
+- `ctr_unp` minlength 6, maxlength 15 + duplicate check в `process()` (`ContractorDAO.loadByUNP`).
+- `ctr_okpo` maxlength 15.
+- `reputation` serverList `/ReputationsListAction` + кнопка `dispatch=editReputation`; required в бизнес-логике (default from `ReputationDAO.loadDefaultForCtc`).
 
-### 2.4 Accounts tab (Contractor.accounts)
-- ctr_bank_props: textarea 400px.
-- gridAccounts: acc_name, acc_account, currency (CurrenciesListAction), Delete.
-- Кнопка «Добавить» → addRowInAccountGrid.
-- При create: 3 default rows (ctr_account1, ctr_account2, ctr_account_val).
-- Validation: если acc_account заполнен — currency обязательна; maxlength 35 для account.
+Readonly/роль:
+- `readOnlyReputation=true` для `onlyManager`/`onlyOtherUserInMinsk`.
+- `readOnlyComment=true` для `onlyManager`/`onlyOtherUserInMinsk`.
+- `adminRole` управляет сценариями в tab «Курируют».
 
-### 2.5 Contact persons tab
-- gridContactPersons: cps_name, cps_position, cps_on_reason, cps_phone, cps_mob_phone, cps_fax, cps_email, cps_contract_comment, cps_fire, cps_block, Edit.
-- Кнопка «Создать» → addPersonInContractor.
-- При create: пустой grid.
+### 4.2 Tab «Курируют»
+Grid `gridUsers`:
+- user (`user.userFullName`, `user.usr_id`) via `/UsersListAction`.
+- delete row (`dispatch=deleteRowFromUserGrid`) доступен только admin (`showDeleteUserForAdmin`).
+- add row: JS `addUserClick()` → `dispatch=addRowInUserGrid`.
 
-### 2.6 Comment tab
-- ctr_comment: textarea 400x305.
+Правила:
+- При create всегда 1 строка с текущим пользователем.
+- Не-admin при add может добавить только себя (`ContractorAction.addRowInUserGrid`).
 
-### 2.7 Кнопки
-- «Отмена» → back → ContractAction.retFromContractor (без contractor).
-- «Сохранить» → process → contractor-insert → session currentContractorId=ctr_id → forward back → ContractAction.retFromContractor.
+### 4.3 Tab «Расчетные счета и банковские реквизиты»
+- `ctr_bank_props` textarea 400, maxlength 800.
+- Grid `gridAccounts`: `acc_name`, `acc_account`, `currency(id/name via /CurrenciesListAction)`, delete row.
+- add row: `dispatch=addRowInAccountGrid`.
 
-## 3) Return flow
-- ContractorAction.process() после save: session.setAttribute(Contractor.currentContractorId, form.getCtr_id()).
-- forward back → ContractAction.retFromContractor(): читает currentContractorId, ContractorDAO.load, form.setContractor, show Contract.
+Правила:
+- При create создаются 3 строки по умолчанию: `ctr_account1`, `ctr_account2`, `ctr_account_val`.
+- Для дефолтных строк: если заполнен `acc_account`, то currency обязательна.
+- Для остальных строк: обязательны и `acc_account`, и currency.
+- `acc_account` maxlength 35.
+- Delete у счетов виден только когда строк > 3 (`show-delete-checker`).
 
-## 4) Traceability
-- contractor.jsp: строки 1–367.
-- ContractorAction.create(), process(), ContractorForm.
-- validation.xml: /ContractorAction:process (3649).
-- sql-resources: contractor-insert.
+### 4.4 Tab «Контактные лица»
+Grid `gridContactPersons`:
+- колонки: `cps_name`, `cps_position`, `cps_on_reason`, `cps_phone`, `cps_mob_phone`, `cps_fax`, `cps_email`, `cps_contract_comment`, `cps_fire`, `cps_block`, edit.
+- `dispatch=fireContactPerson` и `dispatch=blockContactPerson`.
+- `dispatch=editPersonInContractor`.
+- `dispatch=addPersonInContractor` (кнопка «Создать»).
+
+### 4.5 Tab «Комментарии»
+- `ctr_comment` textarea 400x305, maxlength 5000, может быть readonly (`readOnlyComment`).
+
+## 5) Кнопки формы
+- «Отмена»: link dispatch `back`.
+- «Сохранить»: submit `dispatch=process`.
+
+## 6) Create defaults
+- `is_new_doc=true`.
+- `activePanelName=mainPanel`.
+- `lastNumber=1000`, `lastNumberAcc=1000`.
+- gridUsers: текущий user.
+- gridAccounts: 3 дефолтных строки.
+- gridContactPersons: empty.
+
+## 7) Spec gap vs dev gap (this task)
+- **Spec gap (закрыт):** ранее в spec pack были неполно зафиксированы все 5 вкладок и роль/readonly правила для grid-кнопок.
+- **Dev gap:** отсутствовал ранее (TASK-0006 уже закрыл кнопку «Добавить» и экран). В текущем пакете — только спецификация/трассируемость.
+
+## 8) UNCONFIRMED
+- Точный wire-format legacy multipart/x-www-form-urlencoded для nested grid полей — **UNCONFIRMED**.
+- How to verify: `payloads/network.har.BLOCKED.md` (capture create/process + grid edits).

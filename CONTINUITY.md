@@ -128,3 +128,8 @@ Working set (files/ids/commands):
 - docs/AGENT_TASK_REPORTS.md
 - logs/dev-e2e-verify-*.log, logs/dev-ui-smoke-*.log, logs/dev-ports-*.log, logs/dev-java-gate-*.log
 - CONTINUITY.md, docs/PROGRESS.md
+
+Update 2026-02-11 (TASK-0012):
+- DONE: Expanded N3a1/N3a2 spec packs to full parity (tabs, fields, readonly/required/defaults, acceptance/matrix/contracts/test-data/role-presets, HAR BLOCKED instructions). Log: logs/plan-n3a1-n3a2-full-parity-spec-20260211-1140.md.
+- GAP ATTRIBUTION: primary issue was spec gap; no new dev gap confirmed in this planning cycle.
+- NEXT: Dev/QA execute against updated acceptance matrices; capture legacy HAR for UNCONFIRMED wire details.

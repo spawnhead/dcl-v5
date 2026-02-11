@@ -255,3 +255,35 @@ Grok's changes (labelCol, wrapperCol, Divider, sections) were **not in the worki
 
 ### Status
 DONE / VERIFIED (API curl 200; browser form fill рекомендуется ручная проверка — JSON.stringify использует UTF-8).
+
+---
+
+## TASK-0012 — Agent-Plan: N3a1 + N3a2 full parity spec expansion (spec gap vs dev gap)
+
+| Field | Value |
+|-------|-------|
+| **Agent/Start** | Agent-Plan, 2026-02-11 |
+| **Goal** | Довести `contractor_create` и `contract_spec_create` spec packs до полного legacy 1:1 (табы/поля/правила/контракты/матрицы), явно разделив spec gap и dev gap |
+| **End** | 2026-02-11 |
+| **Status** | DONE |
+
+### Done
+- Проведена трассировка по legacy источникам: JSP + Action + Form + validation + struts-config + permissions.
+- N3a1: расширены спеки до 5 вкладок, добавлены role/readOnly/checker правила, grid-операции и account-валидации.
+- N3a2: расширены спеки до 2 вкладок (включая «Претензии»), добавлены attachment/payment/ajax потоки и business validations `beforeSave`.
+- CONTRACTS/ACCEPTANCE/BEHAVIOR_MATRIX/TEST_DATA_SPEC/QA_ROLE_PRESETS обновлены для обоих экранов.
+- Обновлены `payloads/network.har.BLOCKED.md` с пошаговым HAR-планом и must-see request list.
+- Сформирован артефакт: `logs/plan-n3a1-n3a2-full-parity-spec-20260211-1140.md`.
+
+### Gap attribution
+- **Spec gap:** основной и закрытый в этой задаче.
+- **Dev gap:** новых не зафиксировано в рамках planning-цикла; реализация сверяется по обновлённым acceptance/behavior matrix.
+
+### Files touched
+- `docs/screens/contractor_create/*`
+- `docs/screens/contract_spec_create/*`
+- `docs/screens/*/payloads/network.har.BLOCKED.md`
+- `logs/plan-n3a1-n3a2-full-parity-spec-20260211-1140.md`
+- `docs/AGENT_TASK_REPORTS.md`
+- `docs/PROGRESS.md`
+- `CONTINUITY.md`
