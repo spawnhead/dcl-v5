@@ -4,12 +4,16 @@
  * N3a1: Добавить у contractor → /contractors/new?returnTo=contract.
  * N3a2: Спецификации table + «Создать спецификацию» → /contracts/draft/specifications/new.
  * N3a3: Прикреплённые файлы + «Прикрепить» → /contracts/draft/attachments.
+ * TASK-0025: Global UX feedback — ScreenLoader, Message.success/error for save.
  */
-import { Button, Checkbox, DatePicker, Divider, Form, Input, Layout, message, Select, Space, Table, Typography } from 'antd';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { Button, Checkbox, DatePicker, Form, Input, Select, Space, Typography, Card, Row, Col, Flex, Breadcrumb } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { ScreenLoader } from '../../shared/ui/ScreenLoader';
+import { showError, showLoading, hideLoading, notifySuccess, notifyError } from '../../shared/lib/feedback';
+import { fetchWithErrorHandling } from '../../shared/lib/api';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(customParseFormat);
 
@@ -91,12 +95,16 @@ export default function ContractCreatePage() {
   const [attachments, setAttachments] = useState<AttachmentItem[]>([]);
 
   const loadOpen = useCallback(() => {
-    return fetch(`${API_BASE}/api/contracts/create/open`)
+    const newContractorId = searchParams.get('newContractorId');
+    const url = newContractorId
+      ? `${API_BASE}/api/contracts/create/open?newContractorId=${encodeURIComponent(newContractorId)}`
+      : `${API_BASE}/api/contracts/create/open`;
+    return fetch(url)
       .then((r) => r.json())
       .then((data: OpenResponse) => {
         setOpenData(data);
         if (!data.canCreate) {
-          message.warning('Нет прав на создание договора');
+          showError('Нет прав на создание договора');
           navigate('/contracts');
           return;
         }
@@ -115,14 +123,21 @@ export default function ContractCreatePage() {
           conAnnulDate: data.defaults.conAnnulDate ? dayjs(data.defaults.conAnnulDate, DATE_FORMAT) : null,
           conComment: data.defaults.conComment,
         });
-        if (newContractorId) setSearchParams({});
+        // Do NOT clear newContractorId here: setSearchParams({}) triggers loadOpen refetch
+        // with stale params, which overwrites contractor with null.
       });
-  }, [form, navigate, searchParams, setSearchParams]);
+  }, [form, navigate, searchParams]);
 
   useEffect(() => {
+    const startedAt = performance.now();
+    const minLoaderMs = import.meta.env.DEV ? 350 : 0;
     loadOpen()
-      .catch(() => message.error('Ошибка загрузки формы'))
-      .finally(() => setLoading(false));
+      .catch(() => showError('Ошибка загрузки формы'))
+      .finally(() => {
+        const elapsed = performance.now() - startedAt;
+        const delay = Math.max(0, minLoaderMs - elapsed);
+        setTimeout(() => setLoading(false), delay);
+      });
   }, [loadOpen]);
 
   useEffect(() => {
@@ -152,9 +167,10 @@ export default function ContractCreatePage() {
   }, [form]);
 
   const handleFinish = useCallback(
-    (values: Record<string, unknown>) => {
+    async (values: Record<string, unknown>) => {
       setFieldErrors({});
       setSaving(true);
+      showLoading('Сохранение договора...');
       const contractorId = values.contractor as string;
       const currencyId = values.currency as string;
       const sellerId = values.seller as string;
@@ -176,54 +192,50 @@ export default function ContractCreatePage() {
         conComment: (values.conComment as string) ?? '',
         specifications: specifications.map((s) => ({ spcNumber: s.spcNumber, spcDate: s.spcDate, spcSummFormatted: s.spcSummFormatted })),
       };
-      fetch(`${API_BASE}/api/contracts/create/save`, {
+      const result = await fetchWithErrorHandling<SaveResponse>(`${API_BASE}/api/contracts/create/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
-      })
-        .then(async (res) => {
-          const json = await res.json();
-          if (!res.ok) {
-            const err = json as ValidationErrorResponse;
-            const map: Record<string, string> = {};
-            err.error?.fields?.forEach((f) => {
-              map[f.name] = f.message;
-            });
-            setFieldErrors(map);
-            message.error('Ошибка валидации');
-            return;
-          }
-          const data = json as SaveResponse;
-          message.success('Договор сохранён');
-          navigate(data.redirectTo || '/contracts');
-        })
-        .catch(() => {
-          message.error('Ошибка сохранения');
-        })
-        .finally(() => setSaving(false));
+      });
+      hideLoading();
+      setSaving(false);
+      if (!result.ok) {
+        const err = result.error!;
+        if (err.fields?.length) {
+          const map: Record<string, string> = {};
+          err.fields.forEach((f) => {
+            map[f.name] = f.message;
+          });
+          setFieldErrors(map);
+        }
+        notifyError('Ошибка сохранения', err.message);
+        return;
+      }
+      notifySuccess('Договор сохранён');
+      navigate(result.data!.redirectTo || '/contracts');
     },
     [openData, navigate, specifications]
   );
 
   if (loading || !openData) {
     return (
-      <Layout style={{ padding: 16 }}>
-        <Typography.Text>Загрузка...</Typography.Text>
-      </Layout>
+      <ScreenLoader loading={true} rows={10}>
+        <div />
+      </ScreenLoader>
     );
   }
 
   return (
-    <Layout style={{ padding: 16 }}>
+    <div style={{ padding: 16 }}>
       <Typography.Title level={4}>Создание договора</Typography.Title>
       <Form
         form={form}
-        layout="horizontal"
+        layout="vertical"
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
         colon={false}
-        requiredMark={false}
-        onFinish={handleFinish}
+        requiredMark="optional"
+        onFinish={handleFinish} size="large"
         style={{ maxWidth: 720 }}
       >
         <Divider orientation="left" plain>Основные поля</Divider>
@@ -258,20 +270,20 @@ export default function ContractCreatePage() {
         </Form.Item>
         <Form.Item
           label="Контрагент"
-          name="contractor"
-          rules={[{ required: true, message: 'Выберите контрагента' }]}
           validateStatus={fieldErrors['contractor.id'] ? 'error' : undefined}
           help={fieldErrors['contractor.id']}
         >
           <Space.Compact style={{ width: 320 }}>
-            <Select
-              allowClear
-              showSearch
-              optionFilterProp="label"
-              placeholder="Контрагент"
-              options={openData.lookups.contractors.map((c) => ({ value: c.id, label: c.name }))}
-              style={{ width: 240 }}
-            />
+            <Form.Item name="contractor" noStyle rules={[{ required: true, message: 'Выберите контрагента' }]}>
+              <Select
+                allowClear
+                showSearch
+                optionFilterProp="label"
+                placeholder="Контрагент"
+                options={openData.lookups.contractors.map((c) => ({ value: c.id, label: c.name }))}
+                style={{ width: 240 }}
+              />
+            </Form.Item>
             <Button type="default" onClick={() => navigate('/contractors/new?returnTo=contract')}>
               Добавить
             </Button>
@@ -375,6 +387,6 @@ export default function ContractCreatePage() {
           </Space>
         </Form.Item>
       </Form>
-    </Layout>
+    </div>
   );
 }
