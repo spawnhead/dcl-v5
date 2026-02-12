@@ -5,13 +5,17 @@
  * N3a2: Спецификации table + «Создать спецификацию» → /contracts/draft/specifications/new.
  * N3a3: Прикреплённые файлы + «Прикрепить» → /contracts/draft/attachments.
  * TASK-0025: Global UX feedback — ScreenLoader, Message.success/error for save.
+ * TASK-0060: Figma AntD layout — Cards, Row/Col 2/3+1/3, sticky sidebar actions.
  */
-import { Button, Checkbox, DatePicker, Form, Input, Select, Space, Typography, Card, Row, Col, Flex, Breadcrumb } from 'antd';
+import { Button, Breadcrumb, Card, Checkbox, Col, DatePicker, Flex, Form, Input, Row, Select, Space, Typography } from 'antd';
+import { PlusOutlined, SaveOutlined, CloseOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { ScreenLoader } from '../../shared/ui/ScreenLoader';
 import { showError, showLoading, hideLoading, notifySuccess, notifyError } from '../../shared/lib/feedback';
 import { fetchWithErrorHandling } from '../../shared/lib/api';
+import { SpecificationsTable } from './components/SpecificationsTable';
+import { FileUploadSection } from './components/FileUploadSection';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -93,6 +97,9 @@ export default function ContractCreatePage() {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [specifications, setSpecifications] = useState<SpecRow[]>([]);
   const [attachments, setAttachments] = useState<AttachmentItem[]>([]);
+
+  // Watch conAnnul to conditionally show annul date
+  const conAnnulValue = Form.useWatch('conAnnul', form);
 
   const loadOpen = useCallback(() => {
     const newContractorId = searchParams.get('newContractorId');
@@ -226,168 +233,213 @@ export default function ContractCreatePage() {
   }
 
   return (
-    <div style={{ padding: 16 }}>
-      <Typography.Title level={4}>Создание договора</Typography.Title>
+    <div style={{ padding: '16px 24px' }}>
+      <Breadcrumb
+        style={{ marginBottom: 8 }}
+        items={[
+          { title: 'Главная' },
+          { title: 'Договора' },
+          { title: 'Создание договора' },
+        ]}
+      />
+      <Typography.Title level={4} style={{ marginBottom: 24 }}>Создание договора</Typography.Title>
+
       <Form
         form={form}
         layout="vertical"
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 18 }}
         colon={false}
         requiredMark="optional"
-        onFinish={handleFinish} size="large"
-        style={{ maxWidth: 720 }}
+        onFinish={handleFinish}
+        size="large"
       >
-        <Divider orientation="left" plain>Основные поля</Divider>
-        <Form.Item
-          label="Номер"
-          name="conNumber"
-          rules={[{ required: true, message: 'Введите номер договора' }]}
-          validateStatus={fieldErrors['conNumber'] ? 'error' : undefined}
-          help={fieldErrors['conNumber']}
-        >
-          <Input maxLength={50} style={{ width: 230 }} placeholder="Номер договора" />
-        </Form.Item>
-        <Form.Item
-          label="Дата"
-          name="conDate"
-          rules={[{ required: true, message: 'Введите дату' }]}
-          validateStatus={fieldErrors['conDate'] ? 'error' : undefined}
-          help={fieldErrors['conDate']}
-        >
-          <DatePicker format={DATE_FORMAT} style={{ width: 140 }} />
-        </Form.Item>
-        <Form.Item name="conReusable" valuePropName="checked">
-          <Checkbox>Многоразовый</Checkbox>
-        </Form.Item>
-        <Form.Item
-          label="Срок действия"
-          name="conFinalDate"
-          validateStatus={fieldErrors['conFinalDate'] ? 'error' : undefined}
-          help={fieldErrors['conFinalDate']}
-        >
-          <DatePicker format={DATE_FORMAT} style={{ width: 140 }} />
-        </Form.Item>
-        <Form.Item
-          label="Контрагент"
-          validateStatus={fieldErrors['contractor.id'] ? 'error' : undefined}
-          help={fieldErrors['contractor.id']}
-        >
-          <Space.Compact style={{ width: 320 }}>
-            <Form.Item name="contractor" noStyle rules={[{ required: true, message: 'Выберите контрагента' }]}>
-              <Select
-                allowClear
-                showSearch
-                optionFilterProp="label"
-                placeholder="Контрагент"
-                options={openData.lookups.contractors.map((c) => ({ value: c.id, label: c.name }))}
-                style={{ width: 240 }}
-              />
-            </Form.Item>
-            <Button type="default" onClick={() => navigate('/contractors/new?returnTo=contract')}>
-              Добавить
-            </Button>
-          </Space.Compact>
-        </Form.Item>
-        <Form.Item
-          label="Валюта"
-          name="currency"
-          rules={[{ required: true, message: 'Выберите валюту' }]}
-          validateStatus={fieldErrors['currency.id'] ? 'error' : undefined}
-          help={fieldErrors['currency.id']}
-        >
-          <Select
-            allowClear
-            placeholder="Валюта"
-            options={openData.lookups.currencies.map((c) => ({ value: c.id, label: c.name }))}
-            style={{ width: 120 }}
-          />
-        </Form.Item>
-        <Form.Item name="conFaxCopy" valuePropName="checked">
-          <Checkbox onChange={conFaxCopyOnChange}>Факсовая копия</Checkbox>
-        </Form.Item>
-        <Form.Item name="conOriginal" valuePropName="checked">
-          <Checkbox onChange={conOriginalOnChange}>Оригинал</Checkbox>
-        </Form.Item>
-        <Form.Item
-          label="Продавец"
-          name="seller"
-          rules={[{ required: true, message: 'Выберите продавца' }]}
-          validateStatus={fieldErrors['seller.id'] ? 'error' : undefined}
-          help={fieldErrors['seller.id']}
-        >
-          <Select
-            allowClear
-            placeholder="Продавец"
-            options={openData.lookups.sellers.map((s) => ({ value: s.id, label: s.name }))}
-            style={{ width: 280 }}
-          />
-        </Form.Item>
-        <Form.Item name="conAnnul" valuePropName="checked">
-          <Checkbox>Аннулирован</Checkbox>
-        </Form.Item>
-        <Form.Item
-          label="Дата аннулирования"
-          name="conAnnulDate"
-          validateStatus={fieldErrors['conAnnulDate'] ? 'error' : undefined}
-          help={fieldErrors['conAnnulDate']}
-        >
-          <DatePicker format={DATE_FORMAT} style={{ width: 140 }} />
-        </Form.Item>
-        <Form.Item
-          label="Примечание"
-          name="conComment"
-          validateStatus={fieldErrors['conComment'] ? 'error' : undefined}
-          help={fieldErrors['conComment']}
-        >
-          <Input.TextArea rows={4} maxLength={5000} style={{ width: 600 }} placeholder="Примечание" />
-        </Form.Item>
-        <Divider orientation="left" plain>Спецификации</Divider>
-        <div style={{ marginBottom: 16 }}>
-          <Table
-            dataSource={specifications}
-            columns={[
-              { title: 'Номер', dataIndex: 'spcNumber', key: 'spcNumber', width: 120 },
-              { title: 'Дата', dataIndex: 'spcDate', key: 'spcDate', width: 100 },
-              { title: 'Сумма', dataIndex: 'spcSummFormatted', key: 'spcSummFormatted', width: 100 },
-              { title: 'НДС %', dataIndex: 'spcNdsRateFormatted', key: 'spcNdsRateFormatted', width: 80 },
-              { title: 'Сумма с НДС', dataIndex: 'spcSummNdsFormatted', key: 'spcSummNdsFormatted', width: 100 },
-              { title: 'Остаток', dataIndex: 'spcRemainder', key: 'spcRemainder', width: 80 },
-              { title: 'Исполнено', dataIndex: 'spcExecuted', key: 'spcExecuted', width: 80 },
-            ]}
-            pagination={false}
-            size="small"
-            locale={{ emptyText: 'Нет строк' }}
-          />
-          <Button type="default" style={{ marginTop: 8 }} onClick={() => navigate('/contracts/draft/specifications/new', { state: { currencyName: openData.lookups.currencies.find((c) => c.id === form.getFieldValue('currency'))?.name ?? 'BYN' } })}>
-            Создать спецификацию
-          </Button>
-        </div>
-        <Divider orientation="left" plain>Прикреплённые файлы</Divider>
-        <div style={{ marginBottom: 16 }}>
-          {attachments.length === 0 ? (
-            <Typography.Text type="secondary">Нет прикреплённых файлов</Typography.Text>
-          ) : (
-            <ul style={{ margin: 0, paddingLeft: 20 }}>
-              {attachments.map((a) => (
-                <li key={a.id}>{a.originalFileName}</li>
-              ))}
-            </ul>
-          )}
-          <Button type="default" style={{ marginTop: 8 }} onClick={() => navigate('/contracts/draft/attachments')}>
-            Прикрепить
-          </Button>
-        </div>
-        <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
-          <Space>
-            <Button type="primary" htmlType="submit" loading={saving}>
-              Сохранить
-            </Button>
-            <Button onClick={handleCancel}>Отмена</Button>
-          </Space>
-        </Form.Item>
+        <Row gutter={24}>
+          {/* ===== Left column: 2/3 ===== */}
+          <Col xs={24} lg={16}>
+            <Flex vertical gap="large">
+              {/* --- Card: Основные поля --- */}
+              <Card title="Основные поля">
+                <Row gutter={16}>
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="Номер"
+                      name="conNumber"
+                      rules={[{ required: true, message: 'Введите номер договора' }]}
+                      validateStatus={fieldErrors['conNumber'] ? 'error' : undefined}
+                      help={fieldErrors['conNumber']}
+                    >
+                      <Input maxLength={50} placeholder="Номер договора" />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="Дата"
+                      name="conDate"
+                      rules={[{ required: true, message: 'Введите дату' }]}
+                      validateStatus={fieldErrors['conDate'] ? 'error' : undefined}
+                      help={fieldErrors['conDate']}
+                    >
+                      <DatePicker format={DATE_FORMAT} style={{ width: '100%' }} placeholder="Выберите дату" />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="Срок действия"
+                      name="conFinalDate"
+                      validateStatus={fieldErrors['conFinalDate'] ? 'error' : undefined}
+                      help={fieldErrors['conFinalDate']}
+                    >
+                      <DatePicker format={DATE_FORMAT} style={{ width: '100%' }} placeholder="Выберите срок действия" />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} md={12}>
+                    <Form.Item name="conReusable" valuePropName="checked" style={{ marginTop: 30 }}>
+                      <Checkbox>Многоразовый</Checkbox>
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                {/* Контрагент */}
+                <Form.Item
+                  label="Контрагент"
+                  validateStatus={fieldErrors['contractor.id'] ? 'error' : undefined}
+                  help={fieldErrors['contractor.id']}
+                >
+                  <Space.Compact style={{ width: '100%' }}>
+                    <Form.Item name="contractor" noStyle rules={[{ required: true, message: 'Выберите контрагента' }]}>
+                      <Select
+                        allowClear
+                        showSearch
+                        optionFilterProp="label"
+                        placeholder="Выберите контрагента"
+                        options={openData.lookups.contractors.map((c) => ({ value: c.id, label: c.name }))}
+                        style={{ width: '100%' }}
+                      />
+                    </Form.Item>
+                    <Button icon={<PlusOutlined />} onClick={() => navigate('/contractors/new?returnTo=contract')} />
+                  </Space.Compact>
+                </Form.Item>
+
+                <Row gutter={16}>
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="Валюта"
+                      name="currency"
+                      rules={[{ required: true, message: 'Выберите валюту' }]}
+                      validateStatus={fieldErrors['currency.id'] ? 'error' : undefined}
+                      help={fieldErrors['currency.id']}
+                    >
+                      <Select
+                        allowClear
+                        placeholder="Выберите валюту"
+                        options={openData.lookups.currencies.map((c) => ({ value: c.id, label: c.name }))}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="Продавец"
+                      name="seller"
+                      rules={[{ required: true, message: 'Выберите продавца' }]}
+                      validateStatus={fieldErrors['seller.id'] ? 'error' : undefined}
+                      help={fieldErrors['seller.id']}
+                    >
+                      <Select
+                        allowClear
+                        placeholder="Выберите продавца"
+                        options={openData.lookups.sellers.map((s) => ({ value: s.id, label: s.name }))}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                {/* Примечание */}
+                <Form.Item
+                  label="Примечание"
+                  name="conComment"
+                  validateStatus={fieldErrors['conComment'] ? 'error' : undefined}
+                  help={fieldErrors['conComment']}
+                >
+                  <Input.TextArea rows={3} maxLength={5000} showCount placeholder="Примечание к договору" />
+                </Form.Item>
+              </Card>
+
+              {/* --- Card: Спецификации --- */}
+              <Card
+                title="Спецификации"
+                extra={
+                  <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={() =>
+                      navigate('/contracts/draft/specifications/new', {
+                        state: {
+                          currencyName:
+                            openData.lookups.currencies.find((c) => c.id === form.getFieldValue('currency'))?.name ?? 'BYN',
+                        },
+                      })
+                    }
+                  >
+                    Создать спецификацию
+                  </Button>
+                }
+              >
+                <SpecificationsTable data={specifications} />
+              </Card>
+
+              {/* --- Card: Файлы --- */}
+              <Card title="Прикреплённые файлы">
+                <FileUploadSection
+                  attachments={attachments}
+                  onAttachClick={() => navigate('/contracts/draft/attachments')}
+                />
+              </Card>
+            </Flex>
+          </Col>
+
+          {/* ===== Right column: 1/3 — sidebar ===== */}
+          <Col xs={24} lg={8}>
+            <div style={{ position: 'sticky', top: 16 }}>
+              <Flex vertical gap="large">
+                {/* Статусы */}
+                <Card title="Статусы и документы">
+                  <Flex vertical gap="middle">
+                    <Form.Item name="conFaxCopy" valuePropName="checked" style={{ marginBottom: 0 }}>
+                      <Checkbox onChange={conFaxCopyOnChange}>Факсовая копия</Checkbox>
+                    </Form.Item>
+                    <Form.Item name="conOriginal" valuePropName="checked" style={{ marginBottom: 0 }}>
+                      <Checkbox onChange={conOriginalOnChange}>Оригинал</Checkbox>
+                    </Form.Item>
+                    <Form.Item name="conAnnul" valuePropName="checked" style={{ marginBottom: 0 }}>
+                      <Checkbox>Аннулирован</Checkbox>
+                    </Form.Item>
+                    {conAnnulValue && (
+                      <Form.Item
+                        label="Дата аннулирования"
+                        name="conAnnulDate"
+                        validateStatus={fieldErrors['conAnnulDate'] ? 'error' : undefined}
+                        help={fieldErrors['conAnnulDate']}
+                        style={{ paddingLeft: 24 }}
+                      >
+                        <DatePicker format={DATE_FORMAT} style={{ width: '100%' }} placeholder="Выберите дату" />
+                      </Form.Item>
+                    )}
+                  </Flex>
+                </Card>
+
+                {/* Действия */}
+                <Flex vertical gap="middle">
+                  <Button type="primary" size="large" block icon={<SaveOutlined />} htmlType="submit" loading={saving}>
+                    Сохранить
+                  </Button>
+                  <Button size="large" block icon={<CloseOutlined />} onClick={handleCancel}>
+                    Отмена
+                  </Button>
+                </Flex>
+              </Flex>
+            </div>
+          </Col>
+        </Row>
       </Form>
     </div>
   );
 }
-
