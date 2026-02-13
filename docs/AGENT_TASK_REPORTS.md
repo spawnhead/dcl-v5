@@ -1,5 +1,28 @@
 ---
 
+## TASK-0092 - Orders Design Integration
+
+Agent: Senior Frontend Engineer (React 19 + AntD + AG Grid)
+Start: 2026-02-13 14:00
+End: 2026-02-13 14:30
+
+Done:
+- Orders list (/orders): layout per OrdersRegistryPage.tsx — Card filters 4-col, AgGridShell in Card, parity сохранён.
+- Order edit (/orders/new, /orders/:id/edit): layout per OrderPage.tsx — Sections 1–7, sticky footer, produces/payments/paySums grids.
+- Build PASS. API contracts unchanged.
+
+Files:
+- modern/ui/src/features/orders/OrdersPage.tsx
+- modern/ui/src/features/orders/OrderEditPage.tsx
+- modern/ui/tests/e2e/orders-smoke.spec.ts (Позиции → Спецификация)
+
+Artifacts:
+- logs/dev-task-0092-orders-design-integration-20260213-1400.md
+
+Status: VERIFIED — Build PASS; /orders, /orders/new load; Console 0 (browser check).
+
+---
+
 ## TASK-0090 - Orders CERT (post TASK-0089)
 
 Agent: QA Lead (Playwright + DevTools MCP)

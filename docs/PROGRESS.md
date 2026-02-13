@@ -1,6 +1,7 @@
 # Progress
 
 ## Done
+- 2026-02-13: **TASK-0092 Orders design integration.** Orders list + Order edit layout per docs/design (OrdersRegistryPage, OrderPage); Card filters, sections, sticky footer; parity сохранён. logs/dev-task-0092-orders-design-integration-20260213-1400.md.
 - 2026-02-13: **TASK-0090 Orders CERT.** Playwright 2 passed (full flow NOT skip); endpoints 2xx; Console 0. logs/qa-task-0090-orders-cert-20260213-0900.md.
 - 2026-02-13: **TASK-0087 Playwright E2E smoke.** orders-smoke.spec.ts, cp-list-smoke.spec.ts; 3 passed, 1 skipped (Orders full flow BLOCKED by backend save 500). logs/qa-task-0087-playwright-smokes-20260213-0540.md.
 - 2026-02-13: **TASK-0089 Orders save 500 fix.** ord_number truncation (VARCHAR 15); smoke test fixes; Playwright orders-smoke 2 passed. logs/dev-task-0089-orders-save-500-fix-20260213-0830.md.

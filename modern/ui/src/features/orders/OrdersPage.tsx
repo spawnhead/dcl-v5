@@ -1,10 +1,12 @@
 /**
  * Orders list (N2). Parity per docs/screens/orders (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX).
+ * Layout per docs/design/Create Contract Redesign/OrdersRegistryPage.tsx
  * Legacy: OrdersAction.do, Orders.jsp.
  */
 import { AllCommunityModule, ColDef, ModuleRegistry } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { Button, Checkbox, DatePicker, Input, InputNumber, Layout, message, Select, Space, Typography } from 'antd';
+import { Button, Card, Checkbox, Col, DatePicker, Form, Input, InputNumber, message, Row, Select, Space, Typography } from 'antd';
+import { ClearOutlined, FilterOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -22,7 +24,6 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '';
 const DATE_FORMAT = 'DD.MM.YYYY';
 const DEFAULT_ORDER_AFTER_FILTER = 'ord_date descending';
 
-/** Format date for grid: API may return ISO (YYYY-MM-DD), display as DD.MM.YYYY (parity with filter). */
 function formatDateGrid(value: string | null | undefined): string {
   if (value == null || value === '') return '';
   const d = dayjs(value, ['YYYY-MM-DD', DATE_FORMAT], true);
@@ -62,6 +63,7 @@ function buildQueryParams(params: OrderFilterParams): string {
 
 export default function OrdersPage() {
   const navigate = useNavigate();
+  const [form] = Form.useForm();
   const [number, setNumber] = useState('');
   const [dateBegin, setDateBegin] = useState<string | null>(null);
   const [dateEnd, setDateEnd] = useState<string | null>(null);
@@ -143,13 +145,12 @@ export default function OrdersPage() {
   const listParams = appliedFilter ?? null;
   const listQuery = useMemo(() => {
     if (!listParams) return null;
-    const params: OrderFilterParams = {
+    return {
       ...listParams,
       page: listParams.page,
       pageSize: listParams.pageSize,
       order_by: listParams.order_by ?? DEFAULT_ORDER_AFTER_FILTER,
     };
-    return params;
   }, [listParams]);
 
   const listUrl = listQuery ? `${API_BASE}/api/orders?${buildQueryParams(listQuery)}` : null;
@@ -282,21 +283,48 @@ export default function OrdersPage() {
   }, [contractNumber, contractorForId]);
 
   const columnDefs: ColDef<OrderRowDto>[] = useMemo(() => [
-    { field: 'ord_number', headerName: '№ заказа', flex: 1, minWidth: 100 },
+    {
+      field: 'ord_number',
+      headerName: 'Номер',
+      flex: 1,
+      minWidth: 150,
+      cellRenderer: (p: { data?: OrderRowDto }) => {
+        const row = p.data;
+        if (!row) return null;
+        return (
+          <a href="#" onClick={(e) => { e.preventDefault(); navigate(`/orders/${row.ord_id}/edit`); }}>
+            {row.ord_number}
+          </a>
+        );
+      },
+    },
     { field: 'ord_date', headerName: 'Дата', flex: 1, minWidth: 100, valueFormatter: (p) => formatDateGrid(p.value) },
-    { field: 'ord_contractor', headerName: 'Контрагент', flex: 1, minWidth: 140 },
-    { field: 'ord_contractor_for', headerName: 'Заказчик', flex: 1, minWidth: 120 },
-    { field: 'ord_summ', headerName: 'Сумма', flex: 1, minWidth: 90, valueFormatter: (p) => p.value != null ? String(p.value) : '' },
-    { field: 'ord_date_conf', headerName: 'Дата подтв.', flex: 1, minWidth: 100, valueFormatter: (p) => formatDateGrid(p.value) },
-    { field: 'ord_user', headerName: 'Пользователь', flex: 1, minWidth: 120 },
-    { field: 'ord_department', headerName: 'Отдел', flex: 1, minWidth: 120 },
+    { field: 'ord_contractor', headerName: 'Контрагент', flex: 1, minWidth: 200 },
+    { field: 'ord_summ', headerName: 'Сумма', flex: 1, minWidth: 120, valueFormatter: (p) => p.value != null ? p.value.toLocaleString('ru-RU', { minimumFractionDigits: 2 }) : '' },
+    { field: 'ord_contractor_for', headerName: 'Заказ для клиента', flex: 1, minWidth: 200 },
     {
       field: 'is_warn',
-      headerName: '!',
-      width: 44,
+      headerName: '',
+      width: 40,
       cellRenderer: (p: { data?: OrderRowDto }) =>
-        p.data?.is_warn && p.data.is_warn !== '0' ? <span title="Предупреждение">⚠</span> : null,
+        p.data?.is_warn && p.data.is_warn !== '0' ? <span title="Внимание">!</span> : null,
     },
+    {
+      field: 'ord_date_conf',
+      headerName: 'Текущее состояние',
+      flex: 1,
+      minWidth: 350,
+      valueFormatter: (p) => {
+        const row = p.data;
+        if (!row) return '';
+        const parts: string[] = [];
+        if (row.ord_date_conf) parts.push(`Подтверждение ${formatDateGrid(row.ord_date_conf)}`);
+        if (row.ord_sent_to_prod_date) parts.push(`Передан на производство ${formatDateGrid(row.ord_sent_to_prod_date)}`);
+        return parts.join(' ') || '';
+      },
+    },
+    { field: 'ord_user', headerName: 'Пользователь', flex: 1, minWidth: 150 },
+    { field: 'ord_department', headerName: 'Отдел', flex: 1, minWidth: 120 },
     {
       field: 'ord_block',
       headerName: 'Блок',
@@ -322,7 +350,7 @@ export default function OrdersPage() {
       width: 70,
       valueFormatter: (p) => (p.value === 1 ? 'Да' : ''),
     },
-  ], []);
+  ], [navigate]);
 
   const getRowClass = useCallback((params: { data?: OrderRowDto }) => {
     if (params.data?.ord_annul === 1) return 'crossed-cell';
@@ -340,151 +368,202 @@ export default function OrdersPage() {
   }, [appliedFilter]);
 
   return (
-    <Layout style={{ padding: 16 }}>
-      <Space style={{ marginBottom: 16, width: '100%', justifyContent: 'space-between' }}>
+    <div style={{ padding: 24, minHeight: 'calc(100vh - 64px)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <Typography.Title level={4} style={{ margin: 0 }}>Заказы</Typography.Title>
         <Button type="primary" onClick={() => navigate('/orders/new')}>Новый заказ</Button>
-      </Space>
+      </div>
 
-      <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-        <Space wrap align="start">
-          <Input placeholder="№ заказа" value={number} onChange={(e) => setNumber(e.target.value)} style={{ width: 120 }} />
-          <DatePicker
-            placeholder="Дата с"
-            format={DATE_FORMAT}
-            value={dateBegin ? dayjs(dateBegin, DATE_FORMAT) : null}
-            onChange={(date, _) => setDateBegin(date ? date.format(DATE_FORMAT) : null)}
-          />
-          <DatePicker
-            placeholder="Дата по"
-            format={DATE_FORMAT}
-            value={dateEnd ? dayjs(dateEnd, DATE_FORMAT) : null}
-            onChange={(date, _) => setDateEnd(date ? date.format(DATE_FORMAT) : null)}
-          />
-          <Select
-            placeholder="Контрагент"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            value={contractorId ?? undefined}
-            onChange={(v) => setContractorId(v ?? null)}
-            options={contractors.map((c) => ({ value: c.id, label: c.name }))}
-            style={{ minWidth: 180 }}
-          />
-          <Select
-            placeholder="Заказчик (contractor_for)"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            value={contractorForId ?? undefined}
-            onChange={(v) => setContractorForId(v ?? null)}
-            options={contractors.map((c) => ({ value: c.id, label: c.name }))}
-            style={{ minWidth: 180 }}
-          />
-          <Select
-            placeholder="Договор"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            value={contractNumber ?? undefined}
-            onChange={(v) => setContractNumber(v ?? null)}
-            options={contracts.map((c) => ({ value: c.id, label: c.name }))}
-            style={{ minWidth: 140 }}
-          />
-          <Select
-            placeholder="Спецификация"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            value={specificationNumber ?? undefined}
-            onChange={(v) => setSpecificationNumber(v ?? null)}
-            options={specifications.map((s) => ({ value: s.id, label: s.name }))}
-            style={{ minWidth: 140 }}
-          />
-          <Select
-            placeholder="Пользователь"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            value={userId ?? undefined}
-            onChange={(v) => setUserId(v ?? null)}
-            options={users.map((u) => ({ value: u.id, label: u.name }))}
-            style={{ minWidth: 160 }}
-          />
-          <Select
-            placeholder="Отдел"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            value={departmentId ?? undefined}
-            onChange={(v) => setDepartmentId(v ?? null)}
-            options={departments.map((d) => ({ value: d.id, label: d.name }))}
-            style={{ minWidth: 160 }}
-          />
-          <Select
-            placeholder="Категория"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            value={stuffCategoryId ?? undefined}
-            onChange={(v) => setStuffCategoryId(v ?? null)}
-            options={stuffCategories.map((s) => ({ value: s.id, label: s.name }))}
-            style={{ minWidth: 140 }}
-          />
-          <Select
-            placeholder="Продавец"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            value={sellerForWhoId ?? undefined}
-            onChange={(v) => setSellerForWhoId(v ?? null)}
-            options={sellers.map((s) => ({ value: s.id, label: s.name }))}
-            style={{ minWidth: 140 }}
-          />
-          <InputNumber placeholder="Сумма мин" value={sumMin ?? undefined} onChange={(v) => setSumMin(v ?? null)} min={0} style={{ width: 100 }} />
-          <InputNumber placeholder="Сумма макс" value={sumMax ?? undefined} onChange={(v) => setSumMax(v ?? null)} min={0} style={{ width: 100 }} />
-          <Input placeholder="№ подтв." value={ordNumConf} onChange={(e) => setOrdNumConf(e.target.value)} style={{ width: 100 }} />
-        </Space>
+      {/* Filter Section - design: Card variant borderless, Form layout vertical */}
+      <Card variant="borderless" style={{ marginBottom: 24, borderRadius: 8 }}>
+        <Form form={form} layout="vertical">
+          <Row gutter={24}>
+            <Col xs={24} md={12} lg={6}>
+              <Form.Item label="Номер" style={{ marginBottom: 12 }}>
+                <Input placeholder="Введите номер" value={number} onChange={(e) => setNumber(e.target.value)} />
+              </Form.Item>
+              <Form.Item label="Пользователь" style={{ marginBottom: 12 }}>
+                <Select
+                  placeholder="Все"
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  value={userId ?? undefined}
+                  onChange={(v) => setUserId(v ?? null)}
+                  options={users.map((u) => ({ value: u.id, label: u.name }))}
+                />
+              </Form.Item>
+              <Form.Item label="Отдел" style={{ marginBottom: 12 }}>
+                <Select
+                  placeholder="Все"
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  value={departmentId ?? undefined}
+                  onChange={(v) => setDepartmentId(v ?? null)}
+                  options={departments.map((d) => ({ value: d.id, label: d.name }))}
+                />
+              </Form.Item>
+              <Space direction="vertical" style={{ marginTop: 8 }}>
+                <Checkbox checked={executed} onChange={(e) => handleExecutedChange(e.target.checked)}>Исполненные заказы</Checkbox>
+                <Checkbox checked={notExecuted} onChange={(e) => handleNotExecutedChange(e.target.checked)}>Неисполненные заказы</Checkbox>
+              </Space>
+            </Col>
 
-        <Space wrap align="start">
-          <Checkbox checked={executed} onChange={(e) => handleExecutedChange(e.target.checked)}>Выполненные</Checkbox>
-          <Checkbox checked={notExecuted} onChange={(e) => handleNotExecutedChange(e.target.checked)}>Не выполненные</Checkbox>
-          <Checkbox checked={ordReadyForDeliv} onChange={(e) => setOrdReadyForDeliv(e.target.checked)}>Готов к отгрузке</Checkbox>
-          <Checkbox checked={ordAnnulNotShow} onChange={(e) => setOrdAnnulNotShow(e.target.checked)}>Не показ. аннул.</Checkbox>
-          <Typography.Text strong style={{ marginRight: 8 }}>Текущее состояние:</Typography.Text>
-          <Checkbox checked={stateA} disabled={stateDisabled} onChange={(e) => setStateA(e.target.checked)}>Передан на производство</Checkbox>
-          <Checkbox checked={state3} disabled={stateDisabled} onChange={(e) => setState3(e.target.checked)}>Нет ответа (3)</Checkbox>
-          <Checkbox checked={stateB} disabled={stateDisabled} onChange={(e) => setStateB(e.target.checked)}>Получено подтверждение</Checkbox>
-          <Checkbox checked={stateExclamation} disabled={stateDisabled} onChange={(e) => setStateExclamation(e.target.checked)}>Риск нарушить срок поставки (!)</Checkbox>
-          <Checkbox checked={stateC} disabled={stateDisabled} onChange={(e) => setStateC(e.target.checked)}>Выслано покупателю</Checkbox>
-        </Space>
+            <Col xs={24} md={12} lg={6}>
+              <Form.Item label="Контрагент" style={{ marginBottom: 12 }}>
+                <Select
+                  placeholder="Выберите..."
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  value={contractorId ?? undefined}
+                  onChange={(v) => setContractorId(v ?? null)}
+                  options={contractors.map((c) => ({ value: c.id, label: c.name }))}
+                />
+              </Form.Item>
+              <Form.Item label="Производитель (продукт)" style={{ marginBottom: 12 }}>
+                <Select
+                  placeholder="Выберите..."
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  value={stuffCategoryId ?? undefined}
+                  onChange={(v) => setStuffCategoryId(v ?? null)}
+                  options={stuffCategories.map((s) => ({ value: s.id, label: s.name }))}
+                />
+              </Form.Item>
+              <Form.Item label="Продукция заказывается (кем?)" style={{ marginBottom: 12 }}>
+                <Select
+                  placeholder="Выберите..."
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  value={sellerForWhoId ?? undefined}
+                  onChange={(v) => setSellerForWhoId(v ?? null)}
+                  options={sellers.map((s) => ({ value: s.id, label: s.name }))}
+                />
+              </Form.Item>
+            </Col>
 
-        <Space>
-          <Button type="primary" onClick={applyFilter}>Применить фильтр</Button>
-          <Button onClick={clearFilter}>Сбросить фильтр</Button>
-        </Space>
+            <Col xs={24} md={12} lg={6}>
+              <Form.Item label="Клиент" style={{ marginBottom: 12 }}>
+                <Select
+                  placeholder="Выберите..."
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  value={contractorForId ?? undefined}
+                  onChange={(v) => setContractorForId(v ?? null)}
+                  options={contractors.map((c) => ({ value: c.id, label: c.name }))}
+                />
+              </Form.Item>
+              <Form.Item label="Договор" style={{ marginBottom: 12 }}>
+                <Select
+                  placeholder="Выберите..."
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  value={contractNumber ?? undefined}
+                  onChange={(v) => setContractNumber(v ?? null)}
+                  options={contracts.map((c) => ({ value: c.id, label: c.name }))}
+                />
+              </Form.Item>
+              <Form.Item label="Спецификация" style={{ marginBottom: 12 }}>
+                <Select
+                  placeholder="Выберите..."
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  value={specificationNumber ?? undefined}
+                  onChange={(v) => setSpecificationNumber(v ?? null)}
+                  options={specifications.map((s) => ({ value: s.id, label: s.name }))}
+                />
+              </Form.Item>
+              <Space direction="vertical" style={{ marginTop: 8 }}>
+                <Checkbox checked={ordReadyForDeliv} onChange={(e) => setOrdReadyForDeliv(e.target.checked)}>Готовые к отгрузке у производителя</Checkbox>
+                <Checkbox checked={ordAnnulNotShow} onChange={(e) => setOrdAnnulNotShow(e.target.checked)}>Не отображать аннулированные</Checkbox>
+              </Space>
+            </Col>
 
-        {listError && <Typography.Text type="danger">{listError}</Typography.Text>}
-
-        {appliedFilter && (
-          <>
-            {listLoading && <Typography.Text>Загрузка…</Typography.Text>}
-            {!listLoading && listData && listData.items.length === 0 && (
-              <Typography.Text type="secondary">Нет данных по заданному фильтру.</Typography.Text>
-            )}
-            {!listLoading && listData && listData.items.length > 0 && (
-              <>
-                <AgGridShell style={{ height: 420, width: '100%' }}>
-                  <AgGridReact<OrderRowDto>
-                    rowData={listData.items}
-                    columnDefs={columnDefs}
-                    getRowClass={getRowClass}
-                    domLayout="normal"
-                    suppressCellFocus
-                    defaultColDef={{ sortable: true, resizable: true }}
+            <Col xs={24} md={12} lg={6}>
+              <Form.Item label="Дата" style={{ marginBottom: 12 }}>
+                <Space.Compact block>
+                  <DatePicker
+                    placeholder="с"
+                    style={{ width: '50%' }}
+                    format={DATE_FORMAT}
+                    value={dateBegin ? dayjs(dateBegin, DATE_FORMAT) : null}
+                    onChange={(date) => setDateBegin(date ? date.format(DATE_FORMAT) : null)}
                   />
-                </AgGridShell>
-                <Space wrap align="center">
+                  <DatePicker
+                    placeholder="по"
+                    style={{ width: '50%' }}
+                    format={DATE_FORMAT}
+                    value={dateEnd ? dayjs(dateEnd, DATE_FORMAT) : null}
+                    onChange={(date) => setDateEnd(date ? date.format(DATE_FORMAT) : null)}
+                  />
+                </Space.Compact>
+              </Form.Item>
+              <Form.Item label="Сумма" style={{ marginBottom: 12 }}>
+                <Space.Compact block>
+                  <InputNumber placeholder="от" min={0} value={sumMin ?? undefined} onChange={(v) => setSumMin(v ?? null)} style={{ width: '50%' }} />
+                  <InputNumber placeholder="до" min={0} value={sumMax ?? undefined} onChange={(v) => setSumMax(v ?? null)} style={{ width: '50%' }} />
+                </Space.Compact>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row style={{ marginTop: 24 }} gutter={[16, 16]}>
+            <Col xs={24}>
+              <Typography.Text strong style={{ display: 'block', marginBottom: 8 }}>Текущее состояние:</Typography.Text>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px 24px', alignItems: 'center' }}>
+                <Checkbox checked={stateA} disabled={stateDisabled} onChange={(e) => setStateA(e.target.checked)}>Передан на производство</Checkbox>
+                <Checkbox checked={state3} disabled={stateDisabled} onChange={(e) => setState3(e.target.checked)}>Нет опыта (3)</Checkbox>
+                <Checkbox checked={stateB} disabled={stateDisabled} onChange={(e) => setStateB(e.target.checked)}>Получено подтверждение</Checkbox>
+                <Space size={8}>
+                  <Typography.Text>№ подтверждения</Typography.Text>
+                  <Input style={{ width: 100 }} size="small" value={ordNumConf} onChange={(e) => setOrdNumConf(e.target.value)} />
+                </Space>
+                <Checkbox checked={stateExclamation} disabled={stateDisabled} onChange={(e) => setStateExclamation(e.target.checked)}>Риск нарушить срок поставки (!)</Checkbox>
+                <Checkbox checked={stateC} disabled={stateDisabled} onChange={(e) => setStateC(e.target.checked)}>Выслано покупателю</Checkbox>
+              </div>
+            </Col>
+          </Row>
+
+          <Row justify="end" style={{ marginTop: 24 }} gutter={12}>
+            <Col>
+              <Button icon={<ClearOutlined />} onClick={clearFilter}>Очистить фильтр</Button>
+            </Col>
+            <Col>
+              <Button type="primary" icon={<FilterOutlined />} onClick={applyFilter}>Применить фильтр</Button>
+            </Col>
+          </Row>
+        </Form>
+      </Card>
+
+      {listError && <Typography.Text type="danger" style={{ display: 'block', marginBottom: 16 }}>{listError}</Typography.Text>}
+
+      {appliedFilter && (
+        <>
+          {listLoading && <Typography.Text>Загрузка…</Typography.Text>}
+          {!listLoading && listData && listData.items.length === 0 && (
+            <Typography.Text type="secondary">Нет данных по заданному фильтру.</Typography.Text>
+          )}
+          {!listLoading && listData && listData.items.length > 0 && (
+            <>
+              <Card variant="borderless" styles={{ body: { padding: 0 } }} style={{ borderRadius: 8, overflow: 'hidden' }} className="app-content">
+                <AgGridShell style={{ height: 420, width: '100%' }}>
+                    <AgGridReact<OrderRowDto>
+                      rowData={listData.items}
+                      columnDefs={columnDefs}
+                      getRowClass={getRowClass}
+                      domLayout="normal"
+                      suppressCellFocus
+                      defaultColDef={{ sortable: true, resizable: true }}
+                    />
+                  </AgGridShell>
+                <div style={{ padding: '12px 16px', borderTop: '1px solid var(--ant-color-border-secondary, #f0f0f0)', display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
                   <Typography.Text>Сортировка:</Typography.Text>
                   <Select
                     value={appliedFilter?.order_by ?? DEFAULT_ORDER_AFTER_FILTER}
@@ -503,20 +582,20 @@ export default function OrdersPage() {
                   <Button disabled={currentPage <= 1} onClick={() => goToPage(currentPage - 1)}>Назад</Button>
                   <Typography.Text>Стр. {currentPage} из {totalPages} (всего {total})</Typography.Text>
                   <Button disabled={currentPage >= totalPages} onClick={() => goToPage(currentPage + 1)}>Вперёд</Button>
-                </Space>
-              </>
-            )}
-          </>
-        )}
+                </div>
+              </Card>
+            </>
+          )}
+        </>
+      )}
 
-        {!appliedFilter && (
-          <Typography.Text type="secondary">Нажмите «Применить фильтр», чтобы загрузить список заказов.</Typography.Text>
-        )}
-      </Space>
+      {!appliedFilter && (
+        <Typography.Text type="secondary">Нажмите «Применить фильтр», чтобы загрузить список заказов.</Typography.Text>
+      )}
 
       <style>{`
         .crossed-cell { text-decoration: line-through; }
       `}</style>
-    </Layout>
+    </div>
   );
 }
