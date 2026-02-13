@@ -1,6 +1,6 @@
 /**
  * Development dashboard per DEV_DASHBOARD_SPEC: /dev route, blocks from /api/dev/status and /api/me.
- * Error: fixed skeleton, per-block messages, "Повторить" button. Optional: serverTime, dataMode CTA when EMPTY.
+ * Data source: Live DB (Postgres) + Seed dataset indicator. No FAKE_SEEDED display.
  */
 import { Alert, Button, Card, Descriptions, Spin, Typography } from 'antd';
 import { useQuery } from '@tanstack/react-query';
@@ -118,25 +118,22 @@ export default function DevDashboardPage() {
         {!statusQuery.data && !statusError && loading && <Spin size="small" />}
       </Card>
 
-      {/* Block 5: Data mode */}
-      <Card title="Data mode" style={{ marginBottom: 16 }}>
+      {/* Block 5: DB Source + Seed dataset (Postgres-only, no FAKE_SEEDED) */}
+      <Card title="Data source" style={{ marginBottom: 16 }}>
         {statusError && !statusQuery.data && (
           <Alert type="error" message="Недоступно (GET /api/dev/status failed)" showIcon />
         )}
         {!statusError && statusQuery.data && (
-          <>
-            <Typography.Text strong>{statusQuery.data.dataMode}</Typography.Text>
-            {statusQuery.data.dataMode === 'EMPTY' && (
-              <div style={{ marginTop: 8 }}>
-                <Alert
-                  type="info"
-                  message="Заполнить dev seed"
-                  description="Запустите backend с профилем dev; Flyway применит миграции из db/dev (marker DCL_SETTING.DEV_SEED_VERSION)."
-                  showIcon
-                />
-              </div>
-            )}
-          </>
+          <Descriptions column={1} size="small">
+            <Descriptions.Item label="DB Source">
+              <Typography.Text type="success">
+                Live DB (Postgres)
+              </Typography.Text>
+            </Descriptions.Item>
+            <Descriptions.Item label="Seed dataset">
+              {statusQuery.data.seedDataset ?? 'unknown'}
+            </Descriptions.Item>
+          </Descriptions>
         )}
         {!statusQuery.data && !statusError && loading && <Spin size="small" />}
       </Card>

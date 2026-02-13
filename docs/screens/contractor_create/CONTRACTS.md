@@ -39,6 +39,9 @@ Expected success:
 { "ctrId": "...", "returnTo": "contract", "redirectTo": "/contracts/new" }
 ```
 
+Client feedback requirement (modern parity):
+- On success show notification **«Контрагент успешно сохранен»**.
+
 ## 3) Auxiliary operations (child endpoints implied by tabs)
 If modern UI supports per-tab async ops, these must preserve legacy semantics:
 - Add/remove user row.

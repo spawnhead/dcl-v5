@@ -1,0 +1,63 @@
+---
+description: Декоратор команды ///Restart — при вводе пользователем ///Restart выполнить полную процедуру перезапуска сервера (backend, опционально DB/UI).
+globs: ["**"]
+alwaysApply: true
+---
+# Restart command decorator (///Restart)
+
+## Триггер
+Если сообщение пользователя **полностью равно** `///restart` / `///Restart` или **начинается с** `///restart` / `///Restart` (регистр не важен; с пробелом или переносом после), считать это командой перезапуска и выполнить процедуру ниже. Остальной текст после команды игнорировать для целей перезапуска.
+
+## Роль при выполнении
+ROLE: DevOps / Runbook (Seniority: Mid; Focus: перезапуск backend и проверка окружения по DEPLOYMENT_GUIDE и правилам 073/074)
+
+## Обязательная процедура (bash-only, из корня репозитория)
+
+1. **JAVA_HOME (JDK 21)**  
+   Проверить: `java -version` должен показывать 21.x.  
+   Если нет — выставить (Git Bash):  
+   `export JAVA_HOME="/c/Program Files/Eclipse Adoptium/jdk-21.0.6.7-hotspot"`  
+   и `export PATH="$JAVA_HOME/bin:$PATH"`.  
+   См. правило 074-java-21-mandatory.mdc.
+
+2. **БД (опционально, но рекомендуется)**  
+   Убедиться, что Postgres поднят:  
+   `docker compose -f ops/docker-compose.yml up -d`  
+   Проверка: `docker compose -f ops/docker-compose.yml ps` — контейнер postgres в состоянии Up.
+
+3. **Освободить порт 8080**  
+   Найти процесс: `lsof -i :8080` (или на Windows без lsof: `netstat -ano | findstr :8080`, затем `taskkill //PID <pid> //F`).  
+   Завершить процесс, занимающий 8080 (старый backend).  
+   См. правило 073-fixed-dev-ports.mdc.
+
+4. **Запуск backend**  
+   ```bash
+   cd modern/backend
+   ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+   ```  
+   Запуск выполнять в фоне (is_background: true), чтобы чат не блокировался.  
+   Либо сообщить пользователю: «Backend запущен в отдельном терминале; проверьте вывод».
+
+5. **Проверка после старта**  
+   После запуска (подождать 15–30 сек) проверить:  
+   `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/v3/api-docs`  
+   Ожидается 200.
+
+6. **Лог**  
+   Создать артефакт: `logs/restart-YYYYMMDD-HHMM.log`  
+   В логе: дата/время, шаги (JAVA_HOME, docker, kill 8080, start backend), результат curl, итог PASS/FAIL.
+
+## Что не делать
+- Не использовать PowerShell для шагов перезапуска (только bash).
+- Не менять порты (8080 backend, 5173 UI, 5432 Postgres).
+- Не помечать выполнение как Done, если backend не ответил 200 на /v3/api-docs после перезапуска (если проверка выполнялась).
+
+## Опционально (по запросу или в контексте задачи)
+- **Полный перезапуск стека:** после backend поднять UI: `cd modern/ui && npm run dev` (порт 5173).
+- **Перезапуск только БД:** `docker compose -f ops/docker-compose.yml restart postgres`.
+
+## Ссылки
+- docs/DEPLOYMENT_GUIDE.md
+- .cursor/rules/073-fixed-dev-ports.mdc
+- .cursor/rules/074-java-21-mandatory.mdc
+- scripts/restart-backend.sh (удобная обёртка для шагов 1–5)

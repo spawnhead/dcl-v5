@@ -25,6 +25,7 @@ public record ContractorCreateSaveRequest(
     LookupItemDto reputation,
     List<ContractorCreateOpenResponse.ContractorUserRowDto> gridUsers,
     List<ContractorCreateOpenResponse.ContractorAccountRowDto> gridAccounts,
+    List<ContractorCreateOpenResponse.ContractorContactPersonRowDto> gridContactPersons,
     String ctrBankProps,
     String ctrComment,
     String returnTo

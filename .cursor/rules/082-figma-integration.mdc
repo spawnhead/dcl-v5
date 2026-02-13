@@ -1,0 +1,34 @@
+---
+description: Figma-to-Real-Screen Integration Standard. Checklist for every UI/layout task; bash-only for text replacements.
+globs: ["modern/ui/**", "docs/screens/**", "docs/AGENT_TASK_REPORTS.md"]
+alwaysApply: true
+---
+# Figma-to-Real-Screen Integration Standard
+
+## Rule
+При внедрении макета из Figma (или любого layout-рефакторинга экрана) агент обязан выполнить чеклист ниже и зафиксировать результат. Цель — не повторять дорогой выбор (правки не в том файле, дубли страниц, остатки старого layout, отсутствие smoke).
+
+## Checklist (каждый UI/layout таск)
+
+- [ ] **Verify route target** — роут ведёт в нужный компонент (например `/contracts/new` → `ContractCreatePage`). Проверить `App.tsx` / router: path и element соответствуют задаче.
+- [ ] **Delete old layout, no leftovers** — старый layout (Divider/Table/Layout и т.д.) удалён; нет дублирующих страниц или компонентов-заглушек по тому же URL.
+- [ ] **Build pass** — `npm run build` (modern/ui) без ошибок.
+- [ ] **Chrome DevTools MCP evidence** — после изменений: `navigate_page` на целевой URL → `list_console_messages` (types: error) → 0 ошибок; `list_network_requests` (xhr/fetch) → ключевые API 2xx. См. docs/MCP_SETUP.md §5.5.
+
+Дополнительно для форм:
+- Form привязан к тому же экрану; Submit внутри Form; Form.Item name соответствуют полям; после layout-рефакторинга — smoke open 200, save 200 (или ожидаемый сценарий).
+
+## Forbidden
+- Использовать **PowerShell** для текстовых замен в коде (риск CP1251 и кракозябр). Только **bash** (Git Bash/WSL/Linux) и редактор с UTF-8.
+- Правки в файле, не соответствующем роуту (например менять не тот CreatePage).
+- Частичное применение diff: если применяется layout (Card/Row/Col/sidebar), все секции экрана должны быть переведены, без остатков старой вёрстки.
+- Ссылки в отчёте на несуществующий код или несуществующие файлы.
+
+## Required
+- Текстовые замены и массовые правки — только через bash (sed/awk с UTF-8) или через инструменты редактора (search-replace в Cursor/VSCode с UTF-8).
+- Для каждого UI таска — минимум один пункт MCP Evidence в отчёте (Chrome DevTools MCP: URL, Console 0, Network 2xx).
+
+## Reference
+- docs/MCP_SETUP.md §5.5 — Chrome DevTools MCP cookbook
+- .cursor/rules/010-bash-only.mdc — bash-only commands
+- docs/AGENT_TASK_REPORTS.md — секция MCP Evidence и шаблон отчёта

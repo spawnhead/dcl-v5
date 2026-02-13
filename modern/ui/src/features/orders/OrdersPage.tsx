@@ -8,11 +8,13 @@ import { Button, Checkbox, DatePicker, Input, InputNumber, Layout, message, Sele
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { OrderFilterParams, OrderListResponse, OrderRowDto, LookupItemDto } from './types';
 
 dayjs.extend(customParseFormat);
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { AgGridShell } from '../../shared/ui/AgGridShell';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -59,6 +61,7 @@ function buildQueryParams(params: OrderFilterParams): string {
 }
 
 export default function OrdersPage() {
+  const navigate = useNavigate();
   const [number, setNumber] = useState('');
   const [dateBegin, setDateBegin] = useState<string | null>(null);
   const [dateEnd, setDateEnd] = useState<string | null>(null);
@@ -338,7 +341,10 @@ export default function OrdersPage() {
 
   return (
     <Layout style={{ padding: 16 }}>
-      <Typography.Title level={4}>Заказы</Typography.Title>
+      <Space style={{ marginBottom: 16, width: '100%', justifyContent: 'space-between' }}>
+        <Typography.Title level={4} style={{ margin: 0 }}>Заказы</Typography.Title>
+        <Button type="primary" onClick={() => navigate('/orders/new')}>Новый заказ</Button>
+      </Space>
 
       <Space direction="vertical" size="middle" style={{ width: '100%' }}>
         <Space wrap align="start">
@@ -468,7 +474,7 @@ export default function OrdersPage() {
             )}
             {!listLoading && listData && listData.items.length > 0 && (
               <>
-                <div className="ag-theme-quartz" style={{ height: 420, width: '100%' }}>
+                <AgGridShell style={{ height: 420, width: '100%' }}>
                   <AgGridReact<OrderRowDto>
                     rowData={listData.items}
                     columnDefs={columnDefs}
@@ -477,7 +483,7 @@ export default function OrdersPage() {
                     suppressCellFocus
                     defaultColDef={{ sortable: true, resizable: true }}
                   />
-                </div>
+                </AgGridShell>
                 <Space wrap align="center">
                   <Typography.Text>Сортировка:</Typography.Text>
                   <Select

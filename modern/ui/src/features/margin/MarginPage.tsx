@@ -13,6 +13,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 dayjs.extend(customParseFormat);
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { AgGridShell } from '../../shared/ui/AgGridShell';
 import type { MarginGridResponse, MarginGenerateRequest, LookupItemResponse, ViewFlagsDto } from './types';
 import MarginProgressUI from './components/MarginProgress';
 import { useMarginProgress } from './useMarginProgress';
@@ -640,7 +641,7 @@ export default function MarginPage() {
         {meta != null && !gridQuery.isLoading && <Typography.Text type="secondary">Записей: {meta.rowsReturned} {meta.limited ? `(не более ${limit})` : ''}</Typography.Text>}
         {errorMessage && <Typography.Text type="danger">{errorMessage}</Typography.Text>}
 
-        <div className="ag-theme-quartz app-grid" style={{ width: '100%', height: 520, marginTop: 8 }}>
+        <AgGridShell style={{ width: '100%', height: 520, marginTop: 8 }}>
           <AgGridReact
             theme="legacy"
             ref={gridApiRef}
@@ -657,7 +658,7 @@ export default function MarginPage() {
             suppressExcelExport
             defaultColDef={{ sortable: true, floatingFilter: true }}
           />
-        </div>
+        </AgGridShell>
       </div>
 
       <style>{`

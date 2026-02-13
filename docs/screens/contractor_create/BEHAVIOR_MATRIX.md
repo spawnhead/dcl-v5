@@ -9,6 +9,7 @@
 | Delete account row | `deleteRowFromAccountGrid` | row removed; delete button hidden when <=3 rows | show-delete-checker |
 | Toggle contact fire/block | checkbox click | `cps_fire`/`cps_block` toggled in-session; tab stays contactPersons | ContractorAction.fireContactPerson/blockContactPerson |
 | Save valid | `process` | insert/update + save users/accounts/contacts + set `currentContractorId` | ContractorAction.process |
+| Save valid feedback | `process` | success feedback: «Контрагент успешно сохранен» | Modern UX requirement (legacy text UNCONFIRMED) |
 | Save invalid duplicate UNP | `process` | error `error.contractorpage.duplicate_unp`, no persist | ContractorDAO.loadByUNP |
 | Save invalid accounts | `process` | account errors + active tab `accountsContractor` | ContractorAction.process |
 | Cancel | `back` | return to Contract (`retFromContractor`) without save | struts-config forward |

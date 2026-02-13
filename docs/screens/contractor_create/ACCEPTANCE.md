@@ -8,6 +8,7 @@
 5. Account rules (default/custom row behavior, currency/account constraints) соблюдены.
 6. Save возвращает на Contract, а созданный contractor доступен для подстановки (через `currentContractorId` эквивалент).
 7. Role/readOnly behavior: ограничения для non-admin/onlyManager/onlyOtherUserInMinsk соблюдены.
+8. После успешного Save показывается feedback: **«Контрагент успешно сохранен»**.
 
 ## B. Scenarios
 ### B1 Open
@@ -16,7 +17,7 @@
 
 ### B2 Save valid
 - Fill required fields + корректные accounts.
-- Expect: 2xx, contractor created, return to Contract with selected/new contractor.
+- Expect: 2xx, contractor created, return to Contract with selected/new contractor; success feedback «Контрагент успешно сохранен».
 
 ### B3 Duplicate UNP
 - Existing UNP.

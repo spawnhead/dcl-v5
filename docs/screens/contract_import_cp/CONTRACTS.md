@@ -4,7 +4,7 @@
 
 ## 1) Entry flow (open)
 
-**Legacy:** POST ContractsAction.do (dispatch=selectCP, minsk_store=1) → forward chain → CommercialProposalsAction.input → internalFilter.
+**Legacy (VERIFIED 2026-02-12):** POST ContractsAction.do?dispatch=selectCP&minsk_store=1, body: contracts form (number, contractor.id, contractor.name, date_begin, date_end, ..., grid.page, grid.pk, ctrl, do). Response: HTML «Коммерческие предложения» grid.
 
 **Modern:** `GET /api/contracts/import-cp/open?minskStore=1` или SPA route `/contracts/import-cp` + отдельный data fetch.
 

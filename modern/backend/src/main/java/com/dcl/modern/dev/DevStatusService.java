@@ -9,9 +9,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import org.flywaydb.core.api.MigrationInfo;
 
 /**
  * Builds dev status (db, flyway, dataMode). Never throws — errors become status fields.
@@ -38,8 +37,9 @@ public class DevStatusService {
         DevStatusResponse.FlywayStatus flywayStatus = flywayStatus();
         String dataMode = resolveDataMode(db.ok(), dataSource);
         String authMode = profile.equals("dev") ? "DEV_BYPASS" : "TBD";
+        String seedDataset = resolveSeedDataset(dataSource);
 
-        return new DevStatusResponse(profile, javaVersion, serverTime, db, flywayStatus, dataMode, authMode);
+        return new DevStatusResponse(profile, javaVersion, serverTime, db, flywayStatus, dataMode, authMode, seedDataset);
     }
 
     private DevStatusResponse.DbStatus dbStatus() {
@@ -91,6 +91,34 @@ public class DevStatusService {
         } catch (Exception ignored) {
         }
         return "REAL";
+    }
+
+    /**
+     * Seed dataset indicator for UI: last Flyway migration version (e.g. "V21")
+     * or DEV_SEED_VERSION from dcl_setting, or "unknown".
+     */
+    private String resolveSeedDataset(DataSource ds) {
+        try {
+            MigrationInfo[] applied = flyway.info().applied();
+            if (applied != null && applied.length > 0) {
+                MigrationInfo last = applied[applied.length - 1];
+                if (last != null && last.getVersion() != null) {
+                    return "V" + last.getVersion().toString();
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        try (Connection c = ds.getConnection();
+             Statement s = c.createStatement();
+             ResultSet rs = s.executeQuery(
+                 "SELECT stn_value FROM dcl_setting WHERE stn_name = 'DEV_SEED_VERSION' LIMIT 1")) {
+            if (rs.next()) {
+                String val = rs.getString(1);
+                if (val != null && !val.isBlank()) return "DEV_SEED_VERSION=" + val;
+            }
+        } catch (Exception ignored) {
+        }
+        return "unknown";
     }
 
 }

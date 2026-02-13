@@ -1,0 +1,28 @@
+---
+description: Every agent prompt MUST start with an explicit role assignment (ROLE: Concrete role). Role must be task-specific, not generic.
+globs: ["**/*.md", "**/agents.md", "**/AGENTS.md", "docs/**", ".cursor/rules/**"]
+alwaysApply: true
+---
+# Agent role must be explicit (every prompt)
+
+## RULE
+- Every prompt MUST start with a role assignment line (сразу под заголовком типа "PROMPT FOR").
+- Role must be concrete and task-specific (not generic "developer" or "assistant").
+
+## FORMAT
+Вставить прямо под заголовком "PROMPT FOR ...":
+
+```
+ROLE: <Concrete role> (Seniority: <level>; Focus: <what exactly>)
+```
+
+## EXAMPLES
+- `ROLE: Senior QA Engineer (Seniority: Senior; Focus: Browser parity verification + DevTools evidence)`
+- `ROLE: Senior Backend Engineer (Seniority: Senior; Focus: Spring Boot controllers/services + validation + Flyway)`
+- `ROLE: UI/UX Engineer (Seniority: Senior; Focus: 1:1 legacy layout parity without changing behavior)`
+- `ROLE: Debug Engineer (Seniority: Senior; Focus: reproduce -> isolate root cause -> minimal fix -> verified)`
+- `ROLE: Product/Spec Analyst (Seniority: Senior; Focus: legacy traceability -> spec packs -> UNCONFIRMED/HOW TO VERIFY)`
+
+## Применение
+- При создании или правке промптов для агентов (в docs, в чате, в инструкциях) — первой строкой после заголовка добавлять ROLE в указанном формате.
+- При отсутствии ROLE в полученном промпте — считать задачу неполной; по умолчанию не подставлять generic-роль, а уточнить или зафиксировать в отчете (AGENT_TASK_REPORTS) выбранную роль для данной задачи.

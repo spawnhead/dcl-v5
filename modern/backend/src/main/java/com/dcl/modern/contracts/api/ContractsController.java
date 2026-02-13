@@ -59,8 +59,8 @@ public class ContractsController {
     }
 
     @GetMapping("/create/open")
-    public ContractCreateOpenResponse getCreateOpen() {
-        return createService.open(canCreate());
+    public ContractCreateOpenResponse getCreateOpen(@RequestParam(required = false) String newContractorId) {
+        return createService.open(canCreate(), newContractorId);
     }
 
     @PostMapping("/create/save")

@@ -1,16 +1,67 @@
 /**
  * N3a1 Contractor create (from Contract). CONTRACTS: docs/screens/contractor_create.
- * Open from Contract create → «Добавить». Return: redirect /contracts/new?newContractorId=…
+ * TASK-0013: 5 tabs 1:1 per SNAPSHOT: Главная / Курируют / Расчетные счета... / Контактные лица / Комментарии.
+ * TASK-0030: ScreenLoader on open, showLoading/showSuccess/showError on save.
  */
-import { Button, Form, Input, Layout, message, Select, Space, Typography } from 'antd';
+import { Badge, Button, Form, Input, Layout, Popconfirm, Select, Space, Table, Tabs, Typography } from 'antd';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { ScreenLoader } from '../../shared/ui/ScreenLoader';
+import { showError, showLoading, hideLoading, notifySuccess, notifyError, setFlashSuccess } from '../../shared/lib/feedback';
+import { fetchWithErrorHandling } from '../../shared/lib/api';
+import { ContactPersonsModal, type ContactPersonRow } from './ContactPersonsModal';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '';
+const API_BASE = (import.meta as { env?: { VITE_API_BASE_URL?: string } }).env?.VITE_API_BASE_URL ?? '';
+
+const TAB_ORDER = ['mainPanel', 'usersContractor', 'accountsContractor', 'contactPersonsContractor', 'commentContractor'] as const;
+const FIELD_TO_TAB: Record<string, string> = {
+  ctrName: 'mainPanel', ctrFullName: 'mainPanel', country: 'mainPanel', ctrIndex: 'mainPanel',
+  ctrRegion: 'mainPanel', ctrPlace: 'mainPanel', ctrStreet: 'mainPanel', ctrBuilding: 'mainPanel',
+  ctrAddInfo: 'mainPanel', ctrPhone: 'mainPanel', ctrFax: 'mainPanel', ctrEmail: 'mainPanel',
+  ctrUnp: 'mainPanel', ctrOkpo: 'mainPanel', reputation: 'mainPanel',
+  ctrBankProps: 'accountsContractor',
+  ctrComment: 'commentContractor',
+};
+
+interface TabMeta { id: string; label: string }
+
+interface LookupItem { id: string; name?: string; description?: string }
+
+interface UserRow { usrId: string; userFullName: string }
+interface AccountRow { accName: string; accAccount: string; currency: { id: string; name: string } | null }
 
 interface OpenResponse {
-  defaults: Record<string, unknown>;
-  lookups: { countries: { id: string; name: string }[]; reputations: { id: string; name: string }[]; users: unknown[]; currencies: { id: string; name: string }[] };
+  defaults: {
+    ctrName: string;
+    ctrFullName: string;
+    country: LookupItem | null;
+    ctrIndex: string;
+    ctrRegion: string;
+    ctrPlace: string;
+    ctrStreet: string;
+    ctrBuilding: string;
+    ctrAddInfo: string;
+    ctrPhone: string;
+    ctrFax: string;
+    ctrEmail: string;
+    ctrUnp: string;
+    ctrOkpo: string;
+    reputation: LookupItem | null;
+    gridUsers: UserRow[];
+    gridAccounts: AccountRow[];
+    gridContactPersons: unknown[];
+    ctrBankProps: string;
+    ctrComment: string;
+  };
+  lookups: {
+    countries: LookupItem[];
+    reputations: LookupItem[];
+    users: { id: string; userFullName: string }[];
+    currencies: LookupItem[];
+  };
+  tabs?: TabMeta[];
+  activeTab?: string;
   returnTo: string;
 }
 
@@ -22,116 +73,437 @@ interface SaveResponse {
 
 export default function ContractorCreatePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [openData, setOpenData] = useState<OpenResponse | null>(null);
-
-  const returnTo = searchParams.get('returnTo') ?? 'contract';
+  const [gridUsers, setGridUsers] = useState<UserRow[]>([]);
+  const [gridAccounts, setGridAccounts] = useState<AccountRow[]>([]);
+  const [gridContactPersons, setGridContactPersons] = useState<ContactPersonRow[]>([]);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [contactEditIndex, setContactEditIndex] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<string>('mainPanel');
+  const [tabErrorKeys, setTabErrorKeys] = useState<Set<string>>(new Set());
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
+    fetch(`${API_BASE}/api/me`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((me: { roles?: string[] } | null) => {
+        if (me?.roles) setIsAdmin(me.roles.includes('admin'));
+      })
+      .catch(() => {});
+  }, []);
+
+  /** returnTo: query param > path-based default. /contractors/new without param → contractors. */
+  const returnTo =
+    searchParams.get('returnTo') ?? (location.pathname.startsWith('/contractors') ? 'contractors' : 'contract');
+
+  useEffect(() => {
+    const startedAt = performance.now();
+    const minLoaderMs = import.meta.env.DEV ? 350 : 0;
+    const done = () => {
+      const elapsed = performance.now() - startedAt;
+      const delay = Math.max(0, minLoaderMs - elapsed);
+      setTimeout(() => setLoading(false), delay);
+    };
     fetch(`${API_BASE}/api/contractors/create/open?returnTo=${encodeURIComponent(returnTo)}`)
       .then((r) => r.json())
       .then((data: OpenResponse) => {
         setOpenData(data);
+        setGridUsers((data.defaults?.gridUsers ?? []) as UserRow[]);
+        setGridAccounts((data.defaults?.gridAccounts ?? []) as AccountRow[]);
+        setGridContactPersons((data.defaults?.gridContactPersons ?? []) as ContactPersonRow[]);
         form.setFieldsValue({
           ctrName: data.defaults?.ctrName ?? '',
           ctrFullName: data.defaults?.ctrFullName ?? '',
-          country: (data.defaults?.country as { id?: string })?.id,
-          reputation: (data.defaults?.reputation as { id?: string })?.id,
+          country: data.defaults?.country?.id,
+          ctrIndex: data.defaults?.ctrIndex ?? '',
+          ctrRegion: data.defaults?.ctrRegion ?? '',
+          ctrPlace: data.defaults?.ctrPlace ?? '',
+          ctrStreet: data.defaults?.ctrStreet ?? '',
+          ctrBuilding: data.defaults?.ctrBuilding ?? '',
+          ctrAddInfo: data.defaults?.ctrAddInfo ?? '',
+          ctrPhone: data.defaults?.ctrPhone ?? '',
+          ctrFax: data.defaults?.ctrFax ?? '',
+          ctrEmail: data.defaults?.ctrEmail ?? '',
+          ctrUnp: data.defaults?.ctrUnp ?? '',
+          ctrOkpo: data.defaults?.ctrOkpo ?? '',
+          reputation: data.defaults?.reputation?.id ?? data.defaults?.reputation?.description,
+          ctrBankProps: data.defaults?.ctrBankProps ?? '',
+          ctrComment: data.defaults?.ctrComment ?? '',
         });
       })
-      .catch(() => message.error('Ошибка загрузки'))
-      .finally(() => setLoading(false));
+      .catch(() => showError('Ошибка загрузки'))
+      .finally(done);
   }, [returnTo, form]);
 
+  const validateAccounts = useCallback((): string | null => {
+    for (let i = 0; i < gridAccounts.length; i++) {
+      const r = gridAccounts[i];
+      if ((r.accAccount && r.accAccount.trim()) && !r.currency?.id) return 'accountsContractor';
+      if (i >= 3) {
+        if (!(r.accAccount && r.accAccount.trim()) || !r.currency?.id) return 'accountsContractor';
+      }
+      if (r.accAccount && r.accAccount.length > 35) return 'accountsContractor';
+    }
+    return null;
+  }, [gridAccounts]);
+
   const handleFinish = useCallback(
-    (values: Record<string, unknown>) => {
+    async (values: Record<string, unknown>) => {
       setSaving(true);
+      const ctrUnpRaw = values.ctrUnp as string | undefined;
+      const ctrUnp = (ctrUnpRaw != null && String(ctrUnpRaw).trim() !== '') ? String(ctrUnpRaw).trim() : null;
       const body = {
         ctrName: values.ctrName ?? '',
         ctrFullName: values.ctrFullName ?? '',
-        country: values.country ? { id: values.country, name: '' } : null,
-        ctrIndex: '',
-        ctrRegion: '',
-        ctrPlace: '',
-        ctrStreet: '',
-        ctrBuilding: '',
-        ctrAddInfo: '',
-        ctrPhone: '',
-        ctrFax: '',
-        ctrEmail: '',
-        ctrUnp: '',
-        ctrOkpo: '',
-        reputation: values.reputation ? { id: values.reputation, name: '' } : null,
-        gridUsers: openData?.defaults?.gridUsers ?? [],
-        gridAccounts: openData?.defaults?.gridAccounts ?? [],
-        ctrBankProps: '',
-        ctrComment: '',
-        returnTo,
+        country: openData && values.country ? { id: values.country, name: openData.lookups.countries.find((c) => c.id === values.country)?.name ?? '' } : null,
+        ctrIndex: values.ctrIndex ?? '',
+        ctrRegion: values.ctrRegion ?? '',
+        ctrPlace: values.ctrPlace ?? '',
+        ctrStreet: values.ctrStreet ?? '',
+        ctrBuilding: values.ctrBuilding ?? '',
+        ctrAddInfo: values.ctrAddInfo ?? '',
+        ctrPhone: values.ctrPhone ?? '',
+        ctrFax: values.ctrFax ?? '',
+        ctrEmail: values.ctrEmail ?? '',
+        ctrUnp: ctrUnp,
+        ctrOkpo: values.ctrOkpo ?? '',
+        reputation: openData && values.reputation ? { id: values.reputation, name: openData.lookups.reputations.find((r) => r.id === values.reputation || r.description === values.reputation)?.name ?? openData.lookups.reputations.find((r) => r.id === values.reputation || r.description === values.reputation)?.description ?? '' } : null,
+        gridUsers,
+        gridAccounts,
+        gridContactPersons: gridContactPersons.map((cp) => ({
+          cpsName: cp.cpsName ?? '',
+          cpsPosition: cp.cpsPosition ?? '',
+          cpsOnReason: cp.cpsOnReason ?? '',
+          cpsPhone: cp.cpsPhone ?? '',
+          cpsMobPhone: cp.cpsMobPhone ?? '',
+          cpsFax: cp.cpsFax ?? '',
+          cpsEmail: cp.cpsEmail ?? '',
+          cpsContractComment: cp.cpsContractComment ?? '',
+          cpsFire: cp.cpsFire ?? '0',
+          cpsBlock: cp.cpsBlock ?? '0',
+        })),
+        ctrBankProps: values.ctrBankProps ?? '',
+        ctrComment: values.ctrComment ?? '',
+        returnTo: openData?.returnTo ?? returnTo,
       };
-      fetch(`${API_BASE}/api/contractors/create/save`, {
+      showLoading('Сохранение контрагента...');
+      const result = await fetchWithErrorHandling<SaveResponse>(`${API_BASE}/api/contractors/create/save`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
         body: JSON.stringify(body),
-      })
-        .then(async (r) => {
-          const data: SaveResponse = await r.json();
-          if (!r.ok) {
-            const err = await r.json().catch(() => ({}));
-            message.error(err?.error?.message ?? 'Ошибка валидации');
-            return;
-          }
-          message.success('Контрагент сохранён');
-          navigate(data.redirectTo || '/contracts/new');
-        })
-        .catch(() => message.error('Ошибка сохранения'))
-        .finally(() => setSaving(false));
+      });
+      hideLoading();
+      setSaving(false);
+      if (!result.ok) {
+        notifyError('Ошибка сохранения', result.error?.message ?? 'Не удалось сохранить контрагента');
+        return;
+      }
+      const ctrName = String(values?.ctrName ?? form.getFieldValue?.('ctrName') ?? '').trim() || '';
+      const isEdit = !!searchParams.get('ctrId');
+      setFlashSuccess(
+        isEdit ? 'Контрагент сохранён' : 'Контрагент создан',
+        ctrName || undefined
+      );
+      navigate(result.data!.redirectTo || '/contracts/new');
     },
-    [navigate, openData, returnTo]
+    [navigate, gridUsers, gridAccounts, gridContactPersons, returnTo, openData, searchParams, form]
   );
 
-  if (loading || !openData) {
-    return (
-      <Layout style={{ padding: 16 }}>
-        <Typography.Text>Загрузка...</Typography.Text>
-      </Layout>
-    );
-  }
+  const handleSubmit = useCallback(
+    async (e?: React.FormEvent) => {
+      e?.preventDefault();
+      setTabErrorKeys(new Set());
+      try {
+        await form.validateFields();
+      } catch (err: unknown) {
+        const errInfo = err as { errorFields?: Array<{ name: (string | number)[] }> };
+        const fields = errInfo?.errorFields ?? [];
+        const tabs = new Set<string>();
+        for (const f of fields) {
+          const name = Array.isArray(f.name) ? String(f.name[0]) : '';
+          const tab = FIELD_TO_TAB[name];
+          if (tab) tabs.add(tab);
+        }
+        const firstTab = TAB_ORDER.find((t) => tabs.has(t)) ?? 'mainPanel';
+        setTabErrorKeys(tabs);
+        setActiveTab(firstTab);
+        notifyError('Заполните обязательные поля');
+        return;
+      }
+      const accountErrTab = validateAccounts();
+      if (accountErrTab) {
+        setTabErrorKeys(new Set([accountErrTab]));
+        setActiveTab(accountErrTab);
+        notifyError('Заполните обязательные поля');
+        return;
+      }
+      const values = form.getFieldsValue();
+      handleFinish(values);
+    },
+    [form, validateAccounts, handleFinish]
+  );
+
+  const addUserRow = () => {
+    const u = openData?.lookups?.users?.[0];
+    if (u) setGridUsers((prev) => [...prev, { usrId: u.id, userFullName: u.userFullName }]);
+  };
+  const removeUserRow = (idx: number) => setGridUsers((prev) => prev.filter((_, i) => i !== idx));
+  const addAccountRow = () => setGridAccounts((prev) => [...prev, { accName: 'Счёт', accAccount: '', currency: null }]);
+  const removeAccountRow = (idx: number) => {
+    if (gridAccounts.length <= 3) return;
+    setGridAccounts((prev) => prev.filter((_, i) => i !== idx));
+  };
+  const setAccountField = (idx: number, field: keyof AccountRow, value: unknown) => {
+    setGridAccounts((prev) => {
+      const next = [...prev];
+      const row = { ...next[idx] };
+      if (field === 'currency') row.currency = value as AccountRow['currency'];
+      else if (field === 'accAccount') row.accAccount = String(value ?? '');
+      else if (field === 'accName') row.accName = String(value ?? '');
+      next[idx] = row;
+      return next;
+    });
+  };
+  const openContactModal = (mode: 'create' | 'edit', index?: number) => {
+    setContactEditIndex(mode === 'edit' && index !== undefined ? index : null);
+    setContactModalOpen(true);
+  };
+  const handleContactSave = (row: ContactPersonRow, editIndex: number | null) => {
+    if (editIndex !== null) {
+      setGridContactPersons((prev) => {
+        const next = [...prev];
+        next[editIndex] = row;
+        return next;
+      });
+      notifySuccess('Контактное лицо изменено');
+    } else {
+      setGridContactPersons((prev) => [...prev, row]);
+      notifySuccess('Контактное лицо добавлено');
+    }
+    setContactModalOpen(false);
+    setContactEditIndex(null);
+  };
+  const removeContactPersonRow = (idx: number) => setGridContactPersons((prev) => prev.filter((_, i) => i !== idx));
 
   return (
     <Layout style={{ padding: 16 }}>
       <Typography.Title level={4}>Создать контрагента</Typography.Title>
-      <Form form={form} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} onFinish={handleFinish} style={{ maxWidth: 560 }}>
-        <Form.Item label="Наименование" name="ctrName" rules={[{ required: true, message: 'Введите наименование' }]}>
-          <Input style={{ width: 320 }} />
-        </Form.Item>
-        <Form.Item label="Полное наименование" name="ctrFullName">
-          <Input style={{ width: 320 }} />
-        </Form.Item>
-        <Form.Item label="Страна" name="country">
-          <Select
-            allowClear
-            placeholder="Страна"
-            options={openData.lookups.countries.map((c) => ({ value: c.id, label: c.name }))}
-            style={{ width: 240 }}
-          />
-        </Form.Item>
-        <Form.Item label="Репутация" name="reputation">
-          <Select
-            allowClear
-            placeholder="Репутация"
-            options={openData.lookups.reputations.map((r) => ({ value: r.id, label: r.name }))}
-            style={{ width: 240 }}
-          />
-        </Form.Item>
-        <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
+      <Form form={form} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} style={{ maxWidth: 720 }}>
+      {(loading || !openData) ? (
+        <ScreenLoader loading={true} rows={10} variant="spin">
+          <div />
+        </ScreenLoader>
+      ) : (
+        <>
+        <Tabs
+          activeKey={activeTab}
+          onChange={setActiveTab}
+          items={[
+            {
+              key: 'mainPanel',
+              label: <Badge dot={tabErrorKeys.has('mainPanel')}>Главная</Badge>,
+              children: (
+                <>
+                  <Form.Item label="Наименование" name="ctrName" rules={[{ required: true, message: 'Введите наименование' }]}>
+                    <Input style={{ width: 400 }} maxLength={200} />
+                  </Form.Item>
+                  <Form.Item label="Полное наименование" name="ctrFullName" rules={[{ required: true, message: 'Введите полное наименование' }]}>
+                    <Input style={{ width: 400 }} maxLength={300} />
+                  </Form.Item>
+                  <Form.Item label="Страна" name="country" rules={[{ required: true, message: 'Выберите страну' }]}>
+                    <Select allowClear placeholder="Страна" options={openData.lookups.countries.map((c) => ({ value: c.id, label: c.name }))} style={{ width: 280 }} />
+                  </Form.Item>
+                  <Form.Item label="Индекс" name="ctrIndex">
+                    <Input style={{ width: 120 }} maxLength={20} />
+                  </Form.Item>
+                  <Form.Item label="Область" name="ctrRegion">
+                    <Input style={{ width: 200 }} maxLength={50} />
+                  </Form.Item>
+                  <Form.Item label="Населённый пункт" name="ctrPlace">
+                    <Input style={{ width: 200 }} maxLength={50} />
+                  </Form.Item>
+                  <Form.Item label="Улица" name="ctrStreet">
+                    <Input style={{ width: 200 }} maxLength={50} />
+                  </Form.Item>
+                  <Form.Item label="Дом" name="ctrBuilding">
+                    <Input style={{ width: 100 }} maxLength={20} />
+                  </Form.Item>
+                  <Form.Item label="Доп. информация" name="ctrAddInfo">
+                    <Input style={{ width: 400 }} maxLength={1000} />
+                  </Form.Item>
+                  <Form.Item label="Телефон" name="ctrPhone">
+                    <Input style={{ width: 300 }} maxLength={100} />
+                  </Form.Item>
+                  <Form.Item label="Факс" name="ctrFax">
+                    <Input style={{ width: 300 }} maxLength={100} />
+                  </Form.Item>
+                  <Form.Item label="Email" name="ctrEmail">
+                    <Input style={{ width: 300 }} maxLength={40} />
+                  </Form.Item>
+                  <Form.Item label="УНП" name="ctrUnp">
+                    <Input style={{ width: 200 }} maxLength={15} />
+                  </Form.Item>
+                  <Form.Item label="ОКПО" name="ctrOkpo">
+                    <Input style={{ width: 200 }} maxLength={15} />
+                  </Form.Item>
+                  <Form.Item label="Репутация" name="reputation" rules={[{ required: true, message: 'Выберите репутацию' }]}>
+                    <Select allowClear placeholder="Репутация" options={openData.lookups.reputations.map((r) => ({ value: r.id, label: r.name ?? r.description }))} style={{ width: 280 }} />
+                  </Form.Item>
+                </>
+              ),
+            },
+            {
+              key: 'usersContractor',
+              label: <Badge dot={tabErrorKeys.has('usersContractor')}>Курируют</Badge>,
+              children: (
+                <>
+                  <Table
+                    dataSource={gridUsers.map((u, i) => ({ ...u, key: i }))}
+                    columns={[
+                      { title: 'Пользователь', dataIndex: 'userFullName', key: 'userFullName', width: 200 },
+                      { title: '', key: 'action', width: 80, render: (_, __, idx) => <Button type="link" danger size="small" onClick={() => removeUserRow(idx)}>Удалить</Button> },
+                    ]}
+                    pagination={false}
+                    size="small"
+                  />
+                  <Button type="dashed" onClick={addUserRow} style={{ marginTop: 8 }}>Добавить</Button>
+                </>
+              ),
+            },
+            {
+              key: 'accountsContractor',
+              label: <Badge dot={tabErrorKeys.has('accountsContractor')}>Расчетные счета и банковские реквизиты</Badge>,
+              children: (
+                <>
+                  <Form.Item label="Банковские реквизиты" name="ctrBankProps">
+                    <Input.TextArea rows={3} style={{ width: 450 }} maxLength={800} />
+                  </Form.Item>
+                  <Table
+                    dataSource={gridAccounts.map((a, i) => ({ ...a, key: i }))}
+                    columns={[
+                      { title: 'Наименование', dataIndex: 'accName', key: 'accName', width: 150, render: (v, __, i) => <Input value={v} onChange={(e) => setAccountField(i, 'accName', e.target.value)} size="small" maxLength={50} /> },
+                      { title: 'Счёт', dataIndex: 'accAccount', key: 'accAccount', width: 220, render: (v, __, i) => <Input value={v} onChange={(e) => setAccountField(i, 'accAccount', e.target.value)} size="small" maxLength={35} /> },
+                      { title: 'Валюта', key: 'currency', width: 130, render: (_, r, i) => <Select allowClear placeholder="Валюта" value={r.currency?.id} onChange={(id) => setAccountField(i, 'currency', id ? { id, name: openData.lookups.currencies.find((c) => c.id === id)?.name ?? '' } : null)} options={openData.lookups.currencies.map((c) => ({ value: c.id, label: c.name }))} style={{ width: 100 }} size="small" /> },
+                      { title: '', key: 'action', width: 80, render: (_, __, idx) => <Button type="link" danger size="small" disabled={gridAccounts.length <= 3} onClick={() => removeAccountRow(idx)}>Удалить</Button> },
+                    ]}
+                    pagination={false}
+                    size="small"
+                  />
+                  <Button type="dashed" onClick={addAccountRow} style={{ marginTop: 8 }}>Добавить</Button>
+                </>
+              ),
+            },
+            {
+              key: 'contactPersonsContractor',
+              label: <Badge dot={tabErrorKeys.has('contactPersonsContractor')}>Контактные лица</Badge>,
+              children: (
+                <>
+                  <Table
+                    dataSource={gridContactPersons.map((cp, i) => ({ ...cp, key: i }))}
+                    rowKey="key"
+                    scroll={{ x: 1300 }}
+                    columns={[
+                      { title: 'ФИО', dataIndex: 'cpsName', key: 'cpsName', width: 180, ellipsis: true, render: (v) => v || '—' },
+                      { title: 'Должность', dataIndex: 'cpsPosition', key: 'cpsPosition', width: 100, ellipsis: true, render: (v) => v || '—' },
+                      { title: 'Основание', dataIndex: 'cpsOnReason', key: 'cpsOnReason', width: 100, ellipsis: true, render: (v) => v || '—' },
+                      { title: 'Телефон', dataIndex: 'cpsPhone', key: 'cpsPhone', width: 120, ellipsis: true, render: (v) => v || '—' },
+                      { title: 'Моб.', dataIndex: 'cpsMobPhone', key: 'cpsMobPhone', width: 120, ellipsis: true, render: (v) => v || '—' },
+                      { title: 'Факс', dataIndex: 'cpsFax', key: 'cpsFax', width: 100, ellipsis: true, render: (v) => v || '—' },
+                      { title: 'Email', dataIndex: 'cpsEmail', key: 'cpsEmail', width: 140, ellipsis: true, render: (v) => v ? <a href={`mailto:${v}`}>{v}</a> : '—' },
+                      { title: 'Комментарий', dataIndex: 'cpsContractComment', key: 'cpsContractComment', width: 200, ellipsis: true, render: (v) => v || '—' },
+                      { title: 'Уволен', key: 'cpsFire', width: 70, render: (_, r) => (r.cpsFire === '1' ? 'Да' : '—') },
+                      {
+                        title: isAdmin ? (
+                          <Badge status="error" text="Блок" />
+                        ) : (
+                          'Блок'
+                        ),
+                        key: 'cpsBlock',
+                        width: 70,
+                        render: (_, r) => (r.cpsBlock === '1' ? 'Да' : '—'),
+                      },
+                      {
+                        title: '',
+                        key: 'actions',
+                        width: 90,
+                        fixed: 'end',
+                        render: (_, __, idx) => (
+                          <Space size="small">
+                            <EditOutlined
+                              role="button"
+                              title="Редактировать"
+                              style={{ cursor: 'pointer', fontSize: 16 }}
+                              onClick={() => openContactModal('edit', idx)}
+                            />
+                            <Popconfirm
+                              title="Удалить контактное лицо?"
+                              onConfirm={() => removeContactPersonRow(idx)}
+                              okText="Удалить"
+                              cancelText="Отмена"
+                            >
+                              <DeleteOutlined
+                                role="button"
+                                title="Удалить"
+                                style={{ cursor: 'pointer', fontSize: 16, color: 'var(--ant-color-error)' }}
+                              />
+                            </Popconfirm>
+                          </Space>
+                        ),
+                      },
+                    ]}
+                    pagination={false}
+                    size="small"
+                  />
+                  <Button type="dashed" onClick={() => openContactModal('create')} style={{ marginTop: 8 }}>
+                    Добавить
+                  </Button>
+                  <ContactPersonsModal
+                    open={contactModalOpen}
+                    editIndex={contactEditIndex}
+                    initialRow={contactEditIndex !== null ? gridContactPersons[contactEditIndex] ?? null : null}
+                    onSave={handleContactSave}
+                    onCancel={() => { setContactModalOpen(false); setContactEditIndex(null); }}
+                    adminRole={isAdmin}
+                  />
+                </>
+              ),
+            },
+            {
+              key: 'commentContractor',
+              label: <Badge dot={tabErrorKeys.has('commentContractor')}>Комментарии</Badge>,
+              children: (
+                <Form.Item label="Комментарий" name="ctrComment">
+                  <Input.TextArea rows={8} style={{ width: 500 }} maxLength={5000} />
+                </Form.Item>
+              ),
+            },
+          ]}
+        />
+        <Form.Item
+          wrapperCol={{ offset: 6, span: 18 }}
+          style={{
+            marginTop: 16,
+            marginBottom: 0,
+            position: 'sticky',
+            bottom: 0,
+            background: '#fff',
+            paddingTop: 16,
+            borderTop: '1px solid #f0f0f0',
+            zIndex: 1,
+          }}
+        >
           <Space>
-            <Button type="primary" htmlType="submit" loading={saving}>Сохранить</Button>
-            <Button onClick={() => navigate('/contracts/new')}>Отмена</Button>
+            <Button type="primary" htmlType="button" onClick={handleSubmit} loading={saving}>Сохранить</Button>
+            <Button htmlType="button" onClick={() => navigate(returnTo === 'contractors' ? '/contractors' : '/contracts/new')}>Отмена</Button>
           </Space>
         </Form.Item>
+        </>
+      )}
       </Form>
     </Layout>
   );

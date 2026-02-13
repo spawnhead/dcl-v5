@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "generate:api": "openapi-typescript http://localhost:8080/v3/api-docs --output src/api/generated/schema.ts"
+    "generate:api": "openapi-typescript http://localhost:8080/v3/api-docs --output src/api/generated/schema.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
 "dependencies": {
   "@tanstack/react-query": "^5.66.0",
@@ -21,6 +23,7 @@
     "react-router-dom": "^7.13.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.0",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",

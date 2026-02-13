@@ -15,8 +15,9 @@ export interface DevStatusResponse {
     appliedMigrationsCount?: number;
     error?: string;
   };
-  dataMode: 'FAKE_SEEDED' | 'REAL' | 'EMPTY';
+  dataMode?: 'FAKE_SEEDED' | 'REAL' | 'EMPTY';
   authMode?: string;
+  seedDataset?: string;
 }
 
 /** DEV_BYPASS: /api/me contract */

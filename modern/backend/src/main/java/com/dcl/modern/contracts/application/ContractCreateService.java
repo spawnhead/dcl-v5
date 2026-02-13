@@ -1,52 +1,93 @@
 package com.dcl.modern.contracts.application;
 
 import com.dcl.modern.contracts.api.*;
-import com.dcl.modern.contracts.infrastructure.ContractsFakeProvider;
+import com.dcl.modern.contracts.domain.Contract;
+import com.dcl.modern.contracts.infrastructure.ContractRepository;
+import com.dcl.modern.contracts.infrastructure.SellerRepository;
+import com.dcl.modern.contractors.domain.Contractor;
+import com.dcl.modern.contractors.infrastructure.ContractorRepository;
+import com.dcl.modern.currency.domain.Currency;
+import com.dcl.modern.currency.infrastructure.CurrencyRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * N3a Contract create. Legacy: ContractAction (input, show, process).
  * CONTRACTS: docs/screens/contract_create/CONTRACTS.md.
+ * TASK-0020: ALL reads/writes from Postgres. newContractorId resolved via SELECT.
  */
 @Service
 public class ContractCreateService {
 
     private static final DateTimeFormatter DD_MM_YYYY = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-    public ContractCreateOpenResponse open(boolean canCreate) {
-        ContractCreateOpenResponse.ContractCreateDefaultsDto defaults =
-            new ContractCreateOpenResponse.ContractCreateDefaultsDto(
-                "",
-                "",
-                false,
-                "",
-                null,
-                null,
-                false,
-                false,
-                null,
-                false,
-                "",
-                "",
-                true,
-                "0"
-            );
-        ContractCreateOpenResponse.ContractCreateLookupsDto lookups =
-            new ContractCreateOpenResponse.ContractCreateLookupsDto(
-                ContractsFakeProvider.getContractorsLookupForCreate(),
-                ContractsFakeProvider.getCurrenciesLookup(),
-                ContractsFakeProvider.getSellersLookupForCreate()
-            );
+    private final ContractorRepository contractorRepository;
+    private final CurrencyRepository currencyRepository;
+    private final SellerRepository sellerRepository;
+    private final ContractRepository contractRepository;
+
+    public ContractCreateService(ContractorRepository contractorRepository,
+            CurrencyRepository currencyRepository,
+            SellerRepository sellerRepository,
+            ContractRepository contractRepository) {
+        this.contractorRepository = contractorRepository;
+        this.currencyRepository = currencyRepository;
+        this.sellerRepository = sellerRepository;
+        this.contractRepository = contractRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public ContractCreateOpenResponse open(boolean canCreate, String newContractorId) {
+        var contractors = contractorRepository.findAllByOrderByNameAsc().stream()
+            .map(c -> new LookupItemDto(String.valueOf(c.getId()), c.getName()))
+            .toList();
+        var currencies = currencyRepository.findAll().stream()
+            .map(c -> new LookupItemDto(String.valueOf(c.getId()), c.getName()))
+            .toList();
+        var sellers = sellerRepository.findAll().stream()
+            .map(s -> new LookupItemDto(String.valueOf(s.getId()), s.getName()))
+            .toList();
+
+        LookupItemDto selectedContractor = null;
+        if (newContractorId != null && !newContractorId.isBlank()) {
+            Integer ctrId = parseIdFromString(newContractorId);
+            if (ctrId != null) {
+                Optional<Contractor> found = contractorRepository.findById(ctrId);
+                if (found.isPresent()) {
+                    Contractor c = found.get();
+                    selectedContractor = new LookupItemDto(String.valueOf(c.getId()), c.getName());
+                }
+            }
+        }
+
+        var defaults = new ContractCreateOpenResponse.ContractCreateDefaultsDto(
+            "",
+            "",
+            false,
+            "",
+            selectedContractor,
+            null,
+            false,
+            false,
+            null,
+            false,
+            "",
+            "",
+            true,
+            "0"
+        );
+        var lookups = new ContractCreateOpenResponse.ContractCreateLookupsDto(contractors, currencies, sellers);
         return new ContractCreateOpenResponse(defaults, lookups, canCreate);
     }
 
-    /**
-     * Save new contract. Validates per CONTRACTS §2; FAKE_SEEDED returns success without DB insert.
-     */
+    @Transactional
     public ContractCreateSaveResponse save(ContractCreateSaveRequest req) {
         List<ValidationErrorResponse.FieldError> errors = validate(req);
         if (!errors.isEmpty()) {
@@ -54,8 +95,52 @@ public class ContractCreateService {
                 new ValidationErrorResponse.ErrorDetail("VALIDATION_ERROR", errors)
             ));
         }
-        String conId = "5001";
-        return new ContractCreateSaveResponse(conId, "/contracts");
+        Integer contractorId = parseId(req.contractor());
+        Integer currencyId = parseId(req.currency());
+        Integer sellerId = parseId(req.seller());
+        if (contractorId == null || currencyId == null || sellerId == null) {
+            throw new ContractCreateValidationException(new ValidationErrorResponse(
+                new ValidationErrorResponse.ErrorDetail("VALIDATION_ERROR",
+                    List.of(new ValidationErrorResponse.FieldError("contractor", "Invalid contractor/currency/seller")))));
+        }
+        LocalDate conDate = parseDate(req.conDate());
+        Short reusable = Boolean.TRUE.equals(req.conReusable()) ? (short) 1 : (short) 0;
+        LocalDate finalDate = req.conFinalDate() != null && !req.conFinalDate().isBlank() ? parseDate(req.conFinalDate()) : null;
+        Short original = Boolean.TRUE.equals(req.conOriginal()) ? (short) 1 : (short) 0;
+        Short annul = Boolean.TRUE.equals(req.conAnnul()) ? (short) 1 : (short) 0;
+        Integer userId = 1;
+        var now = LocalDateTime.now();
+
+        var contract = new Contract(
+            req.conNumber().trim(),
+            conDate,
+            contractorId,
+            currencyId,
+            sellerId,
+            reusable,
+            finalDate,
+            req.conComment(),
+            original,
+            annul,
+            now,
+            userId
+        );
+        Contract saved = contractRepository.save(contract);
+        return new ContractCreateSaveResponse(String.valueOf(saved.getId()), "/contracts");
+    }
+
+    private static Integer parseId(LookupItemDto dto) {
+        if (dto == null || dto.id() == null || dto.id().isBlank()) return null;
+        return parseIdFromString(dto.id());
+    }
+
+    private static Integer parseIdFromString(String s) {
+        if (s == null || s.isBlank()) return null;
+        try {
+            return Integer.parseInt(s.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     public List<ValidationErrorResponse.FieldError> validate(ContractCreateSaveRequest req) {
@@ -108,6 +193,15 @@ public class ContractCreateService {
             return true;
         } catch (DateTimeParseException e) {
             return false;
+        }
+    }
+
+    private static LocalDate parseDate(String s) {
+        if (s == null || s.isBlank()) return null;
+        try {
+            return LocalDate.parse(s.trim(), DD_MM_YYYY);
+        } catch (DateTimeParseException e) {
+            return null;
         }
     }
 

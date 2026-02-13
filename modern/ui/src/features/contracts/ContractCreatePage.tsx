@@ -12,7 +12,7 @@ import { PlusOutlined, SaveOutlined, CloseOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { ScreenLoader } from '../../shared/ui/ScreenLoader';
-import { showError, showLoading, hideLoading, notifySuccess, notifyError } from '../../shared/lib/feedback';
+import { showError, showLoading, hideLoading, notifyError, setFlashSuccess } from '../../shared/lib/feedback';
 import { fetchWithErrorHandling } from '../../shared/lib/api';
 import { SpecificationsTable } from './components/SpecificationsTable';
 import { FileUploadSection } from './components/FileUploadSection';
@@ -218,10 +218,11 @@ export default function ContractCreatePage() {
         notifyError('Ошибка сохранения', err.message);
         return;
       }
-      notifySuccess('Договор сохранён');
+      const conNumber = String(values?.conNumber ?? form.getFieldValue?.('conNumber') ?? '').trim() || '';
+      setFlashSuccess('Договор создан', conNumber || undefined);
       navigate(result.data!.redirectTo || '/contracts');
     },
-    [openData, navigate, specifications]
+    [openData, navigate, specifications, form]
   );
 
   if (loading || !openData) {

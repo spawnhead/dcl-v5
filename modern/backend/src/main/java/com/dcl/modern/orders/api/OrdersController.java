@@ -2,6 +2,7 @@ package com.dcl.modern.orders.api;
 
 import com.dcl.modern.dev.CurrentUser;
 import com.dcl.modern.dev.CurrentUserProvider;
+import com.dcl.modern.orders.application.OrderEditService;
 import com.dcl.modern.orders.application.OrderFilterParams;
 import com.dcl.modern.orders.application.OrdersService;
 import java.math.BigDecimal;
@@ -9,6 +10,9 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,12 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrdersController {
 
     private final OrdersService service;
+    private final OrderEditService editService;
 
     @Autowired(required = false)
     private CurrentUserProvider currentUserProvider;
 
-    public OrdersController(OrdersService service) {
+    public OrdersController(OrdersService service, OrderEditService editService) {
         this.service = service;
+        this.editService = editService;
     }
 
     private Optional<CurrentUser> currentUser() {
@@ -130,5 +136,29 @@ public class OrdersController {
         @RequestParam(defaultValue = "true") boolean have_all
     ) {
         return service.getSpecifications(contract_id, contractor_id, have_all);
+    }
+
+    /** Order edit open. Legacy: OrderAction input (new) / edit (existing). CONTRACTS: docs/screens/order_edit. */
+    @GetMapping("/edit/open")
+    public OrderEditOpenResponse editOpen(@RequestParam(required = false) Integer ordId) {
+        return editService.open(Optional.ofNullable(ordId));
+    }
+
+    /** Order save (create). Legacy: OrderAction process, is_new_doc=true. */
+    @PostMapping("/edit/save")
+    public OrderEditSaveResponse editSaveCreate(@RequestBody OrderEditSaveRequest request) {
+        if (!request.isNewDoc()) {
+            throw new IllegalArgumentException("Use PUT for update");
+        }
+        return editService.save(request);
+    }
+
+    /** Order save (update). Legacy: OrderAction process, is_new_doc=empty. */
+    @PutMapping("/edit/save")
+    public OrderEditSaveResponse editSaveUpdate(@RequestBody OrderEditSaveRequest request) {
+        if (request.isNewDoc()) {
+            throw new IllegalArgumentException("Use POST for create");
+        }
+        return editService.save(request);
     }
 }

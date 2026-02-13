@@ -4,7 +4,8 @@
  */
 import { AllCommunityModule, ColDef, ModuleRegistry } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { Button, Checkbox, DatePicker, Input, InputNumber, Layout, message, Select, Space, Typography } from 'antd';
+import { Button, Card, Checkbox, Col, DatePicker, Form, Input, InputNumber, Layout, message, Row, Select, Space, Typography } from 'antd';
+import { ClearOutlined, FilterOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -20,6 +21,7 @@ import type {
 dayjs.extend(customParseFormat);
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { AgGridShell } from '../../shared/ui/AgGridShell';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -217,7 +219,7 @@ export default function ContractsPage() {
           setGridData(json.grid);
           setCurrentPage(json.grid.page);
         }
-        message.info('Фильтр сброшен');
+        message.info('Фильтр очищен');
       })
       .catch((e) => setGridError(e instanceof Error ? e.message : 'Ошибка'))
       .finally(() => setGridLoading(false));
@@ -287,101 +289,179 @@ export default function ContractsPage() {
   const hasPrevPage = currentPage > 1;
 
   return (
-    <Layout style={{ padding: 16 }}>
-      <Typography.Title level={4}>Договора</Typography.Title>
+    <Layout.Content className="app-content" style={{ padding: 24, minHeight: 'calc(100vh - 64px)' }}>
+      <div style={{ marginBottom: 24 }}>
+        <Typography.Title level={2} style={{ margin: 0 }}>
+          Договора
+        </Typography.Title>
+      </div>
 
-      <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-        <Space wrap align="start">
-          <Input
-            placeholder="Номер"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
-            style={{ width: 120 }}
-            maxLength={50}
-          />
-          <Select
-            placeholder="Контрагент"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            value={contractor?.id ?? undefined}
-            onChange={(v) => setContractor(v ? contractors.find((c) => c.id === v) ?? null : null)}
-            options={contractors.map((c) => ({ value: c.id, label: c.name }))}
-            style={{ minWidth: 180 }}
-          />
-          <DatePicker
-            placeholder="Дата с"
-            format={DATE_FORMAT}
-            value={dateBegin ? dayjs(dateBegin, DATE_FORMAT) : null}
-            onChange={(date, dateString) => setDateBegin(dateString ?? null)}
-          />
-          <DatePicker
-            placeholder="Дата по"
-            format={DATE_FORMAT}
-            value={dateEnd ? dayjs(dateEnd, DATE_FORMAT) : null}
-            onChange={(date, dateString) => setDateEnd(dateString ?? null)}
-          />
-          <InputNumber placeholder="Сумма от" value={sumMin ?? undefined} onChange={(v) => setSumMin(v ?? null)} style={{ width: 110 }} />
-          <InputNumber placeholder="Сумма до" value={sumMax ?? undefined} onChange={(v) => setSumMax(v ?? null)} style={{ width: 110 }} />
-          <Select
-            placeholder="Пользователь"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            value={user?.id ?? undefined}
-            onChange={(v) => setUser(v ? users.find((u) => u.id === v) ?? null : null)}
-            options={users.map((u) => ({ value: u.id, label: u.name }))}
-            style={{ minWidth: 140 }}
-          />
-          <Select
-            placeholder="Продавец"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            value={seller?.id ?? undefined}
-            onChange={(v) => setSeller(v ? sellers.find((s) => s.id === v) ?? null : null)}
-            options={sellers.map((s) => ({ value: s.id, label: s.name }))}
-            style={{ minWidth: 160 }}
-          />
-          <Checkbox checked={executed} onChange={(e) => handleExecutedChange(e.target.checked)}>Исполн.</Checkbox>
-          <Checkbox checked={notExecuted} onChange={(e) => handleNotExecutedChange(e.target.checked)}>Не исполн.</Checkbox>
-          <Checkbox checked={oridinalAbsent} onChange={(e) => setOridinalAbsent(e.target.checked)}>Без оригинала</Checkbox>
-          <Button type="primary" onClick={applyFilter}>Применить фильтр</Button>
-          <Button onClick={clearFilter}>Очистить фильтр</Button>
-        </Space>
+      {/* Блок фильтров — в одном стиле с Контрагентами (Figma) */}
+      <Card bordered={false} style={{ marginBottom: 24, borderRadius: 8 }}>
+        <Form layout="vertical" name="filter_form">
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+              <Form.Item style={{ margin: 0 }}>
+                <Input
+                  placeholder="Номер"
+                  value={number}
+                  onChange={(e) => setNumber(e.target.value)}
+                  maxLength={50}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+              <Form.Item style={{ margin: 0 }}>
+                <Select
+                  placeholder="Контрагент"
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  value={contractor?.id ?? undefined}
+                  onChange={(v) => setContractor(v ? contractors.find((c) => c.id === v) ?? null : null)}
+                  options={contractors.map((c) => ({ value: c.id, label: c.name }))}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+              <Form.Item style={{ margin: 0 }}>
+                <DatePicker
+                  placeholder="Дата с"
+                  format={DATE_FORMAT}
+                  value={dateBegin ? dayjs(dateBegin, DATE_FORMAT) : null}
+                  onChange={(_, dateString) => setDateBegin(dateString ?? null)}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+              <Form.Item style={{ margin: 0 }}>
+                <DatePicker
+                  placeholder="Дата по"
+                  format={DATE_FORMAT}
+                  value={dateEnd ? dayjs(dateEnd, DATE_FORMAT) : null}
+                  onChange={(_, dateString) => setDateEnd(dateString ?? null)}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+              <Form.Item style={{ margin: 0 }}>
+                <InputNumber
+                  placeholder="Сумма от"
+                  value={sumMin ?? undefined}
+                  onChange={(v) => setSumMin(v ?? null)}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+              <Form.Item style={{ margin: 0 }}>
+                <InputNumber
+                  placeholder="Сумма до"
+                  value={sumMax ?? undefined}
+                  onChange={(v) => setSumMax(v ?? null)}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+              <Form.Item style={{ margin: 0 }}>
+                <Select
+                  placeholder="Пользователь"
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  value={user?.id ?? undefined}
+                  onChange={(v) => setUser(v ? users.find((u) => u.id === v) ?? null : null)}
+                  options={users.map((u) => ({ value: u.id, label: u.name }))}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+              <Form.Item style={{ margin: 0 }}>
+                <Select
+                  placeholder="Продавец"
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  value={seller?.id ?? undefined}
+                  onChange={(v) => setSeller(v ? sellers.find((s) => s.id === v) ?? null : null)}
+                  options={sellers.map((s) => ({ value: s.id, label: s.name }))}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+              <Form.Item style={{ margin: 0 }}>
+                <Space>
+                  <Checkbox checked={executed} onChange={(e) => handleExecutedChange(e.target.checked)}>Исполн.</Checkbox>
+                  <Checkbox checked={notExecuted} onChange={(e) => handleNotExecutedChange(e.target.checked)}>Не исполн.</Checkbox>
+                  <Checkbox checked={oridinalAbsent} onChange={(e) => setOridinalAbsent(e.target.checked)}>Без оригинала</Checkbox>
+                </Space>
+              </Form.Item>
+            </Col>
+            <Col xs={24} lg={8} xl={8} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+              <Button type="primary" icon={<FilterOutlined />} onClick={applyFilter}>
+                Применить фильтр
+              </Button>
+              <Button icon={<ClearOutlined />} onClick={clearFilter}>
+                Очистить фильтр
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      </Card>
 
-        {gridError && <Typography.Text type="danger">{gridError}</Typography.Text>}
+      {gridError && (
+        <Typography.Text type="danger" style={{ display: 'block', marginBottom: 16 }}>
+          {gridError}
+        </Typography.Text>
+      )}
 
-        <Space>
-          <Button size="small" disabled={!hasPrevPage || gridLoading} onClick={() => fetchPage('prev', currentPage - 1)}>
-            Назад
-          </Button>
-          <Typography.Text>Стр. {currentPage}</Typography.Text>
-          <Button size="small" disabled={!hasNextPage || gridLoading} onClick={() => fetchPage('next', currentPage + 1)}>
-            Вперёд
-          </Button>
-        </Space>
-
+      {/* Таблица — Card с гридом */}
+      <Card bordered={false} bodyStyle={{ padding: 0 }} style={{ borderRadius: 8, overflow: 'hidden', marginBottom: 24 }}>
         <style>{`.crossed-cell { text-decoration: line-through; }`}</style>
-        <div className="ag-theme-quartz app-grid" style={{ width: '100%', height: 480 }}>
-          <AgGridReact<ContractRowDto>
-            rowData={gridData?.items ?? []}
-            columnDefs={columnDefs}
-            getRowClass={getRowClass}
-            loading={gridLoading}
-            domLayout="normal"
-            defaultColDef={{ sortable: false }}
-            suppressCellFocus
-          />
+        <div style={{ overflowX: 'auto' }}>
+          <AgGridShell style={{ width: '100%', height: 480 }}>
+            <AgGridReact<ContractRowDto>
+              rowData={gridData?.items ?? []}
+              columnDefs={columnDefs}
+              getRowClass={getRowClass}
+              loading={gridLoading}
+              domLayout="normal"
+              defaultColDef={{ sortable: false }}
+              suppressCellFocus
+            />
+          </AgGridShell>
         </div>
+        <div style={{ padding: '12px 16px', borderTop: '1px solid var(--ant-color-border)' }}>
+          <Space wrap align="center">
+            <Button size="small" disabled={!hasPrevPage || gridLoading} onClick={() => fetchPage('prev', currentPage - 1)}>
+              Назад
+            </Button>
+            <Typography.Text>Стр. {currentPage}</Typography.Text>
+            <Button size="small" disabled={!hasNextPage || gridLoading} onClick={() => fetchPage('next', currentPage + 1)}>
+              Вперёд
+            </Button>
+          </Space>
+        </div>
+      </Card>
 
-        {/* gridBottom: action buttons below grid per SNAPSHOT §3.2; ACCEPTANCE §13–14 */}
-        <Space style={{ marginTop: 12 }} wrap>
+      {/* Кнопки действий — как на Контрагентах */}
+      <div style={{ marginTop: 0 }}>
+        <Space wrap>
           <Button onClick={() => navigate('/contracts/import-cp')}>Импорт из КП</Button>
-          {canCreate && <Button type="primary" onClick={() => navigate('/contracts/new')}>Создать</Button>}
+          {canCreate && (
+            <Button type="primary" icon={<PlusOutlined />} size="large" onClick={() => navigate('/contracts/new')}>
+              Создать
+            </Button>
+          )}
         </Space>
-      </Space>
-    </Layout>
+      </div>
+    </Layout.Content>
   );
 }
 

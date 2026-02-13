@@ -18,6 +18,11 @@ logs/
 *.dump
 *.dumpstream
 
+# Env (secrets)
+.env
+.env.local
+.env.*.local
+
 # IDE / OS
 .idea/
 *.iml
@@ -25,3 +30,6 @@ logs/
 Thumbs.db
 
 .txt
+
+# MCP Ant Design extraction (temporary clone)
+ops/mcp-antd/ant-design/

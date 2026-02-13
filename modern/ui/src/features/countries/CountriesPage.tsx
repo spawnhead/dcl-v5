@@ -4,6 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { Layout, Typography } from 'antd';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { AgGridShell } from '../../shared/ui/AgGridShell';
 import apiClient from '../../api/client';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -36,14 +37,14 @@ export default function CountriesPage() {
       {error ? (
         <Typography.Text type="danger">Failed to load countries.</Typography.Text>
       ) : (
-        <div className="ag-theme-quartz app-grid" style={{ width: '100%', height: '100%', minHeight: 500 }}>
+        <AgGridShell style={{ width: '100%', height: '100%', minHeight: 500 }}>
           <AgGridReact
             rowData={data ?? []}
             columnDefs={columnDefs}
             loading={isLoading}
             animateRows
           />
-        </div>
+        </AgGridShell>
       )}
     </Content>
   );

@@ -14,7 +14,8 @@ public record DevStatusResponse(
     DbStatus db,
     FlywayStatus flyway,
     String dataMode,
-    String authMode
+    String authMode,
+    String seedDataset
 ) {
     public record DbStatus(Boolean ok, String product, String version, String url, String error) {}
     public record FlywayStatus(Boolean ok, Integer appliedMigrationsCount, String error) {}

@@ -72,6 +72,9 @@ Grid `gridContactPersons`:
 - `dispatch=fireContactPerson` и `dispatch=blockContactPerson`.
 - `dispatch=editPersonInContractor`.
 - `dispatch=addPersonInContractor` (кнопка «Создать»).
+- Icon headers: fired = `brick.gif` (tooltip `tooltip.ContactPersons.fired`), blocked = `lock.gif` (tooltip `tooltip.ContactPersons.block_status`).
+- Email column uses `mailto:` link.
+- Block checkbox uses `blockChecker` (readonly for non-admin).
 
 ### 4.5 Tab «Комментарии»
 - `ctr_comment` textarea 400x305, maxlength 5000, может быть readonly (`readOnlyComment`).
@@ -79,6 +82,7 @@ Grid `gridContactPersons`:
 ## 5) Кнопки формы
 - «Отмена»: link dispatch `back`.
 - «Сохранить»: submit `dispatch=process`.
+  - Success feedback: **«Контрагент успешно сохранен»** (modern notification; legacy message not confirmed).
 
 ## 6) Create defaults
 - `is_new_doc=true`.

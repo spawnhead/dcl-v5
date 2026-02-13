@@ -1,0 +1,26 @@
+---
+description: AG Grid theme standard. All list screens use AgGridShell; theme sync with Light/Dark toggle.
+globs: ["modern/ui/**", "docs/AGENT_TASK_REPORTS.md"]
+alwaysApply: true
+---
+# AG Grid Theme Standard
+
+## Rule
+All list screens with AG Grid MUST use `AgGridShell` from `src/shared/ui/AgGridShell.tsx`.
+
+## Forbidden
+- Raw `AgGridReact` without `AgGridShell` wrapper (or `AgGridTheme` for special cases).
+- Custom table renderers for list screens (AntD Table, HTML table) without explicit architectural decision.
+- Hardcoded light background on grid containers.
+- Importing only `ag-theme-quartz.css` without using theme-aware wrapper (dark theme will not apply).
+
+## Required
+- Import `ag-grid.css` and `ag-theme-quartz.css` (contains light + dark variants).
+- Use `AgGridShell` for all grid-based list screens (Contracts, Orders, Margin, Countries, etc.).
+- Grid must switch theme when Light/Dark toggle changes (no refresh).
+- Page content area: use `Layout.Content` with `className="app-content"` for dark theme parity.
+
+## Reference
+- `src/shared/ui/AgGridShell.tsx` — standard wrapper (theme + app-grid).
+- `src/shared/ui/AgGridTheme.tsx` — lower-level theme wrapper (used by AgGridShell).
+- `App.css` — `[data-theme="dark"] .app-content` for dark background.

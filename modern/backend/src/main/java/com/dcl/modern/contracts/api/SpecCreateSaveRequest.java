@@ -25,5 +25,9 @@ public record SpecCreateSaveRequest(
     Boolean spcPayAfterMontage,
     Boolean spcFaxCopy,
     Boolean spcOriginal,
-    String spcComment
+    String spcComment,
+    String spcLetter1Date,
+    String spcLetter2Date,
+    String spcLetter3Date,
+    String spcComplaintInCourtDate
 ) {}

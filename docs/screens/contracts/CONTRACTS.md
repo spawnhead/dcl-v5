@@ -41,13 +41,14 @@ Traceability:
 - Legacy server lists: `/ContractorsListAction`, `/UsersListAction`, `/SellersListAction` in `Contracts.jsp`.
 - Reset defaults in `ContractsAction#input`.
 
+VERIFIED (2026-02-12 legacy HAR capture):
+- Legacy uses POST ContractsAction.do with dispatch=input|filter.
+- Request body: number, contractor.id, contractor.name, date_begin, date_end, sum_min_formatted, sum_max_formatted, user.usr_id, user.usr_name, seller.id, seller.name, grid.page, grid.pk=con_id.
+- Content-Type: application/x-www-form-urlencoded.
+- Response: text/html full page (HTML).
+
 UNCONFIRMED:
-- Legacy serverList XHR wire-format (HTML/options vs JSON).
-- HOW TO VERIFY:
-  1) Открыть legacy Contracts.
-  2) В DevTools → Network поймать вызовы при фокусе/поиске в serverList.
-  3) Сохранить request/response тела.
-  4) Зафиксировать фактические поля id/name и лимиты выдачи.
+- Legacy serverList XHR wire-format (HTML/options vs JSON) — not observed; list uses server-side HTML.
 
 ## 1.2 POST `/api/contracts/data`
 Назначение: получить страницу грида по фильтру (эквивалент `dispatch=filter` + `select-contracts`).

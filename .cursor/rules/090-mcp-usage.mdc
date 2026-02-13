@@ -1,0 +1,104 @@
+---
+description: MCP usage — Playwright (QA/Smoke/E2E), Chrome DevTools (diagnostics), Postgres, cursor-ide-browser, Ant Design, web_fetch. Чёткое разделение: автоматизация vs диагностика.
+globs: ["docs/**", "modern/**", "ops/**"]
+alwaysApply: false
+---
+# MCP Usage (TASK-0045, TASK-0056, TASK-0086)
+
+Ссылка: Playwright MCP — https://github.com/microsoft/playwright-mcp (стандартный инструмент QA/Smoke/E2E).
+
+**Project rules (не менять):** Bash-only. После каждой правки UI/API — browser smoke-check (Console 0 + Network 2xx JSON). Без бинарей в репо (HAR/скрины только как текстовые инструкции или README). 1:1 parity, без догадок, без placeholder.
+
+---
+
+## Разделение ролей: Playwright vs Chrome DevTools
+
+**Playwright (MCP)** — для автоматизации флоу и регрессии. Когда важно «доказать, что работает/не работает», а не глубоко расследовать причины.
+
+**Chrome DevTools (MCP)** — для диагностики причин: консоль, сеть, производительность, trace. Когда нужно понять «почему сломалось».
+
+---
+
+## Playwright MCP — когда использовать
+
+- Автоматизация пользовательских флоу (E2E): логин, заполнение форм, сохранение, навигация.
+- Регрессия и смоук-проверки «за DEV»: закрепить ручную проверку в виде воспроизводимого сценария/теста.
+- Прогоны в CI, по расписанию и повторяемые проверки.
+- Матрица ролей/прав: один флоу под разными пользователями (X-Dev-*, QA_ROLE_PRESETS).
+- Стабилизация флейков через явные ожидания (wait_for, wait_for selector) и детерминированные шаги.
+- Когда важнее «доказать, что работает/не работает», чем глубоко расследовать причины.
+
+### Чеклист: использование Playwright MCP
+
+1. Перед прогоном: UI на 5173, backend на 8080 (bash: проверить порты при необходимости).
+2. Открыть целевой URL: `browser_navigate` (или эквивалент) на http://localhost:5173/...
+3. Выполнить сценарий: `browser_snapshot` → найти ref элемента → `browser_click` / `browser_type` / `browser_fill_form` по ref.
+4. Дождаться результата: `browser_wait_for` (text или time).
+5. Проверить итог: `browser_snapshot` (ожидаемый текст/элемент), `browser_network_requests` (includeStatic: false) — /api/* 2xx.
+6. Зафиксировать в отчёте: URLs, шаги, pass/fail, при fail — краткое описание.
+
+### Правила Playwright
+
+- Не полагаться на скриншоты в репо: доказательства — текст (snapshot, список запросов, лог).
+- Явные ожидания: после навигации/клика использовать wait_for (text или timeout), не «слепой» sleep без необходимости.
+- Один сценарий = один логический флоу (например: открыть форму → заполнить → сохранить → проверить редирект).
+
+---
+
+## Chrome DevTools MCP — когда использовать
+
+- Диагностика «почему сломалось»: ошибки в консоли, исключения, JS-проблемы.
+- Анализ сети и HAR-подобная картина: запросы, статусы, тайминги, CORS, авторизация.
+- Производительность: performance trace, LCP, долгие задачи, рендер.
+- Быстрое расследование нестабильных багов локально.
+- Сбор артефактов для разработчика: консоль + сеть + trace + скрин (скрин — только описание или путь вне репо; в репо не коммитить бинари).
+
+### Чеклист: использование Chrome DevTools MCP
+
+1. Подключить страницу: убедиться, что вкладка с целевым URL выбрана (list_pages, select_page).
+2. Консоль: `list_console_messages` (types: error) → 0 ошибок; при наличии — зафиксировать текст и стек в логе.
+3. Сеть: `list_network_requests` (resourceTypes: fetch/xhr) → все /api/* и /v3/* в статусе 2xx; при 4xx/5xx — URL, status, причина в логе.
+4. При необходимости производительности: `performance_start_trace` (reload: true, autoStop: true) → после остановки анализировать insights; не сохранять тяжёлые бинари в репо.
+5. Артефакты: в AGENT_TASK_REPORTS блок MCP Evidence — Console (OK / N errors + первые строки), Network (список URL + status), при trace — краткий вывод (LCP/задачи).
+
+### Правила Chrome DevTools
+
+- После каждой правки UI/API: обязательно проверить Console 0 errors и Network 2xx для затронутых endpoint.
+- Не коммитить бинари (trace файлы, скрины) в репо; описание и вывод — в logs/*.md или в README.
+
+---
+
+## Остальные MCP (кратко)
+
+**Postgres MCP** — read-only. После save/create: проверить INSERT через SELECT COUNT(*) или выборку по ключу. После migrations: проверить схему (таблицы, колонки) vs Flyway. Запрещено: INSERT/UPDATE/DELETE от агента.
+
+**cursor-ide-browser MCP** — браузер в IDE. Smoke-check без внешнего Chrome: navigate, snapshot, console_messages, network_requests. Когда удобнее один источник правды с IDE.
+
+**Ant Design Components MCP** — документация и примеры компонентов (list-components, get-component-docs, get-component-example). При работе с UI на Ant Design: подбор API, проверка пропсов без выхода в браузер.
+
+**web_fetch MCP** — read-only получение содержимого публичного URL в markdown. Без авторизации и localhost.
+
+Удалены из набора (не использовать в отчётах как обязательные): Docker MCP, GitHub MCP.
+
+---
+
+## Smoke-check URLs (фиксированные порты)
+
+- http://localhost:5173/contracts
+- http://localhost:5173/contractors
+- http://localhost:5173/contractors/new?returnTo=contract
+- http://localhost:5173/contracts/new
+- http://localhost:5173/reports/margin
+- http://localhost:5173/orders
+- http://localhost:5173/commercial-proposals
+
+---
+
+## Reporting (MCP Evidence)
+
+В docs/AGENT_TASK_REPORTS.md при использовании MCP добавлять блок **MCP Evidence**:
+
+- **Postgres:** запрос + результат (без изменения данных).
+- **Playwright:** URLs, шаги сценария, pass/fail, при fail — что ожидалось и что получено.
+- **Chrome DevTools / cursor-ide-browser:** URLs, Console (0 errors или N + кратко), Network (список /api/* + status). Обязательно после UI/API изменений.
+- Бинари (HAR, скрины, trace) в репо не коммитить; только текстовые инструкции или README и логи в logs/*.

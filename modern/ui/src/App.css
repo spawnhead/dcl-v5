@@ -10,12 +10,27 @@
   padding: 0 24px;
 }
 
+[data-theme="dark"] .app-header {
+  background: #141414;
+  border-bottom-color: #303030;
+}
+
+[data-theme="dark"] .app-header .app-title {
+  color: rgba(255, 255, 255, 0.85);
+}
+
 .app-title {
   margin: 0;
 }
 
 .app-content {
   padding: 24px;
+}
+
+/* TASK-0032 fix: Layout in page content must have dark background when theme is dark */
+[data-theme="dark"] .app-content,
+[data-theme="dark"] .app-content .ant-layout {
+  background: #141414;
 }
 
 .app-grid {

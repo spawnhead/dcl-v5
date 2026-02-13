@@ -1,0 +1,8 @@
+{
+  "name": "mcp-antd-setup",
+  "private": true,
+  "description": "Local MCP Ant Design Components server setup for Cursor",
+  "dependencies": {
+    "mcp-antd-components": "github:hannesj/mcp-antd-components"
+  }
+}

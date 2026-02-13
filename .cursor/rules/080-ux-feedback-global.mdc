@@ -1,5 +1,5 @@
 ---
-description: Global UX feedback standard. All screens must show Skeleton/Spin on load and Message.success/error on mutations. Never leave user without feedback after Save.
+description: Global UX feedback standard. Skeleton/Spin on load; notification.success/error on save; message.loading for async. Never leave user without feedback after Save.
 globs: ["modern/ui/**", "docs/AGENT_TASK_REPORTS.md"]
 alwaysApply: true
 ---
@@ -10,14 +10,18 @@ alwaysApply: true
 ### On initial data load
 - Show **Skeleton** (preferred) or **Spin** until data is ready.
 - Do not show blank content or plain "Загрузка..." text without visual indicator.
+- Dev: min duration 250–350ms so Skeleton is visible when request is fast.
 
-### On async operations
-- Show AntD `message.loading` with key; resolve to `message.success` or `message.error`.
-- Use `src/shared/lib/feedback.ts` helpers: `showLoading`, `hideLoading`, `showSuccess`, `showError`.
+### On async operations (loading)
+- Show AntD `message.loading` with key; resolve with `hideLoading()`.
+- Use `showLoading`, `hideLoading` from `src/shared/lib/feedback.ts`.
 
 ### On mutations (save/create/update/delete)
-- Show `message.success` on 2xx.
-- Show `message.error` on non-2xx; include error code or user-friendly text.
+- Show **notification.success** on 2xx (survives redirect; duration 4s).
+- **Success notification must include entity identifier when available** (e.g. "Контрагент создан" + "ООО Рога и копыта"; "Договор создан" + "CN-T24-NEW"; "Контрагент удалён" + ctrName).
+- Show **notification.error** on non-2xx; include error code or user-friendly text.
+- Use `notifySuccess`, `notifyError`, `setFlashSuccess` from `src/shared/lib/feedback.ts`.
+- Before redirect: `setFlashSuccess(title, description)` so notification appears on target page; do not duplicate.
 - **Never leave the user without feedback after clicking Save.**
 
 ### Code

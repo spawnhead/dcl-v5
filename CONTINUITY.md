@@ -7,6 +7,7 @@ Constraints/Assumptions:
 - Start each step by reading/updating this file.
 
 Key decisions:
+- **Next screen: Contractors list (2026-02-12):** References → Контрагенты. Унификация contractor_create: один домен, list + create/edit; returnTo=contractors vs returnTo=contract. Spec pack: docs/screens/contractors/. Plan: logs/plan-next-screen-contractors-20260212-1900.md.
 - **DCL_CONTRACT_FILTER (2026-02-11):** Реализация в application layer; Postgres FUNCTION не создаётся. Детали: docs/db/DCL_CONTRACT_FILTER_DECISION.md.
 - **N3 reopened (2026-02-11):** Parity gap — missing 2 buttons: «Импорт из КП» (ContractsAction.do?dispatch=selectCP&minsk_store=1), «Создать» (ContractAction.do?dispatch=input). Legacy: Contracts.jsp lines 123–128. Plan patch specs → Dev implement → QA re-verify.
 - N3 selected for current Agent-Plan cycle: Contracts list screen spec pack.
@@ -19,6 +20,48 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-13: TASK-0090 Orders CERT: Playwright 2 passed (full flow NOT skip); endpoints 2xx; Console 0. logs/qa-task-0090-orders-cert-20260213-0900.md.
+- 2026-02-13: TASK-0087 Playwright E2E smoke: orders-smoke.spec.ts, cp-list-smoke.spec.ts; 3 passed, 1 skipped (Orders full BLOCKED by backend save 500). logs/qa-task-0087-playwright-smokes-20260213-0540.md.
+- 2026-02-13: TASK-0089 Orders save 500 fix: ord_number VARCHAR(15) truncation in OrderEditService; smoke test fixes; Playwright orders-smoke 2 passed. logs/dev-task-0089-orders-save-500-fix-20260213-0830.md.
+- 2026-02-13: TASK-0088 Orders edit/open 404 fix: killed old 8080 process; clean build + restart; GET /api/orders/edit/open 200. QA BLOCKED (TASK-0085) resolved. logs/dev-task-0088-orders-open-404-fix-20260213-0825.md.
+- 2026-02-13: TASK-0086 MCP rule Playwright + Chrome DevTools: .cursor/rules/090-mcp-usage.mdc переписано; Playwright MCP — стандартный QA/Smoke/E2E (https://github.com/microsoft/playwright-mcp); разделение Playwright (автоматизация/регрессия) vs Chrome DevTools (диагностика); чеклисты и правила; без таблиц, без бинарей. logs/dev-task-0086-mcp-rule-playwright-devtools-20260213-1220.md.
+- 2026-02-13: TASK-0083 Orders AJAX grids: Flyway V29 (dcl_ord_list_payment, dcl_ord_list_pay_sum); Backend OrderPayment/OrderPaySum, open/save; UI OrderEditPage График оплаты + Суммы оплаты. logs/dev-task-0083-orders-ajax-grids-20260213-0815.md.
+- 2026-02-12: TASK-0084 Commercial Proposals list 1:1: Backend V26 dcl_commercial_proposal + dcl_cpr_list_produce, V27 dev seed (contractors + CPs), V28 fix cpr_proposal_declined type; CommercialProposalsController/Service/CpListProvider (Postgres-only); UI CommercialProposalsPage (/commercial-proposals), 10 filters, grid, row actions (Edit/Clone new|old/Block), blocked-row strikethrough; clone creates copy, block toggles. logs/dev-task-0084-cp-list-20260212-2252.md.
+- 2026-02-12: TASK-0081 Legacy HAR capture: 7 экранов (contracts, contractors, contractor_create, contractor_edit, contract_import_cp, contract_spec_create, contract_attachments). Legacy http://localhost:8082/ доступен; POST ContractsAction.do?dispatch=filter|input|selectCP; POST ContractorsAction.do?dispatch=filter; GET ContractorAction.do?dispatch=create|edit. Все BLOCKED.md заменены на network.har (текстовый артефакт). CONTRACTS.md обновлены. logs/qa-task-0081-legacy-har-capture-20260212-1915.md.
+- 2026-02-12: TASK-0082 Orders list Postgres-only: OrderListProvider (dcl_order + JOINs), OrdersService list + lookups из OrderLookupsRepository; OrderFilterFakeProvider удалён. logs/dev-task-0082-orders-list-postgres-only-20260212-2245.md.
+- 2026-02-12: TASK-0080 Orders create/edit 1:1: Flyway V25 (dcl_order, dcl_ord_list_produce, dcl_stuff_category, dcl_blank); OrderEditService (open/save); GET/POST/PUT /api/orders/edit/open|save; OrderEditPage (/orders/new, /orders/:id/edit); Postgres-only lookups. logs/dev-task-0080-orders-create-edit-20260212-2210.md.
+- 2026-02-12: TASK-0079 Orders and Commercial Proposals spec packs: docs/screens/order_edit/*, docs/screens/commercial_proposals/*, docs/screens/commercial_proposal_edit/* (SNAPSHOT/CONTRACTS/ACCEPTANCE/BEHAVIOR_MATRIX/TEST_DATA_SPEC/QA_ROLE_PRESETS/payloads). Three screen modes for CP (Regular, Old Version, Minsk Store). All network payloads BLOCKED pending HAR capture. logs/plan-task-0079-orders-and-cp-specs-20260212-2104.md.
+- 2026-02-12: TASK-0078 Evidence pack for next screens: docs/orchestrator/EVIDENCE_NEXT_SCREENS.md (modern status, legacy universe, Struts actions, candidate flows, blockers). scripts/orchestrator-evidence.sh. logs/plan-task-0078-evidence-pack-20260212-1835.md.
+- 2026-02-12: TASK-0073 Admin Badge for Block: маркировка «Блок» через AntD Badge (999+) при adminRole/isAdmin на /contractors, /contractors/:id/edit, /contractors/new и в ContactPersonsModal. logs/dev-task-0073-admin-badge-block-20260212-1645.md.
+- 2026-02-12: TASK-0072 Contractor Edit parity: BUG-1 — ctrBankProps/ctrComment added to edit save payload (ContractorEditPage); BUG-2 — Contact person edit modal prefill via Form key + initialValues (ContactPersonsModal). logs/dev-task-0072-contractor-edit-bank-and-contact-persons-20260212-1615.md.
+- 2026-02-12: Env unblock (Flyway): port 8080 killed; docker compose down -v + up -d; backend dev profile started; api-docs confirms edit/open, edit/save. logs/dev-flyway-unblock-20260212-1820.md.
+- 2026-02-12: Agent-Dev TASK-0071 Contractor Edit 1:1: GET/PUT edit/open, edit/save; ContractorEditService (Postgres); ContractorEditPage (tabs, returnTo, formReadOnly, roleFlags, 404); route contractors/:id/edit. Build PASS. Env unblocked; browser verification next.
+- 2026-02-12: Agent-Plan TASK-0070 Contractor Edit Spec Pack 1:1: docs/screens/contractor_edit/ (SNAPSHOT/CONTRACTS/ACCEPTANCE/BEHAVIOR_MATRIX/TEST_DATA_SPEC/QA_ROLE_PRESETS/payloads). Full legacy traceability to ContractorAction#edit/editCommon/process/delete. UNCONFIRMED: delete Popconfirm text, occupied check logic. logs/plan-contractor-edit-20260212-1500.md.
+- 2026-02-12: Agent-Dev TASK-0068 Global action confirmations: success notification с entity context (ctrName/conNumber); setFlashSuccess/consumeFlash; Apply/Clear/Delete feedback; rule 080. logs/dev-task-0068-global-confirmations-20260212-1300.md — Build PASS.
+- 2026-02-12: Agent-Dev TASK-0066 contractor_create Contact persons Postgres persistence: V24 dcl_contact_person, JPA Entity+Repository, ContractorCreateService save/open; integration test; E2E VERIFIED (ctrId=33, Postgres 1 row). logs/dev-task-0066-contact-persons-persist-20260212-1206.md.
+- 2026-02-12: Agent-Dev TASK-0067 contractor_create Contact persons UX polish: Modal required/email/maxlen, notifyError on validation fail, notifySuccess on add/edit. logs/dev-task-0067-contact-persons-modal-20260212-1000.md — Build PASS.
+- 2026-02-12: Agent Release Manager TASK-0063 Post-fix audit /contracts/new: diff 59902b17/722e6b01/b43bcbec; бизнес-логика и API не изменены; parity сохранён; Build PASS; open 200; anti-patterns в логе. logs/audit-task-0063-claude-opus-contract-create-fix-20260212-1200.md — VERIFIED.
+- 2026-02-11: Agent-Dev TASK-0058 Contractors list grid missing fields: V22+V23 dev seed миграции заполняют address/phone/email/bank_props для contractors на первой странице; API возвращает данные; backend mapper без изменений. logs/dev-task-0058-contractors-grid-missing-fields-20260211-2359.md.
+- 2026-02-11: Agent-Debug TASK-0057 contractor_create redirect regression check: NO REGRESSION. Both scenarios (returnTo=contractors, returnTo=contract) PASS. TASK-0054 fix verified. logs/debug-task-0057-contractor-redirect-20260211-2100.md.
+- 2026-02-09: Agent-Dev TASK-0056 Chrome DevTools MCP: docs/MCP_SETUP.md §2.5 §5.5, .cursor/rules/090-mcp-usage.mdc, AGENT_TASK_REPORTS MCP Evidence. logs/dev-chrome-devtools-mcp-setup-20260209-1430.md.
+- 2026-02-11: Agent-Debug TASK-0054 contractor_create wrong redirect: returnTo default path-based (contractors for /contractors/new); save body prefer openData.returnTo. logs/debug-contractor-wrong-redirect-20260211-2025.md — VERIFIED.
+- 2026-02-11: Agent-Dev TASK-0050 MCP Ant Design Components: локальная установка ops/mcp-antd/, extract 71 компонент, mcp.json → node + путь; docs/MCP_SETUP.md §2.5.
+- 2026-02-11: Agent-Dev TASK-0049 contractor_create Contact persons UX via Modal: read-only table, Add/Edit через Modal, Delete + Popconfirm. ContactPersonsModal.tsx. logs/dev-contact-persons-modal-20260211-2230.md — VERIFIED.
+- 2026-02-11: Agent-Dev TASK-0048 Contractors list delete + Popconfirm + AntD icons + contractor_create Contact persons tab + success feedback «Контрагент успешно сохранен». DELETE /api/contractors/{ctrId}; gridContactPersons в save. logs/dev-contractors-delete-contacts-20260211-2205.md — VERIFIED.
+- 2026-02-11: Agent-Dev TASK-0047 MCP Command Cookbook: docs/MCP_SETUP.md §5 — Postgres/Docker/Playwright/GitHub сценарии, PASS/FAIL, Minimum MCP Evidence, copy-paste block. logs/dev-mcp-cookbook-20260211-2250.md.
+- 2026-02-11: Agent-Plan TASK-0046 Contractors list + contractor_create parity patch: delete Popconfirm + AntD icons, contact persons tab parity, save success feedback. Specs updated in docs/screens/contractors/* and docs/screens/contractor_create/*. Log: logs/plan-contractors-delete-and-contacts-parity-20260211-2153.md.
+- 2026-02-11: Agent-Dev TASK-0045 MCP setup: docs/MCP_SETUP.md, .env.example, rule 090-mcp-usage.mdc, MCP Evidence template; no secrets in git. logs/dev-mcp-setup-20260211-2215.md.
+- 2026-02-11: Agent-QA TASK-0044 Contractors list parity: **PASS**. ACCEPTANCE B1–B6 verified; Network 2xx; Console 0. logs/qa-contractors-list-20260211-2130.md.
+- 2026-02-11: Agent-Dev TASK-0043 Contractors list: GET lookups, POST data/page/cleanAll/block; Postgres-only; UI ContractorsPage, фильтры, AgGridShell, menu Справочники→Контрагенты. logs/dev-contractors-list-20260211-2120.md — VERIFIED (implementation).
+- 2026-02-11: Agent-Dev TASK-0038 Contracts grid theme align: AgGridShell shared wrapper; Layout.Content+app-content для Contracts; все 4 грида через AgGridShell; rule 081-aggrid-theme.mdc. logs/dev-contracts-grid-theme-align-20260211-2200.md — VERIFIED.
+- 2026-02-12: Agent-Dev TASK-0034 Global feedback notification: notifySuccess/notifyError для save; применён к N3a и N3a1; Skeleton min 350ms в DEV; rule 080 обновлён. logs/dev-notification-feedback-global-20260212-2030.md — VERIFIED.
+- 2026-02-12: Agent-Debug AG Grid dark parity fix: Layout в Contracts/Orders имел светлый фон; добавлен [data-theme="dark"] .app-content .ant-layout { background: #141414 }. logs/fix-aggrid-dark-theme-parity-20260212-2000.md — VERIFIED.
+- 2026-02-12: Agent-Dev TASK-0032 AG Grid dark theme parity: AgGridTheme wrapper (ag-theme-quartz / ag-theme-quartz-dark), применён ко всем 4 гридам. Build PASS. logs/dev-aggrid-dark-theme-20260212-1945.md — VERIFIED.
+- 2026-02-12: Agent-Debug TASK-0031 N3a1 UX feedback guaranteed: flash mechanism (setFlashSuccess→consumeFlash); min loader 280ms; Message на целевой странице после redirect. logs/debug-n3a1-ux-feedback-visible-20260212-1800.md — VERIFIED.
+- 2026-02-12: Agent-Debug TASK-0030 N3a1 contractor_create Save + UX feedback: Save сохраняет в Postgres; ScreenLoader при open; showLoading/showSuccess/showError при save. Backend: ctrUnp blank→null. logs/debug-n3a1-save-and-ux-feedback-20260212-1740.md — VERIFIED.
+- 2026-02-12: Agent-Plan TASK-0029 Next screen + Contractors parity plan: Contractors list выбран; spec-pack docs/screens/contractors/; план унификации create/edit. logs/plan-next-screen-contractors-20260212-1900.md.
+- 2026-02-12: Agent-QA TASK-0028 N3a+N3 full parity re-verify (Postgres-only + UX): **PASS**. N3a open 200, save invalid 400, save valid 200 + redirect; N3 POST data 200, список из Postgres, созданный договор (conId 9) в списке. Console 0 — ручная проверка. Лог: logs/qa-n3a-n3-postgres-parity-20260212-1715.md.
+- 2026-02-12: Agent-Dev TASK-0026 Global Light/Dark theme toggle: ThemeContext + ThemeProvider, ConfigProvider algorithm, Segmented в Header, localStorage persist. Build PASS. logs/dev-theme-toggle-20260212-1830.md — VERIFIED.
 - 2026-02-12: Agent-Dev TASK-0025A Global UX feedback Cursor Rule: 080-ux-feedback-global.mdc — Skeleton/Spin на загрузке; message.loading/success/error на async/mutations; запрет пустого feedback после Save; ссылки на shared layer. logs/dev-cursor-rule-ux-feedback-20260212-1820.md.
 - 2026-02-12: Agent-Dev TASK-0025 Global UX feedback: shared lib (feedback, api error normalization), ScreenLoader (Skeleton), applies to N3a — open Skeleton, save Message.loading→success/error. logs/dev-global-ux-feedback-20260212-1815.md — VERIFIED.
 - 2026-02-12: Agent-Debug TASK-0024 N3a Save not persisting: list использовал fake data; ContractListProvider + Postgres для getData; save → list показывает новый договор. logs/debug-n3a-save-not-persisting-20260212-1850.md — VERIFIED.
@@ -82,9 +125,11 @@ Done:
 - 2026-02-09: Added Cursor rule 074-java-21-mandatory.mdc: backend только JDK 21; перед build/test/run — which java, java -version, JAVA_HOME; Java 8/11/17 = BLOCKED; лог logs/dev-java-gate-*.log; Done только при PASS + mvnw test + spring-boot:run на :8080.
 - 2026-02-11: Added Cursor rule 075-mandatory-task-reporting.mdc: обязательный TASK ID (TASK-0001..) и отчет в docs/AGENT_TASK_REPORTS.md; в начале — Agent/Start, в конце — End/Done/Files/Artifacts/Status; при отсутствии ID — генерация по grep; Done только при заполненной секции и артефакте; anti-loop guard. Создан docs/AGENT_TASK_REPORTS.md.
 - 2026-02-11: Added Cursor rule 076-agent-role-explicit.mdc: каждый промпт для агента MUST начинаться с явной роли ROLE: <Concrete role> (Seniority; Focus); формат и примеры (QA, Backend, UI/UX, Debug, Spec Analyst); при отсутствии ROLE — задача неполная.
+- 2026-02-11: Agent-Dev TASK-0052 contractor_create Tabs validation UX: глобальные действия «Сохранить/Отмена»; validateAllTabs on Save; Badge на вкладках с ошибками; auto-switch на первую вкладку с ошибкой; sticky footer; notification.error/success. logs/dev-contractor-tabs-validation-ux-20260211-2249.md.
 
 Now:
-- (none)
+- TASK-0090 Orders CERT: PASS (Playwright 2 passed, full flow not skip).
+- TASK-0078 Evidence pack for next screens ready: docs/orchestrator/EVIDENCE_NEXT_SCREENS.md. Contains: modern status snapshot (10 screens), legacy universe (160+ JSPs, 22 AJAX, 2 dialogs), Struts actions (200+), candidate flows (10), blockers (7 BLOCKED.md).
 
 Done:
 - 2026-02-10 Agent-Plan: Margin testability pack. CONTRACTS.md — UNCONFIRMED сведены к минимуму, добавлен раздел "How to verify" с точными шагами проверки в legacy (dep_id, export, serverList filter, initial empty grid). Созданы docs/screens/margin/TEST_DATA_SPEC.md (детерминированные seed: справочники, 25–40 строк margin data, маячки для onlyTotal/itog_*/get_not_block/view_*/пагинация), docs/screens/margin/QA_ROLE_PRESETS.md (admin, manager, manager_chief, economist — X-Dev-* заголовки и ожидания на Margin). SEED_DATA_PLAN.md дополнен секцией "Margin parity dataset" со ссылкой на TEST_DATA_SPEC. QA может проверять Margin по ACCEPTANCE/BEHAVIOR_MATRIX без угадываний.
@@ -100,6 +145,7 @@ Done (dev-debug 2026-02-09):
 - Устранены блокеры: MarginService — добавлен import MarginExcelExport; MarginIntegrationTest — исправлена скобка в jsonPath; backend перезапущен с JDK 21. API margin отвечает 2xx; лог logs/dev-debug-20260209-1807.log — VERIFIED.
 
 Next:
+- **Agent-Dev Contractors list (References):** 1:1 по docs/screens/contractors/ (SNAPSHOT, CONTRACTS, ACCEPTANCE). Один домен: list + create/edit; returnTo=contractors. См. logs/plan-next-screen-contractors-20260212-1900.md.
 - QA browser-check N3a missing blocks (при backend 8080 + UI 5173): сценарии Add contractor, Create spec, Attach file.
 - ~~Исправить POST /api/contracts/create/save (400 на валидном теле)~~ — TASK-0009: причина UTF-8 encoding; curl 200 при UTF-8 payload; CONTRACTS дополнен; повторный QA TASK-0008 для PASS.
 - Подключить ContractsService к JPA-репозиториям (при dataMode != FAKE) после появления таблиц V12–V19.
@@ -124,7 +170,7 @@ Open questions (UNCONFIRMED if needed):
 
 Working set (files/ids/commands):
 - docs/screens/orders/*, modern/backend/**/orders/**, modern/ui/src/features/orders/**
-- docs/screens/contracts/*, docs/screens/contract_create/, docs/screens/contract_import_cp/, modern/backend/**/contracts/**, modern/ui/src/features/contracts/** (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX, N3a/N3b)
+- docs/screens/contracts/*, docs/screens/contract_create/, docs/screens/contract_import_cp/, docs/screens/contractors/*, modern/backend/**/contracts/**, modern/ui/src/features/contracts/**, modern/ui/src/features/contractors/** (N3, N3a/N3b, References Contractors)
 - docs/security/ROLE_MODEL.md, docs/security/DEV_BYPASS.md, docs/db/SEED_DATA_PLAN.md, docs/dev/DEV_DASHBOARD_SPEC.md
 - docs/screens/margin/CONTRACTS.md, docs/screens/margin/ACCEPTANCE.md, docs/screens/margin/BEHAVIOR_MATRIX.md
 - docs/screens/margin/TEST_DATA_SPEC.md, docs/screens/margin/QA_ROLE_PRESETS.md

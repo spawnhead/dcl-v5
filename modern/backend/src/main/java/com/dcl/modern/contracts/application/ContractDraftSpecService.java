@@ -33,6 +33,10 @@ public class ContractDraftSpecService {
                 false,
                 false,
                 false,
+                "",
+                "",
+                "",
+                "",
                 ""
             );
         SpecCreateOpenResponse.SpecCreateLookupsDto lookups =
@@ -40,7 +44,11 @@ public class ContractDraftSpecService {
                 ContractsFakeProvider.getUsersLookupForSpec(),
                 ContractsFakeProvider.getDeliveryTermsLookup()
             );
-        return new SpecCreateOpenResponse(defaults, lookups, currency);
+        List<SpecCreateOpenResponse.TabMetaDto> tabs = List.of(
+            new SpecCreateOpenResponse.TabMetaDto("mainPanel", "Главная"),
+            new SpecCreateOpenResponse.TabMetaDto("complaintSpecification", "Претензии")
+        );
+        return new SpecCreateOpenResponse(defaults, lookups, tabs, currency);
     }
 
     /**

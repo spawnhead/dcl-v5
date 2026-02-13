@@ -201,11 +201,12 @@ public final class ContractsFakeProvider {
             .toList();
     }
 
-    /** Filter and page. con_executed: both -> null, only executed -> "1", only notExecuted -> "0". */
+    /** Filter by contractor name when provided (Postgres IDs). Else use contractorId with contractorIdToName (fake IDs). */
     public static List<ContractRow> filterAndPage(
         List<ContractRow> all,
         String number,
         String contractorId,
+        String contractorNameOverride,
         LocalDate dateBegin,
         LocalDate dateEnd,
         Double sumMin,
@@ -225,9 +226,9 @@ public final class ContractsFakeProvider {
             String n = number.trim().toLowerCase();
             stream = stream.filter(r -> r.conNumber() != null && r.conNumber().toLowerCase().contains(n));
         }
-        if (contractorId != null && !contractorId.isBlank()) {
-            String name = contractorIdToName(contractorId);
-            if (name != null) stream = stream.filter(r -> name.equals(r.conContractor()));
+        String contractorName = contractorNameOverride != null ? contractorNameOverride : (contractorId != null ? contractorIdToName(contractorId) : null);
+        if (contractorName != null) {
+            stream = stream.filter(r -> contractorName.equals(r.conContractor()));
         }
         if (dateBegin != null) {
             LocalDate d = dateBegin;
@@ -265,6 +266,7 @@ public final class ContractsFakeProvider {
         List<ContractRow> all,
         String number,
         String contractorId,
+        String contractorNameOverride,
         LocalDate dateBegin,
         LocalDate dateEnd,
         Double sumMin,
@@ -280,9 +282,9 @@ public final class ContractsFakeProvider {
             String n = number.trim().toLowerCase();
             stream = stream.filter(r -> r.conNumber() != null && r.conNumber().toLowerCase().contains(n));
         }
-        if (contractorId != null && !contractorId.isBlank()) {
-            String name = contractorIdToName(contractorId);
-            if (name != null) stream = stream.filter(r -> name.equals(r.conContractor()));
+        String contractorName = contractorNameOverride != null ? contractorNameOverride : (contractorId != null ? contractorIdToName(contractorId) : null);
+        if (contractorName != null) {
+            stream = stream.filter(r -> contractorName.equals(r.conContractor()));
         }
         if (dateBegin != null) {
             LocalDate d = dateBegin;

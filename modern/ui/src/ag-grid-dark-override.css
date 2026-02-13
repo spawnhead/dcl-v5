@@ -1,0 +1,49 @@
+/**
+ * AG Grid dark theme override.
+ * Loaded in AgGridShell so it overrides ag-theme-quartz.css.
+ * Applies when html has data-theme="dark".
+ */
+html[data-theme="dark"] .ag-theme-quartz,
+html[data-theme="dark"] .ag-theme-quartz-dark {
+  --ag-background-color: #1e1e1e !important;
+  --ag-foreground-color: rgba(255, 255, 255, 0.85) !important;
+  --ag-header-background-color: #262626 !important;
+  --ag-border-color: rgba(255, 255, 255, 0.16) !important;
+  --ag-header-column-resize-handle-color: rgba(255, 255, 255, 0.16) !important;
+  --ag-data-color: rgba(255, 255, 255, 0.85) !important;
+  --ag-odd-row-background-color: #252525 !important;
+  --ag-header-foreground-color: rgba(255, 255, 255, 0.9) !important;
+  --ag-icon-font-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+html[data-theme="dark"] .ag-theme-quartz .ag-root,
+html[data-theme="dark"] .ag-theme-quartz-dark .ag-root,
+html[data-theme="dark"] .ag-theme-quartz .ag-body-viewport,
+html[data-theme="dark"] .ag-theme-quartz-dark .ag-body-viewport,
+html[data-theme="dark"] .ag-theme-quartz .ag-center-cols-viewport,
+html[data-theme="dark"] .ag-theme-quartz-dark .ag-center-cols-viewport,
+html[data-theme="dark"] .ag-theme-quartz .ag-body-container,
+html[data-theme="dark"] .ag-theme-quartz-dark .ag-body-container,
+html[data-theme="dark"] .ag-theme-quartz .ag-center-cols-container,
+html[data-theme="dark"] .ag-theme-quartz-dark .ag-center-cols-container,
+html[data-theme="dark"] .ag-theme-quartz .ag-header,
+html[data-theme="dark"] .ag-theme-quartz-dark .ag-header,
+html[data-theme="dark"] .ag-theme-quartz .ag-header-cell,
+html[data-theme="dark"] .ag-theme-quartz-dark .ag-header-cell,
+html[data-theme="dark"] .ag-theme-quartz .ag-header-row,
+html[data-theme="dark"] .ag-theme-quartz-dark .ag-header-row {
+  background-color: #1e1e1e !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Строки данных — тёмный фон и цвет текста */
+html[data-theme="dark"] .ag-theme-quartz .ag-row,
+html[data-theme="dark"] .ag-theme-quartz-dark .ag-row {
+  background-color: #1e1e1e !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+html[data-theme="dark"] .ag-theme-quartz .ag-row.ag-row-odd,
+html[data-theme="dark"] .ag-theme-quartz-dark .ag-row.ag-row-odd {
+  background-color: #252525 !important;
+}

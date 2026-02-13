@@ -1,7 +1,10 @@
 package com.dcl.modern.contracts.application;
 
+import com.dcl.modern.contractors.domain.Contractor;
+import com.dcl.modern.contractors.infrastructure.ContractorRepository;
 import com.dcl.modern.contracts.api.*;
 import com.dcl.modern.contracts.domain.ContractRow;
+import com.dcl.modern.contracts.infrastructure.ContractListProvider;
 import com.dcl.modern.contracts.infrastructure.ContractsFakeProvider;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,18 +13,26 @@ import org.springframework.stereotype.Service;
 
 /**
  * Contracts list use cases. Legacy: ContractsAction (input, filter, grid, cleanAll).
- * CONTRACTS: docs/screens/contracts/CONTRACTS.md. Data: FAKE_SEEDED per TEST_DATA_SPEC.
+ * CONTRACTS: docs/screens/contracts/CONTRACTS.md.
+ * TASK-0024: List reads from Postgres (ContractListProvider) so newly created contracts appear.
  */
 @Service
 public class ContractsService {
 
     private static final DateTimeFormatter DD_MM_YYYY = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    private static final List<ContractRow> ALL_ROWS = ContractsFakeProvider.buildRows();
     private static final List<SortItemDto> FIXED_SORT = List.of(
         new SortItemDto("con_reminder", "DESC"),
         new SortItemDto("con_date", "DESC"),
         new SortItemDto("con_number", "DESC")
     );
+
+    private final ContractListProvider contractListProvider;
+    private final ContractorRepository contractorRepository;
+
+    public ContractsService(ContractListProvider contractListProvider, ContractorRepository contractorRepository) {
+        this.contractListProvider = contractListProvider;
+        this.contractorRepository = contractorRepository;
+    }
 
     public ContractsLookupsResponse getLookups() {
         DefaultsDto defaults = new DefaultsDto(
@@ -37,8 +48,11 @@ public class ContractsService {
             null,
             null
         );
+        var contractors = contractorRepository.findAllByOrderByNameAsc().stream()
+            .map(c -> new LookupItemDto(String.valueOf(c.getId()), c.getName()))
+            .toList();
         ContractsLookupsResponse.LookupsDto lookups = new ContractsLookupsResponse.LookupsDto(
-            ContractsFakeProvider.getContractorsLookup(),
+            contractors,
             ContractsFakeProvider.getUsersLookup(),
             ContractsFakeProvider.getSellersLookup()
         );
@@ -49,14 +63,17 @@ public class ContractsService {
         int page = req.page() != null && req.page() >= 1 ? req.page() : 1;
         int pageSize = req.pageSize() != null && req.pageSize() >= 1 ? Math.min(100, req.pageSize()) : 15;
         String contractorId = req.contractor() != null ? req.contractor().id() : null;
+        String contractorNameForFilter = resolveContractorName(contractorId);
         String userId = req.user() != null ? req.user().id() : null;
         String sellerId = req.seller() != null ? req.seller().id() : null;
         String conExecutedFilter = toConExecutedFilter(req.executed(), req.notExecuted());
 
+        List<ContractRow> allRows = contractListProvider.loadAll();
         List<ContractRow> pageRows = ContractsFakeProvider.filterAndPage(
-            ALL_ROWS,
+            allRows,
             req.number(),
             contractorId,
+            contractorNameForFilter,
             ContractsFakeProvider.parseDate(req.dateBegin()),
             ContractsFakeProvider.parseDate(req.dateEnd()),
             req.sumMin(),
@@ -69,9 +86,10 @@ public class ContractsService {
             pageSize
         );
         long total = ContractsFakeProvider.countFiltered(
-            ALL_ROWS,
+            allRows,
             req.number(),
             contractorId,
+            contractorNameForFilter,
             ContractsFakeProvider.parseDate(req.dateBegin()),
             ContractsFakeProvider.parseDate(req.dateEnd()),
             req.sumMin(),
@@ -115,6 +133,17 @@ public class ContractsService {
         DefaultsDto defaults = new DefaultsDto("", "", "", null, null, false, false, false, null, null, null);
         ContractDataResponse grid = getData(new ContractDataRequest(null, null, "", "", null, null, null, null, null, null, null, 1, 15));
         return new CleanAllResponse(defaults, grid);
+    }
+
+    private String resolveContractorName(String contractorId) {
+        if (contractorId == null || contractorId.isBlank()) return null;
+        try {
+            return contractorRepository.findById(Integer.parseInt(contractorId.trim()))
+                .map(Contractor::getName)
+                .orElse(null);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     /** executed=true && !notExecuted -> "1"; !executed && notExecuted=true -> "0"; else null. */
