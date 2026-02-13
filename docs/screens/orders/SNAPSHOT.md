@@ -1,41 +1,71 @@
-# Orders (N2) → List: Legacy Snapshot
+# Orders (legacy `/OrdersAction.do`) — SNAPSHOT
 
-> Goal of this package: lock down **1:1 parity** for legacy `/OrdersAction.do` list behavior (filters, grid paging, row actions, role gates), not a "best effort" modernized interpretation.
+## Entry and dispatches used by list screen
+- Entry: `/OrdersAction.do?dispatch=input`.
+- List screen dispatches: `input`, `filter`, `reload`, `grid` (`NEXT_PAGE`/`PREV_PAGE`), `block`.
+- Row navigations from grid: `/OrderAction.do?dispatch=edit`, `/OrderAction.do?dispatch=clone`.
+- Create button: `/OrderAction.do?dispatch=input`.
 
-## 1) Evidence base (validated)
-- Action/controller flow: `src/main/java/net/sam/dcl/action/OrdersAction.java` (`input`, `filter`, `internalFilter`, `reload`, `block`, pager handlers).
-- Form contract and computed fields: `src/main/java/net/sam/dcl/form/OrdersForm.java`.
-- View + JS coupling: `src/main/webapp/jsp/Orders.jsp`.
-- DB filter function + ordering: `src/main/webapp/WEB-INF/classes/resources/sql-resources.xml` (`select-orders`).
-- Permissions: `src/main/webapp/WEB-INF/classes/resources/xml-permissions.xml` (`/OrdersAction.do`, `/OrderAction.do?...`).
+## Filters (exact form properties)
+- Hidden: `order_by`, `previousContractorFor.name`, `previousContract.con_number`.
+- Text/date: `number`, `date_begin`, `date_end`, `sum_min_formatted`, `sum_max_formatted`, `ord_num_conf`.
+- ServerList/text fallback chains:
+  - `contractor.name` (`contractor.id`),
+  - `contractor_for.name` (`contractor_for.id`),
+  - `contract.con_number` (`contract.con_id`) with fallback text when `contractor_for` empty,
+  - `specification.spc_number` (`specification.spc_id`) with fallback text when contract empty,
+  - `user.userFullName` (`user.usr_id`),
+  - `stuffCategory.name` (`stuffCategory.id`),
+  - `department.name` (`department.id`),
+  - `sellerForWho.name` (`sellerForWho.id`).
+- Checkboxes: `executed`, `not_executed`, `ord_ready_for_deliv`, `ord_annul_not_show`, `state_a`, `state_3`, `state_b`, `state_exclamation`, `state_c`, `ord_show_movement`.
 
-## 2) Strictness check vs Margin package (etalon)
-Result: Orders pack now follows Margin-level structure:
-- Explicit endpoint inventory with method/path/body/pagination/sort rules.
-- Acceptance written as deterministic legacy behavior, not implementation freedom.
-- Behavior matrix includes `source` and `How to verify` per parity risk.
-- Payload examples cover: base load, filter form, pager next/prev, sort (`order_by`), dependent reload.
+## Defaults (`dispatch=input`)
+- Empty objects/strings for most filters.
+- `not_executed="1"`, `ord_annul_not_show="1"`, `executed=""`, `ord_ready_for_deliv=""`.
+- `order_by=" ord_ready_for_deliv descending, ord_date descending, ord_number descending"`.
+- Role-dependent:
+  - manager: prefilled `user` = current user,
+  - declarant/economist: `ord_ready_for_deliv="1"`.
 
-## 3) Legacy UX and behavior (source-of-truth)
-- Entry endpoint: `GET /OrdersAction.do?dispatch=input`.
-- Default filter state from `input`:
-  - `not_executed=1`, `ord_annul_not_show=1`, `ord_ready_for_deliv=""`.
-  - manager: auto-sets `user` filter to current user.
-  - declarant/economist: auto-sets `ord_ready_for_deliv=1`.
-  - default sort: `ord_ready_for_deliv desc, ord_date desc, ord_number desc`.
-- Apply filter (`dispatch=filter`) hard-resets sort to `ord_date desc` and page to 1.
-- Grid pagination is server/session based through dispatch handler `grid` + `NEXT_PAGE`/`PREV_PAGE`.
-- Filtering SQL is function call `dcl_order_filter(...)` with fixed argument order.
-- JS constraints:
-  - `executed` and `not_executed` are mutually exclusive.
-  - if `executed` checked, state checkboxes (`state_a`, `state_3`, `state_b`, `state_exclamation`, `state_c`) are disabled and cleared.
-  - `state_a`/`state_3` conflict with `state_b` and `state_c`; `state_b` conflicts with `state_a`/`state_3`/`state_c`; `state_c` conflicts with `state_a`/`state_3`/`state_b`.
-  - changing `contractor_for` or `contract` triggers `dispatch=reload`, clears dependent fields.
+## Filter/apply/clear/page/sort behavior
+- Clear button submits `dispatch=input` (re-initializes defaults).
+- Apply button submits `dispatch=filter`; action forces:
+  - `order_by=" ord_date descending"`,
+  - grid page = 1.
+- Pagination dispatch is `grid`; handlers map `NEXT_PAGE`/`PREV_PAGE` to `incPage()` / `decPage()` and run `internalFilter`.
+- Sorting is server-side via `order_by` parameter in SQL `select-orders` (`order by {order_by}`).
 
-## 4) Open evidence gaps
-- No HAR/network capture attached yet for Orders list in this repo.
-- Therefore all request payload examples are **code-derived canonical examples**; capture from legacy browser session is still required for byte-level parity.
+## Client-side disable/readonly rules
+- `executed` checked:
+  - clears+disables `state_a`,`state_3`,`state_b`,`state_exclamation`,`state_c`,
+  - also unchecks `not_executed` and `ord_ready_for_deliv`.
+- `not_executed` click unchecks `executed` and reapplies state disable logic.
+- Mutual exclusions:
+  - `state_a` or `state_3` => disables `state_b`,`state_c`.
+  - `state_b` => disables `state_a`,`state_3`,`state_c`.
+  - `state_c` => disables `state_a`,`state_3`,`state_b`.
+- Changing `contractor_for` clears contract+specification and submits `dispatch=reload`.
+- Changing `contract` may clear specification and submits `dispatch=reload`.
 
-Capture checklist for legacy (to close gaps):
-1. Open Orders list and save HAR with: initial load, filter submit, contractor change reload, contract change reload, pager next/prev, block/unblock.
-2. Save request payloads and response HTML snapshots into `docs/screens/orders/payloads/`.
+## Grid (property=`grid`, PK=`ord_id`)
+Columns in order:
+1. `ord_number`
+2. `ordDateFormatted`
+3. `ord_contractor`
+4. `ordSumFormatted`
+5. `ord_contractor_for`
+6. `ordCurrentStateFormatted` (+ `linkToSpec` image/tooltip)
+7. `threeDayMsg`
+8. warning icon (`attention.gif`, `showWarn`)
+9. `ord_user`
+10. `ord_department`
+11. `ord_block` checkbox (`dispatch=block`)
+12. clone icon (`/OrderAction.do?dispatch=clone`)
+13. edit icon (`/OrderAction.do?dispatch=edit`)
+
+## Row actions / visibility by role
+- Block checkbox readonly for non-admin (`blockChecker`).
+- Clone/Edit readonly when current user is `onlyManager` and row department (`dep_id`) differs from manager department (`editCloneChecker`).
+- Warning icon shown only when `record.is_warn` non-empty.
+- Crossed row style (`crossed-cell`) for annulled rows (`ord_annul="1"`).

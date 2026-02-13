@@ -112,3 +112,8 @@
 
 ## Risks/Questions
 - (none)
+
+## 2026-02-13 — TASK-0091 Orders/Order legacy parity docs recheck
+- Revalidated legacy Struts/JSP/Forms flows for Orders list and Order edit/create from `src/main` + `struts-config.xml`.
+- Rewrote docs/screens/orders and docs/screens/order_edit core parity docs (SNAPSHOT/CONTRACTS/BEHAVIOR_MATRIX/ACCEPTANCE) to strict fact-based content.
+- Added HAR capture blocked instructions for both screens and task artifact log in `logs/`.
