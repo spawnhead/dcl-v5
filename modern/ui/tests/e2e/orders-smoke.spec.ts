@@ -37,7 +37,7 @@ test.describe('Orders smoke', () => {
 
     // 4) Add produce row
     await page.getByRole('button', { name: 'Добавить позицию' }).click();
-    const produceInput = page.locator('.ant-card').filter({ hasText: 'Позиции' }).locator('input').first();
+    const produceInput = page.locator('.ant-card').filter({ hasText: 'Спецификация' }).locator('input').first();
     await produceInput.fill('Smoke produce');
 
     // 5) Payments: add row

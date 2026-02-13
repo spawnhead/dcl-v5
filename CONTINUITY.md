@@ -20,6 +20,7 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-13: TASK-0092 Orders design integration: OrdersPage + OrderEditPage layout per docs/design/Create Contract Redesign (OrdersRegistryPage.tsx, OrderPage.tsx); Card filters, sections, sticky footer; parity сохранён; Build PASS.
 - 2026-02-13: TASK-0090 Orders CERT: Playwright 2 passed (full flow NOT skip); endpoints 2xx; Console 0. logs/qa-task-0090-orders-cert-20260213-0900.md.
 - 2026-02-13: TASK-0087 Playwright E2E smoke: orders-smoke.spec.ts, cp-list-smoke.spec.ts; 3 passed, 1 skipped (Orders full BLOCKED by backend save 500). logs/qa-task-0087-playwright-smokes-20260213-0540.md.
 - 2026-02-13: TASK-0089 Orders save 500 fix: ord_number VARCHAR(15) truncation in OrderEditService; smoke test fixes; Playwright orders-smoke 2 passed. logs/dev-task-0089-orders-save-500-fix-20260213-0830.md.
