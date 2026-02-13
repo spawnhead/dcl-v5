@@ -194,3 +194,23 @@ Update 2026-02-11 (TASK-0012):
 - DONE: Expanded N3a1/N3a2 spec packs to full parity (tabs, fields, readonly/required/defaults, acceptance/matrix/contracts/test-data/role-presets, HAR BLOCKED instructions). Log: logs/plan-n3a1-n3a2-full-parity-spec-20260211-1140.md.
 - GAP ATTRIBUTION: primary issue was spec gap; no new dev gap confirmed in this planning cycle.
 - NEXT: Dev/QA execute against updated acceptance matrices; capture legacy HAR for UNCONFIRMED wire details.
+
+## Done (task-0091 2026-02-13)
+- Legacy parity deep recheck for Orders list + Order create/edit completed from `src/main` only.
+- Updated docs packages:
+  - `docs/screens/orders`: SNAPSHOT/CONTRACTS/BEHAVIOR_MATRIX/ACCEPTANCE + `payloads/network.har.BLOCKED.md`.
+  - `docs/screens/order_edit`: SNAPSHOT/CONTRACTS/BEHAVIOR_MATRIX/ACCEPTANCE + `payloads/network.har.BLOCKED.md`.
+- Added artifact: `logs/plan-task-0091-orders-order-legacy-parity-recheck-20260213-0742.md`.
+- BLOCKED_FIELD set documented (external flows: contractor/contact/CP/import/produce/executed/movement).
+
+## Next
+- Capture HAR on legacy `http://localhost:8082` per blocked checklists and attach distilled payload files.
+
+## Done (task-0094 2026-02-13)
+- Added `docs/orchestrator/LEGACY_FLOW_CP_TO_ORDER_CLOSE.md` with source-backed E2E flow: CP list/edit/clone/block -> CP->Contract import -> CP->Order import -> Order save/executed/block closure semantics.
+- Captured state model and transition rules with explicit dispatch/method references.
+- Added UNKNOWN verification items for uncovered areas (direct Contract->Order automation, separate order close status, menu trace source).
+- Added command/evidence log: `logs/plan-task-0094-legacy-flow-cp-to-order-close-20260213-0806.md`.
+
+## Next
+- Use orchestrator flow map as dependency baseline for CP/Contract/Order parity tasks and close UNKNOWNs by targeted code scans/legacy runtime checks.
