@@ -750,3 +750,25 @@ Files:
 - logs/plan-task-0091-orders-order-legacy-parity-recheck-20260213-0742.md
 
 Status: COMPLETED (docs parity pass, HAR still BLOCKED until capture on 8082).
+
+---
+
+## TASK-0094 - Legacy flow CP -> Contract -> Order -> close trace
+
+Agent: Senior Legacy Workflow Analyst (Codex)
+Start: 2026-02-13 08:06
+End: 2026-02-13 08:06
+
+Done:
+- Built end-to-end legacy trace for Commercial Proposal -> Contract import -> Order import/edit/payments/executed -> closure flags.
+- Produced orchestrator artifact with strictly source-backed steps, state flags, dispatch map, data touchpoints, and UNKNOWN section with verification paths.
+- Logged command/evidence trail in dedicated task log.
+
+Files:
+- docs/orchestrator/LEGACY_FLOW_CP_TO_ORDER_CLOSE.md
+- logs/plan-task-0094-legacy-flow-cp-to-order-close-20260213-0806.md
+- docs/AGENT_TASK_REPORTS.md
+- CONTINUITY.md
+- docs/PROGRESS.md
+
+Status: COMPLETED (fact map ready for orchestrator; UNKNOWN items explicitly isolated).

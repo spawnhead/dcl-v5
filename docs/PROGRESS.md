@@ -118,3 +118,8 @@
 - Revalidated legacy Struts/JSP/Forms flows for Orders list and Order edit/create from `src/main` + `struts-config.xml`.
 - Rewrote docs/screens/orders and docs/screens/order_edit core parity docs (SNAPSHOT/CONTRACTS/BEHAVIOR_MATRIX/ACCEPTANCE) to strict fact-based content.
 - Added HAR capture blocked instructions for both screens and task artifact log in `logs/`.
+
+## 2026-02-13 — TASK-0094 legacy CP->Order closure flow trace
+- Added orchestrator-level legacy flow map `docs/orchestrator/LEGACY_FLOW_CP_TO_ORDER_CLOSE.md` covering CP/Contract/Order transitions and closure flags with strict source traceability.
+- Added evidence log `logs/plan-task-0094-legacy-flow-cp-to-order-close-20260213-0806.md` with commands/files/transition discovery points.
+- Updated task tracking in AGENT_TASK_REPORTS and CONTINUITY.
