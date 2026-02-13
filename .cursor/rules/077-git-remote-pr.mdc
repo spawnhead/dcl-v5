@@ -1,0 +1,131 @@
+---
+description: При запросе ///PR или синхронизации с удалённым репозиторием — получить данные (fetch/pull), отправить (push), при необходимости разрешить конфликты. Bash-only. Ссылка docs/GIT_POLICY.md.
+globs: ["**/*", ".git/**"]
+alwaysApply: false
+---
+# Git Remote & PR — декоратор (по запросу ///PR или sync/push/pull)
+
+Применять это правило, когда пользователь запрашивает:
+- **///PR** — подготовка или обновление PR, синхронизация с удалённым репозиторием
+- получение данных из удалённого репозитория (pull, fetch)
+- отправку данных на удалённый репозиторий (push)
+- разрешение конфликтов после pull/rebase/push
+
+Все команды — только **bash** (см. правило 010-bash-only.mdc). Детальная политика — в **docs/GIT_POLICY.md**.
+
+---
+
+## 1) Получение данных из удалённого репозитория
+
+**Цель:** подтянуть актуальное состояние с remote (по умолчанию `origin`), ветка по умолчанию — `main`.
+
+### Чеклист перед получением данных
+
+1. Прочитать `CONTINUITY.md` и при необходимости обновить (цель, Now, Next).
+2. Узнать текущую ветку: `git branch --show-current`.
+3. Узнать настроенный remote: `git remote -v` (обычно `origin`).
+
+### Команды (bash-only)
+
+**Только обновить ссылки (не менять рабочие файлы):**
+```bash
+git fetch origin
+```
+
+**Подтянуть main в текущую ветку (merge):**
+```bash
+git fetch origin main
+git merge origin/main
+```
+
+**Подтянуть main и перебазировать текущую ветку (рекомендуется для фич-веток):**
+```bash
+git fetch origin main
+git rebase origin/main
+```
+
+**Подтянуть все ветки с remote:**
+```bash
+git fetch origin
+git branch -a
+```
+
+После fetch/rebase при конфликтах — перейти к разделу 3.
+
+---
+
+## 2) Отправка данных на удалённый репозиторий
+
+**Цель:** отправить локальные коммиты в remote без нарушения политики (без force push в main).
+
+### Чеклист перед push
+
+1. Rebase на актуальный main выполнен: `git fetch origin main && git rebase origin/main` (если работаешь в фич-ветке).
+2. Локальные проверки пройдены (линт/тесты по docs/GIT_POLICY.md п. 7), коммиты в формате Conventional Commits.
+3. Не коммитить лишнее: нет `target/`, `node_modules/`, `build/`, секретов (см. .gitignore).
+
+### Команды (bash-only)
+
+**Отправить текущую ветку в origin (без force):**
+```bash
+git push origin $(git branch --show-current)
+```
+
+**Отправить конкретную ветку:**
+```bash
+git push origin <branch-name>
+```
+
+**Запрещено по умолчанию:**
+- `git push --force` (и `--force-with-lease`) в `main` или в общие ветки.
+- Прямые коммиты в main в обход PR (изменения в main только через PR/MR).
+
+Если push отклонён из-за расхождения истории (rejected non-fast-forward):
+- Не делать force без процедуры исключения (docs/GIT_POLICY.md п. 9).
+- Сначала подтянуть remote: `git fetch origin main && git rebase origin/main`, затем снова `git push origin <branch>`.
+
+---
+
+## 3) Разрешение конфликтов
+
+**Когда:** после `git merge origin/main` или `git rebase origin/main` появились конфликты (конфликтующие файлы в `git status`).
+
+### Алгоритм (merge)
+
+1. Найти конфликтующие файлы: `git status` → "both modified".
+2. В каждом файле убрать маркеры `<<<<<<<`, `=======`, `>>>>>>>` и оставить нужный код (объединить изменения вручную при необходимости). При merge: "ours" = текущая ветка, "theirs" = входящая (origin/main).
+3. Добавить разрешённые файлы: `git add <path>`.
+4. Завершить merge: `git commit` (сообщение по умолчанию или осмысленное описание).
+5. Запустить проверки (сборка/тесты) и зафиксировать в логе при необходимости.
+
+### Алгоритм (rebase)
+
+1. При конфликте rebase останавливается. Разрешить конфликты в указанных файлах (аналогично п. 2). При rebase: "ours" = коммит из main, "theirs" = твой коммит — не путать с merge.
+2. Добавить разрешённые файлы: `git add <path>`.
+3. Продолжить rebase: `git rebase --continue`.
+4. При необходимости отменить rebase: `git rebase --abort` (вернуться к состоянию до rebase).
+5. После успешного rebase — запустить тесты/сборку.
+
+### После разрешения
+
+- Убедиться, что сборка и тесты проходят.
+- При необходимости обновить CONTINUITY.md (Key decisions / Open questions) и зафиксировать в логе (logs/) что было разрешено и как.
+
+---
+
+## 4) Краткий сценарий по запросу ///PR
+
+1. Прочитать CONTINUITY.md и docs/PROGRESS.md.
+2. Получить данные: `git fetch origin main && git rebase origin/main` (если в фич-ветке). При конфликтах — разрешить по разделу 3.
+3. Убедиться, что коммиты и проверки в порядке (Conventional Commits, линт/тесты).
+4. Отправить: `git push origin $(git branch --show-current)`.
+5. Напомнить пользователю: создать или обновить PR в веб-интерфейсе (GitHub/GitLab) из текущей ветки в `main`; не мержить без зелёного CI и без соблюдения Definition of Done (docs/GIT_POLICY.md).
+6. В конце задачи обновить CONTINUITY.md (Done, Now, Next) и docs/PROGRESS.md.
+
+---
+
+## Ссылки
+
+- Полная политика Git: **docs/GIT_POLICY.md** (ветвление, PR, коммиты, конфликты, запреты, исключения).
+- Bash-only: **.cursor/rules/010-bash-only.mdc**.
+- Core workflow: **.cursor/rules/000-continuity-always.mdc** (читать/обновлять CONTINUITY в начале и в конце).

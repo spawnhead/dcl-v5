@@ -186,7 +186,7 @@ Working set (files/ids/commands):
 - modern/backend: ./mvnw test (JAVA_HOME=JDK 21, Docker for Testcontainers), ./mvnw spring-boot:run (Postgres up)
 - modern/ui: npm install, npm run generate:api (backend on :8080), npm run dev → /reports/margin
 - docs/screens/margin/IMPLEMENTATION_NOTES.md, logs/dev-margin-*, logs/dev-browser-check-*.log
-- .cursor/rules/070-browser-verification.mdc, .cursor/rules/071-no-user-verification.mdc, .cursor/rules/072-no-blank-screens.mdc, .cursor/rules/073-fixed-dev-ports.mdc, .cursor/rules/074-java-21-mandatory.mdc, .cursor/rules/075-mandatory-task-reporting.mdc, .cursor/rules/076-agent-role-explicit.mdc, .cursor/rules/080-ux-feedback-global.mdc
+- .cursor/rules/070-browser-verification.mdc, .cursor/rules/071-no-user-verification.mdc, .cursor/rules/072-no-blank-screens.mdc, .cursor/rules/073-fixed-dev-ports.mdc, .cursor/rules/074-java-21-mandatory.mdc, .cursor/rules/075-mandatory-task-reporting.mdc, .cursor/rules/076-agent-role-explicit.mdc, .cursor/rules/077-git-remote-pr.mdc, .cursor/rules/080-ux-feedback-global.mdc
 - docs/AGENT_TASK_REPORTS.md
 - logs/dev-e2e-verify-*.log, logs/dev-ui-smoke-*.log, logs/dev-ports-*.log, logs/dev-java-gate-*.log
 - CONTINUITY.md, docs/PROGRESS.md
