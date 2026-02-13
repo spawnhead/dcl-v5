@@ -194,3 +194,14 @@ Update 2026-02-11 (TASK-0012):
 - DONE: Expanded N3a1/N3a2 spec packs to full parity (tabs, fields, readonly/required/defaults, acceptance/matrix/contracts/test-data/role-presets, HAR BLOCKED instructions). Log: logs/plan-n3a1-n3a2-full-parity-spec-20260211-1140.md.
 - GAP ATTRIBUTION: primary issue was spec gap; no new dev gap confirmed in this planning cycle.
 - NEXT: Dev/QA execute against updated acceptance matrices; capture legacy HAR for UNCONFIRMED wire details.
+
+## Done (task-0091 2026-02-13)
+- Legacy parity deep recheck for Orders list + Order create/edit completed from `src/main` only.
+- Updated docs packages:
+  - `docs/screens/orders`: SNAPSHOT/CONTRACTS/BEHAVIOR_MATRIX/ACCEPTANCE + `payloads/network.har.BLOCKED.md`.
+  - `docs/screens/order_edit`: SNAPSHOT/CONTRACTS/BEHAVIOR_MATRIX/ACCEPTANCE + `payloads/network.har.BLOCKED.md`.
+- Added artifact: `logs/plan-task-0091-orders-order-legacy-parity-recheck-20260213-0742.md`.
+- BLOCKED_FIELD set documented (external flows: contractor/contact/CP/import/produce/executed/movement).
+
+## Next
+- Capture HAR on legacy `http://localhost:8082` per blocked checklists and attach distilled payload files.
