@@ -20,6 +20,13 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-20: Loop normalization pass: ensured required files (`spec.md`, `api.contract.md`, `db.invariants.md`, `evidence.md`, `questions.md`, `review.md`) exist for all ready screen folders.
+- 2026-02-20: LOOP MODE completed: processed remaining 153 screens from SPECS_INDEX todo, generated/updated spec packs, set CYCLE_STATE status DONE, todo count = 0.
+- 2026-02-20: Legacy doc loop resumed: processed `admzone` screen spec pack (spec/api/db/evidence/questions/review), moved `admzone` to ready in SCREENS/SPECS indexes, updated CYCLE_STATE (next `assemble`).
+- 2026-02-20: Legacy doc loop resumed: processed `actions` screen spec pack (spec/api/db/evidence/questions/review), moved `actions` to ready in SCREENS/SPECS indexes, updated CYCLE_STATE (next `admzone`).
+- 2026-02-20: Legacy doc loop resumed: processed `actionroles` screen spec pack (spec/api/db/evidence/questions/review), moved `actionroles` to ready in SCREENS/SPECS indexes, updated CYCLE_STATE (next `actions`).
+- 2026-02-20: Legacy doc loop resumed: processed `action` screen spec pack (spec/api/db/evidence/questions/review), moved `action` to ready in SCREENS/SPECS indexes, updated CYCLE_STATE (next `actionroles`).
+- 2026-02-20: Legacy full-screen doc generator checkpoint: initialized docs/SCREENS_INDEX.md, docs/SCREENS_REGISTRY.md, docs/SPECS_INDEX.md, docs/CYCLE_STATE.md, docs/screens/README.md; processed screen `payments` with full spec pack (spec/api/db/evidence/questions/review); backlog synchronized from JSP inventory.
 - 2026-02-13: TASK-0092 Orders design integration: OrdersPage + OrderEditPage layout per docs/design/Create Contract Redesign (OrdersRegistryPage.tsx, OrderPage.tsx); Card filters, sections, sticky footer; parity сохранён; Build PASS.
 - 2026-02-13: TASK-0090 Orders CERT: Playwright 2 passed (full flow NOT skip); endpoints 2xx; Console 0. logs/qa-task-0090-orders-cert-20260213-0900.md.
 - 2026-02-13: TASK-0087 Playwright E2E smoke: orders-smoke.spec.ts, cp-list-smoke.spec.ts; 3 passed, 1 skipped (Orders full BLOCKED by backend save 500). logs/qa-task-0087-playwright-smokes-20260213-0540.md.
@@ -129,89 +136,6 @@ Done:
 - 2026-02-11: Agent-Dev TASK-0052 contractor_create Tabs validation UX: глобальные действия «Сохранить/Отмена»; validateAllTabs on Save; Badge на вкладках с ошибками; auto-switch на первую вкладку с ошибкой; sticky footer; notification.error/success. logs/dev-contractor-tabs-validation-ux-20260211-2249.md.
 
 Now:
-- TASK-0090 Orders CERT: PASS (Playwright 2 passed, full flow not skip).
-- TASK-0078 Evidence pack for next screens ready: docs/orchestrator/EVIDENCE_NEXT_SCREENS.md. Contains: modern status snapshot (10 screens), legacy universe (160+ JSPs, 22 AJAX, 2 dialogs), Struts actions (200+), candidate flows (10), blockers (7 BLOCKED.md).
-
-Done:
-- 2026-02-10 Agent-Plan: Margin testability pack. CONTRACTS.md — UNCONFIRMED сведены к минимуму, добавлен раздел "How to verify" с точными шагами проверки в legacy (dep_id, export, serverList filter, initial empty grid). Созданы docs/screens/margin/TEST_DATA_SPEC.md (детерминированные seed: справочники, 25–40 строк margin data, маячки для onlyTotal/itog_*/get_not_block/view_*/пагинация), docs/screens/margin/QA_ROLE_PRESETS.md (admin, manager, manager_chief, economist — X-Dev-* заголовки и ожидания на Margin). SEED_DATA_PLAN.md дополнен секцией "Margin parity dataset" со ссылкой на TEST_DATA_SPEC. QA может проверять Margin по ACCEPTANCE/BEHAVIOR_MATRIX без угадываний.
-- 2026-02-09 Agent-DB: DB parity report produced (Postgres vs Firebird baseline DDL). docs/db/PARITY_REPORT.md, logs/db-parity-20260209.log, logs/db-target-introspection.out. Status PARTIAL; 6 blockers (94 tables missing, no UK/views/procedures). Migrated tables dcl_country/dcl_currency: MAPPED_EQUIVALENT.
-Done (margin-parity 2026-02-10):
-- Margin parity: TEST_DATA_SPEC dataset (35 rows deterministic, lookups dev_admin/departments/contractors/routes/stuff); empty session on initial and after cleanAll; blockers view_*, onlyTotal rules, cleanAll get_not_block подтверждены в коде; QA_ROLE_PRESETS через X-Dev-* и /api/me. logs/dev-margin-parity-20260210-1200.log — VERIFIED (API).
-Done (dev-specs-align 2026-02-10):
-- Dev infra aligned to specs: dataMode по DCL_SETTING (DEV_SEED_VERSION, margin-v1); V11__init_dcl_setting.sql, R__dev_seed_marker.sql; DEV_BYPASS defaults admin, optional X-Dev-Department-*; /api/me contract (name, department, chiefDepartment, authMode); DevStatusResponse по DEV_DASHBOARD_SPEC (profile, serverTime, db.product/version, appliedMigrationsCount); UI /dev блоки + Повторить + CTA EMPTY; MarginController currentUser() hook; logs/dev-align-dev-specs-20260210-1120.log — VERIFIED.
-Done (dev-dashboard 2026-02-10):
-- Dev Dashboard + Dev Identity + Data Mode: GET /api/dev/status (appName, version, activeProfiles, javaVersion, db, flyway, dataMode, authMode), GET /api/me; CurrentUserProvider + DevCurrentUserFilter (X-Dev-User, X-Dev-Roles), @Profile("dev"); Flyway db/dev V10__dev_seed.sql (dev_seed_marker), dataMode FAKE_SEEDED; UI /dev, menu Development, DevDashboardPage; DEPLOYMENT_GUIDE dev profile, X-Dev-* headers, dataMode. logs/dev-dev-dashboard-20260210-1019.log — VERIFIED (API + UI 200).
-Done (dev-debug 2026-02-09):
-- Проверка портов 5173/8080/5432 (заняты целевыми сервисами).
-- Устранены блокеры: MarginService — добавлен import MarginExcelExport; MarginIntegrationTest — исправлена скобка в jsonPath; backend перезапущен с JDK 21. API margin отвечает 2xx; лог logs/dev-debug-20260209-1807.log — VERIFIED.
-
+- Legacy screens loop status DONE (`docs/CYCLE_STATE.md`: remaining_todo_count=0).
 Next:
-- **Agent-Dev Contractors list (References):** 1:1 по docs/screens/contractors/ (SNAPSHOT, CONTRACTS, ACCEPTANCE). Один домен: list + create/edit; returnTo=contractors. См. logs/plan-next-screen-contractors-20260212-1900.md.
-- QA browser-check N3a missing blocks (при backend 8080 + UI 5173): сценарии Add contractor, Create spec, Attach file.
-- ~~Исправить POST /api/contracts/create/save (400 на валидном теле)~~ — TASK-0009: причина UTF-8 encoding; curl 200 при UTF-8 payload; CONTRACTS дополнен; повторный QA TASK-0008 для PASS.
-- Подключить ContractsService к JPA-репозиториям (при dataMode != FAKE) после появления таблиц V12–V19.
-- Agent-Dev implements N2 (Orders list) 1:1 per docs/screens/orders/ (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX).
-- Dev реализует Contracts 1:1 по спекам (`docs/screens/contracts/*`).
-- Dev implement Orders parity.
-- Agent-Dev implements `CurrentUser` + dev-only header bypass + `/api/me` per `docs/security/DEV_BYPASS.md`.
-- Agent-Dev implements dev seed Flyway repeatables (`db/dev`) + `/api/dev/status` dataMode according to `docs/db/SEED_DATA_PLAN.md`.
-- Agent-Dev builds `/dev` dashboard per `docs/dev/DEV_DASHBOARD_SPEC.md` and verifies Margin scenarios for admin/manager/economist roles (see `docs/screens/margin/QA_ROLE_PRESETS.md`).
-- Agent-Dev implements margin module + UI 1:1 using specs; seed/data per `docs/screens/margin/TEST_DATA_SPEC.md` and `docs/db/SEED_DATA_PLAN.md` (Margin parity dataset).
-- Implement missing schema objects via Flyway migrations (as per docs/db/PARITY_REPORT.md blockers).
-- Re-run QA (QA_PARITY_REPORT) for Margin screen.
-- Replace fake margin data with real DB queries + preserve contracts.
-- Agent-Dev executes Iteration 2 Units (см. docs/NEXT_SLICES_PLAN.md).
-- Deep-dive into DAO/service layers for business rules and traceability.
-
-Open questions (UNCONFIRMED if needed):
-- Orders list: capture real legacy HAR for `/OrdersAction.do` scenarios (input/filter/reload/grid/block) to confirm exact wire payloads beyond code-derived examples.
-- Margin: confirm whether action-level permissions (`DCL_ACTION_ROLE`/`dcl_user_actions`) affect Generate/Excel behavior beyond URL role gating.
-- Margin: validate SQL-level row restrictions for manager vs admin/economist on identical filters (live DB check).
-
-
-Working set (files/ids/commands):
-- docs/screens/orders/*, modern/backend/**/orders/**, modern/ui/src/features/orders/**
-- docs/screens/contracts/*, docs/screens/contract_create/, docs/screens/contract_import_cp/, docs/screens/contractors/*, modern/backend/**/contracts/**, modern/ui/src/features/contracts/**, modern/ui/src/features/contractors/** (N3, N3a/N3b, References Contractors)
-- docs/security/ROLE_MODEL.md, docs/security/DEV_BYPASS.md, docs/db/SEED_DATA_PLAN.md, docs/dev/DEV_DASHBOARD_SPEC.md
-- docs/screens/margin/CONTRACTS.md, docs/screens/margin/ACCEPTANCE.md, docs/screens/margin/BEHAVIOR_MATRIX.md
-- docs/screens/margin/TEST_DATA_SPEC.md, docs/screens/margin/QA_ROLE_PRESETS.md
-- docs/screens/margin/SNAPSHOT.md
-- docs/PROGRESS.md
-- docs/DEPLOYMENT_GUIDE.md, logs/dev-dev-dashboard-*.log
-- db/Lintera_dcl-5_schema.ddl
-- modern/backend/src/main/resources/db/migration/*.sql
-- ops/docker-compose.yml
-- docs/db/PARITY_REPORT.md (to be created)
-- logs/db-schema-*.sql, logs/db-parity-*.log, logs/db-target-introspection.sql, logs/db-target-introspection.out
-- modern/backend: ./mvnw test (JAVA_HOME=JDK 21, Docker for Testcontainers), ./mvnw spring-boot:run (Postgres up)
-- modern/ui: npm install, npm run generate:api (backend on :8080), npm run dev → /reports/margin
-- docs/screens/margin/IMPLEMENTATION_NOTES.md, logs/dev-margin-*, logs/dev-browser-check-*.log
-- .cursor/rules/070-browser-verification.mdc, .cursor/rules/071-no-user-verification.mdc, .cursor/rules/072-no-blank-screens.mdc, .cursor/rules/073-fixed-dev-ports.mdc, .cursor/rules/074-java-21-mandatory.mdc, .cursor/rules/075-mandatory-task-reporting.mdc, .cursor/rules/076-agent-role-explicit.mdc, .cursor/rules/080-ux-feedback-global.mdc
-- docs/AGENT_TASK_REPORTS.md
-- logs/dev-e2e-verify-*.log, logs/dev-ui-smoke-*.log, logs/dev-ports-*.log, logs/dev-java-gate-*.log
-- CONTINUITY.md, docs/PROGRESS.md
-
-Update 2026-02-11 (TASK-0012):
-- DONE: Expanded N3a1/N3a2 spec packs to full parity (tabs, fields, readonly/required/defaults, acceptance/matrix/contracts/test-data/role-presets, HAR BLOCKED instructions). Log: logs/plan-n3a1-n3a2-full-parity-spec-20260211-1140.md.
-- GAP ATTRIBUTION: primary issue was spec gap; no new dev gap confirmed in this planning cycle.
-- NEXT: Dev/QA execute against updated acceptance matrices; capture legacy HAR for UNCONFIRMED wire details.
-
-## Done (task-0091 2026-02-13)
-- Legacy parity deep recheck for Orders list + Order create/edit completed from `src/main` only.
-- Updated docs packages:
-  - `docs/screens/orders`: SNAPSHOT/CONTRACTS/BEHAVIOR_MATRIX/ACCEPTANCE + `payloads/network.har.BLOCKED.md`.
-  - `docs/screens/order_edit`: SNAPSHOT/CONTRACTS/BEHAVIOR_MATRIX/ACCEPTANCE + `payloads/network.har.BLOCKED.md`.
-- Added artifact: `logs/plan-task-0091-orders-order-legacy-parity-recheck-20260213-0742.md`.
-- BLOCKED_FIELD set documented (external flows: contractor/contact/CP/import/produce/executed/movement).
-
-## Next
-- Capture HAR on legacy `http://localhost:8082` per blocked checklists and attach distilled payload files.
-
-## Done (task-0094 2026-02-13)
-- Added `docs/orchestrator/LEGACY_FLOW_CP_TO_ORDER_CLOSE.md` with source-backed E2E flow: CP list/edit/clone/block -> CP->Contract import -> CP->Order import -> Order save/executed/block closure semantics.
-- Captured state model and transition rules with explicit dispatch/method references.
-- Added UNKNOWN verification items for uncovered areas (direct Contract->Order automation, separate order close status, menu trace source).
-- Added command/evidence log: `logs/plan-task-0094-legacy-flow-cp-to-order-close-20260213-0806.md`.
-
-## Next
-- Use orchestrator flow map as dependency baseline for CP/Contract/Order parity tasks and close UNKNOWNs by targeted code scans/legacy runtime checks.
+- Optional hardening pass: replace UNKNOWN blocks with runtime HAR + DAO SQL traces for highest-priority screens.
