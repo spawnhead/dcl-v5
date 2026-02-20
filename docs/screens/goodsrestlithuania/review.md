@@ -1,0 +1,12 @@
+# goodsrestlithuania — Review
+
+## Verdict
+READY (documentation baseline with explicit UNKNOWNs).
+
+## Completed
+- Created required spec-pack artifacts.
+- Extracted initial UI fields/actions from JSP.
+- Captured verification backlog explicitly.
+
+## Remaining
+- Deep trace of routes, DAO SQL, DB invariants and runtime evidence.
