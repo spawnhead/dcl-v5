@@ -13,3 +13,8 @@
 
 Error semantics:
 - DB/query failures on `select-actions` should return legacy error page flow (exact runtime payload/text UNKNOWN).
+
+## SQL constraint alignment (Patch 0.5+)
+- Request payload fields must respect SQL types/lengths/NOT NULL from mapped tables.
+- Exact field-to-column mapping: UNKNOWN (requires action/DAO SQL trace).
+

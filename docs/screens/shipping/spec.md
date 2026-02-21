@@ -60,3 +60,12 @@
 
 ## 6) Unknowns
 - См. `questions.md`.
+<<<<<<< HEAD
+
+## SQL-aligned UI->DB mapping (Patch 0.5+)
+- SQL has priority over UI for required/optional/type constraints.
+- Candidate mapped tables: `DCL_READY_FOR_SHIPPING`, `DCL_SHIPPING`.
+- Column-level mapping requires screen action/DAO trace; until confirmed, treat non-null SQL columns as required at API boundary.
+
+=======
+>>>>>>> origin/main

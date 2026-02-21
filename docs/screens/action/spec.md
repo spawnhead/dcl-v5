@@ -51,3 +51,9 @@ See `db.invariants.md`.
 
 ## 9) Unknowns
 See `questions.md`.
+
+## SQL-aligned UI->DB mapping (Patch 0.5+)
+- SQL has priority over UI for required/optional/type constraints.
+- Candidate mapped tables: `DCL_ACTION`, `DCL_ACTION_ROLE`.
+- Column-level mapping requires screen action/DAO trace; until confirmed, treat non-null SQL columns as required at API boundary.
+

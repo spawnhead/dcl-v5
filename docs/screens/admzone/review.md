@@ -11,3 +11,9 @@ READY (with explicit runtime/permission/DB UNKNOWNs).
 
 ## Remaining
 - Confirm runtime permissions, output templates, and attachment-table enforced rules via deeper trace.
+
+## SQL Review Gate (Patch 0.5+)
+- [x] SQL Schema verified (table/column candidates noted).
+- [x] Triggers/constraints/procedures reviewed at naming/association level.
+- [ ] Full action->DAO->SQL runtime trace completed (if still UNKNOWN in `questions.md`).
+

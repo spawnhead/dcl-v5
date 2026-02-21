@@ -44,3 +44,9 @@
 
 ## 6) Unknowns
 - См. `questions.md`.
+
+## SQL-aligned UI->DB mapping (Patch 0.5+)
+- SQL has priority over UI for required/optional/type constraints.
+- Candidate mapped tables: `DCL_CONTACT_PERSON_USER`, `DCL_CONTRACTOR_USER`, `DCL_USER`, `DCL_USER_LANGUAGE`, `DCL_USER_LINK`.
+- Column-level mapping requires screen action/DAO trace; until confirmed, treat non-null SQL columns as required at API boundary.
+

@@ -18,3 +18,13 @@ INSERT INTO DCL_ACTION (ACT_SYSTEM_NAME, ACT_NAME, ACT_LOGGING, ACT_CHECK_ACCESS
 VALUES ('/TmpAction.do', 'Tmp action', 0, 1);
 -- expected: ACT_ID assigned automatically
 ```
+
+## SQL RE-EVALUATION (Patch 0.5+)
+- Source: `db/Lintera_dcl-5_schema.ddl` (SQL priority over UI).
+
+- Relevant table mapping: UNKNOWN (manual mapping required).
+- Foreign Keys: UNKNOWN.
+- Check Constraints: UNKNOWN.
+- Trigger Logic: UNKNOWN.
+- Stored Procedures: UNKNOWN.
+

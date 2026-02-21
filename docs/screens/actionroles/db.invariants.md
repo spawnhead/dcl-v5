@@ -21,3 +21,13 @@ INSERT INTO DCL_ACTION_ROLE (ACT_ID, ROL_ID) VALUES (NULL, 1);
 
 ## Note
 - In this dump, explicit FK constraints for `DCL_ACTION_ROLE -> DCL_ACTION/DCL_ROLE` are not declared; referential consistency may be application-managed.
+
+## SQL RE-EVALUATION (Patch 0.5+)
+- Source: `db/Lintera_dcl-5_schema.ddl` (SQL priority over UI).
+
+- Relevant table mapping: UNKNOWN (manual mapping required).
+- Foreign Keys: UNKNOWN.
+- Check Constraints: UNKNOWN.
+- Trigger Logic: UNKNOWN.
+- Stored Procedures: UNKNOWN.
+

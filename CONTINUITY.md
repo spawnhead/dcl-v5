@@ -20,6 +20,8 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-21: SQL Deep Dive loop complete: all `needs_sql_review` screens re-evaluated and returned to `ready` with SQL alignment sections (schema/constraints/triggers/procedures).
+- 2026-02-21: SQL Patch Applied (PHASE 0.5): all previously ready screens moved to `needs_sql_review` for mandatory SQL re-evaluation.
 - 2026-02-21: PRD MVP Module 1 переработан по замечаниям: усилена evidence-база, добавлены явные источники по формулам/статусам/ролям, уточнены риски с modern recommendations.
 - 2026-02-21: Сформирован PRD для MVP Module 1 (КП/справочники/договоры) на основе reverse-engineering legacy: docs/PRD_MVP_Module1.md.
 - 2026-02-20: Loop normalization pass: ensured required files (`spec.md`, `api.contract.md`, `db.invariants.md`, `evidence.md`, `questions.md`, `review.md`) exist for all ready screen folders.
@@ -138,6 +140,7 @@ Done:
 - 2026-02-11: Agent-Dev TASK-0052 contractor_create Tabs validation UX: глобальные действия «Сохранить/Отмена»; validateAllTabs on Save; Badge на вкладках с ошибками; auto-switch на первую вкладку с ошибкой; sticky footer; notification.error/success. logs/dev-contractor-tabs-validation-ux-20260211-2249.md.
 
 Now:
+- SQL patch cycle DONE: `todo=0`, `needs_sql_review=0`, all screens back to `ready`.
 - Коммит и PR обновлённого PRD MVP Module 1 (после замечаний).
 Next:
-- Optional hardening pass: replace UNKNOWN blocks with runtime HAR + DAO SQL traces for highest-priority screens.
+- Perform targeted hardening for critical flows: replace UNKNOWN with proven runtime/HAR + DAO SQL traces (optional: highest-priority screens first).

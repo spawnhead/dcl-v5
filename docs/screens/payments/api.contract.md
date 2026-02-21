@@ -19,3 +19,8 @@
 - `sum_min_formatted/sum_max_formatted` — currency format.
 - `contractor.name` max length 200, `pay_account` max length 35.
 - Ошибки валидации ожидаются как Struts field errors (семантически: invalid date/number/maxlength).
+
+## SQL constraint alignment (Patch 0.5+)
+- Request payload fields must respect SQL types/lengths/NOT NULL from mapped tables.
+- Exact field-to-column mapping: UNKNOWN (requires action/DAO SQL trace).
+

@@ -18,3 +18,13 @@ VALUES (999999, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP, 1, 10.00, 1);
 INSERT INTO DCL_PAYMENT (PAY_DATE, PAY_SUMM, CUR_ID) VALUES (CURRENT_DATE, 1.00, 1);
 -- expected: PAY_ID auto-generated; audit columns auto-populated by trigger
 ```
+
+## SQL RE-EVALUATION (Patch 0.5+)
+- Source: `db/Lintera_dcl-5_schema.ddl` (SQL priority over UI).
+
+- Relevant table mapping: UNKNOWN (manual mapping required).
+- Foreign Keys: UNKNOWN.
+- Check Constraints: UNKNOWN.
+- Trigger Logic: UNKNOWN.
+- Stored Procedures: UNKNOWN.
+

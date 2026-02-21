@@ -47,3 +47,8 @@
 
 ## 9) Unknowns
 См. `questions.md`.
+
+## SQL-aligned UI->DB mapping (Patch 0.5+)
+- SQL has priority over UI for required/optional/type constraints.
+- Candidate mapped tables: UNKNOWN.
+

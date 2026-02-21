@@ -16,3 +16,8 @@
 
 ## Access roles link
 - **GET/POST** `/ActionRolesAction.do?dispatch=show&act_id=<id>` (visible only when `act_check_access=1` in row).
+
+## SQL constraint alignment (Patch 0.5+)
+- Request payload fields must respect SQL types/lengths/NOT NULL from mapped tables.
+- Example SQL constraints (from primary candidate table): `ACT_ID` INTEGER NOT NULL; `ACT_NAME` VARCHAR(100); `ACT_SYSTEM_NAME` VARCHAR(100) NOT NULL; `ACT_LOGGING` SMALLINT; `ACT_CHECK_ACCESS` SMALLINT.
+
