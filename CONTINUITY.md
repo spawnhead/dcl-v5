@@ -22,6 +22,8 @@ State:
 Done:
 - 2026-02-21: SQL Deep Dive loop complete: all `needs_sql_review` screens re-evaluated and returned to `ready` with SQL alignment sections (schema/constraints/triggers/procedures).
 - 2026-02-21: SQL Patch Applied (PHASE 0.5): all previously ready screens moved to `needs_sql_review` for mandatory SQL re-evaluation.
+- 2026-02-21: PRD MVP Module 1 переработан по замечаниям: усилена evidence-база, добавлены явные источники по формулам/статусам/ролям, уточнены риски с modern recommendations.
+- 2026-02-21: Сформирован PRD для MVP Module 1 (КП/справочники/договоры) на основе reverse-engineering legacy: docs/PRD_MVP_Module1.md.
 - 2026-02-20: Loop normalization pass: ensured required files (`spec.md`, `api.contract.md`, `db.invariants.md`, `evidence.md`, `questions.md`, `review.md`) exist for all ready screen folders.
 - 2026-02-20: LOOP MODE completed: processed remaining 153 screens from SPECS_INDEX todo, generated/updated spec packs, set CYCLE_STATE status DONE, todo count = 0.
 - 2026-02-20: Legacy doc loop resumed: processed `admzone` screen spec pack (spec/api/db/evidence/questions/review), moved `admzone` to ready in SCREENS/SPECS indexes, updated CYCLE_STATE (next `assemble`).
@@ -139,5 +141,6 @@ Done:
 
 Now:
 - SQL patch cycle DONE: `todo=0`, `needs_sql_review=0`, all screens back to `ready`.
+- Коммит и PR обновлённого PRD MVP Module 1 (после замечаний).
 Next:
-- Perform targeted hardening for critical flows: replace UNKNOWN with proven runtime/HAR + DAO SQL traces.
+- Perform targeted hardening for critical flows: replace UNKNOWN with proven runtime/HAR + DAO SQL traces (optional: highest-priority screens first).

@@ -5,6 +5,7 @@
   1. Map screen route -> action/DAO/procedure.
   2. Trace touched tables/procedures in `db/Lintera_dcl-5_schema.ddl`.
   3. Record only PK/UK/FK/NOT NULL/triggers/procedures that enforce rules.
+<<<<<<< HEAD
 
 ## SQL RE-EVALUATION (Patch 0.5+)
 - Source: `db/Lintera_dcl-5_schema.ddl` (SQL priority over UI).
@@ -17,3 +18,5 @@
 - Trigger Logic: `DCL_ORD_LIST_PAY_SUM_BI0`
 - Stored Procedures: `DCL_GET_ROW_SUM`; `DCL_GET_ROW_SUMM_EUR`; `DCL_GET_ROW_SUMM_OUT_NDS`; `DCL_GET_SUM_OUT_NDS_EUR`; `DCL_GET_SUM_OUT_NDS_EUR_PART`
 
+=======
+>>>>>>> origin/main
