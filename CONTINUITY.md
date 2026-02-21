@@ -20,6 +20,8 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-21: PRD MVP Module 1 переработан по замечаниям: усилена evidence-база, добавлены явные источники по формулам/статусам/ролям, уточнены риски с modern recommendations.
+- 2026-02-21: Сформирован PRD для MVP Module 1 (КП/справочники/договоры) на основе reverse-engineering legacy: docs/PRD_MVP_Module1.md.
 - 2026-02-20: Loop normalization pass: ensured required files (`spec.md`, `api.contract.md`, `db.invariants.md`, `evidence.md`, `questions.md`, `review.md`) exist for all ready screen folders.
 - 2026-02-20: LOOP MODE completed: processed remaining 153 screens from SPECS_INDEX todo, generated/updated spec packs, set CYCLE_STATE status DONE, todo count = 0.
 - 2026-02-20: Legacy doc loop resumed: processed `admzone` screen spec pack (spec/api/db/evidence/questions/review), moved `admzone` to ready in SCREENS/SPECS indexes, updated CYCLE_STATE (next `assemble`).
@@ -136,6 +138,6 @@ Done:
 - 2026-02-11: Agent-Dev TASK-0052 contractor_create Tabs validation UX: глобальные действия «Сохранить/Отмена»; validateAllTabs on Save; Badge на вкладках с ошибками; auto-switch на первую вкладку с ошибкой; sticky footer; notification.error/success. logs/dev-contractor-tabs-validation-ux-20260211-2249.md.
 
 Now:
-- Legacy screens loop status DONE (`docs/CYCLE_STATE.md`: remaining_todo_count=0).
+- Коммит и PR обновлённого PRD MVP Module 1 (после замечаний).
 Next:
 - Optional hardening pass: replace UNKNOWN blocks with runtime HAR + DAO SQL traces for highest-priority screens.
