@@ -1,5 +1,10 @@
 # Commercial Proposals List Screen - ACCEPTANCE CRITERIA
 
+## Reverse-engineering status (2026-02-23)
+- Static trace for checklist-A dispatches is VERIFIED in code (Struts → Action → DAO/SQL ids).
+- Runtime HAR for this screen remains BLOCKED in current workspace; acceptance items tied to exact wire payload/error text stay UNCONFIRMED until legacy runtime capture.
+
+
 ## Overview
 This document defines acceptance criteria for the Commercial Proposals List screen migration.
 All criteria must pass for the screen to be considered "parity complete".

@@ -1,5 +1,10 @@
 # Commercial Proposal Edit Screen - BEHAVIOR MATRIX
 
+## Reverse-engineering status (2026-02-23)
+- Dispatch and AJAX behavior matrix is statically verified against `CommercialProposalAction` methods.
+- Exact runtime payload/response examples per AJAX dispatch remain UNCONFIRMED (HAR blocker).
+
+
 ## Overview
 This matrix documents all behavioral variations of the Commercial Proposal Edit screen.
 

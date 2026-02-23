@@ -1,8 +1,16 @@
-# commercial_proposal_edit — Expected API contracts (legacy-inferred)
+# commercial_proposal_edit — API contract status (legacy reverse)
 
-- UNKNOWN in normalized pass; derive from screen forms/actions and existing docs (TEST_DATA_SPEC.md; SNAPSHOT.md; CONTRACTS.md; BEHAVIOR_MATRIX.md).
+## VERIFIED (static)
+- Endpoint: `POST /CommercialProposalAction.do`.
+- Core dispatches: `input`, `edit`, `process`, `reload`, `print`, `printInvoice`, `printContract`, `newProduce`, `editProduce`, `importExcel`, `uploadTemplate`.
+- AJAX dispatch family verified in action class (produces grids/toggles/recalc/total/currency/nds/free-prices/reverse-calc).
+- Save path: `process` → `saveCommon(...)` → DAO (`CommercialProposalDAO.insert/save`) + related produce/message persistence.
 
-## SQL constraint alignment (Patch 0.5+)
-- Request payload fields must respect SQL types/lengths/NOT NULL from mapped tables.
-- Example SQL constraints (from primary candidate table): `CPR_ID` INTEGER NOT NULL; `CPR_CREATE_DATE` TIMESTAMP NOT NULL; `USR_ID_CREATE` INTEGER NOT NULL; `CPR_EDIT_DATE` TIMESTAMP NOT NULL; `USR_ID_EDIT` INTEGER NOT NULL; `CPR_NUMBER` VARCHAR(20) NOT NULL.
+## UNCONFIRMED (runtime wire)
+- Exact per-dispatch request/response payload contracts in browser runtime (especially AJAX partials).
+- Exact validation/system error response format and status code behavior.
+- Exact binary print/download response headers (PDF/XLS/attachment cases).
 
+## SQL constraint alignment
+- Main persistence object: `DCL_COMMERCIAL_PROPOSAL` + dependent produce/transport/message tables and procedures from sql-resources mappings.
+- Field constraints remain DB-governed; runtime request contracts require HAR confirmation.

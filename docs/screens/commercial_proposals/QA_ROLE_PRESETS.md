@@ -1,5 +1,10 @@
 # Commercial Proposals List Screen - QA ROLE PRESETS
 
+## Reverse-engineering status (2026-02-23)
+- Presets should explicitly validate list actions: `block`, `checkPrice`, and department-limited edit/clone behavior.
+- Wire-level assertions (exact request body/headers) are pending legacy HAR capture.
+
+
 ## Overview
 This document defines QA test presets for different user roles on the Commercial Proposals List screen.
 
