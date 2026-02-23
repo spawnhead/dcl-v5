@@ -8,8 +8,8 @@
 
 ## Negative case
 1. Trigger list load when `select-actions` fails (e.g., DB unavailable).
-2. Expected: legacy error flow/page is shown (exact text UNKNOWN).
+2. Expected: legacy error flow/page is shown (exact text UNCONFIRMED).
 
 ## Actual status in this cycle
 - Static evidence collected from JSP + `ActionsAction` + Struts mappings + DDL.
-- UNKNOWN: exact SQL and runtime error texts for `select-actions`.
+- UNCONFIRMED: exact SQL and runtime error texts for `select-actions`.

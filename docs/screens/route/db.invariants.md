@@ -1,6 +1,6 @@
 # route — DB invariants (enforced only)
 
-- Screen-specific enforced DB invariants: UNKNOWN in this cycle.
+- Screen-specific enforced DB invariants: UNCONFIRMED in this cycle.
 - Verification plan:
   1. Map screen route -> action/DAO/procedure.
   2. Trace touched tables/procedures in `db/Lintera_dcl-5_schema.ddl`.
@@ -12,8 +12,8 @@
 ### Table `DCL_ROUTE`
 - Columns (type): `RUT_ID` INTEGER NOT NULL; `RUT_NAME` VARCHAR(150) NOT NULL
 - NOT NULL: `RUT_ID`, `RUT_NAME`
-- Foreign Keys: UNKNOWN/none detected in direct parse for this table.
-- Check Constraints: UNKNOWN/none detected.
+- Foreign Keys: UNCONFIRMED/none detected in direct parse for this table.
+- Check Constraints: UNCONFIRMED/none detected.
 - Trigger Logic: `DCL_ROUTE_BI0`
-- Stored Procedures: UNKNOWN/none matched by name.
+- Stored Procedures: UNCONFIRMED/none matched by name.
 

@@ -1,7 +1,7 @@
 # actions — Review
 
 ## Verdict
-READY (with explicit UNKNOWNs for SQL/runtime-error details).
+READY (with explicit UNCONFIRMED items for SQL/runtime-error details).
 
 ## Completed
 - Captured entrypoint, grid layout, actions, permissions and cross-screen links.
@@ -14,5 +14,5 @@ READY (with explicit UNKNOWNs for SQL/runtime-error details).
 ## SQL Review Gate (Patch 0.5+)
 - [x] SQL Schema verified (table/column candidates noted).
 - [x] Triggers/constraints/procedures reviewed at naming/association level.
-- [ ] Full action->DAO->SQL runtime trace completed (if still UNKNOWN in `questions.md`).
+- [ ] Full action->DAO->SQL runtime trace completed (if still UNCONFIRMED in `questions.md`).
 

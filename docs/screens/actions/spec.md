@@ -21,7 +21,7 @@
 
 ## 4) Валидации/ошибки
 - На list-экране явных form validations нет.
-- Потенциальные ошибки связаны с загрузкой data source `select-actions` (UNKNOWN runtime тексты/коды).
+- Потенциальные ошибки связаны с загрузкой data source `select-actions` (UNCONFIRMED runtime тексты/коды).
 
 ## 5) Права доступа
 - `xml-permissions`: `/ActionsAction.do,/ActionAction.do,/ActionRolesAction.do` — роль `admin`.
@@ -41,5 +41,5 @@
 
 ## SQL-aligned UI->DB mapping (Patch 0.5+)
 - SQL has priority over UI for required/optional/type constraints.
-- Candidate mapped tables: UNKNOWN.
+- Candidate mapped tables: UNCONFIRMED.
 

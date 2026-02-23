@@ -12,4 +12,4 @@
 
 ## Actual status in this cycle
 - Static evidence assembled from JSP + Action classes + validation + DDL.
-- UNKNOWN: runtime payload/error text and list SQL details (`select-actions`) pending runtime/HAR verification.
+- UNCONFIRMED: runtime payload/error text and list SQL details (`select-actions`) pending runtime/HAR verification.

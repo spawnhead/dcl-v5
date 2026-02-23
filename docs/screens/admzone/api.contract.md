@@ -13,9 +13,9 @@
   - Side effects: delete broken attachment rows, move orphan files to `lost_in_base`, return report in request attribute `message`.
 
 Error semantics:
-- Runtime failures use generic legacy error mechanism (exact payload/text UNKNOWN).
+- Runtime failures use generic legacy error mechanism (exact payload/text UNCONFIRMED).
 
 ## SQL constraint alignment (Patch 0.5+)
 - Request payload fields must respect SQL types/lengths/NOT NULL from mapped tables.
-- Exact field-to-column mapping: UNKNOWN (requires action/DAO SQL trace).
+- Exact field-to-column mapping: UNCONFIRMED (requires action/DAO SQL trace).
 

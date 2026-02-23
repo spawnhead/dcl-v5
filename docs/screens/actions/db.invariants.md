@@ -22,9 +22,9 @@ VALUES ('/TmpAction.do', 'Tmp action', 0, 1);
 ## SQL RE-EVALUATION (Patch 0.5+)
 - Source: `db/Lintera_dcl-5_schema.ddl` (SQL priority over UI).
 
-- Relevant table mapping: UNKNOWN (manual mapping required).
-- Foreign Keys: UNKNOWN.
-- Check Constraints: UNKNOWN.
-- Trigger Logic: UNKNOWN.
-- Stored Procedures: UNKNOWN.
+- Relevant table mapping: UNCONFIRMED (manual mapping required).
+- Foreign Keys: UNCONFIRMED.
+- Check Constraints: UNCONFIRMED.
+- Trigger Logic: UNCONFIRMED.
+- Stored Procedures: UNCONFIRMED.
 

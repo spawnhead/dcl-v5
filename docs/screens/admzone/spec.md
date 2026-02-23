@@ -29,11 +29,11 @@
 ## 4) Валидации/ошибки
 - Field-level validators на этом экране отсутствуют.
 - Для `FixAttachments` действует confirm-dialog (`askUser`).
-- Ошибки выполнения (filesystem/DB/session iteration) обрабатываются общим legacy error flow; точные payload/text UNKNOWN.
+- Ошибки выполнения (filesystem/DB/session iteration) обрабатываются общим legacy error flow; точные payload/text UNCONFIRMED.
 
 ## 5) Права доступа
 - Экран расположен в admin zone меню (`id.adm_zone`).
-- Для конкретных action endpoint требуется отдельная runtime-проверка в permissions/config (см. UNKNOWN).
+- Для конкретных action endpoint требуется отдельная runtime-проверка в permissions/config (см. UNCONFIRMED).
 
 ## 6) Связи с другими экранами
 - `fixattachments` maintenance view (`.FixAttachments`) через `/FixAttachments.do`.
@@ -50,5 +50,5 @@
 
 ## SQL-aligned UI->DB mapping (Patch 0.5+)
 - SQL has priority over UI for required/optional/type constraints.
-- Candidate mapped tables: UNKNOWN.
+- Candidate mapped tables: UNCONFIRMED.
 

@@ -2,7 +2,7 @@
 
 - `/RoutesListAction`
 
-Error semantics: UNKNOWN (verify via legacy runtime/HAR).
+Error semantics: UNCONFIRMED (verify via legacy runtime/HAR).
 
 ## SQL constraint alignment (Patch 0.5+)
 - Request payload fields must respect SQL types/lengths/NOT NULL from mapped tables.

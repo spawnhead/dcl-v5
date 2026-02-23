@@ -1,7 +1,7 @@
 # payments — Review
 
 ## Verdict
-READY (documentation draft suitable for migration planning with explicit UNKNOWNs).
+READY (documentation draft suitable for migration planning with explicit UNCONFIRMED items).
 
 ## Completed
 - Зафиксированы входы/фильтры/грид/actions из `Payments.jsp`.
@@ -15,5 +15,5 @@ READY (documentation draft suitable for migration planning with explicit UNKNOWN
 ## SQL Review Gate (Patch 0.5+)
 - [x] SQL Schema verified (table/column candidates noted).
 - [x] Triggers/constraints/procedures reviewed at naming/association level.
-- [ ] Full action->DAO->SQL runtime trace completed (if still UNKNOWN in `questions.md`).
+- [ ] Full action->DAO->SQL runtime trace completed (if still UNCONFIRMED in `questions.md`).
 

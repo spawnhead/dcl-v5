@@ -17,7 +17,7 @@
 
 ## Negative case
 1. Run FixAttachments when filesystem path is inaccessible or DB issues occur.
-2. Expected: operation fails through legacy error flow; exact message/payload UNKNOWN.
+2. Expected: operation fails through legacy error flow; exact message/payload UNCONFIRMED.
 
 ## Actual status in this cycle
 - Static proof based on JSP + Struts mappings + action implementations.
