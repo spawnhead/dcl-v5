@@ -1,5 +1,10 @@
 # N3 Contracts — Behavior matrix
 
+## Reverse-engineering status (2026-02-23)
+- Matrix entries were reconciled with `ContractsAction` and `ContractAction` role and flow logic (including import from CP path).
+- Remaining UNCONFIRMED items are strictly runtime-wire details for edge/error cases.
+
+
 | Scenario | Trigger | Expected network calls (order) | Expected UI state | Notes / legacy trace |
 |---|---|---|---|---|
 | Initial open | Open screen | 1) `GET /api/contracts/lookups` 2) `POST /api/contracts/data` with defaults | Фильтры пустые, чекбоксы off, grid page=1 | `ContractsAction#input` + `internalFilter`; JSP defaults |

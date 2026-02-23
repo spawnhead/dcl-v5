@@ -1,15 +1,17 @@
-# conditionsforcontract — Expected API contracts (legacy-inferred)
+# conditionsforcontract — API contract status (legacy reverse)
 
-- `/ConditionForContractAction.do?dispatch=clone`
-- `/ConditionForContractAction.do?dispatch=edit`
-- `/ConditionForContractAction.do?dispatch=input`
-- `/ContractorsListAction`
-- `/SellersListAction`
-- `/UsersListAction`
+## VERIFIED (static)
+- List endpoint: `POST /ConditionsForContractAction.do` with `input|filter|markExecute|checkPrice` (+ pager handlers).
+- Form endpoint: `POST /ConditionForContractAction.do` with `input|edit|clone|process|processForce|reload|importExcel|uploadTemplate|selectCP|returnFromSelectCP` and related produce/attach dispatches.
+- AJAX endpoints: `ajaxChangeContract`, `ajaxGetReputation`.
+- SQL ids traced through DAO:
+  - read/list: `select-conditions_for_contract`, `condition_for_contract-load`, `select-condition_for_contract_produces`;
+  - writes: `condition_for_contract-insert`, `condition_for_contract-update`, `condition_for_contract-update-checkPrice`, `execute_condition_for_contract`, produce row insert/delete ids.
 
-Error semantics: UNKNOWN (verify via legacy runtime/HAR).
+## UNCONFIRMED (runtime wire)
+- Exact browser payloads and response wire format for all checklist-C operations.
+- Exact validation/system error rendering contract.
 
-## SQL constraint alignment (Patch 0.5+)
-- Request payload fields must respect SQL types/lengths/NOT NULL from mapped tables.
-- Exact field-to-column mapping: UNKNOWN (requires action/DAO SQL trace).
-
+## SQL constraint alignment
+- Request fields must satisfy DB constraints for `DCL_CONDITION_FOR_CONTRACT` and dependent produce/message objects.
+- Static trace to SQL ids completed; runtime contract samples pending HAR.

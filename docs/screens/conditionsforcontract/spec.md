@@ -1,50 +1,24 @@
 # conditionsforcontract (slug: `conditionsforcontract`) — Legacy Screen Spec
 
-## 1) Вход в экран
-- Primary JSP source: `src/main/webapp/jsp/ConditionsForContract.jsp`.
-- Entry route(s): UNKNOWN (requires Struts mapping verification).
+## 1) Вход в экран (VERIFIED static)
+- Primary JSP: `src/main/webapp/jsp/ConditionsForContract.jsp`.
+- Struts mapping endpoint: `/ConditionsForContractAction.do` (list screen).
+- Primary dispatches: `input`, `filter`, paging handlers, `markExecute`, `checkPrice`.
+- Edit/create transitions go to `/ConditionForContractAction.do` (`input|edit|clone|process...`).
 
-## 2) Что видит пользователь
-- Экран основан на JSP и содержит UI-элементы/поля, перечисленные ниже.
+## 2) UI surface (VERIFIED from JSP/action)
+- Filter fields: contractor, seller, user, date range, execute/check-price/annul flags.
+- Grid columns include contractor/seller/user/execute/check-price/placement date.
+- Row-style rule: annul rows rendered with `crossed-cell` class.
 
-### Поля (из JSP `property`)
-- `annul_exclude`
-- `cfc_check_price`
-- `cfc_contractor`
-- `cfc_execute`
-- `cfc_not_executed`
-- `cfc_not_placed`
-- `cfc_place_date_formatted`
-- `cfc_seller`
-- `cfc_user`
-- `contractor.name`
-- `date_begin`
-- `date_end`
-- `grid`
-- `seller.name`
-- `user.usr_name`
+## 3) Dispatch catalog
+- See `api.contract.md` + `questions.md` for full list and trace chain.
 
-### Колонки/гриды (по JSP markup)
-- `cfc_check_price`
-- `cfc_contractor`
-- `cfc_execute`
-- `cfc_place_date_formatted`
-- `cfc_seller`
-- `cfc_user`
+## 4) Validation and errors
+- Static source for validators: `validation.xml` + action guards (`process`, `processForce`).
+- Runtime-rendered error contract: UNCONFIRMED (requires HAR).
 
-## 3) Действия
-- См. `api.contract.md` (ожидаемые endpoint based on JSP links/forms).
-
-## 4) Валидации и ошибки
-- UNKNOWN: требуется сверка `validation.xml` и runtime HAR.
-
-## 5) DB invariants
-- См. `db.invariants.md`.
-
-## 6) Unknowns
-- См. `questions.md`.
-
-## SQL-aligned UI->DB mapping (Patch 0.5+)
-- SQL has priority over UI for required/optional/type constraints.
-- Candidate mapped tables: UNKNOWN.
-
+## 5) DB mapping summary
+- List: SQL id `select-conditions_for_contract`.
+- Entity save/update: ConditionForContractDAO SQL ids in `api.contract.md`.
+- Final DB invariant enforcement list: see `db.invariants.md`.

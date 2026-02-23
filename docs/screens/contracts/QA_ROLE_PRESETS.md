@@ -1,5 +1,10 @@
 # N3 Contracts — QA role presets (dev headers)
 
+## Reverse-engineering status (2026-02-23)
+- Presets cover admin/manager/economist restrictions from action checkers and menu permissions.
+- Additional runtime assertions still needed for attachment/spec edge-case errors.
+
+
 > Пресеты в формате dev-bypass заголовков для modern backend.
 
 ## 1) admin
