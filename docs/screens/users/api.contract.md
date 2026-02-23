@@ -4,7 +4,7 @@
 - `/UserAction.do?dispatch=create`
 - `/UserAction.do?dispatch=edit`
 
-Error semantics: UNKNOWN (verify via legacy runtime/HAR).
+Error semantics: UNCONFIRMED (verify via legacy runtime/HAR).
 <<<<<<< HEAD
 
 ## SQL constraint alignment (Patch 0.5+)

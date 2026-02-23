@@ -11,4 +11,4 @@
 
 ## Actual status in this cycle
 - Static proof from JSP + `ActionRolesAction` + `ActionRolesForm` + DDL.
-- UNKNOWN: exact SQL text for `select-action-roles-*` and `add/delete-action-roles*` queries.
+- UNCONFIRMED: exact SQL text for `select-action-roles-*` and `add/delete-action-roles*` queries.

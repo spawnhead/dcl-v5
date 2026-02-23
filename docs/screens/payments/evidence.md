@@ -15,4 +15,4 @@
 
 ## Actual status in this cycle
 - UI/DB анализ выполнен статически по JSP + Struts config + validation + DDL.
-- UNKNOWN: фактические runtime error payload/text (нужен HAR/ручной прогон legacy).
+- UNCONFIRMED: фактические runtime error payload/text (нужен HAR/ручной прогон legacy).

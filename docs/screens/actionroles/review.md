@@ -1,7 +1,7 @@
 # actionroles — Review
 
 ## Verdict
-READY (with explicit SQL/runtime UNKNOWNs).
+READY (with explicit SQL/runtime UNCONFIRMED items).
 
 ## Completed
 - Captured dual-list UI structure and all controls.
@@ -15,5 +15,5 @@ READY (with explicit SQL/runtime UNKNOWNs).
 ## SQL Review Gate (Patch 0.5+)
 - [x] SQL Schema verified (table/column candidates noted).
 - [x] Triggers/constraints/procedures reviewed at naming/association level.
-- [ ] Full action->DAO->SQL runtime trace completed (if still UNKNOWN in `questions.md`).
+- [ ] Full action->DAO->SQL runtime trace completed (if still UNCONFIRMED in `questions.md`).
 

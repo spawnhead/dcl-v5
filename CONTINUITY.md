@@ -20,6 +20,7 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-23: Applied global docs/screens normalization for remaining folders: replaced legacy `UNKNOWN` markers with `UNCONFIRMED` wording across screen spec packs to align status taxonomy used in critical scopes.
 - 2026-02-23: Completed static reverse-evidence hardening for commercial_proposals, commercial_proposal_edit, conditionsforcontract, contracts docs; replaced UNKNOWN baselines with VERIFIED static traces + explicit runtime blocker/UNCONFIRMED guidance.
 
 - 2026-02-23: Reverse-engineering hardening pass started for CP list/edit + Conditions for Contract + Contracts screens; static Struts/Action/DAO/SQL trace extraction in progress, runtime HAR capture attempted but blocked pending runnable legacy environment artifacts.
@@ -143,6 +144,6 @@ Done:
 - 2026-02-11: Agent-Dev TASK-0052 contractor_create Tabs validation UX: глобальные действия «Сохранить/Отмена»; validateAllTabs on Save; Badge на вкладках с ошибками; auto-switch на первую вкладку с ошибкой; sticky footer; notification.error/success. logs/dev-contractor-tabs-validation-ux-20260211-2249.md.
 
 Now:
-- Preparing commit + PR for updated reverse-engineering documentation pack.
+- Preparing commit + PR for repository-wide screens docs normalization (`UNKNOWN` -> `UNCONFIRMED`).
 Next:
-- After PR: run legacy runtime capture session to close remaining UNCONFIRMED wire-format/error-model items.
+- Optional focused pass: enrich top-priority screens with per-dispatch static trace blocks (beyond terminology normalization).

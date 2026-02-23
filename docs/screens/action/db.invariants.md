@@ -35,16 +35,16 @@ INSERT INTO DCL_ACTION_ROLE (ACT_ID, ROL_ID) VALUES (1, 1);
 ### Table `DCL_ACTION`
 - Columns (type): `ACT_ID` INTEGER NOT NULL; `ACT_NAME` VARCHAR(100); `ACT_SYSTEM_NAME` VARCHAR(100) NOT NULL; `ACT_LOGGING` SMALLINT; `ACT_CHECK_ACCESS` SMALLINT
 - NOT NULL: `ACT_ID`, `ACT_SYSTEM_NAME`
-- Foreign Keys: UNKNOWN/none detected in direct parse for this table.
-- Check Constraints: UNKNOWN/none detected.
+- Foreign Keys: UNCONFIRMED/none detected in direct parse for this table.
+- Check Constraints: UNCONFIRMED/none detected.
 - Trigger Logic: `DCL_ACTION_BI0`
 - Stored Procedures: `DCL_USER_ACTIONS`
 
 ### Table `DCL_ACTION_ROLE`
 - Columns (type): `ACT_ID` INTEGER NOT NULL; `ROL_ID` INTEGER NOT NULL
 - NOT NULL: `ACT_ID`, `ROL_ID`
-- Foreign Keys: UNKNOWN/none detected in direct parse for this table.
-- Check Constraints: UNKNOWN/none detected.
-- Trigger Logic: UNKNOWN/none detected.
-- Stored Procedures: UNKNOWN/none matched by name.
+- Foreign Keys: UNCONFIRMED/none detected in direct parse for this table.
+- Check Constraints: UNCONFIRMED/none detected.
+- Trigger Logic: UNCONFIRMED/none detected.
+- Stored Procedures: UNCONFIRMED/none matched by name.
 
