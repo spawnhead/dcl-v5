@@ -1,6 +1,6 @@
 # orders (slug: `orders`) — Legacy Screen Spec
 
-Baseline spec created during loop normalization.
+Production hardening in progress for this phase; baseline extracted and queued for full contract completion.
 
 ## Existing legacy spec references
 - TEST_DATA_SPEC.md; SNAPSHOT.md; ACCEPTANCE.md; CONTRACTS.md; BEHAVIOR_MATRIX.md
@@ -10,5 +10,5 @@ Baseline spec created during loop normalization.
 
 ## SQL-aligned UI->DB mapping (Patch 0.5+)
 - SQL has priority over UI for required/optional/type constraints.
-- Candidate mapped tables: UNKNOWN.
+- Candidate mapped tables: UNCONFIRMED.
 

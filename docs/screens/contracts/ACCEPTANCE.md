@@ -1,5 +1,10 @@
 # N3 Contracts — Acceptance criteria (1:1)
 
+## Reverse-engineering status (2026-02-23)
+- Static trace for list/create/edit/import-CP/restore-back flows is VERIFIED in Struts+Action+DAO layers.
+- Runtime coverage exists but is incomplete for some auxiliary subflows; those checks remain UNCONFIRMED.
+
+
 ## Parity MUST (FAIL если не выполнено)
 1. Экран открывается по modern route и отображает фильтр + grid в составе и порядке как legacy Contracts.jsp.
 2. Поля фильтра и имена payload совпадают с legacy (`number`, `contractor`, `date_begin/end`, `sum_min/max`, `user`, `seller`, `executed`, `not_executed`, `oridinal_absent`).

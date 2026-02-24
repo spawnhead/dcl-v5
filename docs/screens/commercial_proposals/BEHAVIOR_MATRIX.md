@@ -1,5 +1,10 @@
 # Commercial Proposals List Screen - BEHAVIOR MATRIX
 
+## Reverse-engineering status (2026-02-23)
+- Role/action rules in this matrix were cross-checked against `CommercialProposalsAction` checkers (`blockChecker`, `blockCheckerPrice`, `editCloneChecker`).
+- Network-level behavior remains partially UNCONFIRMED without fresh HAR (see payloads blocker).
+
+
 ## Overview
 This matrix documents all behavioral variations of the Commercial Proposals List screen.
 

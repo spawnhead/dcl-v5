@@ -20,6 +20,11 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
+- 2026-02-24: Docs refactor to production-ready structure: introduced phased plan (MVP/Phase1/Phase2), centralized open questions, archived 151 baseline screen packs under docs/archive/screens_baseline, updated indexes for active vs archived sets.
+- 2026-02-23: Applied global docs/screens normalization for remaining folders: replaced legacy `UNKNOWN` markers with `UNCONFIRMED` wording across screen spec packs to align status taxonomy used in critical scopes.
+- 2026-02-23: Completed static reverse-evidence hardening for commercial_proposals, commercial_proposal_edit, conditionsforcontract, contracts docs; replaced UNKNOWN baselines with VERIFIED static traces + explicit runtime blocker/UNCONFIRMED guidance.
+
+- 2026-02-23: Reverse-engineering hardening pass started for CP list/edit + Conditions for Contract + Contracts screens; static Struts/Action/DAO/SQL trace extraction in progress, runtime HAR capture attempted but blocked pending runnable legacy environment artifacts.
 - 2026-02-21: SQL Deep Dive loop complete: all `needs_sql_review` screens re-evaluated and returned to `ready` with SQL alignment sections (schema/constraints/triggers/procedures).
 - 2026-02-21: SQL Patch Applied (PHASE 0.5): all previously ready screens moved to `needs_sql_review` for mandatory SQL re-evaluation.
 - 2026-02-21: PRD MVP Module 1 переработан по замечаниям: усилена evidence-база, добавлены явные источники по формулам/статусам/ролям, уточнены риски с modern recommendations.
@@ -140,7 +145,6 @@ Done:
 - 2026-02-11: Agent-Dev TASK-0052 contractor_create Tabs validation UX: глобальные действия «Сохранить/Отмена»; validateAllTabs on Save; Badge на вкладках с ошибками; auto-switch на первую вкладку с ошибкой; sticky footer; notification.error/success. logs/dev-contractor-tabs-validation-ux-20260211-2249.md.
 
 Now:
-- SQL patch cycle DONE: `todo=0`, `needs_sql_review=0`, all screens back to `ready`.
-- Коммит и PR обновлённого PRD MVP Module 1 (после замечаний).
+- Final validation and PR packaging for production-ready docs structure refactor.
 Next:
-- Perform targeted hardening for critical flows: replace UNKNOWN with proven runtime/HAR + DAO SQL traces (optional: highest-priority screens first).
+- Enrich MVP screen packs to close remaining UNCONFIRMED runtime/DB traces per OPEN_QUESTIONS_MASTER.

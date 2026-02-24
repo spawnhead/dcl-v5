@@ -1,5 +1,10 @@
 # Commercial Proposal Edit Screen - QA ROLE PRESETS
 
+## Reverse-engineering status (2026-02-23)
+- Role presets must test `process` branch outcomes (save/back vs print/printInvoice/printContract) and AJAX toggles.
+- Exact server error text/codes remain UNCONFIRMED until runtime capture.
+
+
 ## Overview
 This document defines QA test presets for different user roles on the Commercial Proposal Edit screen.
 

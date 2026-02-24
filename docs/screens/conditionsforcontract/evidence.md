@@ -10,4 +10,4 @@
 
 ## Actual status in this cycle
 - Static extraction from JSP completed.
-- Runtime/HAR verification: UNKNOWN (pending).
+- Runtime/HAR verification: BLOCKED in current workspace (legacy runtime artifacts unavailable); static trace completed.
