@@ -1,5 +1,7 @@
 # Deployment Guide (local)
 
+**Tech stack:** см. `docs/TECH_STACK.md` (источник истины).
+
 ## Prerequisites (facts from 2026-02-09 dev run)
 
 - **JDK 21** (not JRE). Backend requires Java 21; system may have Java 8 in PATH. Set before Maven:

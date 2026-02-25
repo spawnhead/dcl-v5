@@ -43,8 +43,8 @@
 
 ## Status Indicators
 - **Network 200/400/404**: HTTP response code in DevTools Network tab
-- **Toast visible**: Ant Design message.success/error appears
+- **Toast visible**: message.success/error appears
 - **Badge visible**: Tab shows error count badge
 - **Field disabled**: Input/Select is disabled state
-- **Row in grid**: AG Grid shows the row
+- **Row in grid**: table shows the row
 - **Icon visible/hidden**: Element presence in DOM

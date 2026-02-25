@@ -1,5 +1,5 @@
 ---
-description: MCP usage — Playwright (QA/Smoke/E2E), Chrome DevTools (diagnostics), Postgres, cursor-ide-browser, Ant Design, web_fetch. Чёткое разделение: автоматизация vs диагностика.
+description: MCP usage — Playwright (QA/Smoke/E2E), Chrome DevTools (diagnostics), Postgres, cursor-ide-browser, web_fetch. Чёткое разделение: автоматизация vs диагностика.
 globs: ["docs/**", "modern/**", "ops/**"]
 alwaysApply: false
 ---
@@ -73,8 +73,6 @@ alwaysApply: false
 **Postgres MCP** — read-only. После save/create: проверить INSERT через SELECT COUNT(*) или выборку по ключу. После migrations: проверить схему (таблицы, колонки) vs Flyway. Запрещено: INSERT/UPDATE/DELETE от агента.
 
 **cursor-ide-browser MCP** — браузер в IDE. Smoke-check без внешнего Chrome: navigate, snapshot, console_messages, network_requests. Когда удобнее один источник правды с IDE.
-
-**Ant Design Components MCP** — документация и примеры компонентов (list-components, get-component-docs, get-component-example). При работе с UI на Ant Design: подбор API, проверка пропсов без выхода в браузер.
 
 **web_fetch MCP** — read-only получение содержимого публичного URL в markdown. Без авторизации и localhost.
 

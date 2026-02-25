@@ -15,6 +15,6 @@
 | Change page size | Select 25/50/100/200 | No network (client-side) | Pagination size updates | **UNCONFIRMED** default page size. |
 | Sort column | Click column header | No network (client-side) | Sorted rows | All columns sortable. |
 | Export Excel | Click Excel | GET `/MarginAction.do?dispatch=generateExcel` | Browser downloads Excel | Uses iframe injection. |
-| Export CSV | Click “Экспорт CSV” | No network (client-side) | CSV file `margin_export.csv` downloaded | Client-side AG Grid export. |
+| Export CSV | Click “Экспорт CSV” | No network (client-side) | CSV file `margin_export.csv` downloaded | Client-side table export. |
 | Error: non-JSON response | Simulate HTML response from `/MarginDevData.do` | GET `/MarginDevData.do?limit=...` returns HTML | Shows “Сервер вернул страницу вместо JSON…” and clears grid | **UNCONFIRMED** exact text. |
 | Error: no access | Simulate permission HTML page | GET `/MarginDevData.do?limit=...` returns permission HTML | Shows “Нет прав на доступ к данным” | **UNCONFIRMED** exact text. |

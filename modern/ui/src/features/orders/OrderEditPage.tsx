@@ -1,6 +1,6 @@
 /**
  * Order create/edit. CONTRACTS: docs/screens/order_edit.
- * Layout per docs/design/Create Contract Redesign/OrderPage.tsx
+ * Layout per Create Contract Redesign (OrderPage)
  * Routes: /orders/new (create), /orders/:id/edit (edit).
  */
 import {

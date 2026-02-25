@@ -1,6 +1,6 @@
 /**
  * Orders list (N2). Parity per docs/screens/orders (SNAPSHOT, CONTRACTS, ACCEPTANCE, BEHAVIOR_MATRIX).
- * Layout per docs/design/Create Contract Redesign/OrdersRegistryPage.tsx
+ * Layout per Create Contract Redesign (OrdersRegistryPage)
  * Legacy: OrdersAction.do, Orders.jsp.
  */
 import { AllCommunityModule, ColDef, ModuleRegistry } from 'ag-grid-community';

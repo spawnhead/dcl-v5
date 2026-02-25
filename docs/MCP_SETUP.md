@@ -84,23 +84,6 @@ Config location: **Cursor Settings → Features → MCP** (or `~/.cursor/mcp.jso
 - `--isolated=true` — временный user-data-dir (очищается после закрытия)
 - `--channel=canary` — dev/canary Chrome
 
-### 2.6 Ant Design Components MCP
-
-- **Source:** https://github.com/hannesj/mcp-antd-components
-- **Install:** локальная установка в `ops/mcp-antd/` (см. `ops/mcp-antd/README.md`)
-- **Сценарий:** `bash ops/mcp-antd/setup.sh` из корня проекта
-- **Config (stdio):**
-```json
-{
-  "Ant Design Components": {
-    "command": "node",
-    "args": ["<PROJECT_ROOT>/ops/mcp-antd/node_modules/mcp-antd-components/index.mjs"]
-  }
-}
-```
-- **Tools:** `list-components`, `get-component-docs`, `get-component-props`, `list-component-examples`, `get-component-example`, `search-components`
-- **Use:** документация и примеры Ant Design при разработке UI.
-
 ## 3. Smoke-check URLs (fixed ports)
 
 | URL | Purpose |
@@ -245,5 +228,4 @@ Compose (bash-only): `docker compose -f ops/docker-compose.yml up -d` / `down`.
 - Docker MCP: https://cursor.directory/mcp/docker
 - Playwright MCP: https://cursor.directory/mcp/playwright
 - GitHub MCP: https://github.com/github/github-mcp-server
-- Ant Design MCP: https://github.com/hannesj/mcp-antd-components
 - Cursor Rule: `.cursor/rules/090-mcp-usage.mdc`

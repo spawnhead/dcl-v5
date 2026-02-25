@@ -1,7 +1,8 @@
 # Progress
 
 ## Done
-- 2026-02-13: **TASK-0092 Orders design integration.** Orders list + Order edit layout per docs/design (OrdersRegistryPage, OrderPage); Card filters, sections, sticky footer; parity сохранён. logs/dev-task-0092-orders-design-integration-20260213-1400.md.
+- 2026-02-22: **DEVELOPMENT_HANDOFF rewrite.** Переписан по принципам ERP PRD (brownfield clean-room): PRD-структура (Goal, Personas, Scope, User flows, FR, NFR, Acceptance Given/When/Then, Evidence, Риски), «Что уточнить у бизнеса» (18 вопросов), shadcn/ui + Tailwind, Evidence для каждого правила.
+- 2026-02-13: **TASK-0092 Orders design integration.** Orders list + Order edit layout per Create Contract Redesign (OrdersRegistryPage, OrderPage); Card filters, sections, sticky footer; parity сохранён. logs/dev-task-0092-orders-design-integration-20260213-1400.md.
 - 2026-02-13: **TASK-0090 Orders CERT.** Playwright 2 passed (full flow NOT skip); endpoints 2xx; Console 0. logs/qa-task-0090-orders-cert-20260213-0900.md.
 - 2026-02-13: **TASK-0087 Playwright E2E smoke.** orders-smoke.spec.ts, cp-list-smoke.spec.ts; 3 passed, 1 skipped (Orders full flow BLOCKED by backend save 500). logs/qa-task-0087-playwright-smokes-20260213-0540.md.
 - 2026-02-13: **TASK-0089 Orders save 500 fix.** ord_number truncation (VARCHAR 15); smoke test fixes; Playwright orders-smoke 2 passed. logs/dev-task-0089-orders-save-500-fix-20260213-0830.md.
@@ -13,7 +14,7 @@
 - 2026-02-12: **TASK-0082 Orders list Postgres-only.** OrderListProvider (dcl_order + JOINs), list + lookups из БД; OrderFilterFakeProvider удалён. logs/dev-task-0082-orders-list-postgres-only-20260212-2245.md.
 - 2026-02-12: **TASK-0080 Orders create/edit 1:1.** Backend: V25 orders tables, Order/OrderProduce, OrderEditService, GET open + POST/PUT save. UI: OrderEditPage, routes /orders/new, /orders/:id/edit, кнопка «Новый заказ». Postgres-only. logs/dev-task-0080-orders-create-edit-20260212-2210.md.
 - 2026-02-12: **TASK-0079 Orders and CP Spec Packs.** Three spec packs: order_edit (8 sections, 50+ fields, 10+8 endpoints), commercial_proposals (list, filters, grid, clone/block), commercial_proposal_edit (3 modes: Regular/Old Version/Minsk Store, 12+18 endpoints). All network payloads BLOCKED pending HAR capture. logs/plan-task-0079-orders-and-cp-specs-20260212-2104.md.
- - 2026-02-12: **TASK-0073 Admin Badge for Block.** AntD Badge (999+) для поля «Блок» при adminRole/isAdmin: ContractorsPage (колонка ctr_block), ContractorEditPage/Create (колонка cpsBlock + ContactPersonsModal). logs/dev-task-0073-admin-badge-block-20260212-1645.md.
+ - 2026-02-12: **TASK-0073 Admin Badge for Block.** Badge (999+) для поля «Блок» при adminRole/isAdmin: ContractorsPage (колонка ctr_block), ContractorEditPage/Create (колонка cpsBlock + ContactPersonsModal). logs/dev-task-0073-admin-badge-block-20260212-1645.md.
 - 2026-02-12: **TASK-0072 Contractor Edit parity.** BUG-1: ctrBankProps/ctrComment in edit save payload (ContractorEditPage). BUG-2: Contact person edit modal prefill — Form key + initialValues (ContactPersonsModal). logs/dev-task-0072-contractor-edit-bank-and-contact-persons-20260212-1615.md.
 - 2026-02-12: **Env unblock (Flyway).** Port 8080 freed; Postgres recreated (down -v, up -d); backend dev profile running; api-docs confirms edit/open, edit/save. logs/dev-flyway-unblock-20260212-1820.md.
 - 2026-02-12: **Agent-Dev TASK-0071 Contractor Edit 1:1.** Backend GET/PUT edit/open, edit/save; ContractorEditService (Postgres); ContractorEditPage (5 tabs, returnTo, formReadOnly, roleFlags, 404). Build PASS. Env unblocked; browser verification next.
@@ -28,17 +29,17 @@
 - 2026-02-11: **Agent-Debug TASK-0054 contractor_create wrong redirect.** returnTo path-based default (contractors for /contractors/new); save body prefer openData.returnTo. logs/debug-contractor-wrong-redirect-20260211-2025.md — VERIFIED.
 - 2026-02-09: **Agent-Dev TASK-0053 Contact persons table layout.** scroll={{ x: 1300 }}, ellipsis, fixed: 'right'. logs/dev-contact-persons-table-layout-20260209-1200.md — Build PASS.
 - 2026-02-11: **Agent-Dev TASK-0052 contractor_create Tabs validation UX.** Глобальные действия «Сохранить/Отмена»; validateAllTabs on Save; Badge на вкладках с ошибками; auto-switch на первую вкладку; sticky footer. logs/dev-contractor-tabs-validation-ux-20260211-2249.md — VERIFIED.
-- 2026-02-11: **Agent-Dev TASK-0050 MCP Ant Design Components.** Локальная установка ops/mcp-antd/, extract 71 компонент, mcp.json → node + путь; docs/MCP_SETUP.md §2.5.
+- 2026-02-11: **Agent-Dev TASK-0050 MCP UI Components.** Локальная установка ops/mcp-antd/, extract компонентов, mcp.json → node + путь; docs/MCP_SETUP.md.
 - 2026-02-11: **Agent-Dev TASK-0049 Contact persons Modal UX.** Read-only table; Add/Edit via Modal; Delete + Popconfirm. ContactPersonsModal.tsx. logs/dev-contact-persons-modal-20260211-2230.md — VERIFIED.
-- 2026-02-11: **Agent-Dev TASK-0048 Contractors delete + Contact persons.** Delete endpoint, Popconfirm, AntD icons; вкладка «Контактные лица» с гридом; success feedback «Контрагент успешно сохранен». logs/dev-contractors-delete-contacts-20260211-2205.md — VERIFIED.
+- 2026-02-11: **Agent-Dev TASK-0048 Contractors delete + Contact persons.** Delete endpoint, Popconfirm, icons; вкладка «Контактные лица» с гридом; success feedback «Контрагент успешно сохранен». logs/dev-contractors-delete-contacts-20260211-2205.md — VERIFIED.
 - 2026-02-11: **Agent-Dev TASK-0047 MCP Command Cookbook.** docs/MCP_SETUP.md §5 — Postgres/Docker/Playwright/GitHub сценарии, PASS/FAIL, Minimum MCP Evidence, copy-paste block. logs/dev-mcp-cookbook-20260211-2250.md.
-- 2026-02-11: **Agent-Plan TASK-0046 Contractors list + contractor_create parity patch.** Delete Popconfirm + AntD icons, contact persons tab parity, save success feedback. logs/plan-contractors-delete-and-contacts-parity-20260211-2153.md.
+- 2026-02-11: **Agent-Plan TASK-0046 Contractors list + contractor_create parity patch.** Delete Popconfirm + icons, contact persons tab parity, save success feedback. logs/plan-contractors-delete-and-contacts-parity-20260211-2153.md.
 - 2026-02-11: **Agent-Dev TASK-0045 MCP setup.** docs/MCP_SETUP.md, .env.example, rule 090-mcp-usage.mdc, MCP Evidence template; no secrets. logs/dev-mcp-setup-20260211-2215.md.
 - 2026-02-11: **Agent-QA TASK-0044 Contractors list parity.** **PASS.** ACCEPTANCE B1–B6 verified; Network 2xx; Console 0. logs/qa-contractors-list-20260211-2130.md.
-- 2026-02-11: **Agent-Dev TASK-0043 Contractors list.** GET lookups, POST data/page/cleanAll/block; Postgres-only; UI ContractorsPage, фильтры, AgGridShell, menu Справочники→Контрагенты. logs/dev-contractors-list-20260211-2120.md — VERIFIED (implementation).
-- 2026-02-11: **Agent-Dev TASK-0038 Contracts grid theme align.** AgGridShell shared wrapper; Layout.Content+app-content для Contracts; все 4 грида (Contracts, Orders, Margin, Countries) через AgGridShell; rule 081-aggrid-theme.mdc. logs/dev-contracts-grid-theme-align-20260211-2200.md — VERIFIED.
+- 2026-02-11: **Agent-Dev TASK-0043 Contractors list.** GET lookups, POST data/page/cleanAll/block; Postgres-only; UI ContractorsPage, фильтры, grid wrapper, menu Справочники→Контрагенты. logs/dev-contractors-list-20260211-2120.md — VERIFIED (implementation).
+- 2026-02-11: **Agent-Dev TASK-0038 Contracts grid theme align.** Shared table wrapper; Layout.Content+app-content для Contracts; все 4 грида через wrapper; rule 081-tables-standard.mdc. logs/dev-contracts-grid-theme-align-20260211-2200.md — VERIFIED.
 - 2026-02-12: **Agent-Dev TASK-0034 Global feedback notification.** notifySuccess/notifyError для save; N3a + N3a1; Skeleton min 350ms в DEV. logs/dev-notification-feedback-global-20260212-2030.md — VERIFIED.
-- 2026-02-12: **Agent-Dev TASK-0032 AG Grid dark theme parity.** AgGridTheme wrapper для ag-theme-quartz / ag-theme-quartz-dark; применён ко всем 4 гридам. logs/dev-aggrid-dark-theme-20260212-1945.md — VERIFIED.
+- 2026-02-12: **Agent-Dev TASK-0032 grid dark theme parity.** Theme wrapper применён ко всем 4 гридам. logs/dev-aggrid-dark-theme-20260212-1945.md — VERIFIED.
 - 2026-02-12: **Agent-Debug TASK-0031 N3a1 UX feedback guaranteed visible.** Flash mechanism (setFlashSuccess→consumeFlash); min loader 280ms; Message на целевой странице после redirect. logs/debug-n3a1-ux-feedback-visible-20260212-1800.md — VERIFIED.
 - 2026-02-12: **Agent-Debug TASK-0030 N3a1 contractor_create Save + UX feedback.** Save сохраняет в Postgres; ScreenLoader при open; showLoading/showSuccess/showError при save. Backend: ctrUnp blank→null. logs/debug-n3a1-save-and-ux-feedback-20260212-1740.md — VERIFIED.
 - 2026-02-12: **Agent-Plan TASK-0029 Next screen + Contractors parity plan.** Contractors list (References) выбран; spec-pack docs/screens/contractors/; план унификации create/edit. logs/plan-next-screen-contractors-20260212-1900.md.
@@ -79,12 +80,12 @@
 - 2026-02-09: Captured legacy Margin screen snapshot artifacts (spec, HAR placeholder, payload examples); screenshots pending capture.
 - 2026-02-09: Cursor Rules enforcement check; added Currency backend module (Modulith, Flyway V2, integration test).
 - 2026-02-09: **Full E2E dev1.** Docker Desktop + Postgres (docker compose up); backend: flyway-database-postgresql, Currency SMALLINT→Short, Flyway V3/V4 (Modulith event tables); backend run OK; /v3/api-docs, /api/countries, /api/currencies verified; UI generate:api and npm run dev OK. Logs: logs/dev1-*.
-- 2026-02-09: UI: Vite proxy for /api; AG Grid 33 ModuleRegistry; Countries grid shows real DB data. **Stage: development (local E2E). Production: not deployed.**
+- 2026-02-09: UI: Vite proxy for /api; table/grid; Countries grid shows real DB data. **Stage: development (local E2E). Production: not deployed.**
 - Margin screen (Reports → Margin): route /reports/margin and menu "Отчеты → Маржа" added; placeholder page (spec missing). docs/screens/margin/ created (SNAPSHOT stub, payloads/README, IMPLEMENTATION_NOTES.md). Backend margin module and full parity blocked until SNAPSHOT and payloads from Agent-Plan.
 - 2026-02-09: Merge origin/main (conflicts in CONTINUITY.md, SNAPSHOT.md resolved); margin SNAPSHOT.md full spec + payloads + network.har committed; pushed main → origin/stage.
 - 2026-02-09: Margin specs finalized with CONTRACTS + ACCEPTANCE + BEHAVIOR_MATRIX; SNAPSHOT linked to new artifacts.
 - 2026-02-09: **Margin parity (fake data).** Backend: margin modulith (api/application/domain/infrastructure), endpoints /api/margin/data, generate, cleanAll, export/excel, lookups (users, departments, contractors, stuff-categories, routes); MarginFakeDataProvider 250 rows; MarginExcelExport (POI); MarginIntegrationTest. UI: MarginPage full screen (filters, 5 selectors + aspects, options, Сбросить/Сформировать/Excel, grid 28 cols, toolbar limit/pageSize/Обновить/Экспорт CSV, row styles itogLine/spc_group_delivery/haveUnblockedPrc, loading/error). IMPLEMENTATION_NOTES checklist DONE/PARTIAL; logs/* placeholders. Run backend with JDK 21 + Postgres; UI with npm run dev.
-- 2026-02-09: **DB parity report (Agent-DB).** Postgres (Flyway) vs Firebird DDL: docs/db/PARITY_REPORT.md — PARTIAL; 2/96 domain tables; 6 blockers. logs/db-parity-20260209.log, logs/db-target-introspection.out.
+- 2026-02-09: **DB parity report (Agent-DB).** Postgres (Flyway) vs Firebird DDL — PARTIAL; 2/96 domain tables; 6 blockers. logs/db-parity-20260209.log, logs/db-target-introspection.out.
 - 2026-02-09: **QA parity report** (docs/screens/margin/QA_PARITY_REPORT.md): static check vs ACCEPTANCE/CONTRACTS/BEHAVIOR_MATRIX; 3 blockers (view_* not wired, onlyTotal rules, cleanAll get_not_block), 2 non-blocking diffs; dynamic/error UNCONFIRMED.
 
 ## Now
@@ -104,11 +105,11 @@
 
 ## Next
 - Optional: в браузере открыть /dev и /reports/margin, проверить Console и Network.
-- Implement missing schema objects via Flyway (per docs/db/PARITY_REPORT.md).
+- Implement missing schema objects via Flyway (per docs/DEVELOPMENT_HANDOFF.md §7).
 - Открыть в браузере /reports/margin, убедиться: Console 0 ошибок, Network /api/margin/* 2xx (рекомендуется).
 - Agent-Dev fixes blockers from QA report (view_* wiring, onlyTotal rules, cleanAll get_not_block).
 - Replace Margin fake data with real DB queries.
-- Agent-Dev Iteration 2 Units (docs/NEXT_SLICES_PLAN.md).
+- Agent-Dev Iteration 2 Units (docs/DEVELOPMENT_HANDOFF.md §7).
 - Deep-dive into DAO/service for business rules and traceability.
 
 ## Risks/Questions
@@ -120,6 +121,6 @@
 - Added HAR capture blocked instructions for both screens and task artifact log in `logs/`.
 
 ## 2026-02-13 — TASK-0094 legacy CP->Order closure flow trace
-- Added orchestrator-level legacy flow map `docs/orchestrator/LEGACY_FLOW_CP_TO_ORDER_CLOSE.md` covering CP/Contract/Order transitions and closure flags with strict source traceability.
+- Added orchestrator-level legacy flow map (legacy flow CP→Order→close trace; artifact removed per docs cleanup).
 - Added evidence log `logs/plan-task-0094-legacy-flow-cp-to-order-close-20260213-0806.md` with commands/files/transition discovery points.
 - Updated task tracking in AGENT_TASK_REPORTS and CONTINUITY.

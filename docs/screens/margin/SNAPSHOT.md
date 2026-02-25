@@ -48,7 +48,7 @@ Each row has a server-side lookup field + an “aspect” checkbox; only one asp
 - `get_not_block`: “Включить в отчёт незаблокированные закрытия договоров”
 
 **View columns (checkboxes)**
-Columns toggles controlling AG Grid visibility (set in Margin session, read by `MarginDevData`):
+Columns toggles controlling table visibility (set in Margin session, read by `MarginDevData`):
 - `view_contractor`, `view_country`, `view_contract`, `view_stuff_category`, `view_shipping`, `view_payment`,
   `view_transport`, `view_transport_sum`, `view_custom`, `view_other_sum` (logistics), `view_montage_sum`,
   `view_montage_time`, `view_montage_cost`, `view_update_sum`, `view_summ_zak`, `view_koeff`,
@@ -66,7 +66,7 @@ Iframe source: `/test/MarginReportGridStandalone.jsp`
 - Status text (“Загрузка…”, error text, results count)
 - “Грузить” select: limit for server fetch (50/100/200/500/1000; default 200)
 - “Показывать” select: pagination page size (25/50/100/200; default 50)
-- Quick search input (“Поиск…”) — AG Grid quick filter
+- Quick search input (“Поиск…”) — table quick filter
 - Buttons: Обновить, Сбросить фильтр, Экспорт CSV
 
 **Columns list (order)**
@@ -101,12 +101,12 @@ Iframe source: `/test/MarginReportGridStandalone.jsp`
 
 **Row interactions / styles**
 - Sorting: enabled for all columns.
-- Filtering: AG Grid floating filters, date filters for date columns.
+- Filtering: floating filters, date filters for date columns.
 - Row class styling:
   - `itogLine` → bold row (mg-itog).
   - `spc_group_delivery` present → green background; if `haveUnblockedPrc` true then gradient green+pink.
   - `haveUnblockedPrc` without group → pink background.
-- Pagination: AG Grid client-side pagination with page size control.
+- Pagination: client-side pagination with page size control.
 
 ### Secondary panels/modals
 - None detected in JSP/JS. No row details modal is wired in legacy grid.
@@ -141,15 +141,15 @@ Iframe source: `/test/MarginReportGridStandalone.jsp`
 - Network calls: POST `/MarginAction.do?dispatch=cleanAll`, followed by grid data fetch.
 
 **E) Пагинация / page size**
-- Pagination is client-side in AG Grid. Page size dropdown changes `paginationPageSize` and displays status text.
+- Pagination is client-side. Page size dropdown changes `paginationPageSize` and displays status text.
 - “Грузить” limit changes server fetch limit; triggers refetch `/MarginDevData.do?limit=...`.
 
 **F) Сортировка по колонкам**
-- AG Grid default sort (client-side). No server sort parameters.
+- Default sort (client-side). No server sort parameters.
 
 **G) Экспорт (Excel/CSV/Print)**
 - Excel: button injects hidden iframe to `/MarginAction.do?dispatch=generateExcel`, downloads Excel file.
-- CSV: AG Grid “Экспорт CSV” uses client-side `exportDataAsCsv` with filename `margin_export.csv`.
+- CSV: “Экспорт CSV” uses client-side export with filename `margin_export.csv`.
 
 **H) Открытие деталей**
 - Not implemented in grid JS; no row click handlers in `MarginReportGridStandalone.jsp`.
@@ -168,7 +168,7 @@ Iframe source: `/test/MarginReportGridStandalone.jsp`
   - Purpose: render filter form + iframe.
   - Params: none.
 - **GET** `/test/MarginReportGridStandalone.jsp`
-  - Purpose: load AG Grid shell (client JS).
+  - Purpose: load table shell (client JS).
 - **GET** `/MarginDevData.do?limit={n}`
   - Purpose: JSON grid data + view column toggles + meta counts.
   - Query params: `limit` (default 200, max 1000).
@@ -200,10 +200,10 @@ Iframe source: `/test/MarginReportGridStandalone.jsp`
 - All filters are encoded as standard Struts form fields (URL‑encoded form body). Checkbox values are `1` when checked.
 
 ### Sorting protocol
-- Sorting is client-side only in AG Grid; no server sort params.
+- Sorting is client-side only; no server sort params.
 
 ### Pagination protocol
-- Client-side pagination in AG Grid; server only limits max rows via `limit` parameter.
+- Client-side pagination; server only limits max rows via `limit` parameter.
 
 ### Headers/cookies/session requirements
 - Session required (JSESSIONID used in iframe and data URL). Data endpoint reads Margin session state.

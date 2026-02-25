@@ -3,7 +3,7 @@
 ## A. Parity MUST
 1. Фильтры 1:1: ctr_name, ctr_full_name, ctr_account, ctr_address, user, department, ctr_email, ctr_unp.
 2. Грид: колонки в legacy-порядке, block checkbox, edit link, delete link (admin + !occupied).
-3. Row actions используют AntD icons (edit/delete/block) — единообразно во всех строках.
+3. Row actions используют icons (edit/delete/block) — единообразно во всех строках.
 3. Пагинация: page size 15, next/prev серверные.
 4. Кнопка «Создать» → `/contractors/new` (returnTo=contractors).
 5. Edit → `/contractors/{id}/edit`.

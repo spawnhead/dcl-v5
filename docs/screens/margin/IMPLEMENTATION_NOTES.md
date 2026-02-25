@@ -12,7 +12,7 @@ Margin parity implemented per CONTRACTS.md, ACCEPTANCE.md, BEHAVIOR_MATRIX.md. D
 | Selector mutual exclusivity and aspect checkbox rules | DONE | Selecting one selector clears others; only one aspect checkbox at a time; aspect enabled only when that selector is set |
 | Option dependencies (onlyTotal / itog_by_spec / itog_by_user / itog_by_product) | DONE | itog_by_user enabled when itog_by_spec; itog_by_product when itog_by_user; uncheck cascades; onlyTotal auto-unchecks when no selector (useEffect); checking onlyTotal unchecks itog_by_spec |
 | Column visibility toggles (view_*) | DONE | view_* checkboxes in UI (block "Колонки:"); grid column visibility via colDef.hide from viewFlags; init from response.view on load; Generate sends view in body |
-| Grid column order, labels, formats, sort/filter | DONE | 28 columns in SNAPSHOT order; right-aligned numeric; AG Grid sort and floating filters |
+| Grid column order, labels, formats, sort/filter | DONE | 28 columns in SNAPSHOT order; right-aligned numeric; sort and floating filters |
 | Row styling (itogLine, spc_group_delivery, haveUnblockedPrc) | DONE | .mg-itog bold; .mg-group green; .mg-unblocked pink; .mg-group-unblocked gradient |
 | Excel and CSV export | DONE | Excel: GET /api/margin/export/excel; CSV: client-side exportDataAsCsv margin_export.csv |
 | Error/empty/loading states | DONE | "Загрузка…"; "Сервер вернул страницу вместо JSON…"; "Нет прав на доступ к данным"; generic error text |
@@ -26,14 +26,14 @@ Margin parity implemented per CONTRACTS.md, ACCEPTANCE.md, BEHAVIOR_MATRIX.md. D
   - `infrastructure/`: MarginFakeDataProvider (250 rows), MarginExcelExport (POI)
   - Endpoints: GET /api/margin/data?limit=, POST /api/margin/generate, POST /api/margin/cleanAll, GET /api/margin/export/excel, GET /api/margin/lookups/{users,departments,contractors,stuff-categories,routes}
 - **UI** (`modern/ui/src/features/margin/`):
-  - MarginPage: filters (dates, 5 selectors + aspect), options (onlyTotal with auto-uncheck when no selector + uncheck itog_by_spec on check), view_* checkboxes block "Колонки:" driving grid column visibility (init from response.view), buttons (Сбросить всё clears get_not_block too, Сформировать, Excel), toolbar, AG Grid 28 columns with viewFlags→hide, row classes, loading/error
+  - MarginPage: filters (dates, 5 selectors + aspect), options (onlyTotal with auto-uncheck when no selector + uncheck itog_by_spec on check), view_* checkboxes block "Колонки:" driving grid column visibility (init from response.view), buttons (Сбросить всё clears get_not_block too, Сформировать, Excel), toolbar, table 28 columns with viewFlags→hide, row classes, loading/error
 - **Tests**: MarginIntegrationTest (getData, generate, cleanAll, lookups, exportExcel)
 
 ## Real progress loader (2026-02-09) — DONE
 
 - **No fake timers**: progress driven only by real requests and events (lookup query statuses, mutation success, grid onFirstDataRendered, XHR onprogress/onload).
 - **Initial load**: Steps "Пользователи", "Отделы", "Контрагенты", "Категории", "Маршруты"; details "Загружено справочников: N/5"; sync from useQuery statuses; finish/fail when all done or any error.
-- **Generate**: Steps "Отправка запроса" → "Получение данных" → "Отрисовка таблицы"; render step done on AG Grid onFirstDataRendered; finishProgress() then.
+- **Generate**: Steps "Отправка запроса" → "Получение данных" → "Отрисовка таблицы"; render step done on table onFirstDataRendered; finishProgress() then.
 - **Export**: XHR via downloadWithProgress.ts (onprogress → progressPct when Content-Length; onComplete → saveBlobAsFile); steps "Запрос отправлен" → "Получение файла" → "Сохранение".
 - **UI**: useMarginProgress.ts, MarginProgress.tsx (Steps + Progress + Spin + Alert), MarginPage wires all phases; log: logs/dev-margin-progress-loader-20260209.log.
 

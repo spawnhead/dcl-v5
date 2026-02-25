@@ -23,7 +23,7 @@
 ## Margin Grid Iframe Shell
 - Method: GET
 - Path: `/test/MarginReportGridStandalone.jsp`
-- Purpose: Load AG Grid shell + JS for the Margin grid.
+- Purpose: Load table shell + JS for the Margin grid.
 - Auth/session notes: Same as Margin screen (session required; JSP uses `response.encodeURL` for grid data URL).
 - Request:
   - query params: none

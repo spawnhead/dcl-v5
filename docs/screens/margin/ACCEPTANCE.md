@@ -36,7 +36,7 @@
 ### Table (grid)
 - Columns: match 28 listed in `SNAPSHOT.md` in the same order.
 - Sorting: enabled for all columns (client-side).
-- Filtering: AG Grid floating filters; date filters on date columns.
+- Filtering: floating filters; date filters on date columns.
 - Row styles:
   - `itogLine` → bold row.
   - `spc_group_delivery` present → green background; if `haveUnblockedPrc` also true → gradient green+pink.
@@ -47,7 +47,7 @@
 
 ### Export
 - Excel: server download via `/MarginAction.do?dispatch=generateExcel` (iframe).
-- CSV: client-side AG Grid export `margin_export.csv`.
+- CSV: client-side table export `margin_export.csv`.
 
 ## 2) Behavior Scenarios
 
@@ -91,7 +91,7 @@
   - Filters cleared; grid empty or reset to session defaults. **UNCONFIRMED**.
 
 ### Pagination
-- Page size control changes AG Grid `paginationPageSize` (client-side only).
+- Page size control changes `paginationPageSize` (client-side only).
 - “Грузить” control updates `limit` and triggers refetch `/MarginDevData.do?limit=...`.
 
 ### Sorting
@@ -99,7 +99,7 @@
 
 ### Export
 - Excel button triggers iframe GET `/MarginAction.do?dispatch=generateExcel` and downloads file.
-- CSV export uses AG Grid client export.
+- CSV export uses client export.
 
 ### Error / empty / loading
 - Non-JSON response shows “Сервер вернул страницу вместо JSON…” and clears grid.

@@ -9,7 +9,7 @@
     {
       "method": "GET",
       "url": "/test/MarginReportGridStandalone.jsp",
-      "purpose": "Load grid iframe (AG Grid toolbar + JS)."
+      "purpose": "Load grid iframe (table toolbar + JS)."
     },
     {
       "method": "GET",

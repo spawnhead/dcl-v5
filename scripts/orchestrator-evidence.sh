@@ -1,6 +1,6 @@
 #!/bin/bash
 # orchestrator-evidence.sh - Generate evidence pack draft for next screens
-# Usage: ./scripts/orchestrator-evidence.sh > docs/orchestrator/EVIDENCE_NEXT_SCREENS_DRAFT.md
+# Usage: ./scripts/orchestrator-evidence.sh > logs/orchestrator-evidence-draft.md
 # Generated: 2026-02-12
 
 set -euo pipefail
