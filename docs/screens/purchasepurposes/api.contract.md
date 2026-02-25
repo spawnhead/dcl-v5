@@ -1,4 +1,4 @@
-# purchasepurposes — Expected API contracts (legacy-inferred)
+# purchasepurposes — API contracts (phase hardening)
 
 - UNCONFIRMED endpoints (requires struts-config + runtime trace).
 

@@ -1,6 +1,6 @@
 # contract_import_cp (slug: `contract_import_cp`) — Legacy Screen Spec
 
-Baseline spec created during loop normalization.
+Production hardening in progress for this phase; baseline extracted and queued for full contract completion.
 
 ## Existing legacy spec references
 - TEST_DATA_SPEC.md; SNAPSHOT.md; ACCEPTANCE.md; CONTRACTS.md; BEHAVIOR_MATRIX.md

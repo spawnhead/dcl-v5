@@ -1,4 +1,4 @@
-# users — Expected API contracts (legacy-inferred)
+# users — API contracts (phase hardening)
 
 - `/DepartmentsListAction`
 - `/UserAction.do?dispatch=create`

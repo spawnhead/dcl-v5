@@ -1,4 +1,4 @@
-# currencies — Expected API contracts (legacy-inferred)
+# currencies — API contracts (phase hardening)
 
 - `/CurrencyAction.do?dispatch=edit`
 - `/CurrencyAction.do?dispatch=input`

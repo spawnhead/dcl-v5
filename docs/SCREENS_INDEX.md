@@ -7,6 +7,27 @@ in-progress:
 needs_sql_review:
 
 ready:
+- commercial_proposal_edit
+- commercial_proposals
+- conditionsforcontract
+- contract_create
+- contract_import_cp
+- contract_spec_create
+- contractor_create
+- contractor_edit
+- contractors
+- contracts
+- countries
+- currencies
+- incotermslist
+- margin
+- margindev
+- order_edit
+- orders
+- purchasepurposes
+- users
+
+archived:
 - action
 - actionroles
 - actions
@@ -21,36 +42,24 @@ ready:
 - calculationstatedev
 - calculationstatejustgrid
 - closedrecord
-- commercial_proposal_edit
-- commercial_proposals
 - commercialproposal
 - commercialproposalproduce
 - commercialproposals
 - conditionforcontract
 - conditionforcontractproduce
-- conditionsforcontract
 - contactperson
 - contactpersonslist
 - contract
 - contract_attachments
-- contract_create
-- contract_import_cp
-- contract_spec_create
 - contractclosed
 - contractor
-- contractor_create
-- contractor_edit
 - contractorrequest
 - contractorrequests
-- contractors
 - contractorsforcontractsclosedlist
 - contractorslist
-- contracts
 - contractsclosed
 - contractsdepfromcontractorlist
-- countries
 - country
-- currencies
 - currency
 - currencyrate
 - currencyrates
@@ -79,7 +88,6 @@ ready:
 - goodsrestinminsk
 - goodsrestlithuania
 - importfile
-- incotermslist
 - instruction
 - instructions
 - instructiontype
@@ -91,9 +99,6 @@ ready:
 - lockedrecords
 - login
 - login_disabled
-- logs
-- margin
-- margindev
 - mergecontractors
 - montageadjustment
 - montageadjustmenthistory
@@ -110,10 +115,8 @@ ready:
 - number1chistory
 - office
 - order
-- order_edit
 - orderexecutedproduces
 - orderproduce
-- orders
 - orderslogistics
 - ordersstatistics
 - ordersunexecuted
@@ -132,7 +135,6 @@ ready:
 - producescost
 - producesforassembleminsk
 - purchasepurpose
-- purchasepurposes
 - purpose
 - purposes
 - ratends
@@ -174,7 +176,6 @@ ready:
 - uploadfile
 - user
 - userroles
-- users
 - usersetting
 - usersettings
 - woodworkworkfiles

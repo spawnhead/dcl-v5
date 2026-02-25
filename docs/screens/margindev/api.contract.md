@@ -1,4 +1,4 @@
-# margindev — Expected API contracts (legacy-inferred)
+# margindev — API contracts (phase hardening)
 
 - `<%= generateUrl %>`
 

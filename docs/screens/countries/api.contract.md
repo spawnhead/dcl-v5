@@ -1,4 +1,4 @@
-# countries — Expected API contracts (legacy-inferred)
+# countries — API contracts (phase hardening)
 
 - `/CountryAction.do?dispatch=create`
 - `/CountryAction.do?dispatch=delete`

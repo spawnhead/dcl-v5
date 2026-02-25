@@ -1,4 +1,4 @@
-# incotermslist — Expected API contracts (legacy-inferred)
+# incotermslist — API contracts (phase hardening)
 
 - UNCONFIRMED endpoints (requires struts-config + runtime trace).
 
