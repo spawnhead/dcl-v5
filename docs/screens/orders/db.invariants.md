@@ -1,6 +1,6 @@
 # orders — DB invariants (enforced only)
 
-- UNCONFIRMED: enforceable DB constraints/triggers/procedures mapping must be completed for production sign-off.
+- UNCONFIRMED in normalized pass; map to enforced constraints/triggers/procedures only.
 
 ## SQL RE-EVALUATION (Patch 0.5+)
 - Source: `db/Lintera_dcl-5_schema.ddl` (SQL priority over UI).

@@ -1,7 +1,7 @@
 # currencies — Review
 
 ## Verdict
-IN PROGRESS (phase hardening): production-ready sign-off pending unresolved items.
+READY (documentation baseline with explicit UNCONFIRMED items).
 
 ## Completed
 - Created required spec-pack artifacts.

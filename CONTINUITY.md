@@ -20,7 +20,6 @@ State:
 - Stage: development (local E2E). Production: not deployed; no production environment or release process yet.
 
 Done:
-- 2026-02-24: Docs refactor to production-ready structure: introduced phased plan (MVP/Phase1/Phase2), centralized open questions, archived 151 baseline screen packs under docs/archive/screens_baseline, updated indexes for active vs archived sets.
 - 2026-02-23: Applied global docs/screens normalization for remaining folders: replaced legacy `UNKNOWN` markers with `UNCONFIRMED` wording across screen spec packs to align status taxonomy used in critical scopes.
 - 2026-02-23: Completed static reverse-evidence hardening for commercial_proposals, commercial_proposal_edit, conditionsforcontract, contracts docs; replaced UNKNOWN baselines with VERIFIED static traces + explicit runtime blocker/UNCONFIRMED guidance.
 
@@ -145,6 +144,6 @@ Done:
 - 2026-02-11: Agent-Dev TASK-0052 contractor_create Tabs validation UX: глобальные действия «Сохранить/Отмена»; validateAllTabs on Save; Badge на вкладках с ошибками; auto-switch на первую вкладку с ошибкой; sticky footer; notification.error/success. logs/dev-contractor-tabs-validation-ux-20260211-2249.md.
 
 Now:
-- Final validation and PR packaging for production-ready docs structure refactor.
+- Preparing commit + PR for repository-wide screens docs normalization (`UNKNOWN` -> `UNCONFIRMED`).
 Next:
-- Enrich MVP screen packs to close remaining UNCONFIRMED runtime/DB traces per OPEN_QUESTIONS_MASTER.
+- Optional focused pass: enrich top-priority screens with per-dispatch static trace blocks (beyond terminology normalization).

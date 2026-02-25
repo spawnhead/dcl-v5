@@ -1,6 +1,6 @@
-# contractor_create — API contracts (phase hardening)
+# contractor_create — Expected API contracts (legacy-inferred)
 
-- UNCONFIRMED: requires full action/DAO/SQL + runtime HAR hardening before production sign-off (TEST_DATA_SPEC.md; SNAPSHOT.md; ACCEPTANCE.md; CONTRACTS.md; BEHAVIOR_MATRIX.md).
+- UNCONFIRMED in normalized pass; derive from screen forms/actions and existing docs (TEST_DATA_SPEC.md; SNAPSHOT.md; ACCEPTANCE.md; CONTRACTS.md; BEHAVIOR_MATRIX.md).
 
 ## SQL constraint alignment (Patch 0.5+)
 - Request payload fields must respect SQL types/lengths/NOT NULL from mapped tables.
