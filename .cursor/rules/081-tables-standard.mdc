@@ -1,0 +1,25 @@
+---
+description: Tables/grids standard. Per docs/TECH_STACK.md — @tanstack/react-table. Theme sync with Light/Dark.
+globs: ["modern/ui/**", "docs/AGENT_TASK_REPORTS.md"]
+alwaysApply: true
+---
+# Tables Standard (TECH_STACK)
+
+## Rule
+Source of truth: `docs/TECH_STACK.md`. Tables use **@tanstack/react-table** (§7).
+
+All list screens with tables MUST use @tanstack/react-table. Theme (Light/Dark) must apply via CSS variables (theme.css).
+
+## Forbidden
+- Custom table renderers (raw HTML table) without explicit architectural decision.
+- Hardcoded light background on table containers.
+- Ignoring theme variables for dark mode.
+
+## Required
+- Use @tanstack/react-table for list screens (Contracts, Orders, Margin, Countries, etc.).
+- Grid/table must switch theme when Light/Dark toggle changes (no refresh).
+- Page content area: use theme-aware CSS variables (background, foreground, border).
+
+## Reference
+- `docs/TECH_STACK.md` §7 — @tanstack/react-table
+- `docs/TECH_STACK.md` §6 — theme.css, Tailwind CSS variables
